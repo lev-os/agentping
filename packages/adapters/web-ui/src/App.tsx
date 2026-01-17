@@ -414,6 +414,9 @@ export default function App() {
                                                 onAddDirective={responseState.addDirective}
                                                 onRemoveDirective={responseState.removeDirective}
                                                 onNotesChange={responseState.setNotes}
+                                                attachments={responseState.attachments}
+                                                onAddAttachment={responseState.addAttachment}
+                                                onRemoveAttachment={responseState.removeAttachment}
                                                 suggestedDirectives={
                                                     selectedPing.parsedInteraction?.uiHints?.suggestedDirectives as string[] || []
                                                 }

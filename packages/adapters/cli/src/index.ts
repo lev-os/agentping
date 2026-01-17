@@ -19,11 +19,25 @@ const program = new Command();
 program
     .name('agentping')
     .description('CLI for agent-human interaction')
-    .version('0.1.0');
+    .version('0.1.0')
+    .action(async () => {
+        // Default to TUI if no command provided
+        const { runUI } = await import('./ui/App.js');
+        runUI();
+    });
 
 // ============================================================================
 // Commands
 // ============================================================================
+
+// TUI Console
+program
+    .command('ui')
+    .description('Launch the AgentPing Console (TUI)')
+    .action(async () => {
+        const { runUI } = await import('./ui/App.js');
+        runUI();
+    });
 
 // Notify (fire and forget)
 program

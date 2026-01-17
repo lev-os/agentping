@@ -61,12 +61,21 @@ export function QuickActionBar({ actions }: QuickActionBarProps) {
 // EnrichmentPanel
 // ============================================================================
 
+interface FileAttachment {
+    id: string;
+    file: File;
+    previewUrl?: string;
+}
+
 interface EnrichmentPanelProps {
     directives: Directive[];
     notes: string;
     onAddDirective: (directive: Directive) => void;
     onRemoveDirective: (index: number) => void;
     onNotesChange: (notes: string) => void;
+    attachments?: FileAttachment[];
+    onAddAttachment?: (file: File) => void;
+    onRemoveAttachment?: (id: string) => void;
     suggestedDirectives?: string[];
     actions?: QuickAction[];
 }
@@ -77,11 +86,15 @@ export function EnrichmentPanel({
     onAddDirective,
     onRemoveDirective,
     onNotesChange,
+    attachments = [],
+    onAddAttachment,
+    onRemoveAttachment,
     suggestedDirectives = [],
     actions = [],
 }: EnrichmentPanelProps) {
     const [showInput, setShowInput] = useState<string | null>(null);
     const [inputValue, setInputValue] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -111,6 +124,25 @@ export function EnrichmentPanel({
         }
     };
 
+    // Drag-and-Drop Handlers
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (onAddAttachment && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            Array.from(e.dataTransfer.files).forEach(file => onAddAttachment(file));
+        }
+    };
+
     const suggestedTypes = suggestedDirectives.length > 0
         ? suggestedDirectives
         : ['focus_on', 'skip', 'constraint'];
@@ -125,7 +157,22 @@ export function EnrichmentPanel({
     };
 
     return (
-        <div className="enrichment-container">
+        <div
+            className={`enrichment-container ${isDragging ? 'dragging' : ''}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+        >
+            {/* Overlay for Drop Zone */}
+            {isDragging && (
+                <div className="drag-overlay">
+                    <div className="drag-message">
+                        <Icons.Paperclip />
+                        <span>Drop files to attach</span>
+                    </div>
+                </div>
+            )}
+
             {/* Header / Actions Row */}
             <div className="enrichment-top-bar">
                 <div className="enrichment-label">
@@ -178,15 +225,28 @@ export function EnrichmentPanel({
                 )}
             </div>
 
-            {/* Active Chips */}
-            {directives.length > 0 && (
+            {/* Active Chips (Directives + Attachments) */}
+            {(directives.length > 0 || attachments.length > 0) && (
                 <div className="active-directives-list">
                     {directives.map((dir, i) => (
-                        <div key={i} className="directive-chip-premium">
+                        <div key={`dir-${i}`} className="directive-chip-premium">
                             <span className="chip-label">{formatDirective(dir)}</span>
                             <button
                                 className="chip-remove-btn"
                                 onClick={() => onRemoveDirective(i)}
+                            >
+                                <Icons.X />
+                            </button>
+                        </div>
+                    ))}
+                    {attachments.map((att) => (
+                        <div key={att.id} className="attachment-chip">
+                            <Icons.Paperclip />
+                            <span className="chip-label">{att.file.name}</span>
+                            <span className="chip-size">({(att.file.size / 1024).toFixed(1)}KB)</span>
+                            <button
+                                className="chip-remove-btn"
+                                onClick={() => onRemoveAttachment?.(att.id)}
                             >
                                 <Icons.X />
                             </button>
@@ -199,10 +259,10 @@ export function EnrichmentPanel({
             <div className="notes-area-wrapper">
                 <textarea
                     className="notes-textarea"
-                    placeholder="Add notes..."
+                    placeholder="Add notes... (Drag & Drop files supported)"
                     value={notes}
                     onChange={(e) => onNotesChange(e.target.value)}
-                    rows={1} // Starts small, user can expand
+                    rows={1}
                 />
             </div>
         </div>

@@ -136,7 +136,8 @@ We have digitized every possible interaction pattern into **150+ "Primitives"**.
 ### 🛡️ 8. System Ops & Security
 *   **NetSec**: `FirewallRules`, `PacketInspector`, `EncryptionStatus` (Quantum-Safe).
 *   **Hardware**: `ServerRackStatus`, `SignalMonitor` (RF), `ProcessTable`.
-*   **Console**: `TerminalConsole` (Interactive), `AccessPad`.
+*   **Console**: `TerminalConsole` (Interactive TUI), `AccessPad`.
+    > *Now supporting fully interactive Text UIs via `agentping` console.*
 
 ### 🧩 9. Core & Feedback
 *   **Notifications**: `ToastManager`, `NotificationBanner`.
@@ -203,15 +204,23 @@ npm run dev
 ### 2. View the Interface
 Open [http://localhost:5173](http://localhost:5173). You will see the **Primitives Gallery** by default.
 
-### 3. Send a Test Ping (CLI)
-Open a new terminal:
+### 3. Launch the Console (TUI)
+Open a new terminal tab to start the interactive Mission Control:
+
+```bash
+agentping
+```
+*(Or use `npm run tui` if you prefer)*
+
+### 4. Send a Test Ping
+Open another terminal:
 
 ```bash
 # Send a notification
-npx @agentping/cli notify "System Initialized 🚀"
+agentping notify "System Initialized 🚀"
 
 # Send a checklist
-npx @agentping/cli approve-steps --file urgent_plan.json
+agentping approve-steps --file urgent_plan.json
 ```
 
 ---

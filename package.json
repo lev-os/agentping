@@ -8,6 +8,7 @@
         "build": "pnpm -r build",
         "predev": "lsof -ti:7890,7891 | xargs kill -9 2>/dev/null || true",
         "dev": "pnpm -r --parallel dev",
+        "tui": "pnpm --filter @agentping/cli tui",
         "test": "pnpm -r test",
         "lint": "eslint packages --ext .ts,.tsx",
         "clean": "pnpm -r clean && rm -rf node_modules"

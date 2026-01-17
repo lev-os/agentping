@@ -144,31 +144,67 @@ export function useKeyboard(handlers: KeyboardHandlers) {
 // usePingResponse - Manage response state for a ping
 // ============================================================================
 
+interface FileAttachment {
+    id: string;
+    file: File;
+    previewUrl?: string;
+}
+
 interface PingResponseState {
     selectedSteps: Set<string>;
     selectedOptions: Set<string>;
     answerValue: string;
     directives: Directive[];
     notes: string;
+    attachments: FileAttachment[];
 }
 
 export function usePingResponse(ping: Ping | null) {
+    // Helper to get storage key
+    const getStorageKey = (pingId: string) => `agentping_draft_${pingId}`;
+
     const [state, setState] = useState<PingResponseState>({
         selectedSteps: new Set(),
         selectedOptions: new Set(),
         answerValue: '',
         directives: [],
         notes: '',
+        attachments: [],
     });
 
-    // Reset when ping changes
+    // Load from storage or init default when ping changes
     useEffect(() => {
-        if (ping?.payload.type === 'step_approval') {
+        if (!ping) return;
+
+        const saved = localStorage.getItem(getStorageKey(ping.id));
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                setState({
+                    selectedSteps: new Set(parsed.selectedSteps),
+                    selectedOptions: new Set(parsed.selectedOptions),
+                    answerValue: parsed.answerValue || '',
+                    directives: parsed.directives || [],
+                    notes: parsed.notes || '',
+                    attachments: [], // Cannot persist File objects easily in localStorage
+                });
+                return;
+            } catch (e) {
+                console.error('Failed to load draft:', e);
+            }
+        }
+
+        // Default initialization if no draft
+        if (ping.payload.type === 'step_approval') {
             const payload = ping.payload as any;
-            setState(prev => ({
-                ...prev,
+            setState({
                 selectedSteps: new Set(payload.defaultApproved || []),
-            }));
+                selectedOptions: new Set(),
+                answerValue: '',
+                directives: [],
+                notes: '',
+                attachments: [],
+            });
         } else {
             setState({
                 selectedSteps: new Set(),
@@ -176,9 +212,24 @@ export function usePingResponse(ping: Ping | null) {
                 answerValue: '',
                 directives: [],
                 notes: '',
+                attachments: [],
             });
         }
     }, [ping?.id]);
+
+    // Save to storage on change
+    useEffect(() => {
+        if (!ping) return;
+
+        const toSave = {
+            selectedSteps: Array.from(state.selectedSteps),
+            selectedOptions: Array.from(state.selectedOptions),
+            answerValue: state.answerValue,
+            directives: state.directives,
+            notes: state.notes,
+        };
+        localStorage.setItem(getStorageKey(ping.id), JSON.stringify(toSave));
+    }, [state, ping?.id]);
 
     const toggleStep = useCallback((stepId: string) => {
         setState(prev => {
@@ -226,6 +277,25 @@ export function usePingResponse(ping: Ping | null) {
         setState(prev => ({ ...prev, notes }));
     }, []);
 
+    const addAttachment = useCallback((file: File) => {
+        const attachment: FileAttachment = {
+            id: Math.random().toString(36).substring(7),
+            file,
+            previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+        };
+        setState(prev => ({
+            ...prev,
+            attachments: [...prev.attachments, attachment]
+        }));
+    }, []);
+
+    const removeAttachment = useCallback((id: string) => {
+        setState(prev => ({
+            ...prev,
+            attachments: prev.attachments.filter(a => a.id !== id)
+        }));
+    }, []);
+
     const selectAll = useCallback((ids: string[], type: 'steps' | 'options') => {
         setState(prev => ({
             ...prev,
@@ -248,6 +318,8 @@ export function usePingResponse(ping: Ping | null) {
         addDirective,
         removeDirective,
         setNotes,
+        addAttachment,
+        removeAttachment,
         selectAll,
         deselectAll,
     };

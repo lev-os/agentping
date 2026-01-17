@@ -48,6 +48,28 @@ agentping research --file research.json
 agentping select --file options.json --multi
 ```
 
+## 🖥️ TUI Console
+
+The CLI includes a full-screen interactive Terminal UI for responding to pings without leaving your terminal.
+
+```bash
+# Launch the Console
+agentping
+# OR
+npm run tui
+```
+
+### Keyboard Controls
+- **Tab / Shift+Tab**: Switch between Queue and Details panes
+- **Up / Down**: Navigate ping list or steps
+- **Space**: Toggle approval status or multi-select options
+- **Enter**: Submit response or select option
+- **A**: Quick Approve All (Step Checklists)
+- **D**: Quick Deny All (Step Checklists)
+- **Ctrl+C**: Exit
+
+---
+
 ## 🎛️ Flags
 
 | Flag | Description |

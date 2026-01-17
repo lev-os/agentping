@@ -23,13 +23,13 @@ The problem with current agent UIs: they give you a text box and "approve/deny".
                                     │         OUTPUT ADAPTERS         │
                                     │  (where humans see & respond)   │
                                     ├─────────────────────────────────┤
-                                    │  • Default Web UI               │
+                                    │  • TUI Console (Interactive)    │
+                                    │  • Web UI (Default)             │
                                     │  • Slack App                    │
                                     │  • Discord Bot                  │
                                     │  • Telegram Bot                 │
                                     │  • VS Code Extension            │
                                     │  • Custom UI (BYOU)             │
-                                    │  • CLI (for terminal lovers)    │
                                     │  • Webhook (roll your own)      │
                                     └───────────────▲─────────────────┘
                                                     │
@@ -40,7 +40,7 @@ The problem with current agent UIs: they give you a text box and "approve/deny".
 │        INPUT ADAPTERS           │     │                     │     │       INTERACTION PARSERS       │
 │  (how agents send requests)     │     │        CORE         │     │   (turn output → action UIs)    │
 ├─────────────────────────────────┤     │                     │     ├─────────────────────────────────┤
-│  • CLI Tool                     │────▶│  • Ping Queue       │────▶│  • StepApprovalParser           │
+│  • CLI Tool (Scriptable)        │────▶│  • Ping Queue       │────▶│  • StepApprovalParser           │
 │  • MCP Server                   │     │  • Session Manager  │     │  • ResearchDirectiveParser      │
 │  • Python SDK                   │     │  • Response Router  │     │  • CodeReviewParser             │
 │  • TypeScript SDK               │     │  • Audit Log        │     │  • FileSelectionParser          │

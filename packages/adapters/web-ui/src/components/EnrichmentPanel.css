@@ -23,6 +23,62 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* --- Drag & Drop States */
+.enrichment-container.dragging {
+    border-color: var(--accent-primary);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.drag-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Let events bubble to container */
+}
+
+.drag-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--accent-primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.drag-message svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Attachment Chips */
+.attachment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.chip-size {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
 /* --- Header / Top Bar --- */
 
 .enrichment-top-bar {
