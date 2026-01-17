@@ -1,0 +1,17 @@
+.logs-section .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 300px;
+    gap: 16px;
+    padding: 16px;
+}
+
+/* Reuse basic gallery layout classes */
+.gallery-item.large {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.gallery-item.wide {
+    grid-column: span 3;
+}

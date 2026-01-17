@@ -1,0 +1,261 @@
+/* ==========================================================================
+   Enrichment Component ("Cyber-Premium" Aesthetic)
+   ========================================================================== */
+
+.enrichment-container {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Faint glass border */
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 16px;
+}
+
+.enrichment-container:focus-within {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Header / Top Bar --- */
+
+.enrichment-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 28px;
+}
+
+.enrichment-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    user-select: none;
+}
+
+.enrichment-label svg {
+    opacity: 0.6;
+}
+
+.enrichment-actions-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* --- Directive Controls (Buttons) --- */
+
+.directives-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.directive-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.directive-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    /* Logic-font feel */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.directive-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.directive-toggle.active {
+    background: rgba(59, 130, 246, 0.15);
+    /* Blue tint */
+    border-color: rgba(59, 130, 246, 0.5);
+    color: #60a5fa;
+    /* Blue-400 */
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+}
+
+.directive-toggle svg {
+    opacity: 0.8;
+}
+
+/* --- Input Area with Animation --- */
+
+.directive-input-anim {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.directive-text-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: 'Geist', 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 4px;
+    outline: none;
+}
+
+.directive-text-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.input-actions {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kbd-hint {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: monospace;
+}
+
+/* --- Active Chips --- */
+
+.active-directives-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 4px;
+    /* Slight breathing room */
+}
+
+.directive-chip-premium {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 10px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-left: 2px solid #60a5fa;
+    /* Accent bar */
+    border-radius: 4px;
+    font-size: 11px;
+    color: #dbeafe;
+    /* Blue-100 */
+    font-family: 'JetBrains Mono', monospace;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.chip-remove-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.chip-remove-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    /* Red tint */
+    color: #ef4444;
+    /* Red-500 */
+}
+
+/* --- Notes Area --- */
+
+.notes-area-wrapper {
+    position: relative;
+}
+
+.notes-textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Geist', 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 8px 0;
+    resize: none;
+    /* Auto-growth handled or fixed */
+    transition: all 0.2s ease;
+    min-height: 24px;
+}
+
+.notes-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+    font-style: italic;
+}
+
+.notes-textarea:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+    /* Add padding on focus to feel like a field */
+    border-radius: 4px;
+}
+
+/* --- Shared / quick actions override --- */
+.quick-action-bar {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-sm {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}

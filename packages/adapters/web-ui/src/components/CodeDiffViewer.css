@@ -1,0 +1,118 @@
+.code-diff-viewer {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-surface);
+    overflow: hidden;
+    font-family: 'Fira Code', 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.diff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+}
+
+.diff-filepath {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.diff-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.diff-action-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    font-size: 0.8em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.diff-action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.diff-stats {
+    font-size: 0.85em;
+    display: flex;
+    gap: 8px;
+}
+
+.diff-added {
+    color: var(--accent-success);
+}
+
+.diff-removed {
+    color: var(--accent-error);
+}
+
+.diff-content {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+}
+
+.diff-content code {
+    display: block;
+    min-width: 100%;
+}
+
+.diff-line {
+    display: flex;
+    border-left: 3px solid transparent;
+}
+
+.diff-line-add {
+    background: rgba(16, 185, 129, 0.1);
+    /* Green tint */
+    border-left-color: var(--accent-success);
+}
+
+.diff-line-remove {
+    background: rgba(239, 68, 68, 0.1);
+    /* Red tint */
+    border-left-color: var(--accent-error);
+}
+
+
+
+.diff-line-num {
+    user-select: none;
+    width: 40px;
+    text-align: right;
+    padding-right: 10px;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.diff-line-prefix {
+    user-select: none;
+    width: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.diff-line-content {
+    white-space: pre;
+    padding: 0 8px;
+    color: var(--text-primary);
+    flex: 1;
+}

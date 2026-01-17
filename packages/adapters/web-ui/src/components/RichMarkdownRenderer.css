@@ -1,0 +1,54 @@
+/* ----------------------------------------------------------------------------
+   RichMarkdownRenderer
+   ---------------------------------------------------------------------------- */
+.markdown-renderer {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.md-heading {
+    font-weight: 600;
+    margin: 1.5em 0 0.5em;
+    color: var(--text-primary);
+}
+
+.md-paragraph {
+    margin: 0 0 1em;
+}
+
+.md-blockquote {
+    border-left: 4px solid var(--border-color);
+    margin: 0 0 1em;
+    padding-left: 1em;
+    color: var(--text-secondary);
+}
+
+.md-code-block {
+    background: var(--bg-tertiary);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    margin: 0 0 1em;
+}
+
+.md-inline-code {
+    background: var(--bg-tertiary);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.9em;
+}
+
+.md-list {
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+
+.md-hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 2em 0;
+}

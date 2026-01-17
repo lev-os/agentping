@@ -1,0 +1,51 @@
+/* CountdownWidget.css */
+.countdown-widget {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.countdown-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.countdown-timer {
+    display: flex;
+    gap: 16px;
+}
+
+.countdown-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.countdown-value {
+    font-size: 28px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent-primary);
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    min-width: 50px;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+    box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.1);
+}
+
+.countdown-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+}

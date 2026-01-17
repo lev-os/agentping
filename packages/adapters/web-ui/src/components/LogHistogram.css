@@ -1,0 +1,70 @@
+.log-histogram {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    width: 100%;
+    padding: 16px 0 24px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hist-column {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    min-width: 8px;
+}
+
+.hist-bar-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 2px;
+    border-radius: 2px 2px 0 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.hist-bar {
+    width: 100%;
+    transition: flex 0.3s ease;
+}
+
+.hist-bar.info {
+    background: var(--accent-primary);
+    opacity: 0.6;
+}
+
+.hist-bar.warn {
+    background: var(--accent-warning);
+}
+
+.hist-bar.error {
+    background: var(--accent-error);
+}
+
+.hist-column:hover .hist-bar.info {
+    opacity: 0.8;
+}
+
+.hist-label {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65em;
+    color: var(--text-muted);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.hist-column:nth-child(5n) .hist-label,
+.hist-column:hover .hist-label {
+    opacity: 1;
+}

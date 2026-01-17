@@ -1,0 +1,62 @@
+.network-graph-container {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.network-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(0, 229, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.network-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--accent-primary);
+}
+
+.network-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-success);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.network-status::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent-success);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-success);
+}
+
+.network-canvas {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.network-stats {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    pointer-events: none;
+    display: flex;
+    gap: 12px;
+}

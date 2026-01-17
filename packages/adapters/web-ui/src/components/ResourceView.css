@@ -1,0 +1,104 @@
+/* ResourceView.css */
+.resource-view {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.resource-header {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.resource-label-header {
+    width: 150px;
+    flex-shrink: 0;
+    padding: 12px;
+    border-right: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    position: sticky;
+    left: 0;
+    z-index: 21;
+}
+
+.timeline-header {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    /* Scroll sync handled by parent usually, simple for now */
+}
+
+.timeline-hour {
+    flex: 1;
+    /* evenly distributed or fixed width */
+    min-width: 60px;
+    text-align: center;
+    border-right: 1px solid var(--border-subtle);
+    padding: 8px 0;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.resource-row {
+    display: flex;
+    border-bottom: 1px solid var(--border-subtle);
+    height: 60px;
+}
+
+.resource-label {
+    width: 150px;
+    flex-shrink: 0;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    font-size: 13px;
+    color: var(--text-primary);
+    position: sticky;
+    left: 0;
+    z-index: 10;
+}
+
+.resource-timeline {
+    flex: 1;
+    position: relative;
+    background-image: linear-gradient(to right, var(--border-subtle) 1px, transparent 1px);
+    background-size: 60px 100%;
+    /* Match min-width of hour */
+}
+
+.resource-event {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    background: var(--accent-primary);
+    border-radius: 4px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 11px;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: all 0.2s;
+}
+
+.resource-event:hover {
+    opacity: 1;
+    transform: scaleY(1.1);
+    z-index: 5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

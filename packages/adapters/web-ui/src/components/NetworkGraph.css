@@ -1,0 +1,77 @@
+/* ----------------------------------------------------------------------------
+   NetworkGraph (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.network-graph-container {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.network-link {
+    stroke: var(--border-color);
+    stroke-width: 1;
+    stroke-opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.network-link.active {
+    stroke: var(--accent-primary);
+    stroke-width: 2;
+    stroke-opacity: 0.8;
+    filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5));
+}
+
+.network-node {
+    fill: #111;
+    stroke: var(--text-muted);
+    stroke-width: 2;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.network-node.hub {
+    fill: var(--bg-hover);
+    stroke: var(--accent-secondary);
+}
+
+.network-node.selected {
+    fill: var(--accent-primary);
+    stroke: #fff;
+}
+
+.network-node:hover {
+    fill: var(--accent-primary);
+    transform: scale(1.2);
+}
+
+.network-node-glow {
+    fill: none;
+    stroke: var(--accent-primary);
+    stroke-width: 1;
+    stroke-dasharray: 2 2;
+    opacity: 0;
+    transition: opacity 0.3s;
+    animation: rotate 10s linear infinite;
+}
+
+.network-node-glow.visible {
+    opacity: 0.5;
+}
+
+.network-label {
+    fill: var(--text-secondary);
+    font-size: 10px;
+    font-family: var(--font-mono);
+    pointer-events: none;
+    text-shadow: 0 1px 2px #000;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,83 @@
+.activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid transparent;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.activity-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.activity-deploy {
+    border-left-color: var(--accent-primary);
+}
+
+.activity-alert {
+    border-left-color: var(--accent-warning);
+}
+
+.activity-error {
+    border-left-color: var(--accent-error);
+}
+
+.activity-success {
+    border-left-color: var(--accent-success);
+}
+
+.activity-info {
+    border-left-color: var(--text-secondary);
+}
+
+.activity-icon {
+    font-size: 1.1em;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.activity-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-header {
+    font-size: 0.9em;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.activity-user {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-right: 4px;
+}
+
+.activity-action {
+    color: var(--text-secondary);
+    margin-right: 4px;
+}
+
+.activity-target {
+    font-family: var(--font-mono);
+    color: var(--accent-primary);
+}
+
+.activity-time {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}

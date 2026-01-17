@@ -1,0 +1,85 @@
+/* ----------------------------------------------------------------------------
+   PropertyGrid (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.property-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: transparent;
+    /* Cleaner look */
+}
+
+/* Zebra Striping */
+.property-table tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.property-table tr:hover {
+    background: rgba(0, 229, 255, 0.05);
+    /* Subtle cyan tint on hover */
+}
+
+.property-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* Very subtle separator */
+}
+
+.property-table tr:last-child td {
+    border-bottom: none;
+}
+
+.property-key {
+    color: var(--text-secondary);
+    width: 35%;
+    font-weight: 500;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.property-value {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    position: relative;
+}
+
+/* Ghost Input Styling */
+.property-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    /* Reserve space for border */
+    border-radius: 2px;
+    padding: 2px 6px;
+    color: var(--accent-primary);
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.2s;
+    margin: -3px -7px;
+    /* Align perfectly with text */
+    width: calc(100% + 14px);
+}
+
+.property-input:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.property-input:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    text-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
+}
+
+/* Boolean/Select styling if needed */
+.property-value select {
+    background: transparent;
+    color: var(--accent-warning);
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+}

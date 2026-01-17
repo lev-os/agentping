@@ -1,0 +1,56 @@
+.geo-request-map {
+    position: relative;
+    width: 100%;
+    background: #050505;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.world-outline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    opacity: 0.5;
+}
+
+.geo-point {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px currentColor;
+    z-index: 10;
+    cursor: help;
+}
+
+.geo-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: ripple 2s infinite ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+        border-width: 2px;
+    }
+
+    100% {
+        width: 300%;
+        height: 300%;
+        opacity: 0;
+        border-width: 0px;
+    }
+}

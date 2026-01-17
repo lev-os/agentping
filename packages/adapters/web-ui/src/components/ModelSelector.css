@@ -1,0 +1,88 @@
+/* ----------------------------------------------------------------------------
+   ModelSelector (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.model-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.model-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.model-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.model-card.selected {
+    background: rgba(0, 229, 255, 0.05);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.model-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.model-provider {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.model-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.model-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+}
+
+.model-cost {
+    font-size: 10px;
+    padding: 2px 6px;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.model-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    color: black;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 8px var(--accent-primary);
+}

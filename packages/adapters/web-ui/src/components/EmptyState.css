@@ -1,0 +1,40 @@
+/* ----------------------------------------------------------------------------
+   EmptyState (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+.empty-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.empty-description {
+    font-size: 14px;
+    margin-bottom: 16px;
+    max-width: 300px;
+}
+
+.empty-action {
+    display: flex;
+    gap: 8px;
+}

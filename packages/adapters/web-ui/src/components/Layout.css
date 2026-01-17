@@ -1,0 +1,218 @@
+/* ============================================================================
+   Layout.css (Cyber-Premium)
+   Shared layout structure for AgentPing UI (Sidebar + Content Canvas)
+   ============================================================================ */
+
+/* Main App Layout */
+.app-layout {
+    display: flex;
+    height: 100vh;
+    background: var(--bg-primary);
+    overflow: hidden;
+    color: var(--text-primary);
+}
+
+/* Sidebar (Left) */
+.app-sidebar {
+    width: 280px;
+    border-right: 1px solid var(--border-color);
+    background: rgba(5, 5, 5, 0.95);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+}
+
+.app-sidebar-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid var(--border-color);
+    min-height: 70px;
+}
+
+.app-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.app-sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.01);
+}
+
+/* Navigation Items */
+.app-nav-item {
+    text-align: left;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.app-nav-item:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
+}
+
+.app-nav-item.active {
+    color: var(--accent-primary);
+    background: rgba(0, 229, 255, 0.05);
+    border-color: var(--accent-primary-dim);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.1);
+}
+
+/* Content Area (Right) */
+.app-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+    background: radial-gradient(circle at top right, #111 0%, #050505 100%);
+}
+
+.app-page-header {
+    padding: 0 32px;
+    background: rgba(5, 5, 5, 0.8);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 70px;
+    backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.app-page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Canvas (Scrollable Area) */
+.app-canvas {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+    /* Mesh gradient or particle bg hint */
+    background-image:
+        radial-gradient(at 0% 0%, rgba(0, 229, 255, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 42, 109, 0.03) 0px, transparent 50%);
+}
+
+/* Grid Layouts for Canvas content */
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.app-grid-full {
+    grid-template-columns: 1fr;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Search Input Standard */
+.app-search-input {
+    min-width: 240px;
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-round);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.app-search-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 1px var(--accent-primary-dim), var(--glow-primary);
+    background: black;
+    outline: none;
+}
+
+/* App Card Styles */
+.app-card {
+    background: rgba(10, 10, 10, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.app-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.app-card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.02);
+    flex-shrink: 0;
+}
+
+.app-card-header h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+.app-card-header p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.app-card-body {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Utilities */
+.col-span-2 {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .col-span-2 {
+        grid-column: span 1;
+    }
+}

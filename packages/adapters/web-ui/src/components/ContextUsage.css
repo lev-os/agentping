@@ -1,0 +1,82 @@
+/* ----------------------------------------------------------------------------
+   ContextUsage (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.context-usage {
+    font-family: var(--font-mono);
+}
+
+.context-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.context-label {
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.context-stats {
+    color: var(--text-muted);
+}
+
+.usage-val {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.usage-val.critical {
+    color: var(--accent-error);
+    text-shadow: 0 0 5px var(--accent-error);
+}
+
+.separator {
+    margin: 0 4px;
+    opacity: 0.5;
+}
+
+.unit {
+    margin-left: 4px;
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.context-bar-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    padding: 1px;
+}
+
+.context-bar-fill {
+    height: 100%;
+    background: var(--accent-primary);
+    border-radius: 1px;
+    box-shadow: 0 0 5px var(--accent-primary);
+    transition: width 0.3s ease;
+}
+
+.context-bar-fill.warning {
+    background: var(--accent-warning);
+    box-shadow: 0 0 5px var(--accent-warning);
+}
+
+.context-bar-fill.critical {
+    background: var(--accent-error);
+    box-shadow: 0 0 5px var(--accent-error);
+    animation: context-pulse 1s infinite alternate;
+}
+
+@keyframes context-pulse {
+    from {
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 1;
+        box-shadow: 0 0 10px var(--accent-error);
+    }
+}

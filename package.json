@@ -1,0 +1,28 @@
+{
+    "name": "agentping",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Agent-Human Interaction Protocol",
+    "type": "module",
+    "scripts": {
+        "build": "pnpm -r build",
+        "predev": "lsof -ti:7890,7891 | xargs kill -9 2>/dev/null || true",
+        "dev": "pnpm -r --parallel dev",
+        "test": "pnpm -r test",
+        "lint": "eslint packages --ext .ts,.tsx",
+        "clean": "pnpm -r clean && rm -rf node_modules"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "typescript": "^5.3.0",
+        "eslint": "^8.55.0",
+        "@typescript-eslint/eslint-plugin": "^6.13.0",
+        "@typescript-eslint/parser": "^6.13.0",
+        "prettier": "^3.1.0",
+        "vitest": "^1.0.0"
+    },
+    "packageManager": "pnpm@8.12.0",
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

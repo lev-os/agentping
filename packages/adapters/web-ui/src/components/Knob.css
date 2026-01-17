@@ -1,0 +1,59 @@
+/* ----------------------------------------------------------------------------
+   Knob (Cyber-Premium)
+   ---------------------------------------------------------------------------- */
+.knob-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+}
+
+.knob-control {
+    position: relative;
+    cursor: ns-resize;
+    user-select: none;
+    border-radius: 50%;
+    /* Optional: glass background circle */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.4) 100%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s;
+}
+
+.knob-control:hover {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.knob-control:active {
+    cursor: grabbing;
+}
+
+.knob-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.knob-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* SVG Styling */
+.knob-control svg {
+    overflow: visible;
+}
+
+.knob-control path {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}

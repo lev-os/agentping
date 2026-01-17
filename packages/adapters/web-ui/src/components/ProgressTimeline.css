@@ -1,0 +1,94 @@
+/* ----------------------------------------------------------------------------
+   ProgressTimeline
+   ---------------------------------------------------------------------------- */
+.progress-timeline {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 24px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 24px;
+    flex-shrink: 0;
+}
+
+.timeline-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 12px;
+    z-index: 2;
+}
+
+.timeline-complete .timeline-icon {
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+    color: white;
+}
+
+.timeline-current .timeline-icon {
+    background: var(--bg-primary);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(var(--accent-primary-rgb), 0.15);
+}
+
+.timeline-error .timeline-icon {
+    background: var(--accent-error);
+    border-color: var(--accent-error);
+    color: white;
+}
+
+.timeline-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border-color);
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.timeline-complete .timeline-line {
+    background: var(--accent-success);
+}
+
+.timeline-content {
+    padding-top: 2px;
+}
+
+.timeline-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.timeline-description {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.timeline-timestamp {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    margin-top: 4px;
+}

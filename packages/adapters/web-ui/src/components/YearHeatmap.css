@@ -1,0 +1,23 @@
+/* YearHeatmap.css */
+.year-heatmap {
+    /* overflow-x: auto; */
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.heatmap-svg {
+    font-size: 10px;
+}
+
+.heatmap-cell {
+    shape-rendering: geometricPrecision;
+    stroke: var(--bg-secondary);
+    stroke-width: 2px;
+}
+
+.heatmap-cell:hover {
+    stroke: var(--text-primary);
+    stroke-width: 1px;
+}

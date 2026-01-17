@@ -1,0 +1,100 @@
+.orderbook-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #09090b;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.orderbook-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.orderbook-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.orderbook-list.asks {
+    justify-content: flex-end;
+    /* Asks stack up from spread */
+}
+
+.ob-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 12px;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.ob-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ob-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.15;
+    transition: width 0.2s;
+}
+
+.asks .ob-bg {
+    background-color: var(--accent-error);
+}
+
+.bids .ob-bg {
+    background-color: var(--accent-success);
+}
+
+.ob-price {
+    font-weight: 600;
+}
+
+.ob-price.ask {
+    color: var(--accent-error);
+}
+
+.ob-price.bid {
+    color: var(--accent-success);
+}
+
+.ob-size,
+.ob-total {
+    color: var(--text-secondary);
+}
+
+.orderbook-spread {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.spread-price {
+    color: var(--text-primary);
+}
+
+.spread-pct {
+    font-size: 10px;
+    color: var(--text-muted);
+}

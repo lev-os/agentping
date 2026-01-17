@@ -1,0 +1,62 @@
+.hex-inspector {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    background: #0d0d0d;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    color: var(--text-secondary);
+    overflow-x: auto;
+}
+
+.hex-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 160px;
+    gap: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--accent-primary);
+}
+
+.hex-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hex-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 160px;
+    gap: 16px;
+    align-items: center;
+}
+
+.hex-offset {
+    color: var(--text-muted);
+}
+
+.hex-bytes {
+    display: flex;
+    gap: 8px;
+    /* space between byte groups? simplified here */
+}
+
+.hex-byte {
+    width: 20px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.hex-byte.empty {
+    color: var(--text-muted);
+    opacity: 0.3;
+}
+
+.hex-ascii {
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    border-left: 1px solid var(--border-color);
+    padding-left: 12px;
+}

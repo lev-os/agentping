@@ -1,0 +1,23 @@
+{
+    "name": "@agentping/storage-sqlite",
+    "version": "0.1.0",
+    "description": "SQLite storage adapter for AgentPing",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "test": "vitest",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@agentping/core": "workspace:*",
+        "sql.js": "^1.10.0"
+    },
+    "devDependencies": {
+        "@types/sql.js": "^1.4.9",
+        "typescript": "^5.3.0",
+        "vitest": "^1.0.0"
+    }
+}

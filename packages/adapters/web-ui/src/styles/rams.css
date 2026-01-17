@@ -1,0 +1,241 @@
+/**
+ * rams.ai Design Principles CSS
+ * 
+ * Dieter Rams' 10 principles applied to AgentPing UI:
+ * 1. Innovative - Fresh patterns for agent-human interaction
+ * 2. Useful - Every element serves a purpose
+ * 3. Aesthetic - Beautiful, minimal design
+ * 4. Understandable - Self-explanatory interfaces
+ * 5. Unobtrusive - Quiet until needed
+ * 6. Honest - No deceptive patterns
+ * 7. Long-lasting - Timeless design tokens
+ * 8. Thorough - Attention to detail
+ * 9. Environmentally-friendly - Minimal DOM, efficient
+ * 10. Less design as possible - Essential elements only
+ */
+
+/* ============================================================================
+   Principle 10: As little design as possible
+   - Clean, essential elements only
+   ============================================================================ */
+
+.rams-container {
+    display: grid;
+    gap: 1px;
+    background: var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.rams-container>* {
+    background: var(--bg-primary);
+    padding: 16px;
+}
+
+/* ============================================================================
+   Principle 4: Understandable
+   - Clear visual hierarchy, predictable patterns
+   ============================================================================ */
+
+.rams-heading {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.rams-subheading {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+/* ============================================================================
+   Principle 3: Aesthetic
+   - Harmonious proportions, visual balance
+   ============================================================================ */
+
+.rams-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    /* Golden ratio-inspired spacing */
+    margin-bottom: calc(16px * 0.618);
+}
+
+.rams-card:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================================================
+   Principle 5: Unobtrusive
+   - Subtle until interaction
+   ============================================================================ */
+
+.rams-interactive {
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
+}
+
+.rams-interactive:hover,
+.rams-interactive:focus-within {
+    opacity: 1;
+}
+
+/* ============================================================================
+   Principle 8: Thorough
+   - Attention to micro-interactions
+   ============================================================================ */
+
+.rams-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.rams-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+}
+
+/* ============================================================================
+   Principle 9: Environmentally-friendly (efficient)
+   - will-change for compositor optimization
+   ============================================================================ */
+
+.rams-animated {
+    will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rams-animated {
+        will-change: auto;
+    }
+}
+
+/* ============================================================================
+   Principle 6: Honest
+   - Clear status indicators, no hidden states
+   ============================================================================ */
+
+.rams-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rams-status::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    /* Gentle pulse for active states */
+    animation: rams-pulse 2s infinite;
+}
+
+.rams-status[data-status="pending"]::before {
+    color: var(--accent-warning);
+}
+
+.rams-status[data-status="responded"]::before {
+    color: var(--accent-success);
+    animation: none;
+}
+
+.rams-status[data-status="expired"]::before {
+    color: var(--text-muted);
+    animation: none;
+}
+
+@keyframes rams-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ============================================================================
+   Principle 2: Useful
+   - Clear affordances, obvious actions
+   ============================================================================ */
+
+.rams-action-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.rams-action-group .primary {
+    flex: 1;
+}
+
+.rams-action-group .secondary {
+    flex: 0 0 auto;
+}
+
+/* ============================================================================
+   Vercel + rams.ai combined tokens
+   ============================================================================ */
+
+.rams-vercel {
+    /* Touch targets (44px mobile) */
+    --min-touch-target: 44px;
+
+    /* Typography scale (perfect fourth) */
+    --font-xs: 11px;
+    --font-sm: 12px;
+    --font-base: 14px;
+    --font-lg: 18px;
+    --font-xl: 24px;
+    --font-2xl: 32px;
+
+    /* Spacing scale (8px base) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+}
+
+/* ============================================================================
+   Mobile-first responsive (Vercel guideline)
+   ============================================================================ */
+
+@media (max-width: 640px) {
+    .rams-container>* {
+        padding: 12px;
+    }
+
+    .rams-action-group {
+        flex-direction: column;
+    }
+
+    .rams-action-group .primary,
+    .rams-action-group .secondary {
+        flex: none;
+        width: 100%;
+    }
+
+    /* Ensure touch targets on mobile */
+    button,
+    [role="button"],
+    a {
+        min-height: var(--min-touch-target, 44px);
+        min-width: var(--min-touch-target, 44px);
+    }
+}

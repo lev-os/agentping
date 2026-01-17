@@ -1,0 +1,48 @@
+/* ----------------------------------------------------------------------------
+   Rating (Cyber-Premium)
+   ---------------------------------------------------------------------------- */
+.rating-container {
+    display: inline-flex;
+    gap: 4px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.rating-container:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border-color);
+}
+
+.rating-item {
+    font-size: 24px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    line-height: 1;
+    opacity: 0.5;
+    position: relative;
+}
+
+.rating-item:hover {
+    transform: scale(1.3) rotate(10deg);
+}
+
+.rating-item.active {
+    color: var(--accent-warning);
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 184, 0, 0.6);
+}
+
+.rating-item.hovered-active {
+    color: var(--accent-warning);
+    opacity: 0.8;
+}
+
+/* Variant for hearts/skulls if needed */
+.rating-item.danger.active {
+    color: var(--accent-danger);
+    text-shadow: 0 0 10px rgba(255, 42, 109, 0.6);
+}

@@ -1,0 +1,65 @@
+/* ----------------------------------------------------------------------------
+   BatteryMeter (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.battery-meter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.battery-body {
+    width: 32px;
+    height: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    padding: 1px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.battery-fill {
+    height: 100%;
+    border-radius: 1px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 0 5px currentColor;
+}
+
+.battery-bolt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+}
+
+.battery-cap {
+    width: 2px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 0 1px 1px 0;
+}
+
+.battery-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* Pulsing effect when charging */
+.battery-meter.charging .battery-fill {
+    animation: charge-pulse 1s infinite alternate;
+}
+
+@keyframes charge-pulse {
+    from {
+        opacity: 0.6;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

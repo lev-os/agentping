@@ -1,0 +1,115 @@
+.regex-tester {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    height: 400px;
+}
+
+.regex-input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 1.1em;
+}
+
+.regex-slash {
+    color: var(--text-secondary);
+    font-weight: bold;
+    padding: 0 4px;
+}
+
+.regex-pattern {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+}
+
+.regex-flags {
+    width: 60px;
+    background: transparent;
+    border: none;
+    color: var(--accent-primary);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    text-align: right;
+}
+
+.regex-error {
+    color: var(--accent-error);
+    font-size: 0.9em;
+    padding: 0 4px;
+}
+
+.regex-body {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping on small screens */
+    gap: 16px;
+    overflow: hidden;
+    /* container for panes */
+}
+
+.regex-pane {
+    flex: 1;
+    min-width: 250px;
+    /* Prevent squishing */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.regex-pane label {
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.regex-pane textarea {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 12px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    resize: none;
+    outline: none;
+}
+
+.regex-highlight {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.regex-match {
+    background: rgba(var(--accent-primary-rgb), 0.3);
+    color: white;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px var(--accent-primary);
+}

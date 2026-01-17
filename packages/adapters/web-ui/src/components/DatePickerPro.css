@@ -1,0 +1,178 @@
+/* DatePickerPro.css */
+.date-picker-pro {
+    position: relative;
+    width: 320px;
+    font-family: var(--font-sans);
+}
+
+.picker-input-group {
+    display: flex;
+    align-items: center;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.picker-input-group:hover,
+.picker-input-group.active {
+    border-color: var(--accent-primary);
+    background: var(--bg-hover);
+}
+
+.picker-icon {
+    margin-right: 8px;
+    color: var(--text-muted);
+}
+
+.picker-display-value {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.picker-placeholder {
+    color: var(--text-muted);
+}
+
+.picker-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    padding: 16px;
+    width: 380px;
+    /* Wider for shortcuts */
+    display: flex;
+    gap: 16px;
+}
+
+.picker-shortcuts {
+    width: 100px;
+    border-right: 1px solid var(--border-subtle);
+    padding-right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.shortcut-btn {
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shortcut-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.picker-calendar {
+    flex: 1;
+}
+
+.picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.picker-month-nav {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.picker-month-nav:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.picker-month-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.picker-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+}
+
+.picker-day-label {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.picker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.picker-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.picker-cell:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.picker-cell.other-month {
+    color: var(--text-disabled);
+    opacity: 0.5;
+}
+
+.picker-cell.selected {
+    background: var(--accent-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.picker-cell.in-range {
+    background: rgba(var(--accent-primary-rgb), 0.15);
+    color: var(--accent-primary);
+    border-radius: 0;
+}
+
+.picker-cell.range-start {
+    background: var(--accent-primary);
+    color: white;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.picker-cell.range-end {
+    background: var(--accent-primary);
+    color: white;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

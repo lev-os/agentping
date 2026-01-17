@@ -1,0 +1,53 @@
+/* ----------------------------------------------------------------------------
+   TreeBrowser (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.tree-browser {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tree-node {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+.tree-node:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.tree-node:focus-visible {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.folder-icon {
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.tree-node:hover .folder-icon {
+    color: var(--accent-primary);
+}
+
+.file-icon {
+    opacity: 0.6;
+}
+
+/* Connector lines (optional, kept simple for now) */
+.tree-browser [role="group"] {
+    position: relative;
+    /* Indent managed by padding in component for now */
+}

@@ -1,0 +1,195 @@
+.image-diff-viewer {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-surface);
+    overflow: hidden;
+}
+
+.image-diff-toolbar {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    justify-content: center;
+}
+
+.image-diff-modes {
+    display: flex;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px;
+    border-radius: 6px;
+}
+
+.image-diff-modes button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    font-size: 0.85em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.image-diff-modes button:hover {
+    color: var(--text-primary);
+}
+
+.image-diff-modes button.active {
+    background: var(--bg-card);
+    color: var(--accent-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.image-diff-content {
+    background: repeating-conic-gradient(#1a1a1a 0% 25%, #151515 0% 50%) 50% / 20px 20px;
+    padding: 2px;
+    min-height: 200px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Side by Side */
+.diff-sxs {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 2px;
+    padding: 20px;
+}
+
+.diff-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.diff-pane img {
+    max-width: 100%;
+    max-height: 400px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pane-label {
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* Slider / Swipe */
+.diff-slider-container {
+    position: relative;
+    max-width: 100%;
+    height: 400px;
+    /* Needed for absolute positioning context */
+    overflow: hidden;
+    user-select: none;
+    /* Normally you'd want aspect ratio preservation or specific sizing */
+    display: flex;
+    justify-content: center;
+}
+
+.diff-slider-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.diff-slider-img img {
+    display: block;
+    max-width: 100%;
+    max-height: 400px;
+}
+
+.diff-slider-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent-primary);
+    cursor: ew-resize;
+    z-index: 10;
+    pointer-events: none;
+    /* Let input handle events */
+}
+
+.handle-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.diff-slider-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 20;
+    margin: 0;
+}
+
+/* Fade / Onion Skin */
+.diff-fade-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+}
+
+.diff-fade-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.diff-slider-control {
+    position: absolute;
+    bottom: 16px;
+    width: 60%;
+    z-index: 20;
+}
+
+.fade-labels {
+    position: absolute;
+    top: 16px;
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    font-size: 0.8em;
+    color: white;
+    text-shadow: 0 1px 2px black;
+    pointer-events: none;
+}

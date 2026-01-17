@@ -1,0 +1,20 @@
+{
+    "name": "@agentping/slack",
+    "version": "0.1.0",
+    "description": "Slack notification adapter for AgentPing",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@agentping/core": "workspace:*",
+        "@slack/web-api": "^7.0.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.0"
+    }
+}

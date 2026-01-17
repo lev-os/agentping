@@ -1,0 +1,137 @@
+.build-status-logs {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    overflow: hidden;
+}
+
+.build-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.build-title {
+    margin: 0;
+    font-size: 11px;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.build-status-summary {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.build-steps {
+    flex: 1;
+    overflow: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.build-step {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.2s;
+}
+
+.build-step.success {
+    border-left: 3px solid #00ff00;
+}
+
+.build-step.failed {
+    border-left: 3px solid #ff0000;
+}
+
+.build-step.running {
+    border-left: 3px solid var(--accent-primary);
+}
+
+.build-step.pending {
+    border-left: 3px solid #888;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.step-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.step-icon {
+    width: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.build-step.success .step-icon {
+    color: #00ff00;
+}
+
+.build-step.failed .step-icon {
+    color: #ff0000;
+}
+
+.build-step.running .step-icon {
+    color: var(--accent-primary);
+    animation: spin 1s linear infinite;
+}
+
+.build-step.pending .step-icon {
+    color: #888;
+}
+
+.step-name {
+    flex: 1;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.step-duration {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-right: 8px;
+}
+
+.step-toggle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.step-logs {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.log-line {
+    color: #aaa;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+
+.no-logs {
+    color: rgba(255, 255, 255, 0.2);
+    font-style: italic;
+}

@@ -1,0 +1,69 @@
+.starfield-container {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    overflow: hidden;
+    position: relative;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.starfield-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    color: #fff;
+    opacity: 0.5;
+    letter-spacing: 4px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+
+/* Simple parallax star simulation */
+/* Using box-shadow to create multiple stars from one element */
+/* Function to generate random box-shadows would be ideal in SCSS/JS, here we hardcode a few scatterings */
+
+.stars-small {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow:
+        10px 10px #fff, 50px 80px #fff, 120px 30px #fff, 200px 150px #fff,
+        90px 190px #fff, 250px 40px #fff, 10px 220px #fff, 280px 280px #fff,
+        150px 100px #fff, 40px 250px #fff, 220px 20px #fff, 180px 210px #fff,
+        300px 50px #fff, 60px 120px #fff, 130px 280px #fff, 270px 180px #fff;
+    animation: stars-move 50s linear infinite;
+}
+
+.stars-medium {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow:
+        30px 40px #aaa, 150px 180px #aaa, 220px 50px #aaa, 80px 250px #aaa,
+        280px 120px #aaa, 40px 150px #aaa, 190px 280px #aaa, 110px 20px #aaa;
+    animation: stars-move 100s linear infinite;
+}
+
+.stars-large {
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow:
+        200px 100px #888, 50px 280px #888, 120px 40px #888, 260px 220px #888;
+    animation: stars-move 150s linear infinite;
+    border-radius: 50%;
+}
+
+@keyframes stars-move {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-300px);
+    }
+}

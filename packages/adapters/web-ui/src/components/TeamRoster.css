@@ -1,0 +1,103 @@
+.team-roster {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.roster-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.roster-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.roster-avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.roster-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 1.1em;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-secondary);
+}
+
+.status-online .status-dot {
+    background: var(--accent-success);
+    box-shadow: 0 0 4px var(--accent-success);
+}
+
+.status-busy .status-dot {
+    background: var(--accent-error);
+}
+
+.status-away .status-dot {
+    background: var(--accent-warning);
+}
+
+.status-offline .status-dot {
+    background: var(--text-muted);
+}
+
+.roster-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+}
+
+.roster-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roster-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.95em;
+}
+
+.roster-location {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.roster-role {
+    font-size: 0.8em;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

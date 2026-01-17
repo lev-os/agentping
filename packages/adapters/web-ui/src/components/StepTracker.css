@@ -1,0 +1,28 @@
+/* ----------------------------------------------------------------------------
+   StepTracker (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.step-tracker {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.tracker-pip {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    min-width: 20px;
+}
+
+.tracker-pip.active {
+    background: var(--accent-primary);
+    box-shadow: 0 0 5px var(--accent-primary);
+}
+
+.tracker-pip.current {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    transform: scaleY(1.2);
+}

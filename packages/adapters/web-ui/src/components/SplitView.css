@@ -1,0 +1,51 @@
+/* ----------------------------------------------------------------------------
+   SplitView (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.split-view {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.split-pane {
+    overflow: auto;
+    position: relative;
+}
+
+.split-divider {
+    width: 6px;
+    background: var(--bg-secondary);
+    cursor: col-resize;
+    position: relative;
+    z-index: 10;
+    transition: background 0.2s;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.split-divider::after {
+    content: '';
+    width: 2px;
+    height: 20px;
+    background: var(--text-muted);
+    border-radius: 1px;
+}
+
+.split-divider:hover,
+.split-divider.dragging {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.split-divider:hover::after,
+.split-divider.dragging::after {
+    background: black;
+}

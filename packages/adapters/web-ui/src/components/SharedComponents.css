@@ -1,0 +1,193 @@
+/* Approval Buttons */
+.approval-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+    padding: 32px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.approval-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.2px;
+}
+
+.approval-details {
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.approval-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--radius-md);
+}
+
+/* Question Input */
+.question-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.question-text {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.2px;
+}
+
+.question-context {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+}
+
+.question-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.question-options button {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 16px;
+    font-weight: 500;
+    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.question-options button:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+}
+
+.question-options .selected {
+    background: var(--accent-primary-soft);
+    color: var(--accent-primary);
+    border-color: var(--border-active);
+}
+
+.question-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.question-input-row input {
+    flex: 1;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.question-input-row input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow-primary);
+}
+
+/* Direction Picker */
+.direction-picker {
+    display: grid;
+    gap: 12px;
+}
+
+.direction-card {
+    padding: 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.direction-card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-tertiary);
+}
+
+.direction-card.selected {
+    background: var(--accent-primary-soft);
+    border-color: var(--border-active);
+    box-shadow: var(--glow-primary);
+}
+
+.direction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.direction-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.direction-rationale {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Notification Banner */
+.notification-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: var(--radius-md);
+}
+
+.notification-info {
+    background: var(--accent-primary-soft);
+    border: 1px solid rgba(79, 143, 247, 0.25);
+}
+
+.notification-success {
+    background: var(--accent-success-soft);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.notification-warning {
+    background: var(--accent-warning-soft);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.notification-error {
+    background: var(--accent-danger-soft);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+.notification-icon {
+    font-size: 20px;
+}
+
+.notification-message {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+}

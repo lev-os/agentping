@@ -1,0 +1,81 @@
+.hex-dump-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    overflow: hidden;
+}
+
+.hex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.hex-title {
+    margin: 0;
+    font-size: 11px;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hex-info {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.hex-container {
+    flex: 1;
+    overflow: auto;
+    padding: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.hex-row {
+    display: flex;
+    gap: 16px;
+}
+
+.hex-offset {
+    color: rgba(255, 255, 255, 0.4);
+    user-select: none;
+}
+
+.hex-bytes {
+    display: flex;
+    gap: 6px;
+    color: var(--accent-primary);
+}
+
+.hex-byte {
+    width: 16px;
+    text-align: center;
+}
+
+.hex-byte.empty {
+    opacity: 0;
+}
+
+.hex-ascii {
+    display: flex;
+    color: #fff;
+    letter-spacing: 0;
+}
+
+.hex-char {
+    width: 8px;
+    text-align: center;
+}
+
+.hex-row:hover {
+    background: rgba(0, 255, 255, 0.05);
+}

@@ -1,0 +1,349 @@
+/**
+ * UI Skills + Vercel Design Guidelines CSS
+ * 
+ * Comprehensive implementation of:
+ * - https://www.ui-skills.com
+ * - https://vercel.com/design/guidelines
+ */
+
+/* ============================================================================
+   UI Skills: Stack
+   ============================================================================ */
+
+/* MUST use accessible focus patterns */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Focus-within for grouped controls (Vercel) */
+:focus-within {
+    /* Applied per-component as needed */
+}
+
+/* ============================================================================
+   UI Skills: Interaction
+   ============================================================================ */
+
+/* NEVER use h-screen, use h-dvh (100dvh) */
+.full-height {
+    height: 100dvh;
+}
+
+/* MUST respect safe-area-inset for fixed elements */
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Match visual & hit targets (Vercel) */
+/* If visual target < 24px, expand hit target */
+.expand-hit-target {
+    position: relative;
+}
+
+.expand-hit-target::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    /* Expand to at least 24px */
+}
+
+/* Mobile: minimum 44px hit targets (Vercel) */
+@media (max-width: 768px) {
+
+    button,
+    [role="button"],
+    a,
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Prevent double-tap zoom on controls (Vercel) */
+button,
+[role="button"],
+input,
+textarea,
+select {
+    touch-action: manipulation;
+}
+
+/* Tap highlight follows design (Vercel) */
+button,
+[role="button"],
+a {
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+}
+
+/* ============================================================================
+   UI Skills: Animation
+   ============================================================================ */
+
+/* NEVER exceed 200ms for interaction feedback */
+.interaction-transition {
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+}
+
+/* MUST pause looping animations when off-screen */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Only animate compositor props (transform, opacity) */
+.animate-entrance {
+    animation: ui-skills-fade-in 200ms ease-out;
+}
+
+@keyframes ui-skills-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================================
+   UI Skills: Typography
+   ============================================================================ */
+
+/* MUST use text-balance for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading {
+    text-wrap: balance;
+}
+
+/* MUST use text-pretty for body/paragraphs */
+p,
+li,
+dd,
+td,
+th,
+.body-text {
+    text-wrap: pretty;
+}
+
+/* MUST use tabular-nums for data */
+.data,
+.numeric,
+time,
+[data-numeric] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* SHOULD use truncate for dense UI */
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Line clamp for multi-line truncation */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   UI Skills: Layout
+   ============================================================================ */
+
+/* MUST use a fixed z-index scale */
+:root {
+    --z-base: 0;
+    --z-elevated: 10;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-max: 9999;
+}
+
+/* ============================================================================
+   Vercel: Interactions
+   ============================================================================ */
+
+/* Overscroll behavior for modals/drawers (Vercel) */
+.modal,
+.drawer,
+.dialog {
+    overscroll-behavior: contain;
+}
+
+/* ============================================================================
+   Vercel: Forms
+   ============================================================================ */
+
+/* Mobile input size >= 16px to prevent iOS Safari auto-zoom */
+input,
+textarea,
+select {
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
+
+    input,
+    textarea,
+    select {
+        font-size: 14px;
+    }
+}
+
+/* Labels everywhere - visual association */
+label {
+    cursor: pointer;
+}
+
+/* Checkboxes & radios avoid dead zones */
+.checkbox-group,
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    cursor: pointer;
+}
+
+.checkbox-group:hover,
+.radio-group:hover {
+    background: var(--bg-hover, rgba(255, 255, 255, 0.05));
+}
+
+/* Error placement - next to fields */
+.field-error {
+    color: var(--accent-danger, #ef4444);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Placeholders signal emptiness - ellipsis convention */
+input::placeholder,
+textarea::placeholder {
+    opacity: 0.6;
+}
+
+/* ============================================================================
+   Vercel: Performance
+   ============================================================================ */
+
+/* NEVER animate large blur() or backdrop-filter */
+/* Applied via :not() selector where needed */
+
+/* will-change only during active animation */
+.animating {
+    will-change: transform, opacity;
+}
+
+/* Clean up will-change after animation */
+.animation-complete {
+    will-change: auto;
+}
+
+/* ============================================================================
+   Vercel: Accessibility Patterns
+   ============================================================================ */
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--bg-primary);
+    padding: 8px 16px;
+    z-index: var(--z-max);
+    transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ============================================================================
+   Alert Dialog for destructive actions (UI Skills)
+   ============================================================================ */
+
+.alert-dialog {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal);
+}
+
+.alert-dialog-content {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.alert-dialog-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}

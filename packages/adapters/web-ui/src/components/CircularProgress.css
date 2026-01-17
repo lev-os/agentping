@@ -1,0 +1,55 @@
+/* ----------------------------------------------------------------------------
+   CircularProgress (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.circular-progress {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-svg {
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.circular-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+}
+
+.circular-fg {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 4px currentColor);
+    /* Neon glow based on stroke color */
+}
+
+.circular-label {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Pulsing animation for active progress */
+@keyframes progress-pulse {
+    0% {
+        filter: drop-shadow(0 0 2px currentColor);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 2px currentColor);
+    }
+}
+
+.circular-fg {
+    animation: progress-pulse 2s infinite ease-in-out;
+}

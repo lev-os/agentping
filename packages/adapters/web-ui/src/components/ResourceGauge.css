@@ -1,0 +1,50 @@
+/* ----------------------------------------------------------------------------
+   ResourceGauge (New Widget)
+   ---------------------------------------------------------------------------- */
+.resource-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.gauge-svg {
+    transform: rotate(-90deg);
+}
+
+.gauge-circle-bg {
+    fill: none;
+    stroke: var(--bg-tertiary);
+    stroke-width: 8;
+}
+
+.gauge-circle-fg {
+    fill: none;
+    stroke: var(--accent-primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 4px var(--accent-primary));
+}
+
+.gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.gauge-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: -2px;
+}

@@ -1,0 +1,104 @@
+/* ----------------------------------------------------------------------------
+   ToolInvocation (Cyber-Premium Refined)
+   ---------------------------------------------------------------------------- */
+.tool-invocation {
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.tool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tool-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.tool-icon {
+    color: var(--accent-warning);
+}
+
+.tool-status {
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tool-body {
+    padding: 12px;
+}
+
+.section-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 0 0 12px 0;
+    white-space: pre-wrap;
+    color: var(--text-secondary);
+}
+
+.code-block.result {
+    color: var(--accent-success);
+    border-left: 2px solid var(--accent-success);
+    margin-bottom: 0;
+}
+
+/* Status variants */
+.status-running {
+    border-color: var(--accent-primary);
+}
+
+.status-running .tool-status {
+    background: var(--accent-primary);
+    color: black;
+}
+
+.status-failed .code-block.result {
+    color: var(--accent-error);
+    border-left-color: var(--accent-error);
+}
+
+/* Loader line */
+.tool-loader {
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: tool-loading 1.5s infinite;
+}
+
+@keyframes tool-loading {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}

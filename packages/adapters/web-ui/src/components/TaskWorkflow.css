@@ -1,0 +1,260 @@
+/**
+ * TaskWorkflow Styling
+ * Premium dark floating panel matching the new design system
+ */
+
+/* Overlay positions the panel */
+.task-workflow-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.task-workflow-panel {
+    pointer-events: auto;
+    width: 600px;
+    max-width: 90vw;
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    padding: 24px 28px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+}
+
+/* Header */
+.task-workflow-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.task-workflow-header-left,
+.task-workflow-header-right {
+    display: flex;
+    gap: 8px;
+}
+
+.task-workflow-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-workflow-icon-btn:hover:not(:disabled) {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.task-workflow-icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.task-workflow-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+}
+
+/* Step Progress */
+.task-workflow-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.task-workflow-step-badge {
+    background: var(--accent-primary-soft);
+    color: var(--accent-primary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(79, 143, 247, 0.2);
+}
+
+.task-workflow-step-total {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Instruction */
+.task-workflow-instruction {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    min-height: 60px;
+}
+
+.task-workflow-details {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Actions */
+.task-workflow-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.task-workflow-done-btn {
+    background: linear-gradient(180deg, var(--accent-primary) 0%, #3d7ce5 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.task-workflow-done-btn:hover {
+    background: linear-gradient(180deg, #5a9af8 0%, var(--accent-primary) 100%);
+    box-shadow: var(--shadow-md), var(--glow-primary);
+    transform: translateY(-1px);
+}
+
+.task-workflow-input-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 4px 4px 4px 16px;
+    transition: border-color 0.15s ease;
+}
+
+.task-workflow-input-container:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow-primary);
+}
+
+.task-workflow-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    padding: 8px 0;
+}
+
+.task-workflow-input::placeholder {
+    color: var(--text-muted);
+}
+
+.task-workflow-send-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--bg-hover);
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.task-workflow-send-btn:hover:not(:disabled) {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.task-workflow-send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Skip Link */
+.task-workflow-skip {
+    display: block;
+    margin-top: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    transition: color 0.15s ease;
+}
+
+.task-workflow-skip:hover {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+/* Minimized State */
+.task-workflow-minimized {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    border: 1px solid var(--border-color);
+}
+
+.task-workflow-minimized:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.task-workflow-minimized-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.task-workflow-minimized-progress {
+    background: var(--bg-tertiary);
+    color: var(--accent-primary);
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border-subtle);
+}
