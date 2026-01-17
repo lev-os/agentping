@@ -1,0 +1,32 @@
+/* ----------------------------------------------------------------------------
+   DraggableList
+   ---------------------------------------------------------------------------- */
+.draggable-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.draggable-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.draggable-item:hover {
+    border-color: var(--border-hover);
+    transform: translateX(4px);
+}
+
+.draggable-item:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+}

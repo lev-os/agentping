@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Primitives.css';
+import './DraggableList.css';
 
 interface DraggableItem {
     id: string;

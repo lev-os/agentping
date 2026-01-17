@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import './Primitives.css';
+import './HoverCard.css';
 
 interface HoverCardProps {
     trigger: React.ReactNode;

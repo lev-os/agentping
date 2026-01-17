@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import './Primitives.css';
+import './ContextMenu.css';
 
 interface MenuItem {
     id: string;

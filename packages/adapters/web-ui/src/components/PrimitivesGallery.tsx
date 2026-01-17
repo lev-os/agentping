@@ -8,7 +8,7 @@ import {
     ConfirmationModal,
     CommandPalette,
 } from './index';
-import './Primitives.css';
+
 import './Layout.css';
 
 // Import extracted gallery sections

@@ -1,0 +1,66 @@
+/* ----------------------------------------------------------------------------
+   HoverCard
+   ---------------------------------------------------------------------------- */
+.hover-card-trigger {
+    display: inline-block;
+    cursor: help;
+    border-bottom: 1px dashed var(--text-muted);
+    transition: border-color 0.2s;
+}
+
+.hover-card-trigger:hover {
+    border-bottom-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.hover-card-content {
+    position: absolute;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-xl);
+    z-index: 900;
+    width: 280px;
+    animation: fade-in-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-card-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.hover-card-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.hover-card-info h4 {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.hover-card-info span {
+    font-size: 13px;
+    color: var(--accent-primary);
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
