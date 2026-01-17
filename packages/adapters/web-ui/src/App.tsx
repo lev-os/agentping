@@ -12,6 +12,7 @@ import {
     SelectionList,
     ApprovalButtons,
     QuestionInput,
+    SecretInput,
     DirectionPicker,
     NotificationBanner,
     EnrichmentPanel,
@@ -260,6 +261,26 @@ export default function App() {
                         }}
                         onDismiss={handleDismiss}
                     />
+                );
+            }
+            case 'secret': {
+                const payload = selectedPing.payload as any;
+                return (
+                    <div className="flex flex-col gap-4 p-4">
+                        <div className="text-red-400 font-bold">🔒 {payload.title}</div>
+                        <div className="text-gray-400">{payload.question}</div>
+                        <SecretInput
+                            value={responseState.answerValue || ''}
+                            onChange={responseState.setAnswer}
+                            placeholder="Enter secret value..."
+                        />
+                        <button
+                            className="cyber-button primary mt-4"
+                            onClick={handleAnswer}
+                        >
+                            Submit Secret
+                        </button>
+                    </div>
                 );
             }
             case 'custom': {

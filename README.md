@@ -160,6 +160,8 @@ AgentPing is fully compatible with the **Model Context Protocol (MCP)**. This me
 | `ask_human` | The classic. Agent asks a question, you type an answer. |
 | `notify_human` | Fire-and-forget. *"Deployment complete."* |
 | `request_code_review` | Agent shows a diff. You review lines and approve changes. |
+| `request_secret` | Securely request API keys or passwords. Input is masked in UI. |
+| `render_custom_ui` | **The Power Tool**. Render ANY component from the Premium Gallery (Charts, Logs, Diffs, etc.) by name. |
 
 ### Config for Claude Desktop
 

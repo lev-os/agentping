@@ -220,6 +220,135 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
                 required: ['title', 'steps'],
             },
         },
+        {
+            name: 'request_selection',
+            description: 'Request a selection from a list of options. Useful for choosing between different paths, files, or strategies.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    title: {
+                        type: 'string',
+                        description: 'Title of the selection request',
+                    },
+                    options: {
+                        type: 'array',
+                        items: { type: 'string' },
+                        description: 'List of options to choose from',
+                    },
+                    allowMultiple: {
+                        type: 'boolean',
+                        description: 'Whether to allow selecting multiple options (default: false)',
+                    },
+                    context: {
+                        type: 'string',
+                        description: 'Optional context to help the human decide',
+                    },
+                },
+                required: ['title', 'options'],
+            },
+        },
+        {
+            name: 'request_research_direction',
+            description: 'Present multiple research directions to the human and ask for guidance on which to pursue. Allows setting context and pros/cons for each direction.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    problem: {
+                        type: 'string',
+                        description: 'The core problem being researched',
+                    },
+                    directions: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                direction: { type: 'string', description: 'Name/Title of the direction' },
+                                description: { type: 'string', description: 'Brief description' },
+                                pros: { type: 'array', items: { type: 'string' } },
+                                cons: { type: 'array', items: { type: 'string' } },
+                            },
+                        },
+                        description: 'List of proposed directions',
+                    },
+                    allowCustom: {
+                        type: 'boolean',
+                        description: 'Allow human to propose a custom direction',
+                    },
+                },
+                required: ['problem', 'directions'],
+            },
+        },
+        {
+            name: 'request_code_review',
+            description: 'Request human review for a set of code changes. Useful for getting sign-off on critical edits.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    title: {
+                        type: 'string',
+                        description: 'Title of the review request (e.g., "Refactor Auth")',
+                    },
+                    files: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                path: { type: 'string' },
+                                diff: { type: 'string', description: 'The diff content or summary of changes' },
+                                description: { type: 'string' },
+                            },
+                        },
+                        description: 'List of files changed',
+                    },
+                    context: {
+                        type: 'string',
+                        description: 'Overall context for the review',
+                    },
+                },
+                required: ['title', 'files'],
+            },
+        },
+        {
+            name: 'request_secret',
+            description: 'Securely request a sensitive value (API key, password, 2FA code) from the human. The input will be masked in the UI.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    title: {
+                        type: 'string',
+                        description: 'Title of the secret request (e.g., "AWS API Key")',
+                    },
+                    description: {
+                        type: 'string',
+                        description: 'Explanation of why this secret is needed',
+                    },
+                },
+                required: ['title'],
+            },
+        },
+        {
+            name: 'render_custom_ui',
+            description: 'Render a custom UI component from the extensive "Cyber-Premium" gallery. This allows you to show charts, logs, diffs, and AI visualizations.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    title: {
+                        type: 'string',
+                        description: 'Title of the view',
+                    },
+                    component: {
+                        type: 'string',
+                        description: 'Name of the component to render (e.g., "LineChart", "LogViewer", "JsonDiffViewer", "ResourceGauge")',
+                    },
+                    props: {
+                        type: 'object',
+                        description: 'Data/props to pass to the component (see component docs)',
+                        additionalProperties: true,
+                    },
+                },
+                required: ['title', 'component', 'props'],
+            },
+        },
     ],
 }));
 
@@ -410,6 +539,211 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     content: [{
                         type: 'text',
                         text: `COMPLETED STEPS: ${completed.join(', ') || 'none'}\n${notesSummary ? `NOTES:\n${notesSummary}` : 'No notes provided.'}`,
+                    }],
+                };
+            }
+
+            case 'request_selection': {
+                const { title, options, allowMultiple, context } = args as {
+                    title: string;
+                    options: string[];
+                    allowMultiple?: boolean;
+                    context?: string;
+                };
+
+                const ping = await sendPing({
+                    type: 'selection',
+                    title,
+                    context,
+                    options,
+                    allowMultiple: allowMultiple || false,
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: {
+                        selectedOptions?: string[];
+                        value?: string;
+                    };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Human did not select an option in time.' }],
+                    };
+                }
+
+                const selected = response.data?.selectedOptions || (response.data?.value ? [response.data.value] : []);
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `SELECTED: ${selected.join(', ') || 'None'}`,
+                    }],
+                };
+            }
+
+            case 'request_research_direction': {
+                const { problem, directions, allowCustom } = args as {
+                    problem: string;
+                    directions: Array<{ direction: string; description?: string }>;
+                    allowCustom?: boolean;
+                };
+
+                // Map to 'selection' type for TUI compatibility, or 'research_request' if Web UI supports it
+                // Web UI has 'research_request' which uses 'proposedDirections' and 'allowCustomDirection'
+                // TUI currently maps 'selection' to SelectionRenderer.
+                // We should send 'research_request' type if we want Web UI to pick it up specifically,
+                // BUT TUI standardizes on 'selection'.
+                // Strategy: Send 'research_request' but ensure TUI maps it to SelectionRenderer.
+
+                const ping = await sendPing({
+                    type: 'research_request',
+                    title: 'Research Direction', // Generic title for TUI
+                    question: problem,           // Use 'question' for TUI SelectionRenderer label
+                    context: problem,            // Context for Web UI
+                    proposedDirections: directions.map(d => ({
+                        id: d.direction,
+                        title: d.direction,
+                        description: d.description
+                    })),
+                    // Also populate 'options' for pure TUI SelectionRenderer fallback
+                    options: directions.map(d => d.direction),
+                    allowCustomDirection: allowCustom,
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: {
+                        selectedOptions?: string[]; // Generic selection response
+                    };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Human did not select a direction in time.' }],
+                    };
+                }
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `SELECTED DIRECTION: ${response.data?.selectedOptions?.join(', ') || 'None'}`,
+                    }],
+                };
+            }
+
+            case 'request_code_review': {
+                const { title, files, context } = args as {
+                    title: string;
+                    files: Array<{ path: string; diff?: string; description?: string }>;
+                    context?: string;
+                };
+
+                // Map to 'step_approval' for granular file review
+                const steps = files.map(f => ({
+                    id: f.path,
+                    instruction: `Review ${f.path}`, // TUI will show this
+                    description: f.description || 'Code changes',
+                    details: f.diff, // Web UI might show this in expansion
+                    risk: 'medium',
+                    reversible: true
+                }));
+
+                const ping = await sendPing({
+                    type: 'step_approval', // Reuse existing powerful checklist UI
+                    title: title || 'Code Review Request',
+                    context: context || 'Please review the following file changes.',
+                    steps,
+                    allowPartial: true,
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: {
+                        approvedSteps?: string[];
+                        deniedSteps?: string[];
+                    };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Review timed out.' }],
+                    };
+                }
+
+                const approved = response.data?.approvedSteps || [];
+                const denied = response.data?.deniedSteps || [];
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `REVIEW RESULT:\nAPPROVED: ${approved.join(', ') || 'None'}\nREJECTED: ${denied.join(', ') || 'None'}`,
+                    }],
+                };
+            }
+
+            case 'request_secret': {
+                const { title, description } = args as {
+                    title: string;
+                    description?: string;
+                };
+
+                const ping = await sendPing({
+                    type: 'secret',
+                    title: title || 'Secret Request',
+                    question: description || title || 'Please enter the secret value:',
+                    isSecret: true,
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: { value?: string };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Human did not provide key in time.' }],
+                    };
+                }
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `SECRET RECEIVED: ${response.data?.value ? '********' : 'Empty'}`,
+                    }],
+                };
+            }
+
+            case 'render_custom_ui': {
+                const { title, component, props } = args as {
+                    title: string;
+                    component: string;
+                    props: Record<string, any>;
+                };
+
+                const ping = await sendPing({
+                    type: 'custom',
+                    title: title || `View: ${component}`,
+                    customType: component, // Web UI uses this to look up component
+                    data: props,           // Web UI passes this as props
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: Record<string, any>;
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'View timed out.' }],
+                    };
+                }
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `INTERACTION COMPLETE: ${JSON.stringify(response.data || {})}`,
                     }],
                 };
             }

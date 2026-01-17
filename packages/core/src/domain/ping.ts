@@ -20,6 +20,7 @@ export const PingTypeSchema = z.enum([
     'selection',         // Pick from options
     'task_workflow',     // Multi-step task for human to complete
     'custom',            // Extensible
+    'secret',            // Secure input request
 ]);
 
 export type PingType = z.infer<typeof PingTypeSchema>;
@@ -130,6 +131,14 @@ export const ReviewRequestPayloadSchema = z.object({
 
 export type ReviewRequestPayload = z.infer<typeof ReviewRequestPayloadSchema>;
 
+export const SecretPayloadSchema = z.object({
+    type: z.literal('secret'),
+    title: z.string(),
+    question: z.string(),
+});
+
+export type SecretPayload = z.infer<typeof SecretPayloadSchema>;
+
 export const CustomPayloadSchema = z.object({
     type: z.literal('custom'),
     customType: z.string(),
@@ -166,6 +175,7 @@ export const PingPayloadSchema = z.discriminatedUnion('type', [
     NotificationPayloadSchema,
     ReviewRequestPayloadSchema,
     TaskWorkflowPayloadSchema,
+    SecretPayloadSchema,
     CustomPayloadSchema,
 ]);
 
