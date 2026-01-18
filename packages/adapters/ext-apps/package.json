@@ -1,0 +1,34 @@
+{
+  "name": "@agentping/ext-apps",
+  "version": "0.1.0",
+  "description": "AgentPing ext-apps adapter - MCP UI extensions (SEP-1865) integration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./resources": {
+      "types": "./dist/resources.d.ts",
+      "import": "./dist/resources.js"
+    },
+    "./bridge": {
+      "types": "./dist/bridge.d.ts",
+      "import": "./dist/bridge.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@agentping/core": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/node": "^20.10.0"
+  }
+}

@@ -1,0 +1,330 @@
+/**
+ * LCARS Design System Tokens
+ * Star Trek TNG/Picard/Nemesis Hybrid
+ *
+ * Theme: data-theme="lcars" on <html>
+ * Extends existing token system with LCARS-specific values
+ */
+
+/* ============================================================================
+ * LCARS COLOR PALETTE
+ * Based on: TNG (classic orange/tan), Picard (blue), Nemesis (dark blue)
+ * ============================================================================ */
+
+[data-theme="lcars"] {
+  --color-scheme: dark;
+
+  /* === LCARS Core Palette === */
+
+  /* Primary: Nemesis Blue - main interface color */
+  --lcars-blue: #99ccff;
+  --lcars-blue-dark: #6699cc;
+  --lcars-blue-light: #aaddff;
+
+  /* Secondary: TNG Orange - accent and highlights */
+  --lcars-orange: #ff9900;
+  --lcars-orange-dark: #cc6600;
+  --lcars-orange-light: #ffcc66;
+
+  /* Tertiary: Classic Tan/Beige - panels and elbows */
+  --lcars-tan: #ffcc99;
+  --lcars-tan-dark: #cc9966;
+  --lcars-tan-light: #ffe6cc;
+
+  /* Alert Colors */
+  --lcars-red: #cc0000;
+  --lcars-red-alert: #ff3333;
+  --lcars-yellow: #ffff00;
+  --lcars-yellow-alert: #ffcc00;
+  --lcars-green: #00cc00;
+  --lcars-green-ok: #66ff66;
+
+  /* Panel Colors (various for visual interest) */
+  --lcars-purple: #cc99cc;
+  --lcars-violet: #9999cc;
+  --lcars-pink: #cc6699;
+  --lcars-lavender: #cc99ff;
+
+  /* === Background (Space Black) === */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0f;
+  --bg-tertiary: #111118;
+  --bg-elevated: #1a1a24;
+  --bg-muted: #0f0f14;
+  --bg-hover: #1a1a28;
+  --bg-active: #222233;
+  --bg-card: #0a0a0f;
+  --bg-popover: #111118;
+  --bg-sidebar: #000000;
+  --bg-input: #0a0a0f;
+  --bg-input-hover: #111118;
+
+  /* === Text (High contrast for readability) === */
+  --text-primary: #ffffff;
+  --text-secondary: var(--lcars-blue);
+  --text-muted: #99aacc;
+  --text-disabled: #667788;
+  --text-inverse: #000000;
+
+  /* === Borders (LCARS uses thick colored borders) === */
+  --border-default: var(--lcars-blue-dark);
+  --border-hover: var(--lcars-blue);
+  --border-focus: var(--lcars-orange);
+  --border-strong: var(--lcars-tan);
+  --border-input: var(--lcars-blue-dark);
+
+  /* === Primary (LCARS Blue) === */
+  --primary: var(--lcars-blue);
+  --primary-hover: var(--lcars-blue-light);
+  --primary-active: var(--lcars-blue-dark);
+  --primary-foreground: #000000;
+  --primary-muted: rgba(153, 204, 255, 0.2);
+  --primary-glow: 0 0 10px rgba(153, 204, 255, 0.5), 0 0 20px rgba(153, 204, 255, 0.3);
+
+  /* === Accent (LCARS Orange) === */
+  --accent: var(--lcars-orange);
+  --accent-hover: var(--lcars-orange-light);
+  --accent-foreground: #000000;
+  --accent-muted: rgba(255, 153, 0, 0.2);
+
+  /* === Status Colors === */
+  --success: var(--lcars-green);
+  --success-hover: var(--lcars-green-ok);
+  --success-foreground: #000000;
+  --success-muted: rgba(0, 204, 0, 0.2);
+
+  --warning: var(--lcars-yellow);
+  --warning-hover: var(--lcars-yellow-alert);
+  --warning-foreground: #000000;
+  --warning-muted: rgba(255, 255, 0, 0.2);
+
+  --danger: var(--lcars-red);
+  --danger-hover: var(--lcars-red-alert);
+  --danger-foreground: #ffffff;
+  --danger-muted: rgba(204, 0, 0, 0.2);
+
+  --info: var(--lcars-violet);
+  --info-foreground: #000000;
+  --info-muted: rgba(153, 153, 204, 0.2);
+
+  /* === Ring/Focus === */
+  --ring: var(--lcars-orange);
+  --ring-offset: var(--bg-primary);
+
+  /* === Shadows (Minimal - LCARS is flat) === */
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: 0 0 8px rgba(153, 204, 255, 0.2);
+  --shadow-lg: 0 0 16px rgba(153, 204, 255, 0.3);
+  --shadow-xl: 0 0 24px rgba(153, 204, 255, 0.4);
+
+  /* === Glass (LCARS panels are solid, not glass) === */
+  --glass-bg: var(--bg-secondary);
+  --glass-border: var(--lcars-blue-dark);
+  --glass-shadow: none;
+
+  /* === Chart Colors (LCARS palette) === */
+  --chart-1: var(--lcars-blue);
+  --chart-2: var(--lcars-orange);
+  --chart-3: var(--lcars-tan);
+  --chart-4: var(--lcars-purple);
+  --chart-5: var(--lcars-green);
+}
+
+/* ============================================================================
+ * LCARS TYPOGRAPHY
+ * ============================================================================ */
+
+[data-theme="lcars"] {
+  /* LCARS uses a condensed, futuristic font */
+  --font-lcars: 'Antonio', 'Orbitron', 'Michroma', var(--font-sans);
+  --font-lcars-display: 'Orbitron', 'Michroma', var(--font-sans);
+
+  /* LCARS text is typically uppercase */
+  --lcars-text-transform: uppercase;
+
+  /* Letter spacing for that Star Trek feel */
+  --lcars-letter-spacing: 0.05em;
+  --lcars-letter-spacing-wide: 0.1em;
+}
+
+/* ============================================================================
+ * LCARS GEOMETRY
+ * ============================================================================ */
+
+[data-theme="lcars"] {
+  /* LCARS Elbow Radii */
+  --lcars-elbow-radius: 40px;
+  --lcars-elbow-radius-sm: 24px;
+  --lcars-elbow-radius-lg: 60px;
+
+  /* LCARS Panel Widths */
+  --lcars-sidebar-width: 180px;
+  --lcars-sidebar-width-collapsed: 40px;
+  --lcars-header-height: 80px;
+  --lcars-footer-height: 40px;
+
+  /* LCARS Stripe Heights (the horizontal bars) */
+  --lcars-stripe-xs: 8px;
+  --lcars-stripe-sm: 16px;
+  --lcars-stripe-md: 24px;
+  --lcars-stripe-lg: 40px;
+  --lcars-stripe-xl: 60px;
+
+  /* LCARS Button Sizes */
+  --lcars-button-height: 40px;
+  --lcars-button-height-sm: 32px;
+  --lcars-button-height-lg: 56px;
+
+  /* LCARS rounded end caps */
+  --lcars-end-cap: 20px;
+  --lcars-end-cap-sm: 16px;
+  --lcars-end-cap-lg: 28px;
+}
+
+/* ============================================================================
+ * LCARS ANIMATIONS
+ * ============================================================================ */
+
+[data-theme="lcars"] {
+  /* LCARS uses quick, snappy transitions */
+  --lcars-transition-fast: 100ms ease-out;
+  --lcars-transition-normal: 150ms ease-out;
+  --lcars-transition-slow: 250ms ease-out;
+
+  /* Scanning/activity animation timing */
+  --lcars-scan-duration: 2s;
+  --lcars-pulse-duration: 1.5s;
+  --lcars-blink-duration: 0.5s;
+}
+
+/* ============================================================================
+ * LCARS RESPONSIVE BREAKPOINTS
+ * ============================================================================ */
+
+:root {
+  /* 5 Breakpoints as specified */
+  --lcars-bp-mobile-portrait: 320px;
+  --lcars-bp-mobile-landscape: 568px;
+  --lcars-bp-tablet: 768px;
+  --lcars-bp-desktop: 1024px;
+  --lcars-bp-widescreen: 1440px;
+}
+
+/* ============================================================================
+ * LCARS KEYFRAME ANIMATIONS
+ * ============================================================================ */
+
+@keyframes lcars-scan {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes lcars-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes lcars-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes lcars-slide-in-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes lcars-slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes lcars-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Data stream animation for loading states */
+@keyframes lcars-data-stream {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; }
+}
+
+/* ============================================================================
+ * LCARS UTILITY CLASSES
+ * ============================================================================ */
+
+.lcars-text {
+  font-family: var(--font-lcars);
+  text-transform: var(--lcars-text-transform);
+  letter-spacing: var(--lcars-letter-spacing);
+}
+
+.lcars-display {
+  font-family: var(--font-lcars-display);
+  text-transform: var(--lcars-text-transform);
+  letter-spacing: var(--lcars-letter-spacing-wide);
+}
+
+.lcars-animate-scan {
+  animation: lcars-scan var(--lcars-scan-duration) infinite;
+}
+
+.lcars-animate-pulse {
+  animation: lcars-pulse var(--lcars-pulse-duration) infinite;
+}
+
+.lcars-animate-blink {
+  animation: lcars-blink var(--lcars-blink-duration) infinite;
+}
+
+/* Alert state classes */
+.lcars-alert-red {
+  --primary: var(--lcars-red-alert);
+  --accent: var(--lcars-red);
+  animation: lcars-blink 0.3s infinite;
+}
+
+.lcars-alert-yellow {
+  --primary: var(--lcars-yellow-alert);
+  --accent: var(--lcars-yellow);
+}
+
+/* ============================================================================
+ * LCARS CONTAINER QUERIES (Modern Responsive)
+ * ============================================================================ */
+
+@container (max-width: 320px) {
+  .lcars-responsive {
+    --lcars-sidebar-width: 0;
+    --lcars-elbow-radius: 24px;
+  }
+}
+
+@container (min-width: 321px) and (max-width: 567px) {
+  .lcars-responsive {
+    --lcars-sidebar-width: var(--lcars-sidebar-width-collapsed);
+    --lcars-elbow-radius: 32px;
+  }
+}
+
+@container (min-width: 568px) and (max-width: 767px) {
+  .lcars-responsive {
+    --lcars-sidebar-width: 120px;
+  }
+}
+
+@container (min-width: 768px) and (max-width: 1023px) {
+  .lcars-responsive {
+    --lcars-sidebar-width: 150px;
+  }
+}
+
+@container (min-width: 1024px) {
+  .lcars-responsive {
+    --lcars-sidebar-width: 180px;
+    --lcars-elbow-radius: 40px;
+  }
+}

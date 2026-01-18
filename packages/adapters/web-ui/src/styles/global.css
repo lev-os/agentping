@@ -1,85 +1,41 @@
 /**
  * Global Styles for AgentPing Web UI
- * 
+ *
  * Following Vercel Design Guidelines and UI Skills constraints:
- * - Dark mode, keyboard-first, minimal design
+ * - Light/dark mode support (keyboard-first, minimal design)
  * - focus-visible over :focus
  * - prefers-reduced-motion support
  * - tabular-nums for data
  * - text-wrap: pretty/balance for readability
  * - No transition: all (explicit properties only)
+ *
+ * Theme switching:
+ * - data-theme="light" or data-theme="dark" on <html>
+ * - Falls back to prefers-color-scheme
  */
 
+/* Import design tokens */
+@import './tokens.css';
+@import './lcars.css';
+
+/* Legacy variable aliases for backward compatibility */
 :root {
-  /* Cyber-Premium Palette */
-  --bg-primary: #050505;
-  /* Deepest black */
-  --bg-secondary: #0a0a0a;
-  /* Slightly lighter for panels */
-  --bg-tertiary: #121212;
-  /* Card backgrounds */
-  --bg-hover: #1a1a1a;
-  --bg-elevated: #202020;
-  /* Modals/Popovers */
-
-  /* Text Colors */
-  --text-primary: #ededed;
-  --text-secondary: #a1a1aa;
-  --text-muted: #52525b;
-  --text-glow: rgba(237, 237, 237, 0.5);
-
-  /* Neon Accents */
-  --accent-primary: #00e5ff;
-  /* Cyan Neon */
-  --accent-primary-dim: rgba(0, 229, 255, 0.1);
-  --accent-primary-glow: 0 0 10px rgba(0, 229, 255, 0.4), 0 0 20px rgba(0, 229, 255, 0.2);
-
-  --accent-success: #00ff9d;
-  /* Green Neon */
-  --accent-success-dim: rgba(0, 255, 157, 0.1);
-  --accent-warning: #ffb800;
-  /* Amber Neon */
-  --accent-warning-dim: rgba(255, 184, 0, 0.1);
-  --accent-danger: #ff2a6d;
-  /* Pink/Red Neon */
-  --accent-danger-dim: rgba(255, 42, 109, 0.1);
-
-  /* Borders & Glass */
-  --border-color: rgba(255, 255, 255, 0.08);
-  /* Subtle border */
-  --border-hover: rgba(255, 255, 255, 0.15);
-  --border-neon: var(--accent-primary);
-
-  --glass-bg: rgba(10, 10, 10, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-
-  /* Metrics */
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  /* Tech-focused, tighter radii */
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-round: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.7);
-
-  /* Fonts */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-
-  /* Z-Index */
-  --z-base: 0;
-  --z-dropdown: 100;
-  --z-sticky: 200;
-  --z-fixed: 300;
-  --z-modal-backdrop: 400;
-  --z-modal: 500;
-  --z-tooltip: 600;
+  --accent-primary: var(--primary);
+  --accent-primary-dim: var(--primary-muted);
+  --accent-primary-glow: var(--primary-glow);
+  --accent-success: var(--success);
+  --accent-success-dim: var(--success-muted);
+  --accent-warning: var(--warning);
+  --accent-warning-dim: var(--warning-muted);
+  --accent-danger: var(--danger);
+  --accent-danger-dim: var(--danger-muted);
+  --border-color: var(--border-default);
+  --border-neon: var(--primary);
+  --accent-success-soft: var(--success-muted);
+  --accent-warning-soft: var(--warning-muted);
+  --accent-danger-soft: var(--danger-muted);
+  --glow-primary: var(--primary-glow);
+  --text-glow: rgba(var(--text-primary), 0.5);
 }
 
 /* Cyber Utilities */

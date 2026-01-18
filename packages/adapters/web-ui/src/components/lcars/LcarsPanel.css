@@ -1,0 +1,131 @@
+/**
+ * LcarsPanel Styles
+ * Content container with LCARS borders and headers
+ */
+
+.lcars-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  position: relative;
+}
+
+/* ============================================================================
+ * Border Variants
+ * ============================================================================ */
+
+.lcars-panel--border-blue {
+  border: 2px solid var(--lcars-blue-dark);
+}
+
+.lcars-panel--border-orange {
+  border: 2px solid var(--lcars-orange-dark);
+}
+
+.lcars-panel--border-tan {
+  border: 2px solid var(--lcars-tan-dark);
+}
+
+.lcars-panel--border-none {
+  border: none;
+}
+
+/* ============================================================================
+ * Panel Variants
+ * ============================================================================ */
+
+.lcars-panel--outlined {
+  background-color: transparent;
+}
+
+.lcars-panel--filled {
+  background-color: var(--bg-secondary);
+}
+
+/* ============================================================================
+ * Header
+ * ============================================================================ */
+
+.lcars-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  min-height: var(--lcars-stripe-lg);
+}
+
+.lcars-panel__header--blue {
+  background-color: var(--lcars-blue);
+}
+
+.lcars-panel__header--orange {
+  background-color: var(--lcars-orange);
+}
+
+.lcars-panel__header--tan {
+  background-color: var(--lcars-tan);
+}
+
+.lcars-panel__header--purple {
+  background-color: var(--lcars-purple);
+}
+
+.lcars-panel__title {
+  font-family: var(--font-lcars);
+  text-transform: uppercase;
+  letter-spacing: var(--lcars-letter-spacing);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--bg-primary);
+  white-space: nowrap;
+}
+
+.lcars-panel__header-bar {
+  flex: 1;
+  height: var(--lcars-stripe-sm);
+  background-color: inherit;
+  filter: brightness(0.85);
+  border-radius: var(--lcars-end-cap-sm);
+}
+
+/* ============================================================================
+ * Content
+ * ============================================================================ */
+
+.lcars-panel__content {
+  flex: 1;
+  padding: var(--space-4);
+  overflow: auto;
+}
+
+/* ============================================================================
+ * Footer
+ * ============================================================================ */
+
+.lcars-panel__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-default);
+}
+
+/* ============================================================================
+ * Responsive
+ * ============================================================================ */
+
+@container (max-width: 567px) {
+  .lcars-panel__header {
+    min-height: var(--lcars-stripe-md);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .lcars-panel__title {
+    font-size: var(--font-size-xs);
+  }
+
+  .lcars-panel__content {
+    padding: var(--space-2);
+  }
+}

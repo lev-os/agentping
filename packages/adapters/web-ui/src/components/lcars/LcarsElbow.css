@@ -1,0 +1,176 @@
+/**
+ * LcarsElbow Styles
+ * The signature curved corner of LCARS interfaces
+ */
+
+.lcars-elbow {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Curve element - the actual rounded corner */
+.lcars-elbow__curve {
+  width: var(--elbow-radius);
+  height: var(--elbow-radius);
+  flex-shrink: 0;
+}
+
+/* Bar element - extends horizontally from the elbow */
+.lcars-elbow__bar {
+  flex: 1;
+  min-width: 40px;
+  height: var(--bar-height, var(--lcars-stripe-md));
+}
+
+/* Content area inside the elbow */
+.lcars-elbow__content {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-lcars);
+  text-transform: uppercase;
+  letter-spacing: var(--lcars-letter-spacing);
+  font-size: var(--font-size-sm);
+  color: var(--bg-primary);
+}
+
+/* ============================================================================
+ * Position Variants
+ * ============================================================================ */
+
+/* Top-Left: Curve opens to bottom-right */
+.lcars-elbow--top-left {
+  flex-direction: row;
+}
+
+.lcars-elbow--top-left .lcars-elbow__curve {
+  border-top-left-radius: var(--elbow-radius);
+  border-bottom: var(--bar-height) solid transparent;
+}
+
+.lcars-elbow--top-left .lcars-elbow__bar {
+  align-self: flex-end;
+  border-radius: 0 var(--lcars-end-cap) var(--lcars-end-cap) 0;
+}
+
+.lcars-elbow--top-left .lcars-elbow__content {
+  top: 50%;
+  left: 50%;
+  transform: translate(-25%, -25%);
+}
+
+/* Top-Right: Curve opens to bottom-left */
+.lcars-elbow--top-right {
+  flex-direction: row-reverse;
+}
+
+.lcars-elbow--top-right .lcars-elbow__curve {
+  border-top-right-radius: var(--elbow-radius);
+  border-bottom: var(--bar-height) solid transparent;
+}
+
+.lcars-elbow--top-right .lcars-elbow__bar {
+  align-self: flex-end;
+  border-radius: var(--lcars-end-cap) 0 0 var(--lcars-end-cap);
+}
+
+.lcars-elbow--top-right .lcars-elbow__content {
+  top: 50%;
+  right: 50%;
+  transform: translate(25%, -25%);
+}
+
+/* Bottom-Left: Curve opens to top-right */
+.lcars-elbow--bottom-left {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.lcars-elbow--bottom-left .lcars-elbow__curve {
+  border-bottom-left-radius: var(--elbow-radius);
+  border-top: var(--bar-height) solid transparent;
+}
+
+.lcars-elbow--bottom-left .lcars-elbow__bar {
+  align-self: flex-start;
+  border-radius: 0 var(--lcars-end-cap) var(--lcars-end-cap) 0;
+}
+
+.lcars-elbow--bottom-left .lcars-elbow__content {
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-25%, 25%);
+}
+
+/* Bottom-Right: Curve opens to top-left */
+.lcars-elbow--bottom-right {
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.lcars-elbow--bottom-right .lcars-elbow__curve {
+  border-bottom-right-radius: var(--elbow-radius);
+  border-top: var(--bar-height) solid transparent;
+}
+
+.lcars-elbow--bottom-right .lcars-elbow__bar {
+  align-self: flex-start;
+  border-radius: var(--lcars-end-cap) 0 0 var(--lcars-end-cap);
+}
+
+.lcars-elbow--bottom-right .lcars-elbow__content {
+  bottom: 50%;
+  right: 50%;
+  transform: translate(25%, 25%);
+}
+
+/* ============================================================================
+ * Color Variants
+ * ============================================================================ */
+
+.lcars-elbow--blue .lcars-elbow__curve,
+.lcars-elbow--blue .lcars-elbow__bar {
+  background-color: var(--lcars-blue);
+}
+
+.lcars-elbow--orange .lcars-elbow__curve,
+.lcars-elbow--orange .lcars-elbow__bar {
+  background-color: var(--lcars-orange);
+}
+
+.lcars-elbow--tan .lcars-elbow__curve,
+.lcars-elbow--tan .lcars-elbow__bar {
+  background-color: var(--lcars-tan);
+}
+
+.lcars-elbow--purple .lcars-elbow__curve,
+.lcars-elbow--purple .lcars-elbow__bar {
+  background-color: var(--lcars-purple);
+}
+
+.lcars-elbow--violet .lcars-elbow__curve,
+.lcars-elbow--violet .lcars-elbow__bar {
+  background-color: var(--lcars-violet);
+}
+
+.lcars-elbow--pink .lcars-elbow__curve,
+.lcars-elbow--pink .lcars-elbow__bar {
+  background-color: var(--lcars-pink);
+}
+
+/* ============================================================================
+ * Interactive States
+ * ============================================================================ */
+
+.lcars-elbow:hover .lcars-elbow__curve,
+.lcars-elbow:hover .lcars-elbow__bar {
+  filter: brightness(1.1);
+  transition: filter var(--lcars-transition-fast);
+}
+
+.lcars-elbow:active .lcars-elbow__curve,
+.lcars-elbow:active .lcars-elbow__bar {
+  filter: brightness(0.9);
+}
