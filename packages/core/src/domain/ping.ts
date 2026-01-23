@@ -21,6 +21,7 @@ export const PingTypeSchema = z.enum([
     'task_workflow',     // Multi-step task for human to complete
     'custom',            // Extensible
     'secret',            // Secure input request
+    'canvas_interaction', // Studio managing canvas
 ]);
 
 export type PingType = z.infer<typeof PingTypeSchema>;
@@ -166,6 +167,18 @@ export const TaskWorkflowPayloadSchema = z.object({
 
 export type TaskWorkflowPayload = z.infer<typeof TaskWorkflowPayloadSchema>;
 
+export const CanvasInteractionPayloadSchema = z.object({
+    type: z.literal('canvas_interaction'),
+    action: z.enum(['render', 'selection']),
+    componentType: z.string().optional(),
+    componentName: z.string().optional(),
+    props: z.record(z.string(), z.unknown()).optional(),
+    instruction: z.string().optional(),
+    selectionType: z.string().optional(),
+});
+
+export type CanvasInteractionPayload = z.infer<typeof CanvasInteractionPayloadSchema>;
+
 export const PingPayloadSchema = z.discriminatedUnion('type', [
     StepApprovalPayloadSchema,
     ResearchRequestPayloadSchema,
@@ -177,6 +190,7 @@ export const PingPayloadSchema = z.discriminatedUnion('type', [
     TaskWorkflowPayloadSchema,
     SecretPayloadSchema,
     CustomPayloadSchema,
+    CanvasInteractionPayloadSchema,
 ]);
 
 export type PingPayload = z.infer<typeof PingPayloadSchema>;
@@ -261,7 +275,8 @@ export type ResponseData =
     | { type: 'answer'; value: string }
     | { type: 'task_workflow'; completedSteps: string[]; notes: Record<string, string> }
     | { type: 'dismissed' }
-    | { type: 'custom'; data: Record<string, unknown> };
+    | { type: 'custom'; data: Record<string, unknown> }
+    | { type: 'canvas_interaction'; data: Record<string, unknown> };
 
 // ============================================================================
 // Response Enrichment (The Magic - Beyond Yes/No)

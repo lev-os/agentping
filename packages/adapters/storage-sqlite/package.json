@@ -2,7 +2,6 @@
     "name": "@agentping/storage-sqlite",
     "version": "0.1.0",
     "description": "SQLite storage adapter for AgentPing",
-    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {

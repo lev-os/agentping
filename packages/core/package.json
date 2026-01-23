@@ -2,20 +2,22 @@
     "name": "@agentping/core",
     "version": "0.1.0",
     "description": "Core domain logic for AgentPing",
-    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
+            "require": "./dist/index.js",
             "types": "./dist/index.d.ts"
         },
         "./parsers": {
             "import": "./dist/parsers/index.js",
+            "require": "./dist/parsers/index.js",
             "types": "./dist/parsers/index.d.ts"
         },
         "./directives": {
             "import": "./dist/directives/index.js",
+            "require": "./dist/directives/index.js",
             "types": "./dist/directives/index.d.ts"
         }
     },
@@ -26,9 +28,9 @@
         "clean": "rm -rf dist"
     },
     "dependencies": {
-        "zod": "^4.0.0",
         "eventemitter3": "^5.0.0",
-        "nanoid": "^5.0.0"
+        "nanoid": "3",
+        "zod": "^4.0.0"
     },
     "devDependencies": {
         "typescript": "^5.3.0",

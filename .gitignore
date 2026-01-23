@@ -31,3 +31,4 @@ coverage/
 # AgentPing data (local dev)
 .agentping/
 *.db
+packages/studio/out/

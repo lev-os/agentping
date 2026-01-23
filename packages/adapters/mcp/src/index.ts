@@ -349,6 +349,49 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
                 required: ['title', 'component', 'props'],
             },
         },
+        {
+            name: 'render_canvas_component',
+            description: 'Render a UI component directly onto the Studio canvas. Use this when you want to visualize a design idea.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    type: {
+                        type: 'string',
+                        enum: ['button', 'card', 'input', 'table', 'chart'],
+                        description: 'Type of component to render',
+                    },
+                    name: {
+                        type: 'string',
+                        description: 'Label or name for the component',
+                    },
+                    props: {
+                        type: 'object',
+                        description: 'Visual properties (x, y, width, height, color)',
+                        additionalProperties: true,
+                    },
+                },
+                required: ['type', 'name'],
+            },
+        },
+        {
+            name: 'request_canvas_selection',
+            description: 'Ask the human to select a region or object on the canvas. Useful for context-aware editing.',
+            inputSchema: {
+                type: 'object',
+                properties: {
+                    instruction: {
+                        type: 'string',
+                        description: 'Instructions for what to select (e.g., "Select the header")',
+                    },
+                    type: {
+                        type: 'string',
+                        enum: ['object', 'region', 'point'],
+                        description: 'Type of selection required',
+                    },
+                },
+                required: ['instruction'],
+            },
+        },
     ],
 }));
 
@@ -744,6 +787,72 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     content: [{
                         type: 'text',
                         text: `INTERACTION COMPLETE: ${JSON.stringify(response.data || {})}`,
+                    }],
+                };
+            }
+
+            case 'render_canvas_component': {
+                const { type, name, props } = args as {
+                    type: string;
+                    name: string;
+                    props?: Record<string, any>;
+                };
+
+                const ping = await sendPing({
+                    type: 'canvas_interaction',
+                    action: 'render',
+                    componentType: type,
+                    componentName: name,
+                    props: props || {},
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: { success: boolean; objectId?: string };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Canvas render timed out.' }],
+                    };
+                }
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `Component rendered successfully. ID: ${response.data?.objectId || 'unknown'}`,
+                    }],
+                };
+            }
+
+            case 'request_canvas_selection': {
+                const { instruction, type } = args as {
+                    instruction: string;
+                    type?: string;
+                };
+
+                const ping = await sendPing({
+                    type: 'canvas_interaction',
+                    action: 'selection',
+                    instruction,
+                    selectionType: type || 'object',
+                }) as { id: string };
+
+                const response = await waitForResponse(ping.id) as {
+                    timedOut?: boolean;
+                    data?: { selection: any };
+                };
+
+                if (response.timedOut) {
+                    return {
+                        content: [{ type: 'text', text: 'Selection request timed out.' }],
+                    };
+                }
+
+                return {
+                    content: [{
+                        type: 'text',
+                        text: `Selection received: ${JSON.stringify(response.data?.selection)}`,
                     }],
                 };
             }

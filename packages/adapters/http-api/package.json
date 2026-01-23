@@ -2,16 +2,22 @@
     "name": "@agentping/http-api",
     "version": "0.1.0",
     "description": "HTTP API adapter for AgentPing",
-    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
+            "require": "./dist/index.js",
             "types": "./dist/index.d.ts"
         },
         "./websocket": {
             "import": "./dist/websocket.js",
+            "require": "./dist/websocket.js",
+            "types": "./dist/websocket.d.ts"
+        },
+        "./dist/websocket.js": {
+            "import": "./dist/websocket.js",
+            "require": "./dist/websocket.js",
             "types": "./dist/websocket.d.ts"
         }
     },

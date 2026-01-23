@@ -443,8 +443,30 @@ daemon
         child.unref();
     });
 
+// Studio GUI Launch
+program
+    .command('studio')
+    .alias('start')
+    .description('Launch the AgentPing Studio GUI')
+    .action(async () => {
+        console.log('🚀 Launching AgentPing Studio...');
+        const cp = await import('child_process');
+
+        // Use pnpm to run the studio dev command
+        const child = cp.spawn('pnpm', ['--filter', '@agentping/studio', 'dev'], {
+            stdio: 'inherit',
+            shell: true
+        });
+
+        child.on('error', (err) => {
+            console.error('Failed to launch Studio:', err.message);
+            process.exit(1);
+        });
+    });
+
 // ============================================================================
 // Run
 // ============================================================================
+
 
 program.parse();

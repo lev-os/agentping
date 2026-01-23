@@ -1,0 +1,191 @@
+.properties-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.properties-header {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.properties-header h2 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.properties-badge {
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    color: var(--accent-primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.properties-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.properties-section h3 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.05em;
+}
+
+.properties-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+}
+
+.properties-field {
+    display: flex;
+    align-items: center;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 0 8px;
+}
+
+.properties-field label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    width: 20px;
+}
+
+.properties-field input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    padding: 6px 0;
+    width: 100%;
+    outline: none;
+}
+
+.properties-mcp-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.mcp-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mcp-item label {
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+.mcp-item code {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.status-live {
+    font-size: 9px;
+    font-weight: 900;
+    color: var(--status-success);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--status-success);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--status-success);
+}
+
+.properties-empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* Inspector / Preview Element Styles */
+.preview-badge {
+    background: rgba(0, 212, 255, 0.1) !important;
+    color: var(--accent-secondary) !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+}
+
+.properties-field.full {
+    flex-basis: 100%;
+}
+
+.properties-text-preview {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm);
+    font-size: 11px;
+    color: var(--text-secondary);
+    max-height: 80px;
+    overflow-y: auto;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.edit-element-btn {
+    margin-top: var(--spacing-md);
+    width: 100%;
+    background: var(--accent-primary);
+    color: #0a0a0f;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 255, 170, 0.15);
+}
+
+.edit-element-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 170, 0.25);
+    filter: brightness(1.1);
+}
+
+.edit-element-btn:active {
+    transform: translateY(0);
+}

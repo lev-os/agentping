@@ -1,0 +1,101 @@
+/**
+ * Canvas Workspace Styles - Cyber Premium
+ */
+
+.canvas-workspace {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    background-color: var(--bg-tertiary);
+}
+
+.canvas-workspace canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+/* Dot Grid Pattern */
+.canvas-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(rgba(0, 255, 170, 0.15) 1px, transparent 1px),
+        linear-gradient(rgba(0, 255, 170, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 170, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px, 100px 100px, 100px 100px;
+    opacity: 0.8;
+}
+
+/* Design Surface Shadow Effect */
+.canvas-workspace::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 600px;
+    border: 1px solid rgba(0, 255, 170, 0.1);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+    background: rgba(10, 10, 15, 0.2);
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* Zoom Controls */
+.canvas-zoom-controls {
+    position: absolute;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(18, 18, 26, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 99px;
+    /* Pill shape */
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.zoom-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.zoom-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.zoom-level {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 48px;
+    text-align: center;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Fabric.js Control Overrides for Cyber Look */
+.canvas-workspace :global(.canvas-container) {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+}

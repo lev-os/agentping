@@ -1,0 +1,309 @@
+.studio-dashboard {
+    height: 100%;
+    padding: var(--spacing-xl);
+    background: var(--bg-primary);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.header-title h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.uptime-badge {
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    color: var(--accent-primary);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.dashboard-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-card h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Telemetry */
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.telemetry-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.telemetry-item label {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.telemetry-item .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.mini-progress {
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.mini-progress .fill {
+    height: 100%;
+    background: var(--accent-primary);
+    transition: width 0.3s ease;
+}
+
+/* Agent List */
+.agent-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.agent-card {
+    background: var(--bg-tertiary);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.agent-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.agent-id {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.agent-task label,
+.agent-locks label {
+    font-size: 9px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.agent-task p {
+    font-size: 13px;
+    margin: 0;
+}
+
+.lock-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.lock-badge {
+    font-size: 10px;
+    background: rgba(var(--accent-secondary-rgb), 0.1);
+    color: var(--accent-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+}
+
+/* Activity Stream */
+.log-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.log-entry {
+    display: flex;
+    gap: 8px;
+}
+
+.log-entry.success .msg {
+    color: var(--status-success);
+}
+
+.log-entry.info .msg {
+    color: var(--text-primary);
+}
+
+.log-entry.warning .msg {
+    color: var(--status-warning);
+}
+
+.timestamp {
+    color: var(--text-muted);
+}
+
+/* Quick Ops */
+.ops-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.op-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.op-btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+}
+
+.op-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.op-btn.primary {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    border: none;
+}
+
+.op-btn.primary:hover:not(:disabled) {
+    background: var(--accent-primary);
+    box-shadow: 0 0 16px rgba(var(--accent-primary-rgb), 0.4);
+}
+
+.op-btn.danger {
+    color: var(--status-error);
+    border-color: rgba(var(--status-error-rgb), 0.3);
+}
+
+.op-btn.danger:hover:not(:disabled) {
+    background: rgba(var(--status-error-rgb), 0.1);
+}
+
+.op-btn.danger.confirming {
+    background: rgba(var(--status-error-rgb), 0.2);
+    border-color: var(--status-error);
+    animation: pulse-danger 1s ease-in-out infinite;
+}
+
+@keyframes pulse-danger {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--status-error-rgb), 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 12px 4px rgba(var(--status-error-rgb), 0.2);
+    }
+}
+
+.op-btn .spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cancel-confirm {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-confirm:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.log-entry.error .msg {
+    color: var(--status-error);
+}
+
+.empty-agents {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: var(--spacing-lg);
+}

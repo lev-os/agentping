@@ -1,0 +1,100 @@
+/**
+ * Component Gallery Styles - Cyber Premium
+ */
+
+.component-gallery {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--bg-secondary);
+}
+
+.gallery-header {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(18, 18, 26, 0.8);
+    backdrop-filter: blur(10px);
+    height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.gallery-header h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gallery-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+}
+
+.gallery-category {
+    margin-bottom: 24px;
+}
+
+.gallery-category h3 {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-left: 4px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.component-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 16px 8px;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.component-item:hover {
+    background: var(--bg-elevated);
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(0, 255, 170, 0.1);
+}
+
+.component-item:active {
+    transform: translateY(0);
+}
+
+.component-icon {
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.component-item:hover .component-icon {
+    color: var(--accent-primary);
+}
+
+.component-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.component-item:hover .component-label {
+    color: var(--text-primary);
+}
