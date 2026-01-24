@@ -336,27 +336,32 @@
 /* Resize Handles */
 .resize-handle {
     position: relative;
-    z-index: 50;
-    transition: background 0.2s ease;
+    z-index: 100;
+    transition: background 0.15s ease;
     background: transparent;
+    flex-shrink: 0;
 }
 
 .resize-handle.vertical {
-    width: 6px;
+    width: 8px;
     height: 100%;
     cursor: col-resize;
-    margin: 0 -3px;
+    margin: 0 -4px;
 }
 
 .resize-handle.horizontal {
-    height: 6px;
+    height: 8px;
     width: 100%;
     cursor: row-resize;
-    margin: -3px 0;
+    margin: -4px 0;
 }
 
-.resize-handle:hover,
-.resize-handle:active {
+.resize-handle:hover {
+    background: rgba(0, 255, 170, 0.3);
+}
+
+.resize-handle:active,
+.resize-handle.active {
     background: var(--accent-primary);
     box-shadow: 0 0 12px var(--accent-primary);
 }
@@ -367,4 +372,24 @@
 
 .resize-handle.right {
     border-left: 1px solid var(--border-subtle);
+}
+
+/* Disable iframe/webview pointer events during resize */
+.studio-app.resizing iframe,
+.studio-app.resizing webview,
+.studio-app.resizing .preview-iframe,
+.studio-app.resizing .preview-webview {
+    pointer-events: none !important;
+}
+
+/* Add overlay during resize to capture all mouse events */
+.studio-app.resizing::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    cursor: inherit;
 }

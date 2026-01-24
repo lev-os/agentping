@@ -57,8 +57,17 @@ contextBridge.exposeInMainWorld('claudeCode', {
         return () => { ipcRenderer.removeListener('claude:exit', handler); };
     },
 
-    resolveApproval: (sessionId: string, approved: boolean) =>
-        ipcRenderer.invoke('claude:resolveApproval', sessionId, approved),
+    // Enhanced: resolveApproval now requires toolId for queue support
+    resolveApproval: (sessionId: string, toolId: string, approved: boolean) =>
+        ipcRenderer.invoke('claude:resolveApproval', sessionId, toolId, approved),
+
+    // NEW: Batch resolve all pending approvals
+    resolveAllApprovals: (sessionId: string, approved: boolean) =>
+        ipcRenderer.invoke('claude:resolveAllApprovals', sessionId, approved),
+
+    // NEW: Get current approval queue for a session
+    getApprovalQueue: (sessionId: string) =>
+        ipcRenderer.invoke('claude:getApprovalQueue', sessionId),
 
     runDiagnostics: (sessionId: string) =>
         ipcRenderer.invoke('claude:runDiagnostics', sessionId),
@@ -67,6 +76,20 @@ contextBridge.exposeInMainWorld('claudeCode', {
         const handler = (_event: any, data: any) => callback(data);
         ipcRenderer.on('claude:request_approval', handler);
         return () => { ipcRenderer.removeListener('claude:request_approval', handler); };
+    },
+
+    // NEW: Listen for approval queue additions
+    onApprovalQueued: (callback: (data: { sessionId: string; request: any }) => void) => {
+        const handler = (_event: any, data: any) => callback(data);
+        ipcRenderer.on('claude:approval_queued', handler);
+        return () => { ipcRenderer.removeListener('claude:approval_queued', handler); };
+    },
+
+    // NEW: Listen for approval resolutions
+    onApprovalResolved: (callback: (data: { sessionId: string; toolId: string; approved: boolean }) => void) => {
+        const handler = (_event: any, data: any) => callback(data);
+        ipcRenderer.on('claude:approval_resolved', handler);
+        return () => { ipcRenderer.removeListener('claude:approval_resolved', handler); };
     },
 
     onFileModified: (callback: (data: { sessionId: string; path: string }) => void) => {
@@ -142,6 +165,11 @@ contextBridge.exposeInMainWorld('terminal', {
         const handler = (_: any, code: number | null) => callback(code);
         ipcRenderer.on('terminal:exit', handler);
         return () => ipcRenderer.removeListener('terminal:exit', handler);
+    },
+    onCommandRouted: (callback: (data: { command: string }) => void) => {
+        const handler = (_: any, data: { command: string }) => callback(data);
+        ipcRenderer.on('terminal:command_routed', handler);
+        return () => ipcRenderer.removeListener('terminal:command_routed', handler);
     }
 });
 
@@ -173,6 +201,10 @@ contextBridge.exposeInMainWorld('studioControl', {
         ipcRenderer.invoke('studio:getCanvasState'),
     refreshPreview: () =>
         ipcRenderer.send('studio:refreshPreview'),
+    setPreviewUrl: (url: string) =>
+        ipcRenderer.send('studio:setPreviewUrl', url),
+    openExternal: (url: string) =>
+        ipcRenderer.invoke('shell:openExternal', url),
     onLayoutModeChange: (callback: (mode: string) => void) => {
         const handler = (_: any, mode: string) => callback(mode);
         ipcRenderer.on('studio:setLayoutMode', handler);
@@ -192,5 +224,17 @@ contextBridge.exposeInMainWorld('studioControl', {
         const handler = () => callback();
         ipcRenderer.on('studio:refreshPreview', handler);
         return () => ipcRenderer.removeListener('studio:refreshPreview', handler);
+    },
+    onPreviewUrlChange: (callback: (url: string) => void) => {
+        const handler = (_: any, url: string) => callback(url);
+        ipcRenderer.on('studio:setPreviewUrl', handler);
+        return () => ipcRenderer.removeListener('studio:setPreviewUrl', handler);
     }
+});
+
+// Expose Settings API
+contextBridge.exposeInMainWorld('settings', {
+    load: () => ipcRenderer.invoke('settings:load'),
+    save: (updates: any) => ipcRenderer.invoke('settings:save', updates),
+    get: () => ipcRenderer.invoke('settings:get')
 });

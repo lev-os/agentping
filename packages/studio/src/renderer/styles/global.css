@@ -1,7 +1,11 @@
 /**
  * AgentPing Studio - Global Styles
- * Cyber-Premium Design System
+ * Cyber-Premium Design System with Accessibility
  */
+
+/* ==========================================================================
+   CSS Custom Properties
+   ========================================================================== */
 
 :root {
     /* Colors - True Black Series */
@@ -21,9 +25,23 @@
 
     /* Accent Colors */
     --accent-primary: #00ffaa;
+    --accent-primary-rgb: 0, 255, 170;
     --accent-secondary: #00d4ff;
+    --accent-secondary-rgb: 0, 212, 255;
     --accent-warning: #ffaa00;
     --accent-danger: #ff4466;
+
+    /* Semantic Colors */
+    --semantic-success: #10b981;
+    --semantic-warning: #f59e0b;
+    --semantic-error: #ef4444;
+    --semantic-info: #3b82f6;
+
+    /* Status Colors */
+    --status-success: #10b981;
+    --status-warning: #f59e0b;
+    --status-error: #ef4444;
+    --status-info: #3b82f6;
 
     /* Glows */
     --glow-primary: 0 0 20px rgba(0, 255, 170, 0.3);
@@ -32,6 +50,14 @@
     /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Font Sizes (rem for accessibility) */
+    --text-xs: 0.625rem;   /* 10px */
+    --text-sm: 0.75rem;    /* 12px */
+    --text-base: 0.875rem; /* 14px */
+    --text-lg: 1rem;       /* 16px */
+    --text-xl: 1.25rem;    /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
 
     /* Spacing */
     --spacing-xs: 4px;
@@ -49,12 +75,33 @@
     --transition-fast: 0.1s ease;
     --transition-default: 0.2s ease;
     --transition-slow: 0.3s ease;
+
+    /* Focus Ring */
+    --focus-ring-color: var(--accent-primary);
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+
+    /* Min Touch Target (WCAG 2.5.5) */
+    --min-touch-target: 44px;
 }
 
-* {
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    /* Enable smooth scrolling, but respect user preferences */
+    scroll-behavior: smooth;
+    /* Base font size for rem calculations */
+    font-size: 16px;
 }
 
 html,
@@ -67,15 +114,281 @@ body,
 
 body {
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.5;
     color: var(--text-primary);
     background: var(--bg-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent text inflation on mobile */
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
-/* Scrollbar */
+/* ==========================================================================
+   Accessibility: Screen Reader Only
+   ========================================================================== */
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Show on focus (for skip links) */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ==========================================================================
+   Accessibility: Skip Links
+   ========================================================================== */
+
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: var(--spacing-md);
+    outline: none;
+    box-shadow: var(--glow-primary);
+}
+
+/* ==========================================================================
+   Accessibility: Focus Styles
+   ========================================================================== */
+
+/* Default focus-visible style */
+:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Remove outline on mouse focus */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+}
+
+/* Focus within for composite widgets */
+.focus-within-ring:focus-within {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Preserve essential animations with reduced intensity */
+    .essential-animation {
+        animation-duration: 0.3s !important;
+        animation-timing-function: linear !important;
+    }
+}
+
+/* ==========================================================================
+   Accessibility: High Contrast Mode
+   ========================================================================== */
+
+@media (prefers-contrast: more) {
+    :root {
+        --border-subtle: rgba(255, 255, 255, 0.3);
+        --border-default: rgba(255, 255, 255, 0.5);
+        --text-secondary: rgba(255, 255, 255, 0.9);
+        --text-tertiary: rgba(255, 255, 255, 0.8);
+        --text-muted: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Increase focus ring visibility */
+    :focus-visible {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+
+    /* Add borders to buttons */
+    button {
+        border: 1px solid currentColor;
+    }
+}
+
+/* ==========================================================================
+   Accessibility: Forced Colors (Windows High Contrast)
+   ========================================================================== */
+
+@media (forced-colors: active) {
+    :root {
+        --accent-primary: LinkText;
+        --accent-secondary: LinkText;
+        --bg-primary: Canvas;
+        --bg-secondary: Canvas;
+        --bg-tertiary: Canvas;
+        --text-primary: CanvasText;
+        --text-secondary: CanvasText;
+        --border-default: CanvasText;
+    }
+
+    /* Ensure all interactive elements are visible */
+    button,
+    a,
+    input,
+    select,
+    textarea {
+        border: 1px solid currentColor;
+    }
+
+    /* Force visible focus indicators */
+    :focus-visible {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+    }
+
+    /* Ensure icons remain visible */
+    svg {
+        forced-color-adjust: auto;
+    }
+}
+
+/* ==========================================================================
+   Accessibility: Color Scheme
+   ========================================================================== */
+
+@media (prefers-color-scheme: light) {
+    /* Light mode overrides if needed in the future */
+    /* Currently, the app is dark-mode only */
+}
+
+/* ==========================================================================
+   Accessibility: Inverted Colors
+   ========================================================================== */
+
+@media (inverted-colors: inverted) {
+    /* Invert images back to normal */
+    img,
+    video,
+    canvas {
+        filter: invert(1);
+    }
+}
+
+/* ==========================================================================
+   Accessibility: ARIA Live Regions
+   ========================================================================== */
+
+/* Live region for status messages */
+[aria-live="polite"],
+[aria-live="assertive"] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+}
+
+/* Visible live region */
+.live-region-visible {
+    position: static;
+    clip: auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+}
+
+/* Toast/notification announcer */
+.announcer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   Accessibility: Touch Targets
+   ========================================================================== */
+
+/* Ensure minimum touch target size */
+.touch-target {
+    min-width: var(--min-touch-target);
+    min-height: var(--min-touch-target);
+}
+
+/* Add padding to small interactive elements */
+.touch-target-padding {
+    position: relative;
+}
+
+.touch-target-padding::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max(100%, var(--min-touch-target));
+    height: max(100%, var(--min-touch-target));
+}
+
+/* ==========================================================================
+   Scrollbars
+   ========================================================================== */
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -94,19 +407,45 @@ body {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* Focus */
-:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 2px;
+/* Custom scrollbar utility class */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-/* Selection */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* ==========================================================================
+   Selection
+   ========================================================================== */
+
 ::selection {
     background: rgba(0, 255, 170, 0.3);
     color: var(--text-primary);
 }
 
-/* Buttons */
+::-moz-selection {
+    background: rgba(0, 255, 170, 0.3);
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
+
 button {
     font-family: inherit;
     font-size: inherit;
@@ -114,11 +453,18 @@ button {
     border: none;
     background: none;
     color: inherit;
+    /* Minimum touch target */
+    min-height: 32px;
 }
 
-/* Inputs */
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 input,
-textarea {
+textarea,
+select {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
@@ -126,10 +472,242 @@ textarea {
     border: 1px solid var(--border-default);
     border-radius: var(--radius-sm);
     padding: var(--spacing-sm) var(--spacing-md);
+    /* Minimum touch target */
+    min-height: 32px;
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     border-color: var(--accent-primary);
     outline: none;
+}
+
+/* Placeholder text */
+::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+/* Invalid state */
+input:invalid,
+textarea:invalid,
+select:invalid {
+    border-color: var(--semantic-error);
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--accent-primary);
+    text-decoration: underline;
+}
+
+a:focus-visible {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+ul,
+ol {
+    list-style: none;
+}
+
+/* ==========================================================================
+   Images & Media
+   ========================================================================== */
+
+img,
+video,
+svg {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Prevent image dragging */
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+/* Text utilities */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-muted { color: var(--text-muted); }
+.text-accent-primary { color: var(--accent-primary); }
+.text-accent-secondary { color: var(--accent-secondary); }
+.text-success { color: var(--semantic-success); }
+.text-warning { color: var(--semantic-warning); }
+.text-error { color: var(--semantic-error); }
+
+/* Font families */
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Truncate text */
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Line clamp */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Glass effect */
+.glass-panel {
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Spinning animation */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.2s ease-out;
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    *,
+    *::before,
+    *::after {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]::after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]::after {
+        content: " (" attr(title) ")";
+    }
+
+    /* Don't print links for images or javascript */
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    /* Hide non-essential UI elements */
+    .no-print,
+    nav,
+    footer,
+    button,
+    .toolbar {
+        display: none !important;
+    }
 }

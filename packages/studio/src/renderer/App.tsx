@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChatPanel } from '@/renderer/components/ChatPanel';
+import { ChatPanel, ChatPanelRef } from '@/renderer/components/ChatPanel';
 import { CanvasWorkspace, CanvasRef } from '@/renderer/canvas/CanvasWorkspace';
 import { PropertiesPanel } from '@/renderer/components/PropertiesPanel';
 import { FooterPanel } from '@/renderer/components/FooterPanel';
@@ -31,7 +31,9 @@ export default function App() {
     const [currentFileName, setCurrentFileName] = useState<string>('Untitled.apen');
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [canvasLayers, setCanvasLayers] = useState<Array<{ id: string; name: string; type: string; visible: boolean; locked: boolean }>>([]);
+    const [previewUrl, setPreviewUrl] = useState<string>('http://localhost:5173');
     const canvasRef = useRef<CanvasRef>(null);
+    const chatPanelRef = useRef<ChatPanelRef>(null);
 
     // Resizable Panel State
     const [leftWidth, setLeftWidth] = useState(380);
@@ -40,40 +42,40 @@ export default function App() {
     const [isFooterExpanded, setIsFooterExpanded] = useState(false);
     const [resizing, setResizing] = useState<'left' | 'right' | 'footer' | null>(null);
 
-    const handleMouseMove = (e: MouseEvent) => {
+    useEffect(() => {
         if (!resizing) return;
 
-        if (resizing === 'left') {
-            const newWidth = Math.max(200, Math.min(600, e.clientX));
-            setLeftWidth(newWidth);
-        } else if (resizing === 'right') {
-            const newWidth = Math.max(200, Math.min(600, window.innerWidth - e.clientX));
-            setRightWidth(newWidth);
-        } else if (resizing === 'footer') {
-            const newHeight = Math.max(40, Math.min(window.innerHeight * 0.6, window.innerHeight - e.clientY));
-            setFooterHeight(newHeight);
-            if (newHeight > 60 && !isFooterExpanded) setIsFooterExpanded(true);
-            if (newHeight <= 40 && isFooterExpanded) setIsFooterExpanded(false);
-        }
-    };
+        const handleMouseMove = (e: MouseEvent) => {
+            e.preventDefault();
 
-    const handleMouseUp = () => {
-        setResizing(null);
-    };
+            if (resizing === 'left') {
+                const newWidth = Math.max(200, Math.min(600, e.clientX));
+                setLeftWidth(newWidth);
+            } else if (resizing === 'right') {
+                const newWidth = Math.max(200, Math.min(600, window.innerWidth - e.clientX));
+                setRightWidth(newWidth);
+            } else if (resizing === 'footer') {
+                const newHeight = Math.max(40, Math.min(window.innerHeight * 0.6, window.innerHeight - e.clientY));
+                setFooterHeight(newHeight);
+                if (newHeight > 60) setIsFooterExpanded(true);
+                if (newHeight <= 40) setIsFooterExpanded(false);
+            }
+        };
 
-    useEffect(() => {
-        if (resizing) {
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-            document.body.style.cursor = resizing === 'footer' ? 'row-resize' : 'col-resize';
-            document.body.style.userSelect = 'none';
-        } else {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-            document.body.style.cursor = 'default';
-            document.body.style.userSelect = 'auto';
-        }
+        const handleMouseUp = () => {
+            setResizing(null);
+        };
+
+        // Set cursor on body for consistent UX during drag
+        document.body.style.cursor = resizing === 'footer' ? 'row-resize' : 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
         return () => {
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
         };
@@ -132,11 +134,18 @@ export default function App() {
             setFileRevision(prev => prev + 1);
         });
 
+        const unsubPreviewUrl = window.studioControl.onPreviewUrlChange((url) => {
+            console.log('[StudioControl] Preview URL change:', url);
+            setPreviewUrl(url);
+            setLayoutMode('preview');
+        });
+
         return () => {
             unsubLayout();
             unsubOpenFile();
             unsubTerminal();
             unsubRefresh();
+            unsubPreviewUrl();
         };
     }, []);
 
@@ -372,7 +381,7 @@ export default function App() {
     };
 
     return (
-        <div className="studio-app">
+        <div className={`studio-app ${resizing ? 'resizing' : ''}`}>
             {/* Integrated Header with Title and Toolbar */}
             <header className="studio-titlebar">
                 <div className="titlebar-drag-region" />
@@ -417,6 +426,7 @@ export default function App() {
                 <aside className="studio-sidebar studio-sidebar-left" style={{ width: leftWidth }}>
                     {activeSidebar === 'chat' ? (
                         <ChatPanel
+                            ref={chatPanelRef}
                             isBridgeReady={isBridgeReady}
                             workspacePath={workspacePath}
                             onGetCanvasState={() => canvasRef.current?.toJSON()}
@@ -465,7 +475,10 @@ export default function App() {
                 </aside>
 
                 {/* Left Resize Handle */}
-                <div className="resize-handle vertical left" onMouseDown={() => setResizing('left')} />
+                <div
+                    className={`resize-handle vertical left ${resizing === 'left' ? 'active' : ''}`}
+                    onMouseDown={() => setResizing('left')}
+                />
 
                 {/* Center: Canvas */}
                 <main className="studio-canvas-container">
@@ -476,6 +489,7 @@ export default function App() {
                         <Preview
                             onElementSelected={handlePreviewElementSelected}
                             selectedElement={selectedPreviewElement}
+                            initialUrl={previewUrl}
                         />
                     ) : layoutMode === 'code' ? (
                         <FileViewer
@@ -494,7 +508,10 @@ export default function App() {
                 </main>
 
                 {/* Right Resize Handle */}
-                <div className="resize-handle vertical right" onMouseDown={() => setResizing('right')} />
+                <div
+                    className={`resize-handle vertical right ${resizing === 'right' ? 'active' : ''}`}
+                    onMouseDown={() => setResizing('right')}
+                />
 
                 {/* Right: Properties Panel */}
                 <aside className="studio-sidebar studio-sidebar-right" style={{ width: rightWidth }}>
@@ -506,13 +523,24 @@ export default function App() {
                                 window.coordinator.createTask(`Refactor requested for <${el.tagName.toLowerCase()}> with class "${el.className}". User intent: Modify this component.`, []);
                             }
                         }}
+                        onEditWithChat={(element, instruction) => {
+                            // Switch to chat sidebar if not already there
+                            setActiveSidebar('chat');
+                            // Use setTimeout to ensure ChatPanel is mounted before calling
+                            setTimeout(() => {
+                                chatPanelRef.current?.handleEditElement(element, instruction);
+                            }, 100);
+                        }}
                     />
 
                 </aside>
             </div>
 
             {/* Horizontal Resize Handle */}
-            <div className="resize-handle horizontal" onMouseDown={() => setResizing('footer')} />
+            <div
+                className={`resize-handle horizontal ${resizing === 'footer' ? 'active' : ''}`}
+                onMouseDown={() => setResizing('footer')}
+            />
 
             {/* Bottom: Footer Panel with Terminal & Diagnostics */}
             <footer className="studio-footer" style={{ height: isFooterExpanded ? footerHeight : 40 }}>
@@ -521,6 +549,10 @@ export default function App() {
                     onToggleExpand={setIsFooterExpanded}
                     activeSessionId={activeSessionId}
                     workspacePath={workspacePath}
+                    onOpenPreviewUrl={(url) => {
+                        setPreviewUrl(url);
+                        setLayoutMode('preview');
+                    }}
                 />
             </footer>
         </div>

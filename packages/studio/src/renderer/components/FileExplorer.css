@@ -102,6 +102,7 @@
     cursor: not-allowed;
 }
 
+/* Search bar */
 .search-bar {
     display: flex;
     align-items: center;
@@ -126,12 +127,303 @@
     margin-left: 6px;
 }
 
+/* Explorer Toolbar */
+.explorer-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    margin-top: 4px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+}
+
+.toolbar-btn.active {
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+/* Filter & Sort Dropdowns */
+.filter-wrapper,
+.sort-wrapper {
+    position: relative;
+}
+
+.filter-menu,
+.sort-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 1000;
+    min-width: 140px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.1s ease-out;
+}
+
+.filter-menu button,
+.sort-menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.1s;
+    text-align: left;
+}
+
+.filter-menu button:hover,
+.sort-menu button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.filter-menu button.active,
+.sort-menu button.active {
+    background: rgba(var(--accent-primary-rgb), 0.15);
+    color: var(--accent-primary);
+}
+
+.filter-menu button span:last-child,
+.sort-menu button span:last-child {
+    color: var(--accent-primary);
+    font-size: 10px;
+}
+
+/* File count */
+.file-count {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+/* Explorer content */
 .explorer-content {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 20px;
 }
 
+/* Pinned Files Section */
+.pinned-section {
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.pinned-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.pinned-header svg {
+    color: #f59e0b;
+}
+
+.pinned-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.pinned-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.pinned-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.pinned-item .star-icon {
+    color: #f59e0b;
+    flex-shrink: 0;
+}
+
+.pinned-item span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pinned-item .unpin-btn {
+    opacity: 0;
+    padding: 2px;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.15s;
+}
+
+.pinned-item:hover .unpin-btn {
+    opacity: 1;
+}
+
+.pinned-item .unpin-btn:hover {
+    color: var(--semantic-error);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Recent Files Section */
+.recent-section {
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.recent-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.recent-header svg {
+    color: var(--accent-secondary);
+}
+
+.recent-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.recent-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.recent-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.recent-item .clock-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.recent-item span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Context Menu */
+.explorer-context-menu {
+    position: fixed;
+    z-index: 2000;
+    min-width: 180px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    animation: contextMenuIn 0.12s ease-out;
+}
+
+@keyframes contextMenuIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.explorer-context-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.1s;
+    text-align: left;
+}
+
+.explorer-context-menu button:hover {
+    background: rgba(var(--accent-primary-rgb), 0.15);
+    color: var(--text-primary);
+}
+
+.explorer-context-menu button svg {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.explorer-context-menu button:hover svg {
+    color: var(--accent-primary);
+}
+
+.context-divider {
+    height: 1px;
+    margin: 4px 8px;
+    background: var(--border-subtle);
+}
+
+/* Workspace path */
 .workspace-path {
     display: flex;
     align-items: center;
@@ -143,6 +435,7 @@
     text-transform: uppercase;
 }
 
+/* File Tree */
 .file-tree {
     display: flex;
     flex-direction: column;
@@ -275,6 +568,7 @@
     color: var(--text-muted);
     margin-left: 4px;
 }
+
 /* Modified Badges */
 .modified-badge {
     display: flex;
@@ -298,4 +592,92 @@
     0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(var(--accent-primary-rgb), 0.4)); }
     50% { transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(var(--accent-primary-rgb), 0.8)); }
     100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(var(--accent-primary-rgb), 0.4)); }
+}
+
+/* Empty State */
+.explorer-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 16px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.explorer-empty svg {
+    color: var(--text-tertiary);
+    opacity: 0.5;
+}
+
+.explorer-empty p {
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Keyboard Shortcut Hints */
+.shortcut-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 8px;
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.shortcut-hint kbd {
+    display: inline-block;
+    padding: 1px 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 9px;
+}
+
+/* Animation helper */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Scrollbar styling */
+.explorer-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.explorer-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.explorer-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.explorer-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Focus states for accessibility */
+.toolbar-btn:focus-visible,
+.filter-menu button:focus-visible,
+.sort-menu button:focus-visible,
+.explorer-context-menu button:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: -2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 300px) {
+    .explorer-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .file-count {
+        width: 100%;
+        text-align: center;
+        margin-top: 4px;
+    }
 }

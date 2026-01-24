@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 
 import { ClaudeCodeBridge } from './bridge/ClaudeCodeBridge.js';
 import { TerminalBridge } from './bridge/TerminalBridge.js';
+import { SettingsBridge, StudioSettings } from './bridge/SettingsBridge.js';
 
 // Disable hardware acceleration if issues arise on some systems
 // app.disableHardwareAcceleration();
@@ -36,6 +37,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            webviewTag: true, // Enable webview for Preview inspector
             preload: path.join(__dirname, 'preload.js'),
         },
     });
@@ -76,11 +78,19 @@ let fileService: FileService | null = null;
 let agentCoordinator: AgentCoordinator | null = null;
 let studioServer: StudioServer | null = null;
 let terminal: TerminalBridge | null = null;
+let settingsBridge: SettingsBridge | null = null;
 
 // ... setups
 
 function setupIpcHandlers() {
     claudeBridge = new ClaudeCodeBridge();
+    settingsBridge = new SettingsBridge();
+
+    // Load settings on startup
+    settingsBridge.load().then(() => {
+        console.log('[Settings] Loaded settings:', settingsBridge?.getSettings());
+    });
+
     if (mainWindow) {
         fileService = new FileService(mainWindow);
         agentCoordinator = new AgentCoordinator(claudeBridge, mainWindow);
@@ -143,9 +153,24 @@ function setupIpcHandlers() {
     });
 
 
-    ipcMain.handle('claude:resolveApproval', async (_event, sessionId: string, approved: boolean) => {
+    // Enhanced: resolveApproval now requires toolId for queue support
+    ipcMain.handle('claude:resolveApproval', async (_event, sessionId: string, toolId: string, approved: boolean) => {
         if (!claudeBridge) return { error: 'Bridge not initialized' };
-        return claudeBridge.resolveApproval(sessionId, approved);
+        claudeBridge.resolveApproval(sessionId, toolId, approved);
+        return { success: true };
+    });
+
+    // NEW: Batch resolve all pending approvals
+    ipcMain.handle('claude:resolveAllApprovals', async (_event, sessionId: string, approved: boolean) => {
+        if (!claudeBridge) return { error: 'Bridge not initialized' };
+        claudeBridge.resolveAllApprovals(sessionId, approved);
+        return { success: true };
+    });
+
+    // NEW: Get current approval queue for a session
+    ipcMain.handle('claude:getApprovalQueue', async (_event, sessionId: string) => {
+        if (!claudeBridge) return { error: 'Bridge not initialized' };
+        return claudeBridge.getApprovalQueue(sessionId);
     });
 
     ipcMain.handle('claude:runDiagnostics', async (_event, sessionId: string) => {
@@ -156,6 +181,23 @@ function setupIpcHandlers() {
     ipcMain.handle('claude:list', async () => {
         if (!claudeBridge) return { error: 'Bridge not initialized' };
         return claudeBridge.listSessions();
+    });
+
+    // --- Settings Handlers ---
+    ipcMain.handle('settings:load', async () => {
+        if (!settingsBridge) return { error: 'Settings bridge not initialized' };
+        return settingsBridge.load();
+    });
+
+    ipcMain.handle('settings:save', async (_event, updates: Partial<StudioSettings>) => {
+        if (!settingsBridge) return { error: 'Settings bridge not initialized' };
+        await settingsBridge.save(updates);
+        return { success: true };
+    });
+
+    ipcMain.handle('settings:get', async () => {
+        if (!settingsBridge) return { error: 'Settings bridge not initialized' };
+        return settingsBridge.getSettings();
     });
 
     claudeBridge.on('output', (sessionId: string, data: string, stream: 'stdout' | 'stderr') => {
@@ -194,9 +236,46 @@ function setupIpcHandlers() {
         }
     });
 
+    // NEW: Approval queue events for batch approval UI
+    claudeBridge.on('approval_queued', (sessionId: string, request: any) => {
+        if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
+            mainWindow.webContents.send('claude:approval_queued', { sessionId, request });
+        }
+    });
+
+    claudeBridge.on('approval_resolved', (sessionId: string, toolId: string, approved: boolean) => {
+        if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
+            mainWindow.webContents.send('claude:approval_resolved', { sessionId, toolId, approved });
+        }
+    });
+
     claudeBridge.on('file_modified', (sessionId: string, path: string) => {
         if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
             mainWindow.webContents.send('claude:file_modified', { sessionId, path });
+        }
+    });
+
+    // Route Claude's Bash commands to the interactive shell terminal for real-time output
+    claudeBridge.on('run_in_terminal', async (_sessionId: string, command: string) => {
+        if (terminal) {
+            console.log(`[Main] Routing Claude command to terminal: ${command}`);
+
+            // If PTY not running, spawn it first with session's working dir
+            if (!terminal.isRunning()) {
+                const session = claudeBridge?.getSession(_sessionId);
+                const workingDir = session?.workingDir || process.cwd();
+                console.log(`[Main] PTY not running, spawning in: ${workingDir}`);
+                await terminal.spawn(workingDir);
+                // Small delay to let shell initialize
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            terminal.sendInput(command + '\n');
+
+            // Notify renderer to switch to Shell tab for visibility
+            if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
+                mainWindow.webContents.send('terminal:command_routed', { command });
+            }
         }
     });
 
@@ -355,6 +434,22 @@ function setupIpcHandlers() {
     ipcMain.on('studio:refreshPreview', (_event) => {
         if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
             mainWindow.webContents.send('studio:refreshPreview');
+        }
+    });
+
+    ipcMain.on('studio:setPreviewUrl', (_event, url: string) => {
+        if (mainWindow?.webContents && !mainWindow.webContents.isDestroyed()) {
+            mainWindow.webContents.send('studio:setPreviewUrl', url);
+        }
+    });
+
+    // Open URL in system default browser
+    ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+        try {
+            await shell.openExternal(url);
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: (err as Error).message };
         }
     });
 

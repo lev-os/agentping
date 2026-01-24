@@ -1,17 +1,222 @@
-/* Terminal Component Styles */
+/**
+ * Terminal Component Styles
+ * Enhanced with header, search, status indicators, and controls
+ */
 
-.terminal-wrapper {
-    position: relative;
+.terminal-panel {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     background: #0a0a0f;
     overflow: hidden;
 }
 
+/* Terminal Header */
+.terminal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: rgba(20, 20, 28, 0.95);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+    min-height: 36px;
+    overflow: hidden;
+}
+
+.terminal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.terminal-header-left > svg {
+    color: var(--accent-primary);
+}
+
+.terminal-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+/* Connection Status */
+.terminal-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    font-size: 10px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.terminal-status .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.terminal-status .status-text {
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+/* Working Directory */
+.terminal-cwd {
+    display: none; /* Hide on small widths - shown via media query on wider screens */
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: rgba(var(--accent-primary-rgb), 0.08);
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.15);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--accent-primary);
+    max-width: 150px;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+@media (min-width: 700px) {
+    .terminal-cwd {
+        display: flex;
+    }
+}
+
+.terminal-cwd span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Header Right Actions */
+.terminal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Zoom Controls */
+.terminal-zoom {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 6px;
+    margin-right: 8px;
+    border-right: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.terminal-zoom .zoom-level {
+    min-width: 32px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+    white-space: nowrap;
+}
+
+/* Search Bar */
+.terminal-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(15, 15, 20, 0.95);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.terminal-search .search-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.terminal-search input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.15s;
+}
+
+.terminal-search input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 8px rgba(var(--accent-primary-rgb), 0.15);
+}
+
+.terminal-search input::placeholder {
+    color: var(--text-muted);
+}
+
+.terminal-search .search-nav {
+    display: flex;
+    gap: 2px;
+}
+
+.terminal-search .search-nav button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.terminal-search .search-nav button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.terminal-search .search-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.terminal-search .search-close:hover {
+    background: rgba(var(--status-error-rgb), 0.15);
+    color: var(--status-error);
+}
+
+/* Terminal Container */
 .terminal-container {
+    flex: 1;
     width: 100%;
-    height: 100%;
-    background: #0a0a0f;
+    padding: 8px;
+    outline: none;
+    overflow: hidden;
+    min-height: 100px;
+    cursor: text;
 }
 
 /* Ensure xterm canvas receives events properly */
@@ -49,4 +254,59 @@
 
 .terminal-container .xterm-viewport::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 255, 170, 0.35);
+}
+
+/* Keyboard Shortcuts Help */
+.terminal-shortcuts {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 12px;
+    background: rgba(10, 10, 15, 0.8);
+    border-top: 1px solid var(--border-subtle);
+    font-size: 10px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.terminal-shortcuts .ui-kbd-group {
+    transform: scale(0.85);
+    margin-right: 4px;
+}
+
+/* Spinning animation for reconnect button */
+.terminal-header-right .ui-icon-button.spinning svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Focus state for accessibility */
+.terminal-container:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: -2px;
+}
+
+/* Icon button active state in terminal */
+.terminal-header-right .ui-icon-button.active {
+    background: rgba(var(--accent-primary-rgb), 0.15);
+    color: var(--accent-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .terminal-shortcuts {
+        display: none;
+    }
+
+    .terminal-zoom {
+        display: none;
+    }
+
+    .terminal-status .status-text {
+        display: none;
+    }
 }

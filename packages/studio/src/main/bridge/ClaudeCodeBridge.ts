@@ -7,9 +7,37 @@
 
 import { EventEmitter } from 'events';
 import { nanoid } from 'nanoid';
+import * as path from 'path';
 
 // Define the query type locally or use 'any' if types are hard to import dynamically
 type QueryFn = any;
+
+/**
+ * Approval queue item with file content for diff display
+ */
+export interface ApprovalQueueItem {
+    toolCallId: string;
+    name: string;
+    input: any;
+    originalContent?: string;   // File content BEFORE the change
+    proposedContent?: string;   // Content that will be written
+    filePath?: string;          // Resolved absolute path
+    timestamp: Date;
+    resolve: (approved: boolean) => void;
+}
+
+/**
+ * Approval request sent to renderer (without resolve function)
+ */
+export interface ApprovalRequest {
+    toolCallId: string;
+    name: string;
+    input: any;
+    originalContent?: string;
+    proposedContent?: string;
+    filePath?: string;
+    timestamp: Date;
+}
 
 export interface AgentSession {
     id: string;
@@ -18,12 +46,8 @@ export interface AgentSession {
     status: 'starting' | 'running' | 'stopped';
     startedAt: Date;
     sdkSessionId?: string;
-    pendingApproval?: {
-        toolCallId: string;
-        name: string;
-        input: any;
-        resolve: (approved: boolean) => void;
-    };
+    // Queue of pending approvals (supports multiple concurrent approvals)
+    approvalQueue: Map<string, ApprovalQueueItem>;
     isExecuting?: boolean;
 }
 
@@ -52,6 +76,7 @@ export class ClaudeCodeBridge extends EventEmitter {
             workingDir,
             status: 'starting',
             startedAt: new Date(),
+            approvalQueue: new Map(),
         };
 
         this.sessions.set(sessionId, session);
@@ -91,8 +116,12 @@ export class ClaudeCodeBridge extends EventEmitter {
             const options: any = {
                 workingDir: session.workingDir,
                 cwd: session.workingDir, // Explicitly set cwd as well
-                // Default tools for AgentPing
-                allowedTools: ['Read', 'Write', 'Edit', 'Bash', 'Glob', 'Grep', 'WebSearch', 'WebFetch'],
+                // Full Claude Code tool set for parity with CLI
+                allowedTools: [
+                    'Read', 'Write', 'Edit', 'Bash', 'Glob', 'Grep',
+                    'WebSearch', 'WebFetch', 'Task', 'LS',
+                    'TodoWrite', 'TodoRead', 'NotebookEdit', 'NotebookRead'
+                ],
                 maxTurns: 20,
                 // Generate unique sessionId to prevent SDK from using cached sessions
                 sessionId: `${session.id}-${Date.now()}`,
@@ -126,27 +155,65 @@ export class ClaudeCodeBridge extends EventEmitter {
                     if (toolBlock) {
                         const highRiskTools = ['Bash', 'Write', 'Edit'];
                         if (highRiskTools.includes(toolBlock.name)) {
+                            // Capture original file content for Write/Edit tools
+                            let originalContent: string | undefined;
+                            let proposedContent: string | undefined;
+                            let resolvedFilePath: string | undefined;
+
+                            if (toolBlock.name === 'Write' || toolBlock.name === 'Edit') {
+                                const filePath = toolBlock.input?.path || toolBlock.input?.file_path;
+                                if (filePath) {
+                                    const absolutePath = path.isAbsolute(filePath)
+                                        ? filePath
+                                        : path.join(session.workingDir, filePath);
+                                    resolvedFilePath = absolutePath;
+                                    originalContent = await this.captureOriginalContent(absolutePath);
+                                    proposedContent = toolBlock.input?.content || toolBlock.input?.new_string;
+                                }
+                            }
+
+                            const approvalRequest: ApprovalRequest = {
+                                toolCallId: toolBlock.id,
+                                name: toolBlock.name,
+                                input: toolBlock.input,
+                                originalContent,
+                                proposedContent,
+                                filePath: resolvedFilePath,
+                                timestamp: new Date()
+                            };
+
+                            // Emit approval_queued event (renderer will add to queue UI)
+                            this.emit('approval_queued', sessionId, approvalRequest);
+
+                            // Also emit legacy request_approval for backward compatibility
                             this.emit('request_approval', sessionId, {
                                 id: toolBlock.id,
                                 name: toolBlock.name,
-                                input: toolBlock.input
+                                input: toolBlock.input,
+                                originalContent,
+                                proposedContent,
+                                filePath: resolvedFilePath
                             });
 
                             // Create a promise to wait for user approval
                             const approved = await new Promise<boolean>((resolve) => {
-                                session.pendingApproval = {
+                                session.approvalQueue.set(toolBlock.id, {
                                     toolCallId: toolBlock.id,
                                     name: toolBlock.name,
                                     input: toolBlock.input,
+                                    originalContent,
+                                    proposedContent,
+                                    filePath: resolvedFilePath,
+                                    timestamp: new Date(),
                                     resolve
-                                };
+                                });
                             });
 
-                            session.pendingApproval = undefined;
+                            // Remove from queue after resolution
+                            session.approvalQueue.delete(toolBlock.id);
+                            this.emit('approval_resolved', sessionId, toolBlock.id, approved);
 
                             if (!approved) {
-                                // How to cancel a tool call in the SDK? 
-                                // For now, we'll just emit a cancellation or let it fail
                                 this.emit('output', sessionId, `Action '${toolBlock.name}' denied by user.`, 'stderr');
                                 continue;
                             }
@@ -196,10 +263,12 @@ export class ClaudeCodeBridge extends EventEmitter {
                                     this.emit('file_modified', sessionId, filePath);
                                 }
                             }
-                            // Capture Bash tool use for logging
+                            // Capture Bash tool use for logging AND route to shell terminal
                             if (item.name === 'Bash' && item.input?.command) {
                                 console.log(`[ClaudeBridge] Bash command: ${item.input.command}`);
                                 this.emit('output', sessionId, `$ ${item.input.command}`, 'stdout');
+                                // Route command to interactive shell terminal for real-time output
+                                this.emit('run_in_terminal', sessionId, item.input.command);
                             }
                         }
                     }
@@ -294,10 +363,60 @@ export class ClaudeCodeBridge extends EventEmitter {
         return Array.from(this.sessions.values());
     }
 
-    resolveApproval(sessionId: string, approved: boolean): void {
+    /**
+     * Resolve a single pending approval by tool ID
+     */
+    resolveApproval(sessionId: string, toolId: string, approved: boolean): void {
         const session = this.sessions.get(sessionId);
-        if (session && session.pendingApproval) {
-            session.pendingApproval.resolve(approved);
+        if (!session) return;
+
+        const item = session.approvalQueue.get(toolId);
+        if (item) {
+            item.resolve(approved);
+        }
+    }
+
+    /**
+     * Resolve all pending approvals for a session (batch accept/reject)
+     */
+    resolveAllApprovals(sessionId: string, approved: boolean): void {
+        const session = this.sessions.get(sessionId);
+        if (!session) return;
+
+        for (const [toolId, item] of session.approvalQueue) {
+            item.resolve(approved);
+        }
+    }
+
+    /**
+     * Get current approval queue for a session (for renderer to display)
+     */
+    getApprovalQueue(sessionId: string): ApprovalRequest[] {
+        const session = this.sessions.get(sessionId);
+        if (!session) return [];
+
+        return Array.from(session.approvalQueue.values()).map(item => ({
+            toolCallId: item.toolCallId,
+            name: item.name,
+            input: item.input,
+            originalContent: item.originalContent,
+            proposedContent: item.proposedContent,
+            filePath: item.filePath,
+            timestamp: item.timestamp
+        }));
+    }
+
+    /**
+     * Capture original file content before modification
+     */
+    private async captureOriginalContent(filePath: string): Promise<string> {
+        try {
+            const fs = await import('fs/promises');
+            const content = await fs.readFile(filePath, 'utf-8');
+            return content;
+        } catch {
+            // File doesn't exist (new file creation)
+            return '';
         }
     }
 

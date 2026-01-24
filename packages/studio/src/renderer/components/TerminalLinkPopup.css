@@ -1,0 +1,111 @@
+/* Terminal Link Popup Styles */
+
+.terminal-link-popup {
+    position: fixed;
+    z-index: 10000;
+    background: rgba(20, 20, 28, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 255, 170, 0.1);
+    backdrop-filter: blur(12px);
+    min-width: 200px;
+    overflow: hidden;
+    animation: popupSlideIn 0.15s ease-out;
+}
+
+@keyframes popupSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.popup-url {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 11px;
+    color: #00d4ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.popup-close {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    margin-left: 8px;
+}
+
+.popup-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.popup-actions {
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.popup-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.popup-action:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.popup-action.preview {
+    color: #00ffaa;
+}
+
+.popup-action.preview:hover {
+    background: rgba(0, 255, 170, 0.1);
+}
+
+.popup-action.external {
+    color: #00d4ff;
+}
+
+.popup-action.external:hover {
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.popup-action svg {
+    flex-shrink: 0;
+}

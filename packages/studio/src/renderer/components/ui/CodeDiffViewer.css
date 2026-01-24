@@ -1,0 +1,205 @@
+/**
+ * CodeDiffViewer Styles
+ *
+ * Uses Studio's design tokens (--accent-primary, --bg-tertiary, etc.)
+ */
+
+.code-diff-viewer {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.diff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-subtle);
+    gap: 12px;
+}
+
+.diff-header.clickable {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.diff-header.clickable:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.diff-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.diff-collapse-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.diff-filepath {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-family: var(--font-mono);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.diff-stats {
+    display: flex;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.diff-added {
+    color: var(--status-success);
+}
+
+.diff-removed {
+    color: var(--status-error);
+}
+
+.diff-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.diff-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-tertiary);
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.diff-action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border-color: var(--text-tertiary);
+}
+
+.diff-scroll-container {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.diff-content {
+    margin: 0;
+    padding: 0;
+    min-width: 100%;
+}
+
+.diff-content code {
+    display: block;
+    min-width: 100%;
+}
+
+.diff-line {
+    display: flex;
+    min-height: 20px;
+    border-left: 3px solid transparent;
+}
+
+.diff-line-add {
+    background: rgba(var(--status-success-rgb), 0.1);
+    border-left-color: var(--status-success);
+}
+
+.diff-line-add .diff-line-prefix {
+    color: var(--status-success);
+}
+
+.diff-line-remove {
+    background: rgba(var(--status-error-rgb), 0.1);
+    border-left-color: var(--status-error);
+}
+
+.diff-line-remove .diff-line-prefix {
+    color: var(--status-error);
+}
+
+.diff-line-unchanged {
+    background: transparent;
+}
+
+.diff-line-num {
+    user-select: none;
+    width: 36px;
+    min-width: 36px;
+    text-align: right;
+    padding: 0 6px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+    font-size: 10px;
+}
+
+.diff-line-num.old {
+    border-right: 1px solid var(--border-subtle);
+}
+
+.diff-line-num.new {
+    border-right: 1px solid var(--border-subtle);
+}
+
+.diff-line-prefix {
+    user-select: none;
+    width: 20px;
+    min-width: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+.diff-line-content {
+    white-space: pre;
+    padding: 0 8px;
+    color: var(--text-primary);
+    flex: 1;
+    overflow-x: visible;
+}
+
+/* Highlight words that changed within a line (future enhancement) */
+.diff-word-add {
+    background: rgba(var(--status-success-rgb), 0.3);
+    border-radius: 2px;
+}
+
+.diff-word-remove {
+    background: rgba(var(--status-error-rgb), 0.3);
+    border-radius: 2px;
+}
+
+/* Empty state when no changes */
+.diff-empty {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 12px;
+}

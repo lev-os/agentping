@@ -45,8 +45,9 @@ export class AgentCoordinator {
     /**
      * Start a new agent session
      */
-    async startAgent(workingDir: string, role: string = 'general'): Promise<string> {
-        const result = await this.bridge.spawn(workingDir, `You are a ${role} specialist.`);
+    async startAgent(workingDir: string, _role: string = 'general'): Promise<string> {
+        // Start agent without intro prompt - user types first
+        const result = await this.bridge.spawn(workingDir);
 
         if (result.success) {
             this.agents.set(result.sessionId, {
