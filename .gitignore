@@ -28,6 +28,11 @@ pnpm-debug.log*
 # Test coverage
 coverage/
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
 # AgentPing data (local dev)
 .agentping/
 *.db

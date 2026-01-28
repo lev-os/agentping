@@ -11,16 +11,20 @@
         "start": "pnpm --filter @agentping/studio dev",
         "tui": "pnpm --filter @agentping/cli tui",
         "test": "pnpm -r test",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:headed": "playwright test --headed",
         "lint": "eslint packages --ext .ts,.tsx",
         "clean": "pnpm -r clean && rm -rf node_modules"
     },
     "devDependencies": {
+        "@playwright/test": "^1.58.0",
         "@types/node": "^20.10.0",
-        "typescript": "^5.3.0",
-        "eslint": "^8.55.0",
         "@typescript-eslint/eslint-plugin": "^6.13.0",
         "@typescript-eslint/parser": "^6.13.0",
+        "eslint": "^8.55.0",
         "prettier": "^3.1.0",
+        "typescript": "^5.3.0",
         "vitest": "^1.0.0"
     },
     "packageManager": "pnpm@8.12.0",

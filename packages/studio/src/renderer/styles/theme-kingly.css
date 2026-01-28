@@ -1,0 +1,230 @@
+/**
+ * AgentPing Studio - Kingly Theme
+ * Cyber-terminal aesthetic with Notion/Linear polish
+ *
+ * Theme tokens inspired by Lev Kingly interface design
+ */
+
+:root {
+    /* ========================================================================
+       KINGLY THEME TOKENS - PRIMARY
+       ======================================================================== */
+
+    /* Core Colors */
+    --kingly-primary: #22c55e;           /* Neon green - primary accent */
+    --kingly-primary-rgb: 34, 197, 94;   /* RGB for alpha channels */
+    --kingly-bg: #000000;                /* Void black - pure black background */
+    --kingly-surface: #0a0a0a;           /* Slightly elevated surface */
+    --kingly-surface-elevated: #141414;  /* More elevated surfaces */
+
+    /* Typography Families */
+    --kingly-font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --kingly-font-code: 'JetBrains Mono', 'Fira Code', monospace;
+    --kingly-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* ========================================================================
+       KINGLY THEME TOKENS - EXTENDED PALETTE
+       ======================================================================== */
+
+    /* Background Hierarchy */
+    --kingly-bg-primary: #000000;
+    --kingly-bg-secondary: #0a0a0a;
+    --kingly-bg-tertiary: #141414;
+    --kingly-bg-elevated: #1a1a1a;
+    --kingly-bg-overlay: rgba(0, 0, 0, 0.95);
+
+    /* Borders & Dividers */
+    --kingly-border-subtle: rgba(34, 197, 94, 0.1);
+    --kingly-border-default: rgba(34, 197, 94, 0.2);
+    --kingly-border-accent: rgba(34, 197, 94, 0.4);
+    --kingly-border-bright: #22c55e;
+
+    /* Text Colors */
+    --kingly-text-primary: #ffffff;
+    --kingly-text-secondary: rgba(255, 255, 255, 0.8);
+    --kingly-text-tertiary: rgba(255, 255, 255, 0.6);
+    --kingly-text-muted: rgba(255, 255, 255, 0.4);
+    --kingly-text-accent: #22c55e;
+
+    /* State Colors */
+    --kingly-success: #22c55e;
+    --kingly-warning: #fbbf24;
+    --kingly-error: #ef4444;
+    --kingly-info: #3b82f6;
+
+    /* Effects */
+    --kingly-glow-primary: 0 0 20px rgba(34, 197, 94, 0.3);
+    --kingly-glow-intense: 0 0 40px rgba(34, 197, 94, 0.5);
+    --kingly-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --kingly-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+    --kingly-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+    /* Interactive States */
+    --kingly-hover-overlay: rgba(34, 197, 94, 0.1);
+    --kingly-active-overlay: rgba(34, 197, 94, 0.2);
+    --kingly-focus-ring: rgba(34, 197, 94, 0.5);
+
+    /* ========================================================================
+       APPLY KINGLY THEME TO AGENTPING VARIABLES
+       ======================================================================== */
+
+    /* Override AgentPing default colors */
+    --bg-primary: var(--kingly-bg-primary);
+    --bg-secondary: var(--kingly-bg-secondary);
+    --bg-tertiary: var(--kingly-bg-tertiary);
+    --bg-elevated: var(--kingly-bg-elevated);
+
+    --border-subtle: var(--kingly-border-subtle);
+    --border-default: var(--kingly-border-default);
+    --border-accent: var(--kingly-border-accent);
+
+    --text-primary: var(--kingly-text-primary);
+    --text-secondary: var(--kingly-text-secondary);
+    --text-tertiary: var(--kingly-text-tertiary);
+    --text-muted: var(--kingly-text-muted);
+
+    /* Override accent colors */
+    --accent-primary: var(--kingly-primary);
+    --accent-primary-rgb: var(--kingly-primary-rgb);
+    --accent-secondary: var(--kingly-primary); /* Use same green for consistency */
+    --accent-secondary-rgb: var(--kingly-primary-rgb);
+
+    /* Override semantic colors */
+    --semantic-success: var(--kingly-success);
+    --semantic-warning: var(--kingly-warning);
+    --semantic-error: var(--kingly-error);
+    --semantic-info: var(--kingly-info);
+
+    /* Override glows */
+    --glow-primary: var(--kingly-glow-primary);
+    --glow-secondary: var(--kingly-glow-primary);
+
+    /* Override typography */
+    --font-sans: var(--kingly-font-body);
+    --font-mono: var(--kingly-font-code);
+
+    /* Override focus ring */
+    --focus-ring-color: var(--kingly-primary);
+}
+
+/* ============================================================================
+   KINGLY THEME - COMPONENT OVERRIDES
+   ========================================================================== */
+
+/* Body styling for cyber-terminal feel */
+body[data-theme="kingly"] {
+    background: var(--kingly-bg);
+    color: var(--kingly-text-primary);
+    font-family: var(--kingly-font-body);
+}
+
+/* Terminal aesthetic for code blocks */
+body[data-theme="kingly"] code,
+body[data-theme="kingly"] pre {
+    font-family: var(--kingly-font-code);
+    background: var(--kingly-bg-elevated);
+    border: 1px solid var(--kingly-border-default);
+}
+
+/* Headings use display font */
+body[data-theme="kingly"] h1,
+body[data-theme="kingly"] h2,
+body[data-theme="kingly"] h3,
+body[data-theme="kingly"] h4,
+body[data-theme="kingly"] h5,
+body[data-theme="kingly"] h6 {
+    font-family: var(--kingly-font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Enhanced focus states with neon glow */
+body[data-theme="kingly"] :focus-visible {
+    outline: 2px solid var(--kingly-primary);
+    outline-offset: 2px;
+    box-shadow: var(--kingly-glow-primary);
+}
+
+/* Button hover states */
+body[data-theme="kingly"] button:hover {
+    background: var(--kingly-hover-overlay);
+    border-color: var(--kingly-border-accent);
+}
+
+body[data-theme="kingly"] button:active {
+    background: var(--kingly-active-overlay);
+}
+
+/* Link styling */
+body[data-theme="kingly"] a {
+    color: var(--kingly-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+body[data-theme="kingly"] a:hover {
+    text-shadow: var(--kingly-glow-primary);
+    text-decoration: underline;
+}
+
+/* Scrollbar styling */
+body[data-theme="kingly"] ::-webkit-scrollbar-thumb {
+    background: rgba(34, 197, 94, 0.2);
+    border-radius: 4px;
+}
+
+body[data-theme="kingly"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(34, 197, 94, 0.4);
+}
+
+/* Selection styling */
+body[data-theme="kingly"] ::selection {
+    background: rgba(34, 197, 94, 0.3);
+    color: var(--kingly-text-primary);
+}
+
+/* ============================================================================
+   KINGLY THEME - UTILITY CLASSES
+   ========================================================================== */
+
+.kingly-glow {
+    box-shadow: var(--kingly-glow-primary);
+}
+
+.kingly-glow-intense {
+    box-shadow: var(--kingly-glow-intense);
+}
+
+.kingly-border {
+    border: 1px solid var(--kingly-border-default);
+}
+
+.kingly-border-accent {
+    border: 1px solid var(--kingly-border-accent);
+}
+
+.kingly-bg-surface {
+    background: var(--kingly-surface);
+}
+
+.kingly-bg-elevated {
+    background: var(--kingly-surface-elevated);
+}
+
+.kingly-text-accent {
+    color: var(--kingly-primary);
+}
+
+/* ============================================================================
+   THEME TOGGLE SUPPORT
+   ========================================================================== */
+
+/* Allow themes to be toggled via data attribute or class */
+.theme-kingly {
+    /* Apply Kingly theme when class is present */
+}
+
+/* Default theme can be restored by removing data-theme attribute */
+body:not([data-theme="kingly"]) {
+    /* Original AgentPing theme variables remain active */
+}
