@@ -18,7 +18,7 @@ import './Toolbar.css';
 
 type Tool = 'select' | 'rectangle' | 'ellipse' | 'text';
 type SidebarMode = 'chat' | 'components' | 'files' | 'layers';
-type LayoutMode = 'design' | 'dashboard' | 'code' | 'preview';
+type LayoutMode = 'design' | 'dashboard' | 'code' | 'preview' | 'navigator';
 
 interface ToolbarProps {
     activeTool: Tool;
@@ -66,6 +66,7 @@ const LAYOUT_MODES: { id: LayoutMode; icon: typeof Palette; label: string }[] = 
     { id: 'code', icon: FolderTree, label: 'Code' },
     { id: 'preview', icon: Eye, label: 'Preview' },
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { id: 'navigator', icon: LayoutDashboard, label: 'Navigator' },
 ];
 
 export function Toolbar({

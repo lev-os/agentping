@@ -8,6 +8,7 @@ import { FileExplorer } from '@/renderer/components/FileExplorer';
 import { AgentStatusOverlay } from '@/renderer/components/AgentStatusOverlay';
 import { AgentDropdown } from '@/renderer/components/AgentDropdown';
 import { Dashboard } from '@/renderer/components/Dashboard';
+import { Navigator } from '@/renderer/components/Navigator';
 import { Layers } from '@/renderer/components/Layers';
 import { ComponentGallery } from '@/renderer/components/ComponentGallery';
 import { FileViewer } from '@/renderer/components/FileViewer';
@@ -17,11 +18,21 @@ import { serializeDocument, parseDocument } from '@/shared/ApenFormat';
 import '@/renderer/styles/App.css';
 
 export default function App() {
+    // Detect route from URL path
+    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'navigator' => {
+        const path = window.location.pathname;
+        if (path.includes('/navigator')) return 'navigator';
+        if (path.includes('/dashboard')) return 'dashboard';
+        if (path.includes('/preview')) return 'preview';
+        if (path.includes('/code')) return 'code';
+        return 'design';
+    };
+
     const [selectedObject, setSelectedObject] = useState<any>(null);
     const [selectedPreviewElement, setSelectedPreviewElement] = useState<any>(null);
     const [activeTool, setActiveTool] = useState<'select' | 'rectangle' | 'ellipse' | 'text'>('select');
     const [activeSidebar, setActiveSidebar] = useState<'chat' | 'components' | 'files' | 'layers'>('chat');
-    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview'>('design');
+    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'navigator'>(getInitialLayoutMode());
     const [isSyncing, setIsSyncing] = useState(false);
     const [workspacePath, setWorkspacePath] = useState<string | null>(null);
     const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
@@ -148,6 +159,22 @@ export default function App() {
             unsubPreviewUrl();
         };
     }, []);
+
+    // Update URL when layout mode changes
+    useEffect(() => {
+        const pathMap: Record<typeof layoutMode, string> = {
+            'design': '/',
+            'dashboard': '/dashboard',
+            'code': '/code',
+            'preview': '/preview',
+            'navigator': '/navigator'
+        };
+
+        const newPath = pathMap[layoutMode];
+        if (window.location.pathname !== newPath) {
+            window.history.pushState({}, '', newPath);
+        }
+    }, [layoutMode]);
 
     // Global Keyboard Shortcuts
     useEffect(() => {
@@ -485,6 +512,8 @@ export default function App() {
 
                     {layoutMode === 'dashboard' ? (
                         <Dashboard />
+                    ) : layoutMode === 'navigator' ? (
+                        <Navigator />
                     ) : layoutMode === 'preview' ? (
                         <Preview
                             onElementSelected={handlePreviewElementSelected}
