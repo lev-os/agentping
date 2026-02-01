@@ -126,18 +126,51 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
   app.post('/:id/restart', async (c) => {
     try {
       const id = c.req.param('id');
+      console.log(`[API] Restart request for dashboard: ${id}`);
 
       await runner.restart(id);
 
+      console.log(`[API] Restart completed for dashboard: ${id}`);
       return c.json({ success: true, message: `Dashboard ${id} restart initiated` });
     } catch (error) {
-      console.error('Error restarting dashboard:', error);
+      console.error('[API] Error restarting dashboard:', error);
+      console.error('[API] Error stack:', (error as Error).stack);
 
       if ((error as Error).message?.includes('not found')) {
         return c.json({ error: 'Dashboard not found' }, 404);
       }
 
-      return c.json({ error: 'Internal server error' }, 500);
+      return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
+    }
+  });
+
+  // =========================================================================
+  // POST /api/dashboards/restart-all - Restart all dashboards
+  // =========================================================================
+
+  app.post('/restart-all', async (c) => {
+    try {
+      console.log('[API] Restart-all request received');
+
+      const results = await runner.restartAll();
+      const successCount = results.filter(r => r.success).length;
+      const failedCount = results.filter(r => !r.success).length;
+
+      console.log(`[API] Restart-all completed: ${successCount} succeeded, ${failedCount} failed`);
+
+      return c.json({
+        success: true,
+        message: `Restarted ${successCount} dashboard(s)`,
+        total: results.length,
+        succeeded: successCount,
+        failed: failedCount,
+        results
+      });
+    } catch (error) {
+      console.error('[API] Error restarting all dashboards:', error);
+      console.error('[API] Error stack:', (error as Error).stack);
+
+      return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
 

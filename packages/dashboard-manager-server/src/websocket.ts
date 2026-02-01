@@ -203,6 +203,8 @@ export function createWebSocketServer(config: WebSocketConfig) {
    * Log line → stream to subscribed clients
    */
   runner.on('log_line', (data: Extract<DashboardEvent, { type: 'log_line' }>) => {
+    console.log(`[WebSocketServer] Broadcasting log_line: ${data.dashboardId} - ${data.line.substring(0, 50)}...`);
+
     io.to(`dashboard:${data.dashboardId}`).emit('dashboard:log-line', {
       dashboardId: data.dashboardId,
       timestamp: data.timestamp,

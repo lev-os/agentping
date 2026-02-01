@@ -5,6 +5,31 @@
   overflow: hidden;
 }
 
+/* Sofia theme - sharp edges, monospace aesthetic */
+[data-theme="sofia"] .table-container {
+  border-radius: 0;
+  border: 1px solid var(--sofia-border-default);
+  background: var(--sofia-surface);
+}
+
+[data-theme="sofia"] .table th {
+  font-family: var(--sofia-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+  color: var(--sofia-text-muted);
+}
+
+[data-theme="sofia"] .table td {
+  font-family: var(--sofia-font-mono);
+  font-size: 12px;
+  border-bottom: 1px solid var(--sofia-border-subtle);
+}
+
+[data-theme="sofia"] .table tbody tr:hover {
+  background: var(--sofia-hover-overlay);
+}
+
 .table-container.loading,
 .table-container.empty {
   display: flex;

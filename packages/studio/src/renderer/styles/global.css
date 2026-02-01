@@ -6,8 +6,136 @@
 /* ==========================================================================
    Theme System
    ========================================================================== */
-/* Import Kingly theme - can be toggled via data-theme attribute */
-@import './theme-kingly.css';
+/* Import Sofia theme - cyber-tactical aesthetic from Kingly Sofia Dashboard */
+@import './theme-sofia.css';
+
+/* Light theme overrides */
+[data-theme='light'] {
+    /* Colors - Light Series */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-elevated: #dee2e6;
+
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-default: rgba(0, 0, 0, 0.12);
+    --border-accent: rgba(0, 255, 170, 0.5);
+
+    --text-primary: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.7);
+    --text-tertiary: rgba(0, 0, 0, 0.5);
+    --text-muted: rgba(0, 0, 0, 0.3);
+
+    /* Accent Colors - Adjusted for light background */
+    --accent-primary: #00cc88;
+    --accent-primary-rgb: 0, 204, 136;
+    --accent-secondary: #0099cc;
+    --accent-secondary-rgb: 0, 153, 204;
+    --accent-warning: #cc8800;
+    --accent-danger: #cc3344;
+
+    /* Semantic Colors - Adjusted for light background */
+    --semantic-success: #059669;
+    --semantic-warning: #d97706;
+    --semantic-error: #dc2626;
+    --semantic-info: #2563eb;
+
+    /* Status Colors */
+    --status-success: #059669;
+    --status-warning: #d97706;
+    --status-error: #dc2626;
+    --status-info: #2563eb;
+
+    /* Glows - Subtle for light mode */
+    --glow-primary: 0 0 10px rgba(0, 204, 136, 0.2);
+    --glow-secondary: 0 0 10px rgba(0, 153, 204, 0.2);
+
+    /* Focus Ring */
+    --focus-ring-color: var(--accent-primary);
+
+    /* Scrollbar */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='light'] ::selection {
+    background: rgba(0, 204, 136, 0.2);
+    color: var(--text-primary);
+}
+
+[data-theme='light'] .ui-button--primary {
+    background: linear-gradient(135deg, #00cc88 0%, #0099cc 100%);
+    color: #ffffff;
+}
+
+[data-theme='light'] .ui-button--secondary {
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .ui-button--secondary:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='light'] .ui-button--ghost {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme='light'] .ui-button--ghost:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme='light'] .ui-input {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme='light'] .ui-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='light'] .ui-input:hover {
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='light'] .ui-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 204, 136, 0.1);
+}
+
+[data-theme='light'] .ui-context-menu,
+[data-theme='light'] .ui-dropdown-menu,
+[data-theme='light'] .ui-modal {
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] .ui-context-menu-item {
+    color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme='light'] .ui-context-menu-item:hover {
+    background: rgba(0, 204, 136, 0.1);
+    color: #00cc88;
+}
+
+[data-theme='light'] .ui-tooltip {
+    background: rgba(30, 30, 40, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+}
 
 /* ==========================================================================
    CSS Custom Properties

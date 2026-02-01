@@ -14,17 +14,25 @@ export function useWebSocket() {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    const socket = io({
+    console.log('[useWebSocket] Initializing Socket.io client to http://localhost:3030');
+
+    const socket = io('http://localhost:3030', {
       path: '/socket.io',
       transports: ['websocket', 'polling']
     })
 
     socket.on('connect', () => {
+      console.log('[useWebSocket] Connected!', socket.id);
       setIsConnected(true)
     })
 
     socket.on('disconnect', () => {
+      console.log('[useWebSocket] Disconnected');
       setIsConnected(false)
+    })
+
+    socket.on('connect_error', (error) => {
+      console.error('[useWebSocket] Connection error:', error);
     })
 
     socketRef.current = socket

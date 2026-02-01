@@ -1,0 +1,231 @@
+/**
+ * Chart Component Styles - Sofia Theme
+ * Styling for Recharts components with Sofia cyber aesthetic
+ */
+
+/* ============================================================================
+   CHART CONTAINERS
+   ========================================================================== */
+
+.chart-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+}
+
+[data-theme="sofia"] .chart-container {
+    border-radius: 0;
+    background: linear-gradient(135deg, var(--sofia-surface) 0%, hsl(220 20% 6%) 100%);
+    border: 1px solid var(--sofia-border-default);
+    clip-path: polygon(
+        0 0,
+        calc(100% - 12px) 0,
+        100% 12px,
+        100% 100%,
+        12px 100%,
+        0 calc(100% - 12px)
+    );
+    box-shadow: 0 2px 12px hsl(220 20% 0% / 0.4);
+}
+
+/* ============================================================================
+   RECHARTS OVERRIDES - SOFIA THEME
+   ========================================================================== */
+
+/* Grid lines - use subtle cyan */
+[data-theme="sofia"] .recharts-cartesian-grid-horizontal line,
+[data-theme="sofia"] .recharts-cartesian-grid-vertical line {
+    stroke: var(--sofia-border-subtle);
+}
+
+/* Axis lines */
+[data-theme="sofia"] .recharts-cartesian-axis-line {
+    stroke: var(--sofia-border-default);
+}
+
+/* Axis ticks */
+[data-theme="sofia"] .recharts-cartesian-axis-tick-line {
+    stroke: var(--sofia-border-default);
+}
+
+/* Axis text - use monospace */
+[data-theme="sofia"] .recharts-cartesian-axis-tick-value {
+    fill: var(--sofia-text-muted);
+    font-family: var(--sofia-font-mono);
+    font-size: 11px;
+}
+
+/* Legend text */
+[data-theme="sofia"] .recharts-legend-item-text {
+    color: var(--sofia-text-secondary);
+    font-family: var(--sofia-font-body);
+    font-size: 12px;
+}
+
+/* Tooltip */
+[data-theme="sofia"] .recharts-tooltip-wrapper {
+    outline: none;
+}
+
+[data-theme="sofia"] .recharts-default-tooltip {
+    background: var(--sofia-bg-elevated) !important;
+    border: 1px solid var(--sofia-border-accent) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 0 20px hsla(195 100% 50% / 0.3) !important;
+    font-family: var(--sofia-font-mono) !important;
+    font-size: 11px !important;
+}
+
+[data-theme="sofia"] .recharts-tooltip-label {
+    color: var(--sofia-text-primary) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-theme="sofia"] .recharts-tooltip-item {
+    color: var(--sofia-text-secondary) !important;
+}
+
+/* ============================================================================
+   AREA CHART - SOFIA THEME
+   ========================================================================== */
+
+[data-theme="sofia"] .recharts-area {
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Cyber cyan gradient for area fills */
+[data-theme="sofia"] .recharts-area-area {
+    fill: url(#sofiaCyberGradient);
+}
+
+/* ============================================================================
+   BAR CHART - SOFIA THEME
+   ========================================================================== */
+
+[data-theme="sofia"] .recharts-bar-rectangle {
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* ============================================================================
+   PIE CHART - SOFIA THEME
+   ========================================================================== */
+
+[data-theme="sofia"] .recharts-pie-sector {
+    filter: drop-shadow(0 0 6px currentColor);
+    stroke: var(--sofia-bg);
+    stroke-width: 2px;
+}
+
+[data-theme="sofia"] .recharts-pie-label-text {
+    fill: var(--sofia-text-primary);
+    font-family: var(--sofia-font-mono);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ============================================================================
+   LINE CHART - SOFIA THEME
+   ========================================================================== */
+
+[data-theme="sofia"] .recharts-line-curve {
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+[data-theme="sofia"] .recharts-line-dot {
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* ============================================================================
+   CUSTOM CHART COLORS - SOFIA PALETTE
+   ========================================================================== */
+
+/* Use these classes in chart data configurations */
+.sofia-chart-cyan { color: var(--sofia-cyber-cyan); }
+.sofia-chart-purple { color: var(--sofia-cyber-purple); }
+.sofia-chart-yellow { color: var(--sofia-cyber-yellow); }
+.sofia-chart-green { color: var(--sofia-cyber-green); }
+.sofia-chart-red { color: var(--sofia-cyber-red); }
+.sofia-chart-orange { color: var(--sofia-cyber-orange); }
+
+/* ============================================================================
+   CHART UTILITIES
+   ========================================================================== */
+
+.chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+[data-theme="sofia"] .chart-title {
+    font-family: var(--sofia-font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sofia-text-accent);
+    text-shadow: 0 0 10px hsla(195 100% 50% / 0.3);
+}
+
+.chart-legend {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    font-size: 12px;
+}
+
+.chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.chart-legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+[data-theme="sofia"] .chart-legend-color {
+    border-radius: 0;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* ============================================================================
+   LOADING & EMPTY STATES
+   ========================================================================== */
+
+.chart-loading,
+.chart-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--text-muted);
+}
+
+[data-theme="sofia"] .chart-loading,
+[data-theme="sofia"] .chart-empty {
+    font-family: var(--sofia-font-mono);
+    color: var(--sofia-text-muted);
+}
+
+/* ============================================================================
+   GRADIENTS FOR CHARTS - SOFIA THEME
+   ========================================================================== */
+
+/* Include these SVG gradients in chart components */
+/*
+<defs>
+  <linearGradient id="sofiaCyberGradient" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="5%" stopColor="hsl(195 100% 50%)" stopOpacity={0.8} />
+    <stop offset="95%" stopColor="hsl(195 100% 50%)" stopOpacity={0} />
+  </linearGradient>
+  <linearGradient id="sofiaPurpleGradient" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="5%" stopColor="hsl(280 100% 60%)" stopOpacity={0.8} />
+    <stop offset="95%" stopColor="hsl(280 100% 60%)" stopOpacity={0} />
+  </linearGradient>
+</defs>
+*/

@@ -58,6 +58,22 @@ Examples:
 }
 
 // ============================================================================
+// Error Handlers
+// ============================================================================
+
+// Prevent server crash on unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('[CLI] Uncaught exception:', error);
+  console.error('[CLI] Stack:', error.stack);
+  // Don't exit - keep server running
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[CLI] Unhandled promise rejection:', reason);
+  // Don't exit - keep server running
+});
+
+// ============================================================================
 // Main
 // ============================================================================
 

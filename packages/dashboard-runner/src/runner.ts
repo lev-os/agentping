@@ -229,6 +229,30 @@ export class DashboardRunner extends EventEmitter {
   }
 
   /**
+   * Restart all dashboards
+   */
+  async restartAll(): Promise<Array<{ id: string; success: boolean; error?: string }>> {
+    const configs = this.registry.list();
+    const results: Array<{ id: string; success: boolean; error?: string }> = [];
+
+    this.logger.info(`Restarting all dashboards (${configs.length} total)`);
+
+    for (const config of configs) {
+      try {
+        await this.processManager.restart(config.id, config);
+        results.push({ id: config.id, success: true });
+        this.logger.info(`Restarted dashboard: ${config.id}`);
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        results.push({ id: config.id, success: false, error: errorMsg });
+        this.logger.error(`Failed to restart ${config.id}: ${errorMsg}`);
+      }
+    }
+
+    return results;
+  }
+
+  /**
    * Get status of a dashboard
    */
   getStatus(dashboardId: string): DashboardStatus | undefined {

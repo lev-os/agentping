@@ -20,6 +20,14 @@
     font-family: inherit;
 }
 
+/* Sofia theme - sharp edges, no border radius */
+[data-theme="sofia"] .ui-button {
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--sofia-font-body);
+}
+
 .ui-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -38,6 +46,17 @@
 .ui-button--primary:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 255, 170, 0.3);
+}
+
+/* Sofia theme primary button - cyber cyan glow */
+[data-theme="sofia"] .ui-button--primary {
+    background: var(--sofia-primary);
+    color: var(--sofia-bg);
+    box-shadow: 0 0 10px hsla(195 100% 50% / 0.3);
+}
+
+[data-theme="sofia"] .ui-button--primary:hover:not(:disabled) {
+    box-shadow: 0 0 20px hsla(195 100% 50% / 0.5), 0 4px 12px hsla(195 100% 50% / 0.3);
 }
 
 .ui-button--secondary {

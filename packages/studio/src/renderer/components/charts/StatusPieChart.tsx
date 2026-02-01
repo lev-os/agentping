@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import './charts.css';
 import {
     PieChart,
     Pie,
@@ -28,9 +29,9 @@ interface StatusData {
 }
 
 const COLORS = {
-    running: '#4caf50',
-    stopped: '#9e9e9e',
-    failed: '#f44336'
+    running: 'hsl(150 100% 45%)',  // Sofia cyber green
+    stopped: 'hsl(220 10% 55%)',   // Sofia muted
+    failed: 'hsl(0 85% 55%)'       // Sofia cyber red
 };
 
 export const StatusPieChart: React.FC<StatusPieChartProps> = ({

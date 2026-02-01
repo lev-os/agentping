@@ -49,13 +49,46 @@
 
 .dashboard-card {
     background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border: 1px solid var(--border-default);
+    border-radius: 0;  /* Sofia theme uses sharp edges */
     padding: var(--spacing-lg);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* Add Sofia cyber panel styling */
+[data-theme="sofia"] .dashboard-card {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, hsl(220 20% 6%) 100%);
+    clip-path: polygon(
+        0 0,
+        calc(100% - 12px) 0,
+        100% 12px,
+        100% 100%,
+        12px 100%,
+        0 calc(100% - 12px)
+    );
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="sofia"] .dashboard-card:hover {
+    border-color: var(--border-accent);
+    box-shadow:
+        0 6px 24px hsl(220 20% 0% / 0.55),
+        0 12px 48px hsl(220 20% 0% / 0.35),
+        0 0 1px hsl(195 100% 50% / 0.15);
+}
+
+[data-theme="sofia"] .dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(195 100% 50% / 0.5), transparent);
 }
 
 .dashboard-card h3 {

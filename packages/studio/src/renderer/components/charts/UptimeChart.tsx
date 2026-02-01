@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import './charts.css';
 import {
     AreaChart,
     Area,
@@ -94,6 +95,11 @@ export const UptimeChart: React.FC<UptimeChartProps> = ({
                         <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
                         <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                     </linearGradient>
+                    {/* Sofia theme gradient */}
+                    <linearGradient id="sofiaCyberGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(195 100% 50%)" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="hsl(195 100% 50%)" stopOpacity={0} />
+                    </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
@@ -116,9 +122,9 @@ export const UptimeChart: React.FC<UptimeChartProps> = ({
                 <Area
                     type="monotone"
                     dataKey="uptimeHours"
-                    stroke="#8884d8"
+                    stroke="hsl(195 100% 50%)"
                     fillOpacity={1}
-                    fill="url(#colorUptime)"
+                    fill="url(#sofiaCyberGradient)"
                     name="Uptime"
                 />
             </AreaChart>

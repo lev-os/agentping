@@ -1,0 +1,497 @@
+/**
+ * AgentPing Studio - Sofia Theme
+ * Cyber-tactical aesthetic from Kingly Sofia Dashboard
+ * Combines SKYNET (cyberpunk/tactical) + Situation Monitor (minimal/monospace)
+ *
+ * Import this theme instead of theme-kingly.css for Sofia styling
+ */
+
+/* Import Google Fonts for Sofia typography */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* ========================================================================
+       SOFIA THEME TOKENS - COLOR SYSTEM (HSL Based)
+       ======================================================================== */
+
+    /* Core Colors - SKYNET Cyber Palette */
+    --sofia-bg: hsl(220 20% 4%);
+    --sofia-surface: hsl(220 20% 8%);
+    --sofia-surface-elevated: hsl(220 20% 12%);
+    --sofia-foreground: hsl(195 100% 95%);
+
+    /* Cyber Accent Colors */
+    --sofia-primary: hsl(195 100% 50%);           /* Cyber cyan - primary accent */
+    --sofia-primary-rgb: 0, 255, 255;
+    --sofia-secondary: hsl(280 100% 60%);         /* Cyber purple */
+    --sofia-accent: hsl(45 100% 50%);             /* Cyber yellow */
+
+    /* Extended Cyber Palette */
+    --sofia-cyber-cyan: hsl(195 100% 50%);
+    --sofia-cyber-purple: hsl(280 100% 60%);
+    --sofia-cyber-yellow: hsl(45 100% 50%);
+    --sofia-cyber-red: hsl(0 85% 55%);
+    --sofia-cyber-green: hsl(150 100% 45%);
+    --sofia-cyber-orange: hsl(30 100% 50%);
+
+    /* Typography Families */
+    --sofia-font-display: 'Orbitron', sans-serif;      /* Futuristic headings */
+    --sofia-font-body: 'Rajdhani', sans-serif;         /* Body text */
+    --sofia-font-mono: 'JetBrains Mono', monospace;    /* Code/data */
+
+    /* ========================================================================
+       EXTENDED PALETTE
+       ======================================================================== */
+
+    /* Background Hierarchy */
+    --sofia-bg-primary: hsl(220 20% 4%);
+    --sofia-bg-secondary: hsl(220 20% 8%);
+    --sofia-bg-tertiary: hsl(220 20% 12%);
+    --sofia-bg-elevated: hsl(220 20% 15%);
+    --sofia-bg-overlay: hsla(220 20% 4% / 0.95);
+
+    /* Borders & Dividers */
+    --sofia-border-subtle: hsla(195 50% 25% / 0.2);
+    --sofia-border-default: hsla(195 50% 25% / 0.3);
+    --sofia-border-accent: hsla(195 100% 50% / 0.5);
+    --sofia-border-bright: hsl(195 100% 50%);
+
+    /* Text Colors */
+    --sofia-text-primary: hsl(195 100% 95%);
+    --sofia-text-secondary: hsla(195 100% 95% / 0.8);
+    --sofia-text-tertiary: hsla(195 100% 95% / 0.6);
+    --sofia-text-muted: hsl(220 10% 55%);
+    --sofia-text-accent: hsl(195 100% 50%);
+
+    /* State Colors */
+    --sofia-success: hsl(150 100% 45%);
+    --sofia-warning: hsl(45 100% 50%);
+    --sofia-error: hsl(0 85% 55%);
+    --sofia-info: hsl(195 100% 50%);
+
+    /* Grid Pattern */
+    --sofia-grid-color: hsla(195 100% 50% / 0.05);
+    --sofia-grid-size: 30px;
+
+    /* Sharp Edges - No Border Radius (SKYNET aesthetic) */
+    --sofia-radius: 0px;
+
+    /* Glow Effects */
+    --sofia-glow-primary: 0 0 20px hsla(195 100% 50% / 0.3);
+    --sofia-glow-intense: 0 0 40px hsla(195 100% 50% / 0.5);
+    --sofia-glow-sm: 0 0 10px hsla(195 100% 50% / 0.2);
+
+    /* Text Glow */
+    --sofia-text-glow-cyan: 0 0 10px hsl(195 100% 50%), 0 0 20px hsl(195 100% 50%), 0 0 40px hsl(195 100% 50%);
+    --sofia-text-glow-purple: 0 0 10px hsl(280 100% 60%), 0 0 20px hsl(280 100% 60%), 0 0 40px hsl(280 100% 60%);
+    --sofia-text-glow-yellow: 0 0 10px hsl(45 100% 50%), 0 0 20px hsl(45 100% 50%), 0 0 40px hsl(45 100% 50%);
+
+    /* Interactive States */
+    --sofia-hover-overlay: hsla(195 100% 50% / 0.1);
+    --sofia-active-overlay: hsla(195 100% 50% / 0.2);
+    --sofia-focus-ring: hsla(195 100% 50% / 0.5);
+
+    /* ========================================================================
+       APPLY SOFIA THEME TO AGENTPING VARIABLES
+       ======================================================================== */
+
+    /* Override AgentPing default colors */
+    --bg-primary: var(--sofia-bg-primary);
+    --bg-secondary: var(--sofia-bg-secondary);
+    --bg-tertiary: var(--sofia-bg-tertiary);
+    --bg-elevated: var(--sofia-bg-elevated);
+
+    --border-subtle: var(--sofia-border-subtle);
+    --border-default: var(--sofia-border-default);
+    --border-accent: var(--sofia-border-accent);
+
+    --text-primary: var(--sofia-text-primary);
+    --text-secondary: var(--sofia-text-secondary);
+    --text-tertiary: var(--sofia-text-tertiary);
+    --text-muted: var(--sofia-text-muted);
+
+    /* Override accent colors */
+    --accent-primary: var(--sofia-primary);
+    --accent-primary-rgb: var(--sofia-primary-rgb);
+    --accent-secondary: var(--sofia-secondary);
+    --accent-secondary-rgb: 187, 0, 255;  /* Purple RGB */
+
+    /* Override semantic colors */
+    --semantic-success: var(--sofia-success);
+    --semantic-warning: var(--sofia-warning);
+    --semantic-error: var(--sofia-error);
+    --semantic-info: var(--sofia-info);
+
+    /* Override glows */
+    --glow-primary: var(--sofia-glow-primary);
+    --glow-secondary: var(--sofia-glow-intense);
+
+    /* Override typography */
+    --font-sans: var(--sofia-font-body);
+    --font-mono: var(--sofia-font-mono);
+
+    /* Override focus ring */
+    --focus-ring-color: var(--sofia-primary);
+
+    /* Override border radius (sharp edges) */
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+}
+
+/* ============================================================================
+   SOFIA THEME - BASE STYLES
+   ========================================================================== */
+
+body[data-theme="sofia"] {
+    background: var(--sofia-bg);
+    color: var(--sofia-text-primary);
+    font-family: var(--sofia-font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grid Background Pattern (SKYNET style) */
+body[data-theme="sofia"]::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--sofia-grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--sofia-grid-color) 1px, transparent 1px);
+    background-size: var(--sofia-grid-size) var(--sofia-grid-size);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Scanline Effect Overlay (SKYNET style) */
+body[data-theme="sofia"]::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+    animation: sofia-scanline 8s linear infinite;
+}
+
+@keyframes sofia-scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100vh; }
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+
+body[data-theme="sofia"] h1,
+body[data-theme="sofia"] h2,
+body[data-theme="sofia"] h3,
+body[data-theme="sofia"] h4,
+body[data-theme="sofia"] h5,
+body[data-theme="sofia"] h6 {
+    font-family: var(--sofia-font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body[data-theme="sofia"] code,
+body[data-theme="sofia"] pre {
+    font-family: var(--sofia-font-mono);
+    background: var(--sofia-bg-elevated);
+    border: 1px solid var(--sofia-border-default);
+}
+
+/* Data/metric displays use monospace */
+body[data-theme="sofia"] .data-value {
+    font-family: var(--sofia-font-mono);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+body[data-theme="sofia"] .data-label {
+    font-family: var(--sofia-font-body);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sofia-text-muted);
+}
+
+/* ============================================================================
+   GLOW EFFECTS
+   ========================================================================== */
+
+.sofia-text-glow {
+    text-shadow: var(--sofia-text-glow-cyan);
+}
+
+.sofia-text-glow-sm {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+}
+
+.sofia-text-glow-cyan {
+    text-shadow: var(--sofia-text-glow-cyan);
+}
+
+.sofia-text-glow-purple {
+    text-shadow: var(--sofia-text-glow-purple);
+}
+
+.sofia-text-glow-yellow {
+    text-shadow: var(--sofia-text-glow-yellow);
+}
+
+.sofia-border-glow {
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor, inset 0 0 5px currentColor;
+}
+
+.sofia-border-glow-cyan {
+    box-shadow: 0 0 5px var(--sofia-cyber-cyan), 0 0 10px var(--sofia-cyber-cyan), inset 0 0 5px hsla(195 100% 50% / 0.3);
+}
+
+.sofia-border-glow-purple {
+    box-shadow: 0 0 5px var(--sofia-cyber-purple), 0 0 10px var(--sofia-cyber-purple), inset 0 0 5px hsla(280 100% 60% / 0.3);
+}
+
+/* ============================================================================
+   CYBER PANEL - Cut Corner Effect
+   ========================================================================== */
+
+.sofia-cyber-panel {
+    position: relative;
+    background: linear-gradient(135deg, var(--sofia-surface) 0%, hsl(220 20% 6%) 100%);
+    border: 1px solid var(--sofia-border-default);
+    clip-path: polygon(
+        0 0,
+        calc(100% - 15px) 0,
+        100% 15px,
+        100% 100%,
+        15px 100%,
+        0 calc(100% - 15px)
+    );
+    box-shadow:
+        0 4px 20px hsl(220 20% 0% / 0.5),
+        0 8px 40px hsl(220 20% 0% / 0.3),
+        0 0 1px hsl(195 100% 50% / 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sofia-cyber-panel:hover {
+    border-color: var(--sofia-border-accent);
+    box-shadow:
+        0 6px 24px hsl(220 20% 0% / 0.55),
+        0 12px 48px hsl(220 20% 0% / 0.35),
+        0 0 1px hsl(195 100% 50% / 0.15);
+}
+
+.sofia-cyber-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(195 100% 50% / 0.5), transparent);
+}
+
+.sofia-cyber-panel-sm {
+    clip-path: polygon(
+        0 0,
+        calc(100% - 8px) 0,
+        100% 8px,
+        100% 100%,
+        8px 100%,
+        0 calc(100% - 8px)
+    );
+    box-shadow:
+        0 2px 12px hsl(220 20% 0% / 0.4),
+        0 4px 24px hsl(220 20% 0% / 0.2);
+}
+
+/* ============================================================================
+   INTERACTIVE STATES
+   ========================================================================== */
+
+body[data-theme="sofia"] :focus-visible {
+    outline: 2px solid var(--sofia-primary);
+    outline-offset: 2px;
+    box-shadow: var(--sofia-glow-primary);
+}
+
+body[data-theme="sofia"] button:hover {
+    background: var(--sofia-hover-overlay);
+    border-color: var(--sofia-border-accent);
+}
+
+body[data-theme="sofia"] button:active {
+    background: var(--sofia-active-overlay);
+}
+
+body[data-theme="sofia"] a {
+    color: var(--sofia-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+body[data-theme="sofia"] a:hover {
+    text-shadow: var(--sofia-glow-sm);
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+
+body[data-theme="sofia"] ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+body[data-theme="sofia"] ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body[data-theme="sofia"] ::-webkit-scrollbar-thumb {
+    background: hsla(195 100% 50% / 0.2);
+    border-radius: 0;  /* Sharp edges */
+}
+
+body[data-theme="sofia"] ::-webkit-scrollbar-thumb:hover {
+    background: hsla(195 100% 50% / 0.4);
+}
+
+/* ============================================================================
+   SELECTION STYLING
+   ========================================================================== */
+
+body[data-theme="sofia"] ::selection {
+    background: hsla(195 100% 50% / 0.3);
+    color: var(--sofia-text-primary);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes sofia-pulse-glow {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+    }
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+    }
+}
+
+@keyframes sofia-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+    52% { opacity: 1; }
+    54% { opacity: 0.9; }
+}
+
+.sofia-animate-pulse-glow {
+    animation: sofia-pulse-glow 2s ease-in-out infinite;
+}
+
+.sofia-animate-flicker {
+    animation: sofia-flicker 3s ease-in-out infinite;
+}
+
+/* ============================================================================
+   STATUS INDICATORS
+   ========================================================================== */
+
+body[data-theme="sofia"] .status-active {
+    color: var(--sofia-success);
+    animation: sofia-pulse-glow 1.5s ease-in-out infinite;
+}
+
+body[data-theme="sofia"] .status-idle {
+    color: var(--sofia-text-muted);
+}
+
+body[data-theme="sofia"] .status-warning {
+    color: var(--sofia-warning);
+    animation: sofia-flicker 2s ease-in-out infinite;
+}
+
+body[data-theme="sofia"] .status-error {
+    color: var(--sofia-error);
+    animation: sofia-pulse-glow 0.5s ease-in-out infinite;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+.sofia-bg-surface {
+    background: var(--sofia-surface);
+}
+
+.sofia-bg-elevated {
+    background: var(--sofia-surface-elevated);
+}
+
+.sofia-border {
+    border: 1px solid var(--sofia-border-default);
+}
+
+.sofia-border-accent {
+    border: 1px solid var(--sofia-border-accent);
+}
+
+.sofia-text-accent {
+    color: var(--sofia-primary);
+}
+
+.sofia-text-muted {
+    color: var(--sofia-text-muted);
+}
+
+/* Level performance colors */
+.sofia-level-perfect { color: var(--sofia-cyber-yellow); }
+.sofia-level-excellent { color: var(--sofia-cyber-green); }
+.sofia-level-good { color: var(--sofia-cyber-orange); }
+.sofia-level-poor { color: var(--sofia-cyber-red); }
+.sofia-level-none { color: var(--sofia-text-muted); }
+
+/* ============================================================================
+   PROGRESS BARS
+   ========================================================================== */
+
+.sofia-progress {
+    background: var(--sofia-surface);
+    border: 1px solid var(--sofia-border-default);
+    height: 8px;
+    overflow: hidden;
+}
+
+.sofia-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sofia-primary), var(--sofia-cyber-cyan));
+    box-shadow: 0 0 10px var(--sofia-primary);
+    transition: width 0.3s ease;
+}
+
+/* ============================================================================
+   THEME TOGGLE SUPPORT
+   ========================================================================== */
+
+/* Allow themes to be toggled via data attribute or class */
+.theme-sofia {
+    /* Apply Sofia theme when class is present */
+}
+
+/* Default theme can be restored by removing data-theme attribute */
+body:not([data-theme="sofia"]) {
+    /* Original AgentPing theme variables remain active */
+}

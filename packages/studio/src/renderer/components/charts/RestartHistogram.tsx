@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import './charts.css';
 import {
     BarChart,
     Bar,
@@ -109,9 +110,9 @@ export const RestartHistogram: React.FC<RestartHistogramProps> = ({
                     labelStyle={{ color: '#000', fontWeight: 'bold' }}
                 />
                 <Legend />
-                <Bar dataKey="crashes" stackId="a" fill="#ff4444" name="Crashes" />
-                <Bar dataKey="healthFailures" stackId="a" fill="#ff9800" name="Health Failures" />
-                <Bar dataKey="manualRestarts" stackId="a" fill="#4caf50" name="Manual Restarts" />
+                <Bar dataKey="crashes" stackId="a" fill="hsl(0 85% 55%)" name="Crashes" />
+                <Bar dataKey="healthFailures" stackId="a" fill="hsl(45 100% 50%)" name="Health Failures" />
+                <Bar dataKey="manualRestarts" stackId="a" fill="hsl(150 100% 45%)" name="Manual Restarts" />
             </BarChart>
         </ResponsiveContainer>
     );
