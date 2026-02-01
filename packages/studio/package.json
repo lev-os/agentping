@@ -20,10 +20,6 @@
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
         "test:e2e:headed": "playwright test --headed",
-        "test:e2e:debug": "playwright test --debug",
-        "test:e2e": "playwright test",
-        "test:e2e:ui": "playwright test --ui",
-        "test:e2e:headed": "playwright test --headed",
         "test:e2e:debug": "playwright test --debug"
     },
     "dependencies": {
@@ -34,6 +30,7 @@
         "@hono/node-server": "^1.4.1",
         "@modelcontextprotocol/sdk": "^1.0.0",
         "clsx": "^2.1.1",
+        "dashboard-runner": "link:../dashboard-runner",
         "electron-store": "^8.1.0",
         "electron-updater": "^6.7.3",
         "fabric": "^6.0.0",
@@ -63,7 +60,7 @@
         "@types/react-dom": "^19.0.0",
         "@types/react-syntax-highlighter": "^15.5.13",
         "@vitejs/plugin-react": "^4.2.0",
-        "electron": "^28.0.0",
+        "electron": "^28.3.3",
         "electron-builder": "^24.9.0",
         "electron-rebuild": "^3.2.9",
         "storybook": "^8.5.0",

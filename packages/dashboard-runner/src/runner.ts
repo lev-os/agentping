@@ -1,0 +1,297 @@
+/**
+ * Dashboard Runner
+ *
+ * Core orchestration for dashboard lifecycle management.
+ * Inspired by ~/lev/core/daemon/src/daemon-core.ts
+ */
+
+import { EventEmitter } from 'events';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
+import { join } from 'path';
+import { homedir } from 'os';
+import { parse as parseYaml } from 'yaml';
+import type { DashboardConfig, DashboardStatus, RunnerConfig, RunnerState, DashboardEvent } from './types.js';
+import { DashboardRegistry, registry } from './registry.js';
+import { ProcessManager } from './process-manager.js';
+import { HealthMonitor } from './health-monitor.js';
+import { DashboardLogger } from './logger.js';
+
+export class DashboardRunner extends EventEmitter {
+  private config: RunnerConfig;
+  private state: RunnerState;
+  private registry: DashboardRegistry;
+  private processManager: ProcessManager;
+  private healthMonitor: HealthMonitor;
+  private logger: DashboardLogger;
+  private stateDir: string;
+  private pidFile: string;
+  private stateFile: string;
+  private running: boolean = false;
+
+  constructor(config: RunnerConfig) {
+    super();
+    this.config = config;
+    this.registry = registry;
+
+    // Initialize directories
+    this.stateDir = config.stateDir || join(homedir(), '.local/share/lev/dashboard-runner');
+    this.pidFile = join(this.stateDir, 'runner.pid');
+    this.stateFile = join(this.stateDir, 'state.json');
+
+    // Initialize components
+    this.logger = new DashboardLogger({
+      logDir: config.logDir || join(this.stateDir, 'logs')
+    });
+
+    this.processManager = new ProcessManager({
+      logger: this.logger,
+      registry: this.registry
+    });
+
+    this.healthMonitor = new HealthMonitor({
+      logger: this.logger,
+      processManager: this.processManager
+    });
+
+    // Initialize state
+    this.state = {
+      startedAt: new Date().toISOString(),
+      dashboards: {}
+    };
+
+    // Forward events from components
+    this.processManager.on('process_started', (data) => this.emit('process_started', data));
+    this.processManager.on('process_crashed', (data) => this.emit('process_crashed', data));
+    this.processManager.on('restart_success', (data) => this.emit('restart_success', data));
+    this.processManager.on('restart_failed', (data) => this.emit('restart_failed', data));
+    this.healthMonitor.on('health_check_failed', (data) => this.emit('health_check_failed', data));
+
+    // Load configuration
+    this.loadConfig();
+  }
+
+  /**
+   * Load dashboard configurations from YAML
+   */
+  private loadConfig(): void {
+    if (!existsSync(this.config.configPath)) {
+      throw new Error(`Config file not found: ${this.config.configPath}`);
+    }
+
+    const yaml = readFileSync(this.config.configPath, 'utf-8');
+    const config = parseYaml(yaml) as { dashboards: DashboardConfig[] };
+
+    if (!config.dashboards || !Array.isArray(config.dashboards)) {
+      throw new Error('Invalid config: missing dashboards array');
+    }
+
+    // Register all dashboards
+    for (const dashboard of config.dashboards) {
+      this.registry.register(dashboard.id, dashboard);
+      this.state.dashboards[dashboard.id] = {
+        id: dashboard.id,
+        status: 'stopped',
+        restartAttempts: 0
+      };
+    }
+
+    this.logger.info(`Loaded ${config.dashboards.length} dashboard configurations`);
+  }
+
+  /**
+   * Start the runner and all dashboards
+   */
+  async start(): Promise<void> {
+    if (this.running) {
+      this.logger.warn('Runner already running');
+      return;
+    }
+
+    this.logger.info('Starting dashboard runner...');
+
+    // Check for existing runner
+    if (this.isAlreadyRunning()) {
+      throw new Error('Another runner is already running');
+    }
+
+    // Create state directory
+    mkdirSync(this.stateDir, { recursive: true });
+
+    // Write PID file
+    writeFileSync(this.pidFile, String(process.pid));
+
+    // Set up signal handlers
+    this.setupSignalHandlers();
+
+    this.running = true;
+
+    // Start all dashboards
+    const dashboards = this.registry.list();
+    for (const dashboard of dashboards) {
+      try {
+        await this.processManager.start(dashboard.id, dashboard);
+        this.state.dashboards[dashboard.id].status = 'online';
+      } catch (err) {
+        this.logger.error(`Failed to start ${dashboard.id}: ${err instanceof Error ? err.message : String(err)}`);
+        this.state.dashboards[dashboard.id].status = 'failed';
+      }
+    }
+
+    // Start health monitoring
+    for (const dashboard of dashboards) {
+      this.healthMonitor.startMonitoring(
+        dashboard.id,
+        dashboard.health_check.interval_ms || 10000
+      );
+    }
+
+    this.saveState();
+    this.logger.info('Dashboard runner started');
+  }
+
+  /**
+   * Stop the runner and all dashboards
+   */
+  async stop(): Promise<void> {
+    if (!this.running) {
+      return;
+    }
+
+    this.logger.info('Stopping dashboard runner...');
+    this.running = false;
+
+    // Stop health monitoring
+    this.healthMonitor.stopAll();
+
+    // Stop all dashboards
+    const dashboards = this.registry.list();
+    for (const dashboard of dashboards) {
+      try {
+        await this.processManager.stop(dashboard.id);
+        this.state.dashboards[dashboard.id].status = 'stopped';
+      } catch (err) {
+        this.logger.error(`Failed to stop ${dashboard.id}: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+
+    // Remove PID file
+    if (existsSync(this.pidFile)) {
+      try {
+        unlinkSync(this.pidFile);
+      } catch (err) {
+        this.logger.warn(`Failed to remove PID file: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+
+    this.saveState();
+    this.logger.info('Dashboard runner stopped');
+  }
+
+  /**
+   * Restart a specific dashboard
+   */
+  async restart(dashboardId: string): Promise<void> {
+    const config = this.registry.get(dashboardId);
+    if (!config) {
+      throw new Error(`Dashboard not found: ${dashboardId}`);
+    }
+
+    this.logger.info(`Restarting dashboard: ${dashboardId}`);
+    await this.processManager.restart(dashboardId, config);
+  }
+
+  /**
+   * Get status of a dashboard
+   */
+  getStatus(dashboardId: string): DashboardStatus | undefined {
+    return this.state.dashboards[dashboardId];
+  }
+
+  /**
+   * Get status of all dashboards
+   */
+  getAllStatus(): Record<string, DashboardStatus> {
+    return { ...this.state.dashboards };
+  }
+
+  /**
+   * Check if another runner is already running
+   */
+  private isAlreadyRunning(): boolean {
+    if (!existsSync(this.pidFile)) {
+      return false;
+    }
+
+    try {
+      const pid = parseInt(readFileSync(this.pidFile, 'utf-8').trim());
+      process.kill(pid, 0); // Check if process exists
+      return true;
+    } catch {
+      // Process doesn't exist, clean up stale PID file
+      unlinkSync(this.pidFile);
+      return false;
+    }
+  }
+
+  /**
+   * Set up signal handlers for graceful shutdown
+   */
+  private setupSignalHandlers(): void {
+    let shuttingDown = false;
+
+    const gracefulShutdown = async (signal: string) => {
+      if (shuttingDown) return;
+      shuttingDown = true;
+
+      this.logger.info(`Received ${signal}, shutting down gracefully...`);
+      try {
+        await this.stop();
+        process.exit(0);
+      } catch (err) {
+        this.logger.error(`Shutdown error: ${err instanceof Error ? err.message : String(err)}`);
+        process.exit(1);
+      }
+    };
+
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGHUP', () => gracefulShutdown('SIGHUP'));
+
+    process.on('uncaughtException', async (err) => {
+      this.logger.error(`Uncaught exception: ${err.message}`);
+      if (!shuttingDown) {
+        shuttingDown = true;
+        try {
+          await this.stop();
+        } catch {
+          // Ignore errors during emergency shutdown
+        }
+      }
+      process.exit(1);
+    });
+  }
+
+  /**
+   * Save runner state to disk
+   */
+  private saveState(): void {
+    try {
+      writeFileSync(this.stateFile, JSON.stringify(this.state, null, 2));
+    } catch (err) {
+      this.logger.error(`Failed to save state: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+
+  /**
+   * Update dashboard status
+   */
+  updateStatus(dashboardId: string, updates: Partial<DashboardStatus>): void {
+    if (this.state.dashboards[dashboardId]) {
+      this.state.dashboards[dashboardId] = {
+        ...this.state.dashboards[dashboardId],
+        ...updates
+      };
+      this.saveState();
+    }
+  }
+}

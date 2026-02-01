@@ -141,8 +141,8 @@ export function Navigator() {
                     <div
                         key={dashboard.port}
                         className={`dashboard-card status-${dashboard.status}`}
-                        onClick={() => dashboard.status === 'online' && handleOpenDashboard(dashboard.url)}
-                        style={{ cursor: dashboard.status === 'online' ? 'pointer' : 'default' }}
+                        onClick={() => handleOpenDashboard(dashboard.url)}
+                        style={{ cursor: 'pointer' }}
                     >
                         <div className="card-header">
                             <div className="card-title">

@@ -8,7 +8,7 @@ import { FileExplorer } from '@/renderer/components/FileExplorer';
 import { AgentStatusOverlay } from '@/renderer/components/AgentStatusOverlay';
 import { AgentDropdown } from '@/renderer/components/AgentDropdown';
 import { Dashboard } from '@/renderer/components/Dashboard';
-import { Navigator } from '@/renderer/components/Navigator';
+import { NavigatorWithRunner } from '@/renderer/components/NavigatorWithRunner';
 import { Layers } from '@/renderer/components/Layers';
 import { ComponentGallery } from '@/renderer/components/ComponentGallery';
 import { FileViewer } from '@/renderer/components/FileViewer';
@@ -513,7 +513,7 @@ export default function App() {
                     {layoutMode === 'dashboard' ? (
                         <Dashboard />
                     ) : layoutMode === 'navigator' ? (
-                        <Navigator />
+                        <NavigatorWithRunner />
                     ) : layoutMode === 'preview' ? (
                         <Preview
                             onElementSelected={handlePreviewElementSelected}

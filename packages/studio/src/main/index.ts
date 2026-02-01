@@ -71,6 +71,7 @@ import { FileService } from './FileService.js';
 
 import { AgentCoordinator } from './coordinator/AgentCoordinator.js';
 import { StudioServer } from './server/StudioServer.js';
+import { DashboardManager } from './dashboard-manager.js';
 
 // ... existing code
 
@@ -79,6 +80,7 @@ let agentCoordinator: AgentCoordinator | null = null;
 let studioServer: StudioServer | null = null;
 let terminal: TerminalBridge | null = null;
 let settingsBridge: SettingsBridge | null = null;
+let dashboardManager: DashboardManager | null = null;
 
 // ... setups
 
@@ -453,6 +455,22 @@ function setupIpcHandlers() {
         }
     });
 
+    // --- Dashboard Manager Handlers ---
+    ipcMain.handle('dashboard:restart', async (_event, dashboardId: string) => {
+        if (!dashboardManager) return { error: 'Dashboard manager not initialized' };
+        try {
+            await dashboardManager.restart(dashboardId);
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: (err as Error).message };
+        }
+    });
+
+    ipcMain.handle('dashboard:getStatus', async () => {
+        if (!dashboardManager) return { error: 'Dashboard manager not initialized' };
+        return dashboardManager.getAllStatus();
+    });
+
     ipcMain.handle('studio:getCanvasState', async () => {
         // This will be handled by the renderer via a response pattern
         // For now, return null - the actual canvas state is managed client-side
@@ -461,9 +479,19 @@ function setupIpcHandlers() {
 }
 
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     createWindow();
     setupIpcHandlers(); // Moved after createWindow to access mainWindow
+
+    // Start dashboard manager
+    console.log('[Main] Starting dashboard manager...');
+    dashboardManager = new DashboardManager();
+    try {
+        await dashboardManager.start();
+        console.log('[Main] Dashboard manager started successfully');
+    } catch (err) {
+        console.error('[Main] Failed to start dashboard manager:', err);
+    }
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -485,16 +513,22 @@ app.on('window-all-closed', () => {
     claudeBridge?.terminateAll();
     studioServer?.stop();
     terminal?.terminate();
-
+    dashboardManager?.stop();
 
     if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
-app.on('before-quit', () => {
+app.on('before-quit', async () => {
     claudeBridge?.terminateAll();
     studioServer?.stop();
     terminal?.terminate();
 
+    // Stop dashboard manager gracefully
+    if (dashboardManager) {
+        console.log('[Main] Stopping dashboard manager...');
+        await dashboardManager.stop();
+        console.log('[Main] Dashboard manager stopped');
+    }
 });

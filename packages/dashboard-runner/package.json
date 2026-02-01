@@ -1,0 +1,64 @@
+{
+  "name": "@lev-os/dashboard-runner",
+  "version": "1.0.0",
+  "description": "Resilient process management for dashboard applications",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./runner": {
+      "import": "./dist/runner.js",
+      "types": "./dist/runner.d.ts"
+    },
+    "./registry": {
+      "import": "./dist/registry.js",
+      "types": "./dist/registry.d.ts"
+    },
+    "./process-manager": {
+      "import": "./dist/process-manager.js",
+      "types": "./dist/process-manager.d.ts"
+    },
+    "./port-finder": {
+      "import": "./dist/port-finder.js",
+      "types": "./dist/port-finder.d.ts"
+    },
+    "./health-monitor": {
+      "import": "./dist/health-monitor.js",
+      "types": "./dist/health-monitor.d.ts"
+    },
+    "./logger": {
+      "import": "./dist/logger.js",
+      "types": "./dist/logger.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --test tests/**/*.test.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "dashboard",
+    "process-manager",
+    "auto-restart",
+    "port-management",
+    "resilience",
+    "monitoring"
+  ],
+  "author": "Leviathan Team",
+  "license": "MIT"
+}
