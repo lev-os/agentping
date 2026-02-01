@@ -72,6 +72,7 @@ import { FileService } from './FileService.js';
 import { AgentCoordinator } from './coordinator/AgentCoordinator.js';
 import { StudioServer } from './server/StudioServer.js';
 import { DashboardManager } from './dashboard-manager.js';
+import type { DashboardRunner } from 'dashboard-runner';
 
 // ... existing code
 
@@ -81,6 +82,7 @@ let studioServer: StudioServer | null = null;
 let terminal: TerminalBridge | null = null;
 let settingsBridge: SettingsBridge | null = null;
 let dashboardManager: DashboardManager | null = null;
+let dashboardHttpServer: any = null;
 
 // ... setups
 
@@ -479,19 +481,42 @@ function setupIpcHandlers() {
 }
 
 
+async function startDashboardServer() {
+    try {
+        // Dynamic import to handle ESM package from CommonJS context
+        const { createServer } = await import('@lev-os/dashboard-manager-server');
+
+        // Start dashboard manager
+        console.log('[Main] Starting dashboard manager...');
+        dashboardManager = new DashboardManager();
+        await dashboardManager.start();
+        console.log('[Main] Dashboard manager started successfully');
+
+        // Start embedded HTTP server for dashboard-manager
+        const runner = (dashboardManager as any).runner as DashboardRunner;
+        if (runner) {
+            console.log('[Main] Starting embedded dashboard HTTP server...');
+            const server = createServer({
+                runner,
+                port: 3030,
+                host: '127.0.0.1',
+                enableWebSocket: true,
+                enableLogger: isDev,
+            });
+            dashboardHttpServer = server.start();
+            console.log('[Main] Dashboard HTTP server running at http://127.0.0.1:3030');
+        }
+    } catch (err) {
+        console.error('[Main] Failed to start dashboard server:', err);
+    }
+}
+
 app.whenReady().then(async () => {
     createWindow();
     setupIpcHandlers(); // Moved after createWindow to access mainWindow
 
-    // Start dashboard manager
-    console.log('[Main] Starting dashboard manager...');
-    dashboardManager = new DashboardManager();
-    try {
-        await dashboardManager.start();
-        console.log('[Main] Dashboard manager started successfully');
-    } catch (err) {
-        console.error('[Main] Failed to start dashboard manager:', err);
-    }
+    // Start dashboard server asynchronously
+    await startDashboardServer();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -508,12 +533,20 @@ app.whenReady().then(async () => {
     });
 });
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
     // Terminate all Claude sessions on quit
     claudeBridge?.terminateAll();
     studioServer?.stop();
     terminal?.terminate();
-    dashboardManager?.stop();
+
+    // Stop embedded dashboard HTTP server
+    if (dashboardHttpServer) {
+        console.log('[Main] Stopping embedded dashboard HTTP server...');
+        await dashboardHttpServer.close();
+        dashboardHttpServer = null;
+    }
+
+    await dashboardManager?.stop();
 
     if (process.platform !== 'darwin') {
         app.quit();
@@ -524,6 +557,14 @@ app.on('before-quit', async () => {
     claudeBridge?.terminateAll();
     studioServer?.stop();
     terminal?.terminate();
+
+    // Stop embedded dashboard HTTP server
+    if (dashboardHttpServer) {
+        console.log('[Main] Stopping embedded dashboard HTTP server...');
+        await dashboardHttpServer.close();
+        dashboardHttpServer = null;
+        console.log('[Main] Dashboard HTTP server stopped');
+    }
 
     // Stop dashboard manager gracefully
     if (dashboardManager) {

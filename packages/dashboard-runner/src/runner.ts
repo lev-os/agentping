@@ -60,10 +60,32 @@ export class DashboardRunner extends EventEmitter {
     };
 
     // Forward events from components
-    this.processManager.on('process_started', (data) => this.emit('process_started', data));
-    this.processManager.on('process_crashed', (data) => this.emit('process_crashed', data));
+    this.processManager.on('process_started', (data) => {
+      // Update state with port, pid, and startedAt
+      if (this.state.dashboards[data.dashboardId]) {
+        this.state.dashboards[data.dashboardId].port = data.port;
+        this.state.dashboards[data.dashboardId].pid = data.pid;
+        this.state.dashboards[data.dashboardId].startedAt = new Date();
+        this.state.dashboards[data.dashboardId].status = 'online';
+        this.saveState();
+      }
+      this.emit('process_started', data);
+    });
+    this.processManager.on('process_crashed', (data) => {
+      // Track crash metrics and clear runtime data
+      if (this.state.dashboards[data.dashboardId]) {
+        this.state.dashboards[data.dashboardId].crashes =
+          (this.state.dashboards[data.dashboardId].crashes || 0) + 1;
+        this.state.dashboards[data.dashboardId].status = 'failed';
+        this.state.dashboards[data.dashboardId].port = undefined;
+        this.state.dashboards[data.dashboardId].pid = undefined;
+        this.saveState();
+      }
+      this.emit('process_crashed', data);
+    });
     this.processManager.on('restart_success', (data) => this.emit('restart_success', data));
     this.processManager.on('restart_failed', (data) => this.emit('restart_failed', data));
+    this.processManager.on('log_line', (data) => this.emit('log_line', data));
     this.healthMonitor.on('health_check_failed', (data) => this.emit('health_check_failed', data));
 
     // Load configuration
@@ -87,11 +109,17 @@ export class DashboardRunner extends EventEmitter {
 
     // Register all dashboards
     for (const dashboard of config.dashboards) {
+      // Expand tilde in cwd path
+      if (dashboard.cwd && dashboard.cwd.startsWith('~')) {
+        dashboard.cwd = dashboard.cwd.replace(/^~/, homedir());
+      }
+
       this.registry.register(dashboard.id, dashboard);
       this.state.dashboards[dashboard.id] = {
         id: dashboard.id,
         status: 'stopped',
-        restartAttempts: 0
+        restartAttempts: 0,
+        crashes: 0
       };
     }
 
@@ -212,6 +240,20 @@ export class DashboardRunner extends EventEmitter {
    */
   getAllStatus(): Record<string, DashboardStatus> {
     return { ...this.state.dashboards };
+  }
+
+  /**
+   * Get dashboard config
+   */
+  getConfig(dashboardId: string): DashboardConfig | undefined {
+    return this.registry.get(dashboardId);
+  }
+
+  /**
+   * Get all dashboard configs
+   */
+  getAllConfigs(): DashboardConfig[] {
+    return this.registry.list();
   }
 
   /**

@@ -1,0 +1,70 @@
+/**
+ * Dashboard Manager UI - Kingly Theme
+ * Reuses AgentPing Studio theme tokens
+ */
+
+:root {
+  /* Kingly Theme Tokens */
+  --kingly-primary: #22c55e;
+  --kingly-primary-rgb: 34, 197, 94;
+  --kingly-bg: #000000;
+  --kingly-surface: #0a0a0a;
+  --kingly-surface-elevated: #141414;
+
+  --kingly-border-subtle: rgba(34, 197, 94, 0.1);
+  --kingly-border-default: rgba(34, 197, 94, 0.2);
+  --kingly-border-accent: rgba(34, 197, 94, 0.4);
+
+  --kingly-text-primary: #ffffff;
+  --kingly-text-secondary: rgba(255, 255, 255, 0.8);
+  --kingly-text-tertiary: rgba(255, 255, 255, 0.6);
+  --kingly-text-muted: rgba(255, 255, 255, 0.4);
+
+  --kingly-success: #22c55e;
+  --kingly-warning: #fbbf24;
+  --kingly-error: #ef4444;
+  --kingly-info: #3b82f6;
+
+  --kingly-glow-primary: 0 0 20px rgba(34, 197, 94, 0.3);
+  --kingly-hover-overlay: rgba(34, 197, 94, 0.1);
+  --kingly-active-overlay: rgba(34, 197, 94, 0.2);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body[data-theme="kingly"] {
+  background: var(--kingly-bg);
+  color: var(--kingly-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+body[data-theme="kingly"] code {
+  font-family: var(--font-mono);
+  background: var(--kingly-surface-elevated);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+body[data-theme="kingly"] button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+body[data-theme="kingly"] :focus-visible {
+  outline: 2px solid var(--kingly-primary);
+  outline-offset: 2px;
+}
+
+body[data-theme="kingly"] ::selection {
+  background: rgba(34, 197, 94, 0.3);
+  color: var(--kingly-text-primary);
+}

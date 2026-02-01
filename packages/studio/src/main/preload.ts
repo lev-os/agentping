@@ -238,3 +238,41 @@ contextBridge.exposeInMainWorld('settings', {
     save: (updates: any) => ipcRenderer.invoke('settings:save', updates),
     get: () => ipcRenderer.invoke('settings:get')
 });
+
+// Expose Dashboard Manager API
+contextBridge.exposeInMainWorld('dashboardManager', {
+    restart: (dashboardId: string) =>
+        ipcRenderer.invoke('dashboard:restart', dashboardId),
+    getStatus: () =>
+        ipcRenderer.invoke('dashboard:getStatus'),
+    onProcessStarted: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:process_started', handler);
+        return () => ipcRenderer.removeListener('dashboard:process_started', handler);
+    },
+    onProcessCrashed: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:process_crashed', handler);
+        return () => ipcRenderer.removeListener('dashboard:process_crashed', handler);
+    },
+    onRestartSuccess: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:restart_success', handler);
+        return () => ipcRenderer.removeListener('dashboard:restart_success', handler);
+    },
+    onRestartFailed: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:restart_failed', handler);
+        return () => ipcRenderer.removeListener('dashboard:restart_failed', handler);
+    },
+    onHealthCheckFailed: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:health_check_failed', handler);
+        return () => ipcRenderer.removeListener('dashboard:health_check_failed', handler);
+    },
+    onPortChanged: (callback: (data: any) => void) => {
+        const handler = (_: any, data: any) => callback(data);
+        ipcRenderer.on('dashboard:port_changed', handler);
+        return () => ipcRenderer.removeListener('dashboard:port_changed', handler);
+    }
+});

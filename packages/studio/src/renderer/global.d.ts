@@ -109,6 +109,17 @@ export interface ISettings {
     get: () => Promise<StudioSettings>;
 }
 
+export interface IDashboardManager {
+    restart: (dashboardId: string) => Promise<{ success?: boolean; error?: string }>;
+    getStatus: () => Promise<Record<string, any>>;
+    onProcessStarted: (callback: (data: any) => void) => () => void;
+    onProcessCrashed: (callback: (data: any) => void) => () => void;
+    onRestartSuccess: (callback: (data: any) => void) => () => void;
+    onRestartFailed: (callback: (data: any) => void) => () => void;
+    onHealthCheckFailed: (callback: (data: any) => void) => () => void;
+    onPortChanged: (callback: (data: any) => void) => () => void;
+}
+
 // Electron webview element interface
 interface WebviewElement extends HTMLElement {
     src: string;
@@ -136,6 +147,7 @@ declare global {
         canvas: ICanvas;
         studioControl: IStudioControl;
         settings: ISettings;
+        dashboardManager?: IDashboardManager;
         electronAPI?: any; // Electron API presence indicator
         platform: {
             isMac: boolean;

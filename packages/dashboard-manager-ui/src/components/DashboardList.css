@@ -1,0 +1,152 @@
+.dashboard-list {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-list-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--kingly-text-primary);
+}
+
+.dashboard-list-loading,
+.dashboard-list-error,
+.dashboard-list-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--kingly-text-secondary);
+}
+
+.dashboard-list-error button,
+.dashboard-list-empty button {
+  margin-top: 1rem;
+}
+
+.dashboard-table {
+  background: var(--kingly-surface);
+  border: 1px solid var(--kingly-border-default);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.dashboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table thead {
+  background: var(--kingly-surface-elevated);
+  border-bottom: 1px solid var(--kingly-border-default);
+}
+
+.dashboard-table th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--kingly-text-tertiary);
+}
+
+.dashboard-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-bottom: 1px solid var(--kingly-border-subtle);
+}
+
+.dashboard-row:hover {
+  background: var(--kingly-hover-overlay);
+}
+
+.dashboard-row:last-child {
+  border-bottom: none;
+}
+
+.dashboard-table td {
+  padding: 1rem;
+  color: var(--kingly-text-secondary);
+}
+
+.dashboard-name .name {
+  font-weight: 500;
+  color: var(--kingly-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-name .id {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--kingly-text-muted);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--kingly-primary);
+  color: #000;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--kingly-glow-primary);
+  transform: translateY(-1px);
+}
+
+.btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  background: transparent;
+  border: 1px solid var(--kingly-border-default);
+  border-radius: 0.375rem;
+  color: var(--kingly-text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-sm:hover {
+  background: var(--kingly-hover-overlay);
+  border-color: var(--kingly-primary);
+  color: var(--kingly-primary);
+  box-shadow: var(--kingly-glow-primary);
+}
+
+.btn-primary-sm svg {
+  transition: transform 0.2s ease;
+}
+
+.btn-primary-sm:hover svg {
+  transform: scale(1.1);
+}
+
+.btn-danger-sm {
+  padding: 0.375rem 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--kingly-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+}
+
+.btn-danger-sm:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--kingly-error);
+}

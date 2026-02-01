@@ -69,7 +69,11 @@ const DEFAULT_DASHBOARDS: Omit<DashboardUI, 'status'>[] = [
     }
 ];
 
-export function NavigatorWithRunner() {
+interface NavigatorWithRunnerProps {
+    onSelectDashboard?: (dashboardId: string) => void;
+}
+
+export function NavigatorWithRunner({ onSelectDashboard }: NavigatorWithRunnerProps = {}) {
     const [dashboards, setDashboards] = useState<DashboardUI[]>(
         DEFAULT_DASHBOARDS.map(d => ({ ...d, status: 'checking' as const }))
     );
@@ -351,6 +355,17 @@ export function NavigatorWithRunner() {
                                     onClick={(e) => handleRestartDashboard(dashboard.id, e)}
                                 >
                                     <RotateCw size={12} /> Restart
+                                </button>
+                            )}
+                            {onSelectDashboard && runnerEnabled && (
+                                <button
+                                    className="details-button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSelectDashboard(dashboard.id);
+                                    }}
+                                >
+                                    <Activity size={12} /> View Details
                                 </button>
                             )}
                         </div>

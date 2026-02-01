@@ -260,6 +260,46 @@
     margin: 0;
 }
 
+/* Buttons */
+.restart-button,
+.details-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 8px;
+}
+
+.restart-button {
+    background: rgba(255, 107, 0, 0.2);
+    border-color: rgba(255, 107, 0, 0.4);
+    color: #ff6b00;
+}
+
+.restart-button:hover {
+    background: rgba(255, 107, 0, 0.3);
+    border-color: rgba(255, 107, 0, 0.6);
+}
+
+.details-button {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
+}
+
+.details-button:hover {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: rgba(0, 212, 255, 0.6);
+}
+
 /* Animation */
 .animate-in {
     animation: fadeIn 0.3s ease-in-out;
@@ -274,4 +314,66 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+.runner-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-icon.restarting,
+.status-icon.failed {
+    color: var(--status-warning);
+}
+
+.dashboard-card.status-restarting {
+    border-color: var(--status-warning);
+}
+
+.dashboard-card.status-restarting::before {
+    background: var(--status-warning);
+}
+
+.dashboard-card.status-failed {
+    border-color: var(--status-error);
+    opacity: 0.8;
+}
+
+.dashboard-card.status-failed::before {
+    background: var(--status-error);
+}
+
+.restart-info {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.restart-attempts {
+    font-weight: 600;
+}
+
+.port-changed {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-style: italic;
 }

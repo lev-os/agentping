@@ -1,0 +1,118 @@
+#!/usr/bin/env node
+
+/**
+ * CLI Entry Point for Dashboard Manager Server
+ *
+ * Standalone HTTP server for dashboard-runner
+ */
+
+import { DashboardRunner } from '@lev-os/dashboard-runner';
+import { createServer } from './index.js';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { homedir } from 'os';
+
+// ============================================================================
+// Parse CLI Arguments
+// ============================================================================
+
+function parseArgs() {
+  const args = process.argv.slice(2);
+  const config = {
+    configPath: join(process.cwd(), 'dashboards.yaml'),
+    port: 3030,
+    host: '127.0.0.1',
+  };
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    if (arg === '--config' || arg === '-c') {
+      config.configPath = args[++i];
+    } else if (arg === '--port' || arg === '-p') {
+      config.port = parseInt(args[++i], 10);
+    } else if (arg === '--host' || arg === '-h') {
+      config.host = args[++i];
+    } else if (arg === '--help') {
+      console.log(`
+Dashboard Manager Server
+
+Usage:
+  dashboard-manager-server [options]
+
+Options:
+  --config, -c <path>    Path to dashboards.yaml config file (default: ./dashboards.yaml)
+  --port, -p <number>    HTTP server port (default: 3030)
+  --host, -h <address>   Bind address (default: 127.0.0.1)
+  --help                 Show this help message
+
+Examples:
+  dashboard-manager-server --config ~/dashboards.yaml
+  dashboard-manager-server --port 8080 --host 0.0.0.0
+      `);
+      process.exit(0);
+    }
+  }
+
+  return config;
+}
+
+// ============================================================================
+// Main
+// ============================================================================
+
+async function main() {
+  const config = parseArgs();
+
+  console.log('[CLI] Dashboard Manager Server');
+  console.log('[CLI] Config path:', config.configPath);
+
+  // Validate config file exists
+  if (!existsSync(config.configPath)) {
+    console.error(`[CLI] Error: Config file not found: ${config.configPath}`);
+    console.error('[CLI] Use --config to specify a valid dashboards.yaml file');
+    process.exit(1);
+  }
+
+  try {
+    // Initialize DashboardRunner
+    console.log('[CLI] Initializing DashboardRunner...');
+    const runner = new DashboardRunner({
+      configPath: config.configPath,
+    });
+
+    // Start runner
+    await runner.start();
+    console.log('[CLI] DashboardRunner started successfully');
+
+    // Create HTTP server
+    const server = createServer({
+      runner,
+      port: config.port,
+      host: config.host,
+      enableWebSocket: true,
+    });
+
+    // Start server
+    const instance = server.start();
+
+    // Graceful shutdown
+    const shutdown = async () => {
+      console.log('\n[CLI] Received shutdown signal');
+      console.log('[CLI] Stopping runner...');
+      await runner.stop();
+      console.log('[CLI] Stopped successfully');
+      process.exit(0);
+    };
+
+    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', shutdown);
+
+    console.log('[CLI] Server ready. Press Ctrl+C to stop.');
+  } catch (error) {
+    console.error('[CLI] Fatal error:', error);
+    process.exit(1);
+  }
+}
+
+main();

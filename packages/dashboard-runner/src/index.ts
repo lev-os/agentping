@@ -10,6 +10,7 @@ export { ProcessManager } from './process-manager.js';
 export { PortFinder } from './port-finder.js';
 export { HealthMonitor } from './health-monitor.js';
 export { DashboardLogger } from './logger.js';
+export { validateDashboardConfig, validateDashboardsConfig } from './validator.js';
 
 export type {
   DashboardConfig,
@@ -22,3 +23,5 @@ export type {
   HealthStatus,
   DashboardEvent
 } from './types.js';
+
+export type { ValidationError, ValidationResult } from './validator.js';

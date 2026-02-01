@@ -47,6 +47,7 @@ export interface DashboardStatus {
   restartAttempts: number;
   lastHealthCheck?: Date;
   healthy?: boolean;
+  crashes?: number;
 }
 
 export interface RunnerConfig {
@@ -73,4 +74,5 @@ export type DashboardEvent =
   | { type: 'restart_success'; dashboardId: string; attempts: number }
   | { type: 'restart_failed'; dashboardId: string; attempts: number }
   | { type: 'health_check_failed'; dashboardId: string; reason: string }
-  | { type: 'port_changed'; dashboardId: string; oldPort: number; newPort: number };
+  | { type: 'port_changed'; dashboardId: string; oldPort: number; newPort: number }
+  | { type: 'log_line'; dashboardId: string; timestamp: string; stream: 'stdout' | 'stderr'; line: string };

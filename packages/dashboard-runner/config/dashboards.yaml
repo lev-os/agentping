@@ -2,7 +2,9 @@ dashboards:
   - name: AgentPing Storybook
     id: agentping
     port: 6006
-    port_range: [6006, 6010]
+    port_range:
+      - 6006
+      - 6010
     command: pnpm storybook --port {port}
     cwd: ~/digital/leviathan/core/agent-harness/vendor/AgentPing/packages/studio
     health_check:
@@ -14,13 +16,19 @@ dashboards:
     restart_policy:
       enabled: true
       max_retries: 5
-      backoff_ms: [1000, 2000, 4000, 8000, 16000]
-
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
   - name: Sofia UI Storybook
     id: sofia
     port: 6007
-    port_range: [6007, 6011]
-    command: pnpm storybook --port {port}
+    port_range:
+      - 6007
+      - 6011
+    command: pnpm storybook --port {port} --no-open
     cwd: ~/digital/kingly/apps/production/Sofia/packages/ui
     health_check:
       type: http
@@ -31,46 +39,64 @@ dashboards:
     restart_policy:
       enabled: true
       max_retries: 5
-      backoff_ms: [1000, 2000, 4000, 8000, 16000]
-
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
   - name: Flight Deck Dashboard
     id: flight-deck
     port: 3001
-    port_range: [3001, 3005]
+    port_range:
+      - 3001
+      - 3005
     command: pnpm dev --port {port}
     cwd: ~/clawd/apps/dashboard
     health_check:
       type: http
       path: /
       timeout_ms: 5000
-      expected_status: [200, 500]  # 500 is OK for root path
+      expected_status:
+        - 200
+        - 500
       interval_ms: 10000
     restart_policy:
       enabled: true
       max_retries: 3
-      backoff_ms: [2000, 4000, 8000]
-
+      backoff_ms:
+        - 2000
+        - 4000
+        - 8000
   - name: CEO Stack
     id: ceo-stack
     port: 3003
-    port_range: [3003, 3007]
+    port_range:
+      - 3003
+      - 3007
     command: npm run dev -- --port {port}
     cwd: ~/digital/kingly/hub/ceo/stack
     health_check:
       type: http
       path: /
       timeout_ms: 5000
-      expected_status: [200, 307]  # 307 redirect is OK
+      expected_status:
+        - 200
+        - 307
       interval_ms: 10000
     restart_policy:
       enabled: true
       max_retries: 3
-      backoff_ms: [2000, 4000, 8000]
-
+      backoff_ms:
+        - 2000
+        - 4000
+        - 8000
   - name: Jarvis Voice Dashboard
     id: jarvis
     port: 8080
-    port_range: [8080, 8084]
+    port_range:
+      - 8080
+      - 8084
     command: bunx vite --port {port}
     cwd: ~/clawd/.lev/poc/jarvis-dashboard
     health_check:
@@ -82,12 +108,18 @@ dashboards:
     restart_policy:
       enabled: true
       max_retries: 5
-      backoff_ms: [1000, 2000, 4000, 8000, 16000]
-
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
   - name: Navigator
     id: navigator
     port: 5180
-    port_range: [5180, 5184]
+    port_range:
+      - 5180
+      - 5184
     command: pnpm dev
     cwd: ~/digital/leviathan/core/agent-harness/vendor/AgentPing/packages/studio
     health_check:
@@ -99,4 +131,9 @@ dashboards:
     restart_policy:
       enabled: true
       max_retries: 5
-      backoff_ms: [1000, 2000, 4000, 8000, 16000]
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000

@@ -35,12 +35,14 @@ export class ProcessManager extends EventEmitter {
    * Start a dashboard process
    */
   async start(dashboardId: string, config: DashboardConfig): Promise<void> {
+    // Get ports already allocated by this runner
+    const allocatedPorts = Array.from(this.processes.values()).map(p => p.port);
+
     // Find available port
-    const occupiedPorts = await this.portFinder.getOccupiedPorts();
     const port = await this.portFinder.findAvailablePort(
       config.port,
       config.port_range,
-      occupiedPorts
+      allocatedPorts
     );
 
     // Build command with port
@@ -53,7 +55,7 @@ export class ProcessManager extends EventEmitter {
     const child = spawn(command, {
       cwd: config.cwd,
       shell: true,
-      detached: false,
+      detached: true,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: { ...process.env, ...config.env, PORT: String(port) }
     });
@@ -67,6 +69,12 @@ export class ProcessManager extends EventEmitter {
       const lines = data.toString().split('\n').filter((l: string) => l.trim());
       for (const line of lines) {
         this.logger.info(line, { dashboardId });
+        this.emit('log_line', {
+          dashboardId,
+          timestamp: new Date().toISOString(),
+          stream: 'stdout',
+          line
+        });
       }
     });
 
@@ -75,6 +83,12 @@ export class ProcessManager extends EventEmitter {
       const lines = data.toString().split('\n').filter((l: string) => l.trim());
       for (const line of lines) {
         this.logger.error(line, { dashboardId });
+        this.emit('log_line', {
+          dashboardId,
+          timestamp: new Date().toISOString(),
+          stream: 'stderr',
+          line
+        });
       }
     });
 
@@ -135,17 +149,21 @@ export class ProcessManager extends EventEmitter {
       this.restartTimers.delete(dashboardId);
     }
 
-    // Kill process
+    // Kill process group (negative PID on Unix kills entire process tree)
     try {
-      dashboardProcess.process.kill('SIGTERM');
+      const pid = dashboardProcess.process.pid;
+      if (pid) {
+        // Kill entire process group
+        process.kill(-pid, 'SIGTERM');
+      }
 
       // Wait for process to exit (with timeout)
       await new Promise<void>((resolve) => {
         const timeout = setTimeout(() => {
           // Force kill if still running
-          if (!dashboardProcess.process.killed) {
+          if (!dashboardProcess.process.killed && pid) {
             this.logger.warn(`Force killing dashboard: ${dashboardId}`, { dashboardId });
-            dashboardProcess.process.kill('SIGKILL');
+            process.kill(-pid, 'SIGKILL');
           }
           resolve();
         }, 5000);

@@ -8,7 +8,9 @@ import { FileExplorer } from '@/renderer/components/FileExplorer';
 import { AgentStatusOverlay } from '@/renderer/components/AgentStatusOverlay';
 import { AgentDropdown } from '@/renderer/components/AgentDropdown';
 import { Dashboard } from '@/renderer/components/Dashboard';
+import { DashboardDetailView } from '@/renderer/components/DashboardDetailView';
 import { NavigatorWithRunner } from '@/renderer/components/NavigatorWithRunner';
+import { NavigatorWithDashboards } from '@/renderer/components/NavigatorWithDashboards';
 import { Layers } from '@/renderer/components/Layers';
 import { ComponentGallery } from '@/renderer/components/ComponentGallery';
 import { FileViewer } from '@/renderer/components/FileViewer';
@@ -19,8 +21,9 @@ import '@/renderer/styles/App.css';
 
 export default function App() {
     // Detect route from URL path
-    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'navigator' => {
+    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'navigator' | 'dashboards' => {
         const path = window.location.pathname;
+        if (path.includes('/dashboards')) return 'dashboards';
         if (path.includes('/navigator')) return 'navigator';
         if (path.includes('/dashboard')) return 'dashboard';
         if (path.includes('/preview')) return 'preview';
@@ -28,11 +31,18 @@ export default function App() {
         return 'design';
     };
 
+    // Extract dashboard ID from URL if on detail route
+    const getDashboardIdFromUrl = (): string | null => {
+        const match = window.location.pathname.match(/^\/dashboard\/([a-z0-9-]+)$/i);
+        return match ? match[1] : null;
+    };
+
     const [selectedObject, setSelectedObject] = useState<any>(null);
+    const [selectedDashboardId, setSelectedDashboardId] = useState<string | null>(getDashboardIdFromUrl());
     const [selectedPreviewElement, setSelectedPreviewElement] = useState<any>(null);
     const [activeTool, setActiveTool] = useState<'select' | 'rectangle' | 'ellipse' | 'text'>('select');
     const [activeSidebar, setActiveSidebar] = useState<'chat' | 'components' | 'files' | 'layers'>('chat');
-    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'navigator'>(getInitialLayoutMode());
+    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'navigator' | 'dashboards'>(getInitialLayoutMode());
     const [isSyncing, setIsSyncing] = useState(false);
     const [workspacePath, setWorkspacePath] = useState<string | null>(null);
     const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
@@ -164,17 +174,31 @@ export default function App() {
     useEffect(() => {
         const pathMap: Record<typeof layoutMode, string> = {
             'design': '/',
-            'dashboard': '/dashboard',
+            'dashboard': selectedDashboardId ? `/dashboard/${selectedDashboardId}` : '/dashboard',
             'code': '/code',
             'preview': '/preview',
-            'navigator': '/navigator'
+            'navigator': '/navigator',
+            'dashboards': '/dashboards'
         };
 
         const newPath = pathMap[layoutMode];
         if (window.location.pathname !== newPath) {
             window.history.pushState({}, '', newPath);
         }
-    }, [layoutMode]);
+    }, [layoutMode, selectedDashboardId]);
+
+    // Handle browser back/forward
+    useEffect(() => {
+        const handlePopState = () => {
+            const newLayoutMode = getInitialLayoutMode();
+            const newDashboardId = getDashboardIdFromUrl();
+            setLayoutMode(newLayoutMode);
+            setSelectedDashboardId(newDashboardId);
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
 
     // Global Keyboard Shortcuts
     useEffect(() => {
@@ -511,9 +535,31 @@ export default function App() {
                 <main className="studio-canvas-container">
 
                     {layoutMode === 'dashboard' ? (
-                        <Dashboard />
+                        selectedDashboardId ? (
+                            <DashboardDetailView
+                                dashboardId={selectedDashboardId}
+                                onBack={() => {
+                                    setSelectedDashboardId(null);
+                                    setLayoutMode('dashboard');
+                                }}
+                            />
+                        ) : (
+                            <Dashboard />
+                        )
+                    ) : layoutMode === 'dashboards' ? (
+                        <NavigatorWithDashboards
+                            onSelectDashboard={(dashboardId) => {
+                                setSelectedDashboardId(dashboardId);
+                                setLayoutMode('dashboard');
+                            }}
+                        />
                     ) : layoutMode === 'navigator' ? (
-                        <NavigatorWithRunner />
+                        <NavigatorWithRunner
+                            onSelectDashboard={(dashboardId) => {
+                                setSelectedDashboardId(dashboardId);
+                                setLayoutMode('dashboard');
+                            }}
+                        />
                     ) : layoutMode === 'preview' ? (
                         <Preview
                             onElementSelected={handlePreviewElementSelected}
