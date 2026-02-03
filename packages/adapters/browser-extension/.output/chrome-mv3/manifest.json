@@ -1,0 +1,1 @@
+{"manifest_version":3,"name":"AgentPing Browser Bridge","description":"Bridges Chrome DevTools Protocol to AgentPing daemon","version":"0.1.0","icons":{"16":"/assets/dot-gray.svg"},"permissions":["debugger","activeTab","tabs","storage","alarms"],"background":{"service_worker":"background.js"},"action":{"default_popup":"popup.html"}}

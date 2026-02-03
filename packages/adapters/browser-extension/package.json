@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "description": "AgentPing Chrome extension - CDP bridge to daemon via WebSocket",
   "type": "module",
-  "main": "./dist/background.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "wxt",
+    "dev:firefox": "wxt --browser firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build --browser firefox",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.268",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "wxt": "^0.20.0"
   }
 }
