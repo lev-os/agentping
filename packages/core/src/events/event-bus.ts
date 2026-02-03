@@ -24,7 +24,15 @@ export interface SessionEvents {
     'session:ended': (sessionId: string) => void;
 }
 
-export type AgentPingEvents = PingEvents & SessionEvents;
+export interface LeaseEvents {
+    'lease:requested': (requestId: string, agentName: string, scopes: string[], tabId?: number) => void;
+    'lease:approved': (requestId: string, lease: { token: string; scopes: string[]; expiresAt: number }) => void;
+    'lease:denied': (requestId: string, reason?: string) => void;
+    'lease:revoked': (token: string) => void;
+    'lease:expired': (token: string) => void;
+}
+
+export type AgentPingEvents = PingEvents & SessionEvents & LeaseEvents;
 
 // ============================================================================
 // Event Bus Interface

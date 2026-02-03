@@ -64,14 +64,19 @@ async function main() {
     });
     console.log(`✓ PingService initialized with ${defaultParsers.length} parsers`);
 
-    // 6. Create HTTP API
+    // 6. Create lease manager and browser CDP adapter (before HTTP API)
+    const leaseManager = new LeaseManager({ eventBus });
+    const browserCDPAdapter = createBrowserCDPAdapter({ eventBus, leaseManager });
+
+    // 7. Create HTTP API with browserCDPAdapter
     const httpApp = createHttpApi({
         pingService,
+        browserCDPAdapter,
         corsOrigins: config.cors?.origins || ['*'],
         enableLogger: config.logging?.enabled ?? true,
     });
 
-    // 7. Create HTTP server and attach WebSocket
+    // 8. Create HTTP server and attach WebSocket
     const httpServer = createServer(async (req, res) => {
         // Forward to Hono
         const url = new URL(req.url || '/', `http://${req.headers.host}`);
@@ -100,12 +105,22 @@ async function main() {
     console.log('✓ WebSocket server attached');
 
     // Attach Browser CDP adapter
-    const leaseManager = new LeaseManager();
-    const browserCDPAdapter = createBrowserCDPAdapter({ eventBus, leaseManager });
     browserCDPAdapter.attach(httpServer, '/browser-cdp');
     console.log('✓ Browser CDP adapter attached');
 
-    // 8. Start the server
+    // Route lease_request pings to browser extension
+    eventBus.on('ping:created', (ping: any) => {
+        if (ping.payload?.type === 'lease_request' && browserCDPAdapter.isExtensionConnected()) {
+            browserCDPAdapter.requestLease(
+                ping.agentName || ping.agentId,
+                ping.payload.scopes || [ping.payload.scope || 'browser'],
+                ping.payload.tabId,
+            ).catch((err: Error) => console.error('[Daemon] Failed to route lease to extension:', err));
+            console.log(`[Daemon] Routed lease_request to extension for ${ping.agentName}`);
+        }
+    });
+
+    // 9. Start the server
     httpServer.listen(config.port, () => {
         console.log(`\n🚀 AgentPing daemon running on http://localhost:${config.port}`);
         console.log(`   API: http://localhost:${config.port}/api/v1`);
@@ -114,7 +129,7 @@ async function main() {
         console.log(`\n   Press Ctrl+C to stop\n`);
     });
 
-    // 9. Graceful shutdown
+    // 10. Graceful shutdown
     const shutdown = async () => {
         console.log('\n⏳ Shutting down...');
         httpServer.close();

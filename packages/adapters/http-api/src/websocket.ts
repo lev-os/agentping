@@ -27,7 +27,16 @@ export class WebSocketManager {
      * Attach to an HTTP server
      */
     attach(server: any, path = '/api/v1/ws'): void {
-        this.wss = new WebSocketServer({ server, path });
+        this.wss = new WebSocketServer({ noServer: true });
+
+        server.on('upgrade', (req: any, socket: any, head: any) => {
+            const url = new URL(req.url || '/', `http://${req.headers.host}`);
+            if (url.pathname === path) {
+                this.wss!.handleUpgrade(req, socket, head, (ws) => {
+                    this.wss!.emit('connection', ws, req);
+                });
+            }
+        });
 
         this.wss.on('connection', (ws: WebSocket) => {
             this.clients.add(ws);
@@ -70,6 +79,26 @@ export class WebSocketManager {
 
         this.eventBus.on('ping:cancelled', (ping: Ping) => {
             this.broadcast({ type: 'ping:cancelled', data: ping });
+        });
+
+        this.eventBus.on('lease:requested', (requestId: string, agentName: string, scopes: string[], tabId?: number) => {
+            this.broadcast({ type: 'lease:requested', data: { requestId, agentName, scopes, tabId } });
+        });
+
+        this.eventBus.on('lease:approved', (requestId: string, lease: { token: string; scopes: string[]; expiresAt: number }) => {
+            this.broadcast({ type: 'lease:approved', data: { requestId, lease } });
+        });
+
+        this.eventBus.on('lease:denied', (requestId: string, reason?: string) => {
+            this.broadcast({ type: 'lease:denied', data: { requestId, reason } });
+        });
+
+        this.eventBus.on('lease:revoked', (token: string) => {
+            this.broadcast({ type: 'lease:revoked', data: { token } });
+        });
+
+        this.eventBus.on('lease:expired', (token: string) => {
+            this.broadcast({ type: 'lease:expired', data: { token } });
         });
     }
 

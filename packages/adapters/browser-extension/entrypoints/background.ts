@@ -27,7 +27,7 @@ export default defineBackground(() => {
   // State
   let ws: WebSocket | null = null;
   let state: ConnectionState = 'disconnected';
-  let lease: LeaseInfo | null = null;
+  let leases: LeaseInfo[] = [];
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   let attachedTabs = new Set<number>();
 
@@ -35,15 +35,38 @@ export default defineBackground(() => {
   const RECONNECT_DELAY_MS = 3000;
   const KEEPALIVE_ALARM = 'agentping-keepalive';
 
+  // Icon pulse animation state
+  let iconPulseInterval: ReturnType<typeof setInterval> | null = null;
+
   // Icon Management
   function updateIcon() {
     const iconMap: Record<ConnectionState, string> = {
-      disconnected: '/assets/dot-gray.svg',
-      connecting: '/assets/dot-amber.svg',
-      connected: '/assets/dot-green.svg',
-      leased: '/assets/dot-cyan.svg',
+      disconnected: '/assets/dot-gray.png',
+      connecting: '/assets/dot-amber.png',
+      connected: '/assets/dot-green.png',
+      leased: '/assets/dot-cyan.png',
     };
     chrome.action.setIcon({ path: { '16': iconMap[state] } });
+  }
+
+  // Icon pulse animation for attention
+  function startIconPulse() {
+    if (iconPulseInterval) return; // Already pulsing
+    let toggle = false;
+    iconPulseInterval = setInterval(() => {
+      chrome.action.setIcon({
+        path: { '16': toggle ? '/assets/dot-amber.png' : '/assets/dot-cyan.png' }
+      });
+      toggle = !toggle;
+    }, 500);
+  }
+
+  function stopIconPulse() {
+    if (iconPulseInterval) {
+      clearInterval(iconPulseInterval);
+      iconPulseInterval = null;
+    }
+    updateIcon(); // Restore to appropriate state
   }
 
   function setState(newState: ConnectionState) {
@@ -106,48 +129,92 @@ export default defineBackground(() => {
   async function handleMessage(msg: Record<string, unknown>) {
     switch (msg.type) {
       case 'lease:granted': {
-        lease = msg.lease as LeaseInfo;
+        const grantedLease = msg.lease as LeaseInfo;
+        // Ensure expiresAt is set if not already present
+        if (!grantedLease.expiresAt && msg.ttl) {
+          const ttlMinutes = typeof msg.ttl === 'number' ? msg.ttl : parseInt(String(msg.ttl), 10);
+          grantedLease.expiresAt = Date.now() + (ttlMinutes * 60 * 1000);
+        }
+
+        // Add to leases array
+        leases.push(grantedLease);
+        chrome.storage.local.set({ activeLeases: leases });
+
         setState('leased');
-        console.log('[AgentPing] Lease granted, scopes:', lease.scopes);
+        console.log('[AgentPing] Lease granted, scopes:', grantedLease.scopes);
         break;
       }
 
       case 'lease:revoked': {
-        await detachAll();
-        lease = null;
-        setState('connected');
+        const revokedToken = msg.token as string | undefined;
+        if (revokedToken) {
+          leases = leases.filter(l => l.token !== revokedToken);
+        } else {
+          leases = [];
+        }
+
+        if (leases.length === 0) {
+          await detachAll();
+          setState('connected');
+        }
+
+        chrome.storage.local.set({ activeLeases: leases });
         console.log('[AgentPing] Lease revoked');
         break;
       }
 
       case 'cdp:request': {
         const req = msg as unknown as { type: string } & CDPRequest;
-        if (!lease) {
+
+        // Filter out expired leases
+        leases = leases.filter(l => l.expiresAt > Date.now());
+        chrome.storage.local.set({ activeLeases: leases });
+
+        if (leases.length === 0) {
           send({ type: 'cdp:response', id: req.id, error: { code: -1, message: 'No active lease' } });
-          return;
-        }
-        if (lease.expiresAt < Date.now()) {
-          send({ type: 'cdp:response', id: req.id, error: { code: -2, message: 'Lease expired' } });
-          lease = null;
           setState('connected');
           return;
         }
-        await executeCDP(req);
+
+        // Use first valid lease (or lease matching tabId if specified)
+        const activeLease = req.tabId
+          ? leases.find(l => l.tabId === req.tabId) || leases[0]
+          : leases[0];
+
+        await executeCDP(req, activeLease);
         break;
       }
 
       case 'lease:request': {
-        chrome.storage.local.set({
-          pendingLease: {
-            requestId: msg.requestId,
-            scopes: msg.scopes,
-            agentName: msg.agentName,
-            agentId: msg.agentId,
-            ttl: msg.ttl,
-            reason: msg.reason,
-            tabId: msg.tabId,
-          },
-        });
+        const newPending = {
+          requestId: msg.requestId,
+          scopes: msg.scopes,
+          agentName: msg.agentName,
+          agentId: msg.agentId,
+          ttl: msg.ttl,
+          reason: msg.reason,
+          tabId: msg.tabId,
+        };
+
+        // Append to pending array (not overwrite)
+        const existing = await chrome.storage.local.get('pendingLeases');
+        const pendingLeases = existing.pendingLeases || [];
+        pendingLeases.push(newPending);
+        await chrome.storage.local.set({ pendingLeases });
+
+        // Set badge count and color
+        chrome.action.setBadgeText({ text: String(pendingLeases.length) });
+        chrome.action.setBadgeBackgroundColor({ color: '#ff2a6d' });
+
+        // Start icon pulse animation
+        startIconPulse();
+
+        // Broadcast overlay to active tab
+        const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (activeTab?.id && !activeTab.url?.startsWith('chrome://')) {
+          chrome.tabs.sendMessage(activeTab.id, { type: 'showLeaseOverlay', lease: newPending })
+            .catch(() => { /* content script not loaded */ });
+        }
         break;
       }
 
@@ -157,8 +224,15 @@ export default defineBackground(() => {
   }
 
   // CDP Execution
-  async function executeCDP(req: CDPRequest) {
-    const tabId = req.tabId ?? lease?.tabId;
+  async function executeCDP(req: CDPRequest, activeLease: LeaseInfo) {
+    let tabId = req.tabId ?? activeLease?.tabId;
+
+    // Auto-select active tab if none specified
+    if (!tabId) {
+      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      tabId = activeTab?.id;
+    }
+
     if (!tabId) {
       send({ type: 'cdp:response', id: req.id, error: { code: -3, message: 'No target tab' } });
       return;
@@ -192,23 +266,107 @@ export default defineBackground(() => {
     if (source.tabId) attachedTabs.delete(source.tabId);
   });
 
-  // Messages from popup
+  // Extension action click - toggle drawer
+  chrome.action.onClicked.addListener(async (tab) => {
+    if (tab.id && !tab.url?.startsWith('chrome://')) {
+      chrome.tabs.sendMessage(tab.id, { type: 'toggleDrawer' }).catch(() => {
+        console.warn('[AgentPing] Content script not loaded on this tab');
+      });
+    }
+  });
+
+  // Messages from popup/drawer
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (msg.type === 'getState') {
-      sendResponse({ state, lease });
+      sendResponse({ state, leases });
+      return true;
+    }
+
+    if (msg.type === 'getDrawerState') {
+      // Filter expired leases before returning
+      const now = Date.now();
+      chrome.storage.local.get(['activeLeases', 'pendingLeases'], (data) => {
+        const validLeases = (data.activeLeases || []).filter((l: LeaseInfo) => l.expiresAt > now);
+        // Update storage if we filtered any out
+        if (validLeases.length !== (data.activeLeases || []).length) {
+          leases = validLeases;
+          chrome.storage.local.set({ activeLeases: validLeases });
+          if (validLeases.length === 0 && state === 'leased') {
+            setState('connected');
+          }
+        }
+        sendResponse({
+          connectionState: state,
+          activeLeases: validLeases,
+          pendingLeases: data.pendingLeases || [],
+        });
+      });
       return true;
     }
 
     if (msg.type === 'approveLease') {
       send({ type: 'lease:approve', requestId: msg.requestId });
-      chrome.storage.local.remove('pendingLease');
+
+      // Remove from pending array
+      chrome.storage.local.get('pendingLeases', (data) => {
+        const remaining = (data.pendingLeases || []).filter((p: any) => p.requestId !== msg.requestId);
+        chrome.storage.local.set({ pendingLeases: remaining });
+        // Update badge
+        if (remaining.length === 0) {
+          stopIconPulse();
+          chrome.action.setBadgeText({ text: '' });
+        } else {
+          chrome.action.setBadgeText({ text: String(remaining.length) });
+        }
+      });
+
+      // Hide overlay on ALL tabs
+      chrome.tabs.query({}).then((tabs) => {
+        for (const tab of tabs) {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { type: 'hideLeaseOverlay' }).catch(() => {});
+          }
+        }
+      });
       sendResponse({ ok: true });
       return true;
     }
 
     if (msg.type === 'denyLease') {
       send({ type: 'lease:deny', requestId: msg.requestId });
-      chrome.storage.local.remove('pendingLease');
+
+      // Remove from pending array
+      chrome.storage.local.get('pendingLeases', (data) => {
+        const remaining = (data.pendingLeases || []).filter((p: any) => p.requestId !== msg.requestId);
+        chrome.storage.local.set({ pendingLeases: remaining });
+        if (remaining.length === 0) {
+          stopIconPulse();
+          chrome.action.setBadgeText({ text: '' });
+        } else {
+          chrome.action.setBadgeText({ text: String(remaining.length) });
+        }
+      });
+
+      // Hide overlay on ALL tabs
+      chrome.tabs.query({}).then((tabs) => {
+        for (const tab of tabs) {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { type: 'hideLeaseOverlay' }).catch(() => {});
+          }
+        }
+      });
+      sendResponse({ ok: true });
+      return true;
+    }
+
+    if (msg.type === 'revokeLease') {
+      const token = msg.token as string;
+      leases = leases.filter(l => l.token !== token);
+      chrome.storage.local.set({ activeLeases: leases });
+      if (leases.length === 0) {
+        setState('connected');
+      }
+      send({ type: 'lease:revoke', token });
       sendResponse({ ok: true });
       return true;
     }
@@ -220,16 +378,61 @@ export default defineBackground(() => {
     }
   });
 
-  // MV3 Keep-Alive
+  // MV3 Keep-Alive + lease GC
   chrome.alarms.create(KEEPALIVE_ALARM, { periodInMinutes: 0.4 });
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === KEEPALIVE_ALARM) {
       if (!ws || ws.readyState !== WebSocket.OPEN) {
         connect();
       }
+      // Garbage-collect expired leases every tick
+      gcLeases();
     }
   });
 
-  // Init
-  connect();
+  // Garbage-collect expired leases from in-memory + storage
+  async function gcLeases() {
+    const now = Date.now();
+    leases = leases.filter(l => l.expiresAt > now);
+    await chrome.storage.local.set({ activeLeases: leases });
+    if (leases.length > 0) {
+      setState('leased');
+    } else {
+      if (state === 'leased') setState('connected');
+    }
+  }
+
+  // Init - restore state from storage, clean stale data
+  async function init() {
+    const stored = await chrome.storage.local.get(['activeLeases', 'pendingLeases', 'pendingLease']);
+
+    // Migrate old singular key → array
+    if (stored.pendingLease && !stored.pendingLeases) {
+      await chrome.storage.local.set({ pendingLeases: [stored.pendingLease] });
+      await chrome.storage.local.remove('pendingLease');
+    } else if (stored.pendingLease) {
+      await chrome.storage.local.remove('pendingLease');
+    }
+
+    // Restore active leases, filter expired
+    if (stored.activeLeases) {
+      leases = stored.activeLeases.filter((l: LeaseInfo) => l.expiresAt > Date.now());
+    }
+    await chrome.storage.local.set({ activeLeases: leases });
+    if (leases.length > 0) {
+      setState('leased');
+    }
+
+    // Restore badge for any pending requests
+    const pending = (await chrome.storage.local.get('pendingLeases')).pendingLeases || [];
+    if (pending.length > 0) {
+      chrome.action.setBadgeText({ text: String(pending.length) });
+      chrome.action.setBadgeBackgroundColor({ color: '#ff2a6d' });
+      startIconPulse();
+    }
+
+    connect();
+  }
+
+  init();
 });

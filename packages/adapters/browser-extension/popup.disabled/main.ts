@@ -78,12 +78,23 @@ function render(connState: string, lease: any, pendingLease: PendingLease | null
     leaseSection.classList.add('active');
     leaseScopesEl.textContent = (lease.scopes || []).join(', ') || '--';
     if (lease.expiresAt) {
-      const totalMs = lease.ttlMs || (lease.expiresAt - Date.now());
+      const now = Date.now();
+      const remaining = lease.expiresAt - now;
+      // Calculate total duration from lease grant (fallback to remaining if ttlMs not available)
+      const totalMs = lease.ttlMs || remaining;
       startCountdown(lease.expiresAt, totalMs);
+    } else {
+      // Fallback if no expiresAt - show 00:00
+      leaseCountdownEl.textContent = '00:00';
+      leaseProgressEl.style.width = '0%';
     }
     btnDisconnect.style.display = 'block';
   } else {
     leaseSection.classList.remove('active');
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
     btnDisconnect.style.display = connState === 'connected' ? 'block' : 'none';
   }
 
@@ -103,8 +114,9 @@ function render(connState: string, lease: any, pendingLease: PendingLease | null
 
 chrome.runtime.sendMessage({ type: 'getState' }, (resp) => {
   if (resp) {
-    chrome.storage.local.get('pendingLease', (data) => {
-      render(resp.state, resp.lease, data.pendingLease || null);
+    chrome.storage.local.get(['pendingLease', 'activeLease'], (data) => {
+      const lease = resp.lease || data.activeLease || null;
+      render(resp.state, lease, data.pendingLease || null);
     });
   }
 });
@@ -115,7 +127,8 @@ btnApprove.addEventListener('click', () => {
       chrome.runtime.sendMessage({ type: 'approveLease', requestId: data.pendingLease.requestId });
       chrome.storage.local.remove('pendingLease');
       pendingSection.classList.remove('pending');
-      statusEl.textContent = 'Lease granted';
+      statusEl.textContent = '\u2705 Granted';
+      setTimeout(() => window.close(), 800);
     }
   });
 });
@@ -138,9 +151,13 @@ btnDisconnect.addEventListener('click', () => {
 });
 
 chrome.storage.onChanged.addListener((changes) => {
-  if (changes.pendingLease) {
+  if (changes.pendingLease || changes.activeLease) {
     chrome.runtime.sendMessage({ type: 'getState' }, (resp) => {
-      if (resp) render(resp.state, resp.lease, changes.pendingLease.newValue || null);
+      if (resp) {
+        const lease = resp.lease || changes.activeLease?.newValue || null;
+        const pending = changes.pendingLease?.newValue || null;
+        render(resp.state, lease, pending);
+      }
     });
   }
 });

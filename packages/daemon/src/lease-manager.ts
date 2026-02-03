@@ -6,6 +6,7 @@
  */
 
 import { randomUUID, createHmac } from 'crypto';
+import type { IEventBus } from '@agentping/core';
 
 // ============================================================================
 // Types
@@ -21,9 +22,22 @@ export interface Lease {
 
 interface PendingRequest {
   requestId: string;
+  agentName: string;
   scopes: string[];
   tabId?: number;
   createdAt: number;
+}
+
+/** Result of waiting for a lease decision */
+export interface LeaseWaitResult {
+  approved: boolean;
+  lease?: Lease;
+  reason?: string;
+}
+
+interface LeaseWaiter {
+  resolve: (result: LeaseWaitResult) => void;
+  timeout: ReturnType<typeof setTimeout>;
 }
 
 export interface LeaseManagerConfig {
@@ -31,6 +45,8 @@ export interface LeaseManagerConfig {
   leaseDurationMs?: number;
   /** Secret for signing tokens */
   secret?: string;
+  /** Event bus for emitting lease events */
+  eventBus?: IEventBus;
 }
 
 // ============================================================================
@@ -40,25 +56,32 @@ export interface LeaseManagerConfig {
 export class LeaseManager {
   private activeLease: Lease | null = null;
   private pendingRequests = new Map<string, PendingRequest>();
+  private waiters = new Map<string, LeaseWaiter[]>();
   private leaseDurationMs: number;
   private secret: string;
+  private eventBus?: IEventBus;
 
   constructor(config: LeaseManagerConfig = {}) {
     this.leaseDurationMs = config.leaseDurationMs ?? 5 * 60 * 1000;
     this.secret = config.secret ?? randomUUID();
+    this.eventBus = config.eventBus;
   }
 
   /**
    * Create a pending lease request. Returns requestId.
    */
-  createPendingRequest(scopes: string[], tabId?: number): string {
+  createPendingRequest(scopes: string[], tabId?: number, agentName = 'unknown'): string {
     const requestId = randomUUID();
     this.pendingRequests.set(requestId, {
       requestId,
+      agentName,
       scopes,
       tabId,
       createdAt: Date.now(),
     });
+
+    this.eventBus?.emit('lease:requested', requestId, agentName, scopes, tabId);
+
     return requestId;
   }
 
@@ -72,6 +95,9 @@ export class LeaseManager {
     this.pendingRequests.delete(requestId);
 
     // Revoke any existing lease
+    if (this.activeLease) {
+      this.eventBus?.emit('lease:revoked', this.activeLease.token);
+    }
     this.activeLease = null;
 
     const now = Date.now();
@@ -93,14 +119,59 @@ export class LeaseManager {
       createdAt: now,
     };
 
+    this.eventBus?.emit('lease:approved', requestId, {
+      token: this.activeLease.token,
+      scopes: this.activeLease.scopes,
+      expiresAt: this.activeLease.expiresAt,
+    });
+
+    // Resolve waiters
+    this.resolveWaiters(requestId, { approved: true, lease: this.activeLease });
+
     return this.activeLease;
   }
 
   /**
    * Deny a pending request.
    */
-  denyPending(requestId: string): void {
+  denyPending(requestId: string, reason?: string): void {
     this.pendingRequests.delete(requestId);
+
+    this.eventBus?.emit('lease:denied', requestId, reason);
+
+    // Resolve waiters
+    this.resolveWaiters(requestId, { approved: false, reason });
+  }
+
+  /**
+   * Wait for a lease decision (approval or denial).
+   * Returns the result or null on timeout.
+   */
+  waitForDecision(requestId: string, timeoutMs = 30000): Promise<LeaseWaitResult> {
+    // Check if request still exists
+    if (!this.pendingRequests.has(requestId)) {
+      // Already resolved - check if there's an active lease
+      const lease = this.getActiveLease();
+      if (lease) {
+        return Promise.resolve({ approved: true, lease });
+      }
+      return Promise.resolve({ approved: false, reason: 'Request not found or already resolved' });
+    }
+
+    return new Promise((resolve) => {
+      const waiter: LeaseWaiter = {
+        resolve,
+        timeout: setTimeout(() => {
+          this.removeWaiter(requestId, waiter);
+          resolve({ approved: false, reason: 'Timed out waiting for lease decision' });
+        }, timeoutMs),
+      };
+
+      if (!this.waiters.has(requestId)) {
+        this.waiters.set(requestId, []);
+      }
+      this.waiters.get(requestId)!.push(waiter);
+    });
   }
 
   /**
@@ -109,10 +180,19 @@ export class LeaseManager {
   getActiveLease(): Lease | null {
     if (!this.activeLease) return null;
     if (this.activeLease.expiresAt < Date.now()) {
+      const expiredToken = this.activeLease.token;
       this.activeLease = null;
+      this.eventBus?.emit('lease:expired', expiredToken);
       return null;
     }
     return this.activeLease;
+  }
+
+  /**
+   * Get a pending request by ID.
+   */
+  getPendingRequest(requestId: string): PendingRequest | undefined {
+    return this.pendingRequests.get(requestId);
   }
 
   /**
@@ -134,7 +214,40 @@ export class LeaseManager {
    * Revoke the active lease.
    */
   revokeActive(): void {
+    if (this.activeLease) {
+      this.eventBus?.emit('lease:revoked', this.activeLease.token);
+    }
     this.activeLease = null;
+  }
+
+  /**
+   * Resolve all waiters for a request ID.
+   */
+  private resolveWaiters(requestId: string, result: LeaseWaitResult): void {
+    const waiters = this.waiters.get(requestId);
+    if (waiters) {
+      for (const waiter of waiters) {
+        clearTimeout(waiter.timeout);
+        waiter.resolve(result);
+      }
+      this.waiters.delete(requestId);
+    }
+  }
+
+  /**
+   * Remove a specific waiter.
+   */
+  private removeWaiter(requestId: string, waiter: LeaseWaiter): void {
+    const waiters = this.waiters.get(requestId);
+    if (waiters) {
+      const index = waiters.indexOf(waiter);
+      if (index !== -1) {
+        waiters.splice(index, 1);
+      }
+      if (waiters.length === 0) {
+        this.waiters.delete(requestId);
+      }
+    }
   }
 
   /**

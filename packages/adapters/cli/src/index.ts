@@ -246,7 +246,9 @@ lease
     .requiredOption('-s, --scope <scope>', 'Lease scope: browser, filesystem, network, shell, custom')
     .requiredOption('--ttl <duration>', 'Time-to-live (e.g. 15m, 1h, 30s)')
     .requiredOption('-r, --reason <reason>', 'Reason for the lease request')
+    .option('-w, --wait', 'Block until lease is granted/denied by the daemon lease-manager')
     .option('-t, --timeout <seconds>', 'Timeout in seconds', '300')
+    .option('--poll-interval <ms>', 'Poll interval in ms when using --wait', '1000')
     .option('--json', 'Output as JSON')
     .option('--quiet', 'Only output the token')
     .option('--agent <id>', 'Agent ID', 'cli-agent')
@@ -272,7 +274,20 @@ lease
                 },
             });
 
-            const response = await waitForResponse(ping.id, parseInt(options.timeout) * 1000);
+            const timeoutMs = parseInt(options.timeout) * 1000;
+
+            let response: any;
+            if (options.wait) {
+                spinner.text = 'Waiting for lease activation...';
+                response = await waitForLeaseActivation(
+                    ping.id,
+                    timeoutMs,
+                    parseInt(options.pollInterval),
+                );
+            } else {
+                response = await waitForResponse(ping.id, timeoutMs);
+            }
+
             spinner.stop();
 
             if (!response) {
@@ -572,6 +587,73 @@ async function waitForResponse(pingId: string, timeoutMs: number): Promise<any> 
 
     const data = await res.json() as { response: unknown };
     return data.response;
+}
+
+/**
+ * Wait for a lease to be activated by the daemon lease-manager.
+ *
+ * Tries the dedicated /api/v1/lease/:id/wait endpoint first (long-poll).
+ * Falls back to polling /api/v1/pings/:id/wait if the endpoint is unavailable.
+ */
+async function waitForLeaseActivation(pingId: string, timeoutMs: number, pollIntervalMs = 1000): Promise<any> {
+    const deadline = Date.now() + timeoutMs;
+
+    // Try the dedicated lease wait endpoint (added by daemon, long-polls until lease activates)
+    try {
+        const res = await fetch(
+            `${API_BASE}/api/v1/lease/${encodeURIComponent(pingId)}/wait?timeout=${Math.floor(timeoutMs / 1000)}`,
+        );
+
+        if (res.ok) {
+            const data = await res.json() as { lease?: any; response?: any };
+            if (data.lease || data.response) {
+                // Normalize to a response-like shape for consistent CLI output
+                const lease = data.lease;
+                return data.response || {
+                    action: lease?.token ? 'approved' : 'denied',
+                    data: lease ? {
+                        type: 'lease',
+                        granted: true,
+                        token: lease.token,
+                        expiresAt: lease.expiresAt
+                            ? new Date(lease.expiresAt).toISOString()
+                            : undefined,
+                    } : { type: 'lease', granted: false },
+                };
+            }
+        }
+
+        if (res.status === 408) {
+            return null; // Timeout
+        }
+
+        // If 404 or other non-OK, fall through to polling
+        if (res.status !== 404) {
+            const error = await res.json().catch(() => ({})) as { error?: string };
+            if (error.error) throw new Error(error.error);
+        }
+    } catch (err) {
+        // Endpoint not available yet — fall back to polling
+        if ((err as Error).message && !(err as Error).message.includes('fetch')) {
+            throw err; // Re-throw real errors, not connection issues
+        }
+    }
+
+    // Fallback: poll the ping wait endpoint
+    while (Date.now() < deadline) {
+        const remaining = deadline - Date.now();
+        const pollTimeout = Math.min(pollIntervalMs, remaining);
+
+        const response = await waitForResponse(pingId, pollTimeout);
+        if (response) return response;
+
+        // If we still have time, sleep before next poll
+        if (Date.now() < deadline) {
+            await new Promise((resolve) => setTimeout(resolve, pollIntervalMs));
+        }
+    }
+
+    return null; // Overall timeout
 }
 
 // ============================================================================

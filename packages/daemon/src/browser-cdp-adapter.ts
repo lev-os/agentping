@@ -46,7 +46,16 @@ export class BrowserCDPAdapter {
    * Attach to an HTTP server at /browser-cdp
    */
   attach(server: any, path = '/browser-cdp'): void {
-    this.wss = new WebSocketServer({ server, path });
+    this.wss = new WebSocketServer({ noServer: true });
+
+    server.on('upgrade', (req: any, socket: any, head: any) => {
+      const url = new URL(req.url || '/', `http://${req.headers.host}`);
+      if (url.pathname === path) {
+        this.wss!.handleUpgrade(req, socket, head, (ws) => {
+          this.wss!.emit('connection', ws, req);
+        });
+      }
+    });
 
     this.wss.on('connection', (ws: WebSocket) => {
       // Only one extension connection at a time
@@ -155,11 +164,12 @@ export class BrowserCDPAdapter {
 
   /**
    * Request a lease from the extension user.
+   * Returns the requestId for subsequent wait/poll operations.
    */
-  async requestLease(agentName: string, scopes: string[], tabId?: number): Promise<void> {
+  async requestLease(agentName: string, scopes: string[], tabId?: number): Promise<string> {
     if (!this.extension) throw new Error('No browser extension connected');
 
-    const requestId = this.leaseManager.createPendingRequest(scopes, tabId);
+    const requestId = this.leaseManager.createPendingRequest(scopes, tabId, agentName);
     this.sendToExtension({
       type: 'lease:request',
       requestId,
@@ -167,6 +177,24 @@ export class BrowserCDPAdapter {
       scopes,
       tabId,
     });
+
+    return requestId;
+  }
+
+  /**
+   * Wait for a lease decision (approval or denial).
+   */
+  async waitForLeaseDecision(requestId: string, timeoutMs = 30000): Promise<{ approved: boolean; lease?: { token: string; scopes: string[]; expiresAt: number }; reason?: string }> {
+    const result = await this.leaseManager.waitForDecision(requestId, timeoutMs);
+    return {
+      approved: result.approved,
+      lease: result.lease ? {
+        token: result.lease.token,
+        scopes: result.lease.scopes,
+        expiresAt: result.lease.expiresAt,
+      } : undefined,
+      reason: result.reason,
+    };
   }
 
   /**

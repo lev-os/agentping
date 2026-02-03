@@ -7,7 +7,11 @@ export default defineConfig({
     description: 'Bridges Chrome DevTools Protocol to AgentPing daemon',
     permissions: ['debugger', 'activeTab', 'tabs', 'storage', 'alarms'],
     icons: {
-      16: '/assets/dot-gray.svg',
+      16: '/assets/dot-gray.png',
+    },
+    action: {
+      default_icon: { 16: '/assets/dot-gray.png' },
+      default_title: 'AgentPing',
     },
   },
 });

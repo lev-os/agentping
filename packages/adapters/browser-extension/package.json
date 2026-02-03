@@ -8,6 +8,7 @@
     "dev:firefox": "wxt --browser firefox",
     "build": "wxt build",
     "build:firefox": "wxt build --browser firefox",
+    "watch": "wxt build --mode development && chokidar 'entrypoints/**/*' 'public/**/*' -c 'wxt build --mode development'",
     "zip": "wxt zip",
     "postinstall": "wxt prepare"
   },
