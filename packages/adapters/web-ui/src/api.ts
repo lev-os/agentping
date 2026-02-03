@@ -132,3 +132,22 @@ export function buildTaskWorkflowResponse(
         respondedVia: 'web-ui',
     };
 }
+
+export function buildLeaseResponse(
+    granted: boolean,
+    enrichment?: HumanResponse['enrichment']
+): Omit<HumanResponse, 'respondedAt'> {
+    const now = new Date();
+    return {
+        action: granted ? 'approved' : 'denied',
+        data: {
+            type: 'lease',
+            granted,
+            // Token generated server-side; client just signals intent
+            token: granted ? `lease-${now.getTime()}` : undefined,
+            expiresAt: granted ? now.toISOString() : undefined,
+        },
+        enrichment,
+        respondedVia: 'web-ui',
+    };
+}

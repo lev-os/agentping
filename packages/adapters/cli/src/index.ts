@@ -235,6 +235,310 @@ program
     });
 
 // ============================================================================
+// Lease Commands
+// ============================================================================
+
+const lease = program.command('lease').description('Manage capability leases');
+
+lease
+    .command('request')
+    .description('Request a scoped capability lease')
+    .requiredOption('-s, --scope <scope>', 'Lease scope: browser, filesystem, network, shell, custom')
+    .requiredOption('--ttl <duration>', 'Time-to-live (e.g. 15m, 1h, 30s)')
+    .requiredOption('-r, --reason <reason>', 'Reason for the lease request')
+    .option('-t, --timeout <seconds>', 'Timeout in seconds', '300')
+    .option('--json', 'Output as JSON')
+    .option('--quiet', 'Only output the token')
+    .option('--agent <id>', 'Agent ID', 'cli-agent')
+    .option('--agent-name <name>', 'Agent name', 'CLI Agent')
+    .option('--session <id>', 'Session ID', 'cli-session')
+    .option('--constraints <json>', 'JSON constraints object')
+    .action(async (options) => {
+        const spinner = ora('Requesting lease approval...').start();
+
+        try {
+            const constraints = options.constraints ? JSON.parse(options.constraints) : undefined;
+
+            const ping = await sendPing({
+                agentId: options.agent,
+                agentName: options.agentName,
+                sessionId: options.session,
+                payload: {
+                    type: 'lease_request',
+                    scope: options.scope,
+                    ttl: options.ttl,
+                    reason: options.reason,
+                    constraints,
+                },
+            });
+
+            const response = await waitForResponse(ping.id, parseInt(options.timeout) * 1000);
+            spinner.stop();
+
+            if (!response) {
+                console.error('Timeout waiting for lease approval');
+                process.exit(2);
+            }
+
+            const granted = response.action === 'approved';
+
+            if (options.json) {
+                console.log(JSON.stringify({ granted, ...response }, null, 2));
+            } else if (options.quiet) {
+                if (granted && response.data?.token) {
+                    console.log(response.data.token);
+                } else {
+                    console.error(granted ? 'granted (no token)' : 'denied');
+                    process.exit(granted ? 0 : 1);
+                }
+            } else {
+                if (granted) {
+                    console.log(`\n✓ Lease granted: ${options.scope} (${options.ttl})`);
+                    if (response.data?.token) {
+                        console.log(`  Token: ${response.data.token}`);
+                    }
+                    if (response.data?.expiresAt) {
+                        console.log(`  Expires: ${response.data.expiresAt}`);
+                    }
+                } else {
+                    console.log('✗ Lease denied');
+                }
+            }
+
+            process.exit(granted ? 0 : 1);
+        } catch (err) {
+            spinner.fail(`Failed: ${(err as Error).message}`);
+            process.exit(3);
+        }
+    });
+
+lease
+    .command('status')
+    .description('Check active lease status')
+    .option('--json', 'Output as JSON')
+    .action(async (options) => {
+        const spinner = ora('Checking lease status...').start();
+
+        try {
+            const res = await fetch(`${API_BASE}/api/v1/pings?status=responded&limit=20`);
+
+            if (!res.ok) {
+                throw new Error('Failed to fetch pings');
+            }
+
+            const data = await res.json() as { pings: any[] };
+            const leases = data.pings.filter(
+                (p: any) => p.payload?.type === 'lease_request' && p.response?.action === 'approved'
+            );
+
+            spinner.stop();
+
+            if (options.json) {
+                console.log(JSON.stringify(leases, null, 2));
+            } else if (leases.length === 0) {
+                console.log('No active leases');
+            } else {
+                console.log(`\nActive leases (${leases.length}):\n`);
+                for (const l of leases) {
+                    const scope = l.payload.scope;
+                    const ttl = l.payload.ttl;
+                    const expiresAt = l.response?.data?.expiresAt || 'unknown';
+                    console.log(`  [${scope}] ttl=${ttl} expires=${expiresAt} ping=${l.id}`);
+                }
+            }
+        } catch (err) {
+            spinner.fail(`Failed: ${(err as Error).message}`);
+            process.exit(3);
+        }
+    });
+
+lease
+    .command('revoke [pingId]')
+    .description('Revoke an active lease')
+    .option('--all', 'Revoke all active leases')
+    .option('--json', 'Output as JSON')
+    .action(async (pingId, options) => {
+        if (!pingId && !options.all) {
+            console.error('Provide a ping ID or use --all');
+            process.exit(1);
+        }
+
+        const spinner = ora('Revoking lease...').start();
+
+        try {
+            if (options.all) {
+                const res = await fetch(`${API_BASE}/api/v1/pings?status=responded&limit=50`);
+                if (!res.ok) throw new Error('Failed to fetch pings');
+
+                const data = await res.json() as { pings: any[] };
+                const leases = data.pings.filter(
+                    (p: any) => p.payload?.type === 'lease_request' && p.response?.action === 'approved'
+                );
+
+                let revoked = 0;
+                for (const l of leases) {
+                    const r = await fetch(`${API_BASE}/api/v1/pings/${l.id}/dismiss`, { method: 'POST' });
+                    if (r.ok) revoked++;
+                }
+
+                spinner.stop();
+                console.log(options.json
+                    ? JSON.stringify({ revoked })
+                    : `✓ Revoked ${revoked} lease(s)`);
+            } else {
+                const res = await fetch(`${API_BASE}/api/v1/pings/${pingId}/dismiss`, { method: 'POST' });
+
+                spinner.stop();
+
+                if (!res.ok) {
+                    const err = await res.json() as { error?: string };
+                    throw new Error(err.error || 'Failed to revoke');
+                }
+
+                console.log(options.json
+                    ? JSON.stringify({ revoked: true, pingId })
+                    : `✓ Lease revoked: ${pingId}`);
+            }
+        } catch (err) {
+            spinner.fail(`Failed: ${(err as Error).message}`);
+            process.exit(3);
+        }
+    });
+
+// ============================================================================
+// CDP Passthrough Commands
+// ============================================================================
+
+program
+    .command('cdp <domainMethod>')
+    .description('Execute a CDP command via daemon (e.g. Page.navigate, DOM.getDocument)')
+    .option('--param <kv...>', 'Parameters as key=value pairs')
+    .option('--lease-token <token>', 'Lease token for authorization')
+    .option('--json', 'Output as JSON')
+    .action(async (domainMethod, options) => {
+        const spinner = ora(`CDP: ${domainMethod}...`).start();
+
+        try {
+            const params: Record<string, unknown> = {};
+            if (options.param) {
+                for (const kv of options.param) {
+                    const eqIdx = kv.indexOf('=');
+                    if (eqIdx === -1) {
+                        params[kv] = true;
+                    } else {
+                        const key = kv.slice(0, eqIdx);
+                        let val: unknown = kv.slice(eqIdx + 1);
+                        // Attempt JSON parse for structured values
+                        try { val = JSON.parse(val as string); } catch { /* keep as string */ }
+                        params[key] = val;
+                    }
+                }
+            }
+
+            const token = options.leaseToken || process.env.AGENTPING_LEASE_TOKEN;
+            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const res = await fetch(`${API_BASE}/api/v1/cdp`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ method: domainMethod, params }),
+            });
+
+            spinner.stop();
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: res.statusText })) as { error?: string };
+                throw new Error(err.error || `CDP call failed: ${res.status}`);
+            }
+
+            const result = await res.json();
+
+            if (options.json) {
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log(JSON.stringify(result, null, 2));
+            }
+        } catch (err) {
+            spinner.fail(`Failed: ${(err as Error).message}`);
+            process.exit(3);
+        }
+    });
+
+// Browser sugar commands
+const browser = program.command('browser').description('Browser automation shortcuts (CDP sugar)');
+
+const BROWSER_SUGAR: Record<string, { method: string; paramKey?: string; description: string }> = {
+    snapshot: { method: 'Page.captureSnapshot', description: 'Capture page MHTML snapshot' },
+    screenshot: { method: 'Page.captureScreenshot', description: 'Capture page screenshot (base64 PNG)' },
+    navigate: { method: 'Page.navigate', paramKey: 'url', description: 'Navigate to a URL' },
+    click: { method: 'Runtime.evaluate', paramKey: 'expression', description: 'Click element via selector (document.querySelector(sel).click())' },
+    type: { method: 'Runtime.evaluate', paramKey: 'expression', description: 'Type into focused element' },
+};
+
+for (const [name, config] of Object.entries(BROWSER_SUGAR)) {
+    const cmd = browser
+        .command(config.paramKey ? `${name} <value>` : name)
+        .description(config.description)
+        .option('--lease-token <token>', 'Lease token for authorization')
+        .option('--json', 'Output as JSON');
+
+    cmd.action(async (valueOrOptions: any, maybeOptions?: any) => {
+        const value = typeof valueOrOptions === 'string' ? valueOrOptions : undefined;
+        const options = maybeOptions || (typeof valueOrOptions === 'object' ? valueOrOptions : {});
+
+        const spinner = ora(`browser ${name}...`).start();
+
+        try {
+            let params: Record<string, unknown> = {};
+
+            if (name === 'click' && value) {
+                params.expression = `document.querySelector(${JSON.stringify(value)}).click()`;
+            } else if (name === 'type' && value) {
+                // value format: "selector|text"
+                const [selector, ...textParts] = value.split('|');
+                const text = textParts.join('|');
+                params.expression = `(() => { const el = document.querySelector(${JSON.stringify(selector)}); el.focus(); el.value = ${JSON.stringify(text)}; el.dispatchEvent(new Event('input', {bubbles:true})); })()`;
+            } else if (config.paramKey && value) {
+                params[config.paramKey] = value;
+            }
+
+            const token = options.leaseToken || process.env.AGENTPING_LEASE_TOKEN;
+            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const res = await fetch(`${API_BASE}/api/v1/cdp`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ method: config.method, params }),
+            });
+
+            spinner.stop();
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: res.statusText })) as { error?: string };
+                throw new Error(err.error || `CDP call failed: ${res.status}`);
+            }
+
+            const result = await res.json();
+
+            if (options.json) {
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log(JSON.stringify(result, null, 2));
+            }
+        } catch (err) {
+            spinner.fail(`Failed: ${(err as Error).message}`);
+            process.exit(3);
+        }
+    });
+}
+
+// ============================================================================
 // API Helpers
 // ============================================================================
 

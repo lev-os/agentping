@@ -22,6 +22,7 @@ export const PingTypeSchema = z.enum([
     'custom',            // Extensible
     'secret',            // Secure input request
     'canvas_interaction', // Studio managing canvas
+    'lease_request',     // Agent requests a scoped capability lease (e.g. browser)
 ]);
 
 export type PingType = z.infer<typeof PingTypeSchema>;
@@ -179,6 +180,16 @@ export const CanvasInteractionPayloadSchema = z.object({
 
 export type CanvasInteractionPayload = z.infer<typeof CanvasInteractionPayloadSchema>;
 
+export const LeaseRequestPayloadSchema = z.object({
+    type: z.literal('lease_request'),
+    scope: z.enum(['browser', 'filesystem', 'network', 'shell', 'custom']),
+    ttl: z.string(), // e.g. "15m", "1h", "30s"
+    reason: z.string(),
+    constraints: z.record(z.string(), z.unknown()).optional(),
+});
+
+export type LeaseRequestPayload = z.infer<typeof LeaseRequestPayloadSchema>;
+
 export const PingPayloadSchema = z.discriminatedUnion('type', [
     StepApprovalPayloadSchema,
     ResearchRequestPayloadSchema,
@@ -191,6 +202,7 @@ export const PingPayloadSchema = z.discriminatedUnion('type', [
     SecretPayloadSchema,
     CustomPayloadSchema,
     CanvasInteractionPayloadSchema,
+    LeaseRequestPayloadSchema,
 ]);
 
 export type PingPayload = z.infer<typeof PingPayloadSchema>;
@@ -276,7 +288,8 @@ export type ResponseData =
     | { type: 'task_workflow'; completedSteps: string[]; notes: Record<string, string> }
     | { type: 'dismissed' }
     | { type: 'custom'; data: Record<string, unknown> }
-    | { type: 'canvas_interaction'; data: Record<string, unknown> };
+    | { type: 'canvas_interaction'; data: Record<string, unknown> }
+    | { type: 'lease'; granted: boolean; token?: string; expiresAt?: string };
 
 // ============================================================================
 // Response Enrichment (The Magic - Beyond Yes/No)

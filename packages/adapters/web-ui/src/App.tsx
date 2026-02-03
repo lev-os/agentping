@@ -5,7 +5,7 @@
 import { useState, useCallback } from 'react';
 import type { Ping, Directive } from '@agentping/core';
 import { usePings, useWebSocket, useKeyboard, usePingResponse } from './hooks';
-import { respondToPing, dismissPing, buildStepApprovalResponse, buildSelectionResponse, buildApprovalResponse, buildAnswerResponse, buildTaskWorkflowResponse } from './api';
+import { respondToPing, dismissPing, buildStepApprovalResponse, buildSelectionResponse, buildApprovalResponse, buildAnswerResponse, buildTaskWorkflowResponse, buildLeaseResponse } from './api';
 import {
     PingCard,
     StepChecklist,
@@ -20,7 +20,8 @@ import {
     TaskWorkflow,
     PrimitivesGallery,
     HistoryView,
-    LandingPage
+    LandingPage,
+    LeaseApproval
 } from './components';
 import { componentRegistry } from './renderers';
 import './components/Layout.css';
@@ -260,6 +261,40 @@ export default function App() {
                             }
                         }}
                         onDismiss={handleDismiss}
+                    />
+                );
+            }
+            case 'lease_request': {
+                const payload = selectedPing.payload as any;
+                return (
+                    <LeaseApproval
+                        agentId={selectedPing.agentId}
+                        agentName={selectedPing.agentName}
+                        scope={payload.scope}
+                        ttl={payload.ttl}
+                        reason={payload.reason}
+                        constraints={payload.constraints}
+                        status={selectedPing.status === 'responded'
+                            ? (selectedPing.response?.action === 'approved' ? 'active' : 'denied')
+                            : selectedPing.status === 'expired' ? 'expired' : 'pending'}
+                        expiresAt={selectedPing.response?.action === 'approved' && selectedPing.expiresAt
+                            ? new Date(selectedPing.expiresAt) : undefined}
+                        onApprove={async () => {
+                            try {
+                                await respondToPing(selectedPing.id, buildLeaseResponse(true));
+                                refresh();
+                            } catch (e) {
+                                console.error('Failed to grant lease:', e);
+                            }
+                        }}
+                        onDeny={async () => {
+                            try {
+                                await respondToPing(selectedPing.id, buildLeaseResponse(false));
+                                refresh();
+                            } catch (e) {
+                                console.error('Failed to deny lease:', e);
+                            }
+                        }}
                     />
                 );
             }

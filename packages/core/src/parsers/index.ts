@@ -4,7 +4,7 @@
  * Turn ping payloads into UI hints for rendering.
  */
 
-import type { Ping, ParsedInteraction, QuickAction, StepApprovalPayload, ResearchRequestPayload, SelectionPayload } from '../domain/ping.js';
+import type { Ping, ParsedInteraction, QuickAction, StepApprovalPayload, ResearchRequestPayload, SelectionPayload, LeaseRequestPayload } from '../domain/ping.js';
 import type { IInteractionParser } from '../ports/parser.js';
 
 // ============================================================================
@@ -329,6 +329,54 @@ export const notificationParser: IInteractionParser = {
 };
 
 // ============================================================================
+// Lease Request Parser
+// ============================================================================
+
+export const leaseRequestParser: IInteractionParser = {
+    name: 'lease-request',
+    priority: 50,
+
+    canParse(ping: Ping): boolean {
+        return ping.payload.type === 'lease_request';
+    },
+
+    parse(ping: Ping): ParsedInteraction {
+        const payload = ping.payload as LeaseRequestPayload;
+
+        const quickActions: QuickAction[] = [
+            {
+                id: 'grant',
+                label: `Grant ${payload.scope} lease (${payload.ttl})`,
+                shortcut: 'y',
+                style: 'primary',
+                action: { type: 'approve_all' },
+            },
+            {
+                id: 'deny',
+                label: 'Deny',
+                shortcut: 'n',
+                style: 'danger',
+                action: { type: 'deny_all' },
+            },
+        ];
+
+        return {
+            interactionType: 'lease-approval',
+            quickActions,
+            uiHints: {
+                scope: payload.scope,
+                ttl: payload.ttl,
+                reason: payload.reason,
+                constraints: payload.constraints,
+                suggestedDirectives: ['constraint', 'timeline'],
+            },
+            fallbackText: `Lease request: ${payload.scope} for ${payload.ttl} — ${payload.reason}`,
+            fallbackOptions: ['Grant', 'Deny'],
+        };
+    },
+};
+
+// ============================================================================
 // Fallback Parser (lowest priority, always matches)
 // ============================================================================
 
@@ -375,5 +423,6 @@ export const defaultParsers: IInteractionParser[] = [
     approvalParser,
     questionParser,
     notificationParser,
+    leaseRequestParser,
     fallbackParser,
 ];

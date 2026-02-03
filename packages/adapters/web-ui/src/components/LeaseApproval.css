@@ -1,0 +1,306 @@
+/* LeaseApproval.css */
+.lease-approval {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.lease-approval--active {
+    border-color: rgba(0, 255, 157, 0.3);
+}
+
+.lease-approval--expired {
+    border-color: rgba(255, 42, 109, 0.3);
+    opacity: 0.7;
+}
+
+.lease-approval--denied {
+    border-color: rgba(255, 42, 109, 0.3);
+    opacity: 0.7;
+}
+
+/* Header */
+.lease-approval__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.lease-approval__scope-icon {
+    font-size: 28px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 229, 255, 0.08);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+.lease-approval__title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.lease-approval__scope-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent-primary);
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.lease-approval__label {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.lease-approval__status {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 99px;
+}
+
+.lease-approval__status--pending {
+    color: var(--accent-primary);
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.lease-approval__status--active {
+    color: #00ff9d;
+    background: rgba(0, 255, 157, 0.1);
+    border: 1px solid rgba(0, 255, 157, 0.2);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.lease-approval__status--expired {
+    color: #ff2a6d;
+    background: rgba(255, 42, 109, 0.1);
+    border: 1px solid rgba(255, 42, 109, 0.2);
+}
+
+.lease-approval__status--denied {
+    color: #ff2a6d;
+    background: rgba(255, 42, 109, 0.1);
+    border: 1px solid rgba(255, 42, 109, 0.2);
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 4px rgba(0, 255, 157, 0.2); }
+    50% { box-shadow: 0 0 12px rgba(0, 255, 157, 0.4); }
+}
+
+/* Agent */
+.lease-approval__agent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    padding: 10px 14px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.lease-approval__agent-label {
+    color: var(--text-muted);
+}
+
+.lease-approval__agent-name {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.lease-approval__agent-id {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+
+/* Details Grid */
+.lease-approval__details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.lease-approval__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.lease-approval__detail-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lease-approval__detail-value {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+/* Countdown */
+.lease-approval__countdown {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: #00ff9d;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+}
+
+.lease-approval__countdown--warning {
+    color: #ff2a6d;
+    text-shadow: 0 0 10px rgba(255, 42, 109, 0.4);
+    animation: countdown-blink 1s ease-in-out infinite;
+}
+
+@keyframes countdown-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Reason */
+.lease-approval__reason {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lease-approval__reason-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lease-approval__reason-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Constraints */
+.lease-approval__constraints {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lease-approval__constraints-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lease-approval__constraints-json {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+    overflow-x: auto;
+}
+
+/* Actions */
+.lease-approval__actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.lease-approval__btn {
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.lease-approval__btn--approve {
+    background: rgba(0, 255, 157, 0.15);
+    color: #00ff9d;
+    border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.lease-approval__btn--approve:hover {
+    background: rgba(0, 255, 157, 0.25);
+    box-shadow: 0 0 16px rgba(0, 255, 157, 0.2);
+}
+
+.lease-approval__btn--deny {
+    background: rgba(255, 42, 109, 0.15);
+    color: #ff2a6d;
+    border: 1px solid rgba(255, 42, 109, 0.3);
+}
+
+.lease-approval__btn--deny:hover {
+    background: rgba(255, 42, 109, 0.25);
+    box-shadow: 0 0 16px rgba(255, 42, 109, 0.2);
+}
+
+.lease-approval__btn-icon {
+    font-size: 16px;
+}
+
+.lease-approval__kbd {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+}
+
+/* Progress bar */
+.lease-approval__progress-container {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.lease-approval__progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff9d, #00e5ff);
+    border-radius: 2px;
+    transition: width 1s linear;
+    box-shadow: 0 0 8px rgba(0, 255, 157, 0.3);
+}

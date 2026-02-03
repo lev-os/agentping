@@ -16,6 +16,8 @@ import { SQLiteStore } from '@agentping/storage-sqlite';
 import { createHttpApi } from '@agentping/http-api';
 import { createWebSocketManager } from '@agentping/http-api/websocket';
 import { loadConfig, type DaemonConfig } from './config.js';
+import { createBrowserCDPAdapter } from './browser-cdp-adapter.js';
+import { LeaseManager } from './lease-manager.js';
 
 // ============================================================================
 // Main Entry Point
@@ -97,11 +99,18 @@ async function main() {
     wsManager.attach(httpServer, '/api/v1/ws');
     console.log('✓ WebSocket server attached');
 
+    // Attach Browser CDP adapter
+    const leaseManager = new LeaseManager();
+    const browserCDPAdapter = createBrowserCDPAdapter({ eventBus, leaseManager });
+    browserCDPAdapter.attach(httpServer, '/browser-cdp');
+    console.log('✓ Browser CDP adapter attached');
+
     // 8. Start the server
     httpServer.listen(config.port, () => {
         console.log(`\n🚀 AgentPing daemon running on http://localhost:${config.port}`);
         console.log(`   API: http://localhost:${config.port}/api/v1`);
         console.log(`   WS:  ws://localhost:${config.port}/api/v1/ws`);
+        console.log(`   CDP: ws://localhost:${config.port}/browser-cdp`);
         console.log(`\n   Press Ctrl+C to stop\n`);
     });
 
@@ -110,6 +119,7 @@ async function main() {
         console.log('\n⏳ Shutting down...');
         httpServer.close();
         wsManager.close();
+        browserCDPAdapter.close();
         await store.close();
         console.log('✓ Goodbye!\n');
         process.exit(0);

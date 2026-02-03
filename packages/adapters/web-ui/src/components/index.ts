@@ -164,3 +164,6 @@ export { YearHeatmap } from './YearHeatmap';
 export { TimezoneSlider } from './TimezoneSlider';
 export { CountdownWidget } from './CountdownWidget';
 export { RecurringEventEditor } from './RecurringEventEditor';
+
+// Lease Approval
+export { LeaseApproval } from './LeaseApproval';
