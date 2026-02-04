@@ -2,6 +2,7 @@
     "name": "@agentping/core",
     "version": "0.1.0",
     "description": "Core domain logic for AgentPing",
+    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "exports": {

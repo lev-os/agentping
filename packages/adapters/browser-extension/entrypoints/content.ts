@@ -23,7 +23,7 @@ export default defineContentScript({
     // Load config from storage (synced from daemon via background)
     const stored = await chrome.storage.local.get(['notificationConfig', 'themeConfig']);
 
-    const notificationStyle: NotificationStyle = stored.notificationConfig?.style || 'modal';
+    const notificationStyle: NotificationStyle = stored.notificationConfig?.style || 'drawer';
     const notificationConfig = {
       position: stored.notificationConfig?.position || 'right',
       maxStack: stored.notificationConfig?.maxStack || 5,

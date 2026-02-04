@@ -226,6 +226,24 @@ input[type="checkbox"] {
   font-variant-numeric: tabular-nums;
 }
 
+/* Smaller keyboard shortcut badge for inline use */
+.kbd-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  color: var(--text-muted);
+  min-width: 16px;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
 /* Badges */
 .badge {
   display: inline-flex;

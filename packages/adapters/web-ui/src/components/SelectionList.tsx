@@ -19,6 +19,15 @@ interface SelectionListProps {
 }
 
 export function SelectionList({ options, selectedOptions, onToggle, allowMultiple }: SelectionListProps) {
+    // Warn in dev mode about options with empty labels
+    if (process.env.NODE_ENV === 'development') {
+        options.forEach(option => {
+            if (!option.label) {
+                console.warn('[SelectionList] Option missing label:', option);
+            }
+        });
+    }
+
     return (
         <div className="selection-list">
             {options.map((option) => (
@@ -43,7 +52,9 @@ export function SelectionList({ options, selectedOptions, onToggle, allowMultipl
                         />
                     )}
                     <div className="selection-content">
-                        <div className="selection-label">{option.label}</div>
+                        <div className="selection-label">
+                            {option.label || <span className="text-muted">(Unnamed option)</span>}
+                        </div>
                         {option.description && (
                             <div className="selection-description">{option.description}</div>
                         )}

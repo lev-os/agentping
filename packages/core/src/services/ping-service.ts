@@ -6,12 +6,13 @@
  */
 
 import { nanoid } from 'nanoid';
-import type {
-    Ping,
-    CreatePingRequest,
-    HumanResponse,
-    ParsedInteraction,
-    PingStatus,
+import {
+    CreatePingRequestSchema,
+    type Ping,
+    type CreatePingRequest,
+    type HumanResponse,
+    type ParsedInteraction,
+    type PingStatus,
 } from '../domain/ping.js';
 import type { IPingStore } from '../ports/store.js';
 import type { INotificationChannel } from '../ports/channel.js';
@@ -74,8 +75,11 @@ export class PingService {
      * Submit a new ping
      */
     async submitPing(request: CreatePingRequest): Promise<Ping> {
+        // 0. Validate the request (throws ZodError if invalid)
+        const validatedRequest = CreatePingRequestSchema.parse(request);
+
         // 1. Create the ping entity
-        const ping = this.createPingEntity(request);
+        const ping = this.createPingEntity(validatedRequest);
 
         // 2. Run through parsers to get interaction hints
         const parser = this.parsers.find(p => p.canParse(ping));

@@ -61,7 +61,7 @@ export class BrowserCDPAdapter {
     this.leaseManager = config.leaseManager;
     this.extensionConfig = config.extensionConfig || {
       notification: {
-        style: 'modal',
+        style: 'drawer',
         position: 'right',
         maxStack: 5,
         soundEnabled: true,

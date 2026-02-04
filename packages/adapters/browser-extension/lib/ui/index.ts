@@ -90,7 +90,7 @@ export class NotificationManager {
 
   constructor(config?: Partial<NotificationManagerConfig>) {
     this.config = {
-      style: config?.style || 'modal',
+      style: config?.style || 'drawer',
       notification: { ...DEFAULT_NOTIFICATION_CONFIG, ...config?.notification },
     };
   }

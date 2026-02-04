@@ -38,11 +38,22 @@ interface QuickActionBarProps {
 }
 
 export function QuickActionBar({ actions }: QuickActionBarProps) {
-    if (actions.length === 0) return null;
+    // Filter out actions with empty/missing labels
+    const validActions = actions.filter(action => {
+        if (!action.label) {
+            if (process.env.NODE_ENV === 'development') {
+                console.warn('[QuickActionBar] Action missing label:', action);
+            }
+            return false;
+        }
+        return true;
+    });
+
+    if (validActions.length === 0) return null;
 
     return (
         <div className="quick-action-bar">
-            {actions.map((action) => (
+            {validActions.map((action) => (
                 <button
                     key={action.id}
                     className={`btn-${action.style} btn-sm`}
