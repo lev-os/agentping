@@ -50,6 +50,9 @@ importers:
       '@agentping/core':
         specifier: workspace:*
         version: link:../../core
+      '@agentping/daemon':
+        specifier: workspace:*
+        version: link:../../daemon
       commander:
         specifier: ^12.0.0
         version: 12.1.0
@@ -272,6 +275,12 @@ importers:
       ws:
         specifier: ^8.16.0
         version: 8.19.0
+      yaml:
+        specifier: ^2.3.0
+        version: 2.8.2
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
     devDependencies:
       '@types/node':
         specifier: ^20.10.0
@@ -408,7 +417,7 @@ importers:
         version: link:../adapters/storage-sqlite
       '@anthropic-ai/claude-agent-sdk':
         specifier: ^0.2.15
-        version: 0.2.15(zod@4.3.5)
+        version: 0.2.15(zod@4.3.6)
       '@hono/node-server':
         specifier: ^1.4.1
         version: 1.19.9(hono@4.11.4)
@@ -417,7 +426,7 @@ importers:
         version: link:../dashboard-manager-server
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.0
-        version: 1.25.2(hono@4.11.4)(zod@4.3.5)
+        version: 1.25.2(hono@4.11.4)(zod@4.3.6)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -572,13 +581,13 @@ packages:
       is-fullwidth-code-point: 4.0.0
     dev: false
 
-  /@anthropic-ai/claude-agent-sdk@0.2.15(zod@4.3.5):
+  /@anthropic-ai/claude-agent-sdk@0.2.15(zod@4.3.6):
     resolution: {integrity: sha512-KN3jrHR5tIcAfLbplK5xHqNyUS3XnG8DMnImGeVEv64Z8NxfxIWtJTxtuBRWjyYzo36PEhK4r2SkX97A2iG+ng==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^4.0.0
     dependencies:
-      zod: 4.3.5
+      zod: 4.3.6
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.5
       '@img/sharp-darwin-x64': 0.33.5
@@ -1752,6 +1761,37 @@ packages:
       raw-body: 3.0.2
       zod: 4.3.5
       zod-to-json-schema: 3.25.1(zod@4.3.5)
+    transitivePeerDependencies:
+      - hono
+      - supports-color
+    dev: false
+
+  /@modelcontextprotocol/sdk@1.25.2(hono@4.11.4)(zod@4.3.6):
+    resolution: {integrity: sha512-LZFeo4F9M5qOhC/Uc1aQSrBHxMrvxett+9KLHt7OhcExtoiRN9DKgbZffMP/nxjutWDQpfMDfP3nkHI4X9ijww==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@cfworker/json-schema': ^4.1.1
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      '@cfworker/json-schema':
+        optional: true
+    dependencies:
+      '@hono/node-server': 1.19.9(hono@4.11.4)
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+      content-type: 1.0.5
+      cors: 2.8.5
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.0.6
+      express: 5.2.1
+      express-rate-limit: 7.5.1(express@5.2.1)
+      jose: 6.1.3
+      json-schema-typed: 8.0.2
+      pkce-challenge: 5.0.1
+      raw-body: 3.0.2
+      zod: 4.3.6
+      zod-to-json-schema: 3.25.1(zod@4.3.6)
     transitivePeerDependencies:
       - hono
       - supports-color
@@ -8437,7 +8477,7 @@ packages:
       formdata-node: 6.0.3
       listr2: 8.3.3
       ofetch: 1.5.1
-      zod: 4.3.5
+      zod: 4.3.6
     dev: true
 
   /pump@3.0.3:
@@ -10801,12 +10841,24 @@ packages:
       zod: 4.3.5
     dev: false
 
+  /zod-to-json-schema@3.25.1(zod@4.3.6):
+    resolution: {integrity: sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==}
+    peerDependencies:
+      zod: ^3.25 || ^4
+    dependencies:
+      zod: 4.3.6
+    dev: false
+
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
     dev: false
 
   /zod@4.3.5:
     resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
+    dev: false
+
+  /zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}

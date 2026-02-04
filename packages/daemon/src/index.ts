@@ -28,7 +28,7 @@ async function main() {
 
     // 1. Load configuration
     const config = await loadConfig();
-    console.log(`📁 Config loaded from: ${config.configPath || 'defaults'}`);
+    console.log(`📁 Config loaded`);
     console.log(`💾 Database: ${config.database.path}`);
 
     // 2. Initialize storage
@@ -66,7 +66,22 @@ async function main() {
 
     // 6. Create lease manager and browser CDP adapter (before HTTP API)
     const leaseManager = new LeaseManager({ eventBus });
-    const browserCDPAdapter = createBrowserCDPAdapter({ eventBus, leaseManager });
+    const browserCDPAdapter = createBrowserCDPAdapter({
+        eventBus,
+        leaseManager,
+        extensionConfig: {
+            notification: {
+                style: (config as any).notification?.style || 'modal',
+                position: (config as any).notification?.position || 'right',
+                maxStack: (config as any).notification?.maxStack || 5,
+                soundEnabled: (config as any).notification?.soundEnabled ?? true,
+                soundVolume: (config as any).notification?.soundVolume || 0.15,
+            },
+            theme: {
+                mode: (config as any).theme?.mode || 'system',
+            },
+        },
+    });
 
     // 7. Create HTTP API with browserCDPAdapter
     const httpApp = createHttpApi({
@@ -115,6 +130,8 @@ async function main() {
                 ping.agentName || ping.agentId,
                 ping.payload.scopes || [ping.payload.scope || 'browser'],
                 ping.payload.tabId,
+                ping.payload.ttl || (config as any).lease?.defaultTtlMinutes || '5m',
+                ping.payload.reason,
             ).catch((err: Error) => console.error('[Daemon] Failed to route lease to extension:', err));
             console.log(`[Daemon] Routed lease_request to extension for ${ping.agentName}`);
         }

@@ -14,9 +14,27 @@ import { LeaseManager, type Lease } from './lease-manager.js';
 // Types
 // ============================================================================
 
+export interface NotificationConfig {
+  style: 'modal' | 'drawer' | 'toast';
+  position: 'left' | 'right' | 'center';
+  maxStack: number;
+  soundEnabled: boolean;
+  soundVolume: number;
+}
+
+export interface ThemeConfig {
+  mode: 'light' | 'dark' | 'system';
+}
+
+export interface ExtensionConfig {
+  notification?: NotificationConfig;
+  theme?: ThemeConfig;
+}
+
 export interface BrowserCDPAdapterConfig {
   eventBus: IEventBus;
   leaseManager: LeaseManager;
+  extensionConfig?: ExtensionConfig;
 }
 
 interface PendingRequest {
@@ -36,10 +54,45 @@ export class BrowserCDPAdapter {
   private pending = new Map<string, PendingRequest>();
   private eventBus: IEventBus;
   private leaseManager: LeaseManager;
+  private extensionConfig: ExtensionConfig;
 
   constructor(config: BrowserCDPAdapterConfig) {
     this.eventBus = config.eventBus;
     this.leaseManager = config.leaseManager;
+    this.extensionConfig = config.extensionConfig || {
+      notification: {
+        style: 'modal',
+        position: 'right',
+        maxStack: 5,
+        soundEnabled: true,
+        soundVolume: 0.15,
+      },
+      theme: {
+        mode: 'system',
+      },
+    };
+  }
+
+  /**
+   * Update the extension configuration and push to connected extension
+   */
+  updateConfig(config: Partial<ExtensionConfig>): void {
+    if (config.notification) {
+      this.extensionConfig.notification = { ...this.extensionConfig.notification, ...config.notification };
+    }
+    if (config.theme) {
+      this.extensionConfig.theme = { ...this.extensionConfig.theme, ...config.theme };
+    }
+
+    // Push update to extension
+    this.sendConfigToExtension();
+  }
+
+  private sendConfigToExtension(): void {
+    this.sendToExtension({
+      type: 'config:update',
+      config: this.extensionConfig,
+    });
   }
 
   /**
@@ -99,6 +152,16 @@ export class BrowserCDPAdapter {
       case 'extension:hello': {
         this.extensionCapabilities = (msg.capabilities as string[]) || [];
         console.log('[BrowserCDP] Extension capabilities:', this.extensionCapabilities);
+        // Send initial config to extension
+        if (this.extensionCapabilities.includes('notification-ui')) {
+          this.sendConfigToExtension();
+        }
+        break;
+      }
+
+      case 'config:request': {
+        // Extension is requesting current config
+        this.sendConfigToExtension();
         break;
       }
 
@@ -166,7 +229,13 @@ export class BrowserCDPAdapter {
    * Request a lease from the extension user.
    * Returns the requestId for subsequent wait/poll operations.
    */
-  async requestLease(agentName: string, scopes: string[], tabId?: number): Promise<string> {
+  async requestLease(
+    agentName: string,
+    scopes: string[],
+    tabId?: number,
+    ttl?: string | number,
+    reason?: string
+  ): Promise<string> {
     if (!this.extension) throw new Error('No browser extension connected');
 
     const requestId = this.leaseManager.createPendingRequest(scopes, tabId, agentName);
@@ -176,6 +245,8 @@ export class BrowserCDPAdapter {
       agentName,
       scopes,
       tabId,
+      ttl: ttl || '5m',
+      reason: reason || 'Agent requesting browser access',
     });
 
     return requestId;

@@ -86,9 +86,11 @@ export default defineBackground(() => {
       console.log('[AgentPing] Connected to daemon');
       ws!.send(JSON.stringify({
         type: 'extension:hello',
-        capabilities: ['cdp', 'tabs'],
-        version: '0.1.0',
+        capabilities: ['cdp', 'tabs', 'notification-ui'],
+        version: '0.2.0',
       }));
+      // Request current config from daemon
+      ws!.send(JSON.stringify({ type: 'config:request' }));
     };
 
     ws.onmessage = async (event) => {
@@ -128,6 +130,29 @@ export default defineBackground(() => {
   // Message Handler
   async function handleMessage(msg: Record<string, unknown>) {
     switch (msg.type) {
+      case 'config:update': {
+        // Daemon sends config updates (notification style, theme, etc.)
+        const config = msg.config as Record<string, unknown>;
+        if (config) {
+          // Store notification config
+          if (config.notification) {
+            await chrome.storage.local.set({ notificationConfig: config.notification });
+          }
+          // Store theme config
+          if (config.theme) {
+            await chrome.storage.local.set({ agentping_theme_config: config.theme });
+          }
+          // Broadcast config update to all tabs
+          const tabs = await chrome.tabs.query({});
+          for (const tab of tabs) {
+            if (tab.id && !tab.url?.startsWith('chrome://')) {
+              chrome.tabs.sendMessage(tab.id, { type: 'updateConfig', config }).catch(() => {});
+            }
+          }
+        }
+        break;
+      }
+
       case 'lease:granted': {
         const grantedLease = msg.lease as LeaseInfo;
         // Ensure expiresAt is set if not already present
