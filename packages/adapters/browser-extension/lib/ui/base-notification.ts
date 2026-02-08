@@ -133,8 +133,9 @@ export abstract class BaseNotification implements NotificationUI {
     // Register common keyboard shortcuts
     this.registerKeyboardShortcuts();
 
-    // Initialize the UI (implemented by subclasses)
-    this.initializeUI();
+    // NOTE: initializeUI() is NOT called here because subclass fields
+    // aren't initialized yet. Subclasses must call this.initializeUI()
+    // at the end of their own constructor.
   }
 
   /**

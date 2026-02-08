@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      margin: 0;
+    }
+    h1 { font-size: 16px; margin: 0 0 12px; color: #00e5ff; }
+    .status { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.green { background: #00ff9d; box-shadow: 0 0 8px rgba(0,255,157,0.5); }
+    .dot.gray { background: #555; }
+    .dot.amber { background: #f59e0b; }
+    .section { margin-bottom: 16px; }
+    .section-title { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+    .card { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+    .agent { font-weight: 600; color: #00e5ff; }
+    .scopes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .scope { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3); padding: 2px 8px; border-radius: 4px; font-size: 11px; color: #00e5ff; }
+    .buttons { display: flex; gap: 8px; margin-top: 12px; }
+    .btn { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
+    .btn-grant { background: rgba(0,255,157,0.2); color: #00ff9d; border: 1px solid rgba(0,255,157,0.3); }
+    .btn-deny { background: rgba(255,42,109,0.2); color: #ff2a6d; border: 1px solid rgba(255,42,109,0.3); }
+    .empty { color: #666; font-size: 13px; text-align: center; padding: 20px; }
+    a { color: #00e5ff; text-decoration: none; }
+  </style>
+  <script type="module" crossorigin src="/chunks/popup-DPbbfBKe.js"></script>
+</head>
+<body>
+  <h1>⚡ AgentPing</h1>
+  <div class="status">
+    <div class="dot" id="statusDot"></div>
+    <span id="statusText">Checking...</span>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Pending Requests</div>
+    <div id="requests"></div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Active Leases</div>
+    <div id="leases"></div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 16px;">
+    <a href="http://localhost:7891" target="_blank">Open Dashboard</a>
+  </div>
+
+  <script src="./main.js"></script>
+</body>
+</html>

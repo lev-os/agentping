@@ -38,6 +38,7 @@ export class ToastNotificationUI extends BaseNotification {
     super('agentping-toast-container', themeManager, config);
     // Toast container doesn't block clicks
     this.host.style.pointerEvents = 'none';
+    this.initializeUI();
   }
 
   protected initializeUI(): void {

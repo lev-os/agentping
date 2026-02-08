@@ -60,6 +60,7 @@ export class DrawerNotificationUI extends BaseNotification {
   constructor(themeManager: ThemeManager, config: NotificationConfig) {
     super('agentping-drawer', themeManager, config);
     this.host.style.zIndex = '2147483646'; // Slightly lower than modal
+    this.initializeUI();
   }
 
   protected initializeUI(): void {

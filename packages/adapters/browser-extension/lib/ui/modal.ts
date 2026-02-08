@@ -32,6 +32,7 @@ export class ModalNotificationUI extends BaseNotification {
 
   constructor(themeManager: ThemeManager, config: NotificationConfig) {
     super('agentping-modal-overlay', themeManager, config);
+    this.initializeUI();
   }
 
   protected initializeUI(): void {
