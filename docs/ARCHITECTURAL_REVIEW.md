@@ -382,6 +382,71 @@ Despite the issues above, the codebase has strong architectural foundations:
 
 ---
 
+## 8. Test Coverage Analysis
+
+### Test Infrastructure
+
+| Framework | Scope | Config Location |
+|-----------|-------|-----------------|
+| Vitest | Unit/Integration | Per-package `vitest.config.ts` |
+| Playwright | E2E (Electron + Storybook) | Root + `packages/studio/playwright.config.ts` |
+| Node test runner | Dashboard-runner only | package.json scripts |
+
+**No CI/CD pipeline exists.** No `.github/workflows/` directory. Tests are not automated.
+
+### Coverage by Package
+
+| Package | Test Type | Files | Cases | Quality |
+|---------|-----------|-------|-------|---------|
+| `core` | Unit (Vitest) | 2 | ~21 | Good — tests parsers + PingService with mocks |
+| `http-api` | Integration (Vitest) | 1 | ~19 | Good — real API contract tests (requires daemon) |
+| `studio` | E2E (Playwright) | 13 | ~170 | Excellent — Storybook component tests with ARIA |
+| `browser-extension` | E2E (Playwright) | 1 | ~11 | Basic — tests extension loading, not features |
+
+**Total: 16 test files, ~220 test cases, ~4,000 lines of test code.**
+
+### Packages with ZERO Tests
+
+| Package | Risk Level | Why It Matters |
+|---------|------------|----------------|
+| `daemon` | **Critical** | Core orchestrator — failures affect all clients |
+| `mcp` (both) | **Critical** | Primary agent integration point |
+| `cli` | **High** | User-facing tool, 865 lines of untested code |
+| `storage-sqlite` | **High** | Data persistence — corruption = data loss |
+| `web-ui` | **Medium** | Human response interface |
+| `slack` | **Medium** | External integration |
+| `webhook` | **Medium** | External integration with HMAC signing |
+| `canvas` | **Low** | UI component library |
+| `ext-apps` | **Low** | Supplementary UI rendering |
+| `dashboard-runner` | **Low** | Auxiliary process management |
+| `dashboard-manager-server` | **Low** | Auxiliary HTTP server |
+| `dashboard-manager-ui` | **Low** | Auxiliary UI |
+
+### Critical Testing Gaps
+
+1. **No integration tests across packages** — No test verifies the full flow: agent submits ping via MCP → daemon stores → web-ui displays → human responds → agent receives response.
+
+2. **No WebSocket tests** — Real-time event broadcasting is untested.
+
+3. **No storage adapter tests** — SQLite migrations, query correctness, and data integrity are untested.
+
+4. **No error scenario coverage** — Happy paths only. No tests for: channel notification failure, store corruption, malformed payloads, timeout edge cases, concurrent access.
+
+5. **No expiration tests** — The `expiresAt` field exists but no test verifies expiration behavior (because the behavior doesn't exist either — see Section 4.5).
+
+6. **No MCP tool tests** — The 12 MCP tools that agents use daily have zero test coverage.
+
+7. **No daemon lifecycle tests** — Startup, graceful shutdown, configuration loading, and port binding are untested.
+
+### Test Quality Notes
+
+- **Studio E2E tests are the highlight** — Thorough ARIA accessibility testing, keyboard navigation, responsive design. These are production-grade.
+- **Core unit tests use proper mocking** — `vi.fn()` mocks for all ports. Good isolation.
+- **HTTP API tests require running daemon** — Uses `describe.skipIf` pattern, meaning they silently skip in most environments.
+- **Dashboard packages have test scripts in package.json but zero test files** — Placeholder config.
+
+---
+
 ## Summary Scorecard
 
 | Area | Score | Notes |
@@ -392,6 +457,7 @@ Despite the issues above, the codebase has strong architectural foundations:
 | README Accuracy | 4/10 | Wrong ports, missing packages, phantom features documented |
 | Error Handling | 4/10 | Inconsistent strategies, silent failures, no typed errors |
 | Type Safety | 7/10 | Good Zod usage, but `as any` casts undermine it in places |
+| Test Coverage | 3/10 | 11 of 15 packages have zero tests; no integration or e2e flows |
 | Testability | 7/10 | Hexagonal architecture enables testing, but coverage is sparse |
 | Cross-Package Consistency | 5/10 | Factory pattern is consistent, but logging/errors/config are not |
 | Code Organization | 6/10 | Good package boundaries, but god files within packages |

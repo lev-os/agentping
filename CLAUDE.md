@@ -17,7 +17,20 @@ pnpm dev
 ```
 
 ## Project Structure
+- `packages/core` - Core AgentPing SDK (domain logic, ports, services)
 - `packages/studio` - Electron-based desktop GUI
-- `packages/core` - Core AgentPing primitives
-- `packages/daemon` - Background MCP server
-- `packages/adapters/*` - Various adapters (CLI, Web UI, Slack, etc.)
+- `packages/daemon` - Background HTTP server & orchestrator
+- `packages/api-client` - Typed HTTP client for daemon API
+- `packages/canvas` - Shared React component library
+- `packages/dashboard-runner` - Process management for external apps
+- `packages/dashboard-manager-server` - Dashboard HTTP + WebSocket server
+- `packages/dashboard-manager-ui` - Dashboard React web UI
+- `packages/adapters/http-api` - REST + WebSocket API layer
+- `packages/adapters/mcp` - MCP server for Claude/Cursor
+- `packages/adapters/web-ui` - React web interface
+- `packages/adapters/storage-sqlite` - SQLite persistence
+- `packages/adapters/cli` - Terminal interface
+- `packages/adapters/slack` - Slack notification channel
+- `packages/adapters/webhook` - HTTP webhook delivery
+- `packages/adapters/browser-extension` - Chrome extension (CDP bridge)
+- `packages/adapters/ext-apps` - MCP UI extensions
