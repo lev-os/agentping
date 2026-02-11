@@ -1,96 +1,76 @@
-# Web UI Surface Architecture
+# Web UI Companion
 
-This document defines how AgentPing UI surfaces should be organized during consolidation.
+Companion to `docs/architecture.md`.
 
-## Current State (What Exists Today)
+Use this file for UI-surface boundary decisions only.
+Product definition, end-state goals, and handoff contract live in `docs/architecture.md`.
 
-### Runtime Surfaces
+## Scope
 
-- `packages/adapters/web-ui`: agent-facing web app plus adapter-owned gallery/canvas wiring.
-- `packages/studio`: Electron shell and renderer; also includes Storybook stories and studio-only components.
-- `packages/canvas`: standalone canvas app.
-- `packages/dashboard-manager-ui`: dashboard process control UI.
-- `packages/ui`: imported Sofia-style shared component package with its own Storybook.
+In scope:
 
-### Control Plane
+- UI package boundaries
+- adapter-vs-ui-kit ownership rules
+- surface runtime checklist
 
-- External control plane exists via:
-  - `packages/dashboard-runner`
-  - `packages/dashboard-manager-server`
-  - `packages/dashboard-runner/config/dashboards.yaml`
-- Studio main process still has embedded dashboard-runner startup logic, creating dual orchestration paths.
+Out of scope:
 
-### Why `@agentping/web-ui` Is Driving Gallery Today
+- protocol/domain architecture
+- cross-repo planning history
+- GenUI research synthesis
 
-- Gallery primitives and old Sofia subtree live in `packages/adapters/web-ui/src/components`.
-- That package became both:
-  - protocol adapter shell
-  - UI component host
-- Result: adapter owns UI inventory concerns that should live in shared UI kit.
+## Current UI Surface Map
 
-## Ideal State (Production Target)
+Runner-managed surfaces from `packages/dashboard-runner/config/dashboards.yaml`:
 
-### 1) Single Shared UI Kit
+- `agentping` storybook (`packages/studio`, `:6006`)
+- `sofia` storybook (`packages/ui`, `:6007`)
+- `web-ui` (`packages/adapters/web-ui`, `:5173`)
+- `canvas` (`packages/canvas`, `:5174`)
+- `dashboard-manager-ui` (`packages/dashboard-manager-ui`, `:5175`)
+- `studio` web shell (`packages/studio`, `:5180`)
 
-- `packages/ui` is the only source of reusable components.
-- `packages/adapters/web-ui`, `packages/studio`, and `packages/canvas` consume from `packages/ui`.
-- Adapter package does not own canonical primitives.
+## Ownership Rules
 
-### 2) Single Canvas Package With Modes
+1. `packages/ui` is the canonical shared component library.
+2. `packages/adapters/web-ui` is an adapter shell, not a canonical primitive source.
+3. `packages/canvas` owns canvas runtime and mode orchestration.
+4. `packages/studio` owns desktop shell concerns, not shared primitive canon.
+5. system/operator components can remain local when they are runtime-coupled.
 
-- Canonical canvas engine lives in `packages/canvas`.
-- Modes are explicit and config-driven (`render`, `inspect`, `compose`).
-- Studio and web-ui use canvas APIs, not duplicated renderer forks.
+## Adapter Boundary Rules
 
-### 3) Single Dashboard Control Plane
+Adapters in `packages/adapters/*` should own:
 
-- Dashboard lifecycle is managed only by runner + manager server.
-- Studio acts as API client.
-- No embedded runner bootstrap in Studio steady state.
+- transport/channel integration
+- session/auth/channel-specific UX
+- adapter wiring to core ports
 
-### 4) Fail-Fast Theme Contract
+Adapters should not own:
 
-- Allowed themes: `agentping`, `skynet`, `syslog`.
-- Allowed modes: `light`, `dark`.
-- Invalid theme or mode throws and blocks startup/config load.
-- No hidden fallback theme resolution.
+- long-term reusable component canon
+- duplicate primitive libraries
 
-### 5) Two Storybooks, Distinct Purpose
+## Short Execution Sequence
 
-- Storybook A (`agentping`, `:6006`): Studio shell + composition surfaces.
-- Storybook B (`sofia`, `:6007`): shared UI kit inventory (`packages/ui`).
+1. Consolidate shared components into `packages/ui`.
+2. Update Studio/web-ui/canvas shared imports to `packages/ui`.
+3. Remove adapter-local primitive ownership from `packages/adapters/web-ui`.
+4. Keep only adapter-shell concerns in `web-ui`.
+5. Verify surfaces through dashboard runner.
 
-### 6) Adapter-First Surface Expansion
+Detailed sequence and acceptance checks:
 
-- Browser extension becomes a first-class AgentPing output surface.
-- Mobile adapters (including iOS/SwiftUI) consume the same primitive + action contracts.
-- New surfaces should add adapter packages, not fork core UI logic.
+- `docs/handoff-consolidation.md`
+- `docs/open-questions.md`
 
-## Package Responsibility Matrix
+## Validation Commands
 
-| Package | Owns | Must Not Own |
-|---|---|---|
-| `packages/ui` | reusable primitives, tokens, themes, shared patterns | adapter runtime concerns |
-| `packages/adapters/web-ui` | ping/session/protocol UX flows | canonical primitive source trees |
-| `packages/canvas` | canvas runtime and mode system | app-specific duplicated render contracts |
-| `packages/studio` | desktop shell and orchestration UX | process orchestration internals in steady state |
-| `packages/dashboard-runner` | process lifecycle and config-driven launches | UI components |
-| `packages/dashboard-manager-ui` | dashboard operator UI | component canon |
+```bash
+pnpm dashboards:kill
+pnpm dashboards:start
+pnpm dashboards:status
+curl -s http://127.0.0.1:3030/api/dashboards | jq
+```
 
-## Required Consolidation Steps
-
-1. Move or re-export Sofia components into `packages/ui` as canonical source.
-2. Replace adapter-owned gallery source usage with `packages/ui` exports.
-3. Remove duplicated canvas render/hook implementations outside `packages/canvas`.
-4. Remove Studio embedded dashboard boot path after runner/server parity checks.
-5. Keep dashboard inventory fully config-driven from `dashboards.yaml`.
-6. Define and publish adapter starter contracts for extension + mobile surfaces.
-
-## Validation Checklist
-
-- `pnpm dashboards:kill`
-- `pnpm dashboards:start`
-- `pnpm dashboards:status`
-- `curl -s http://127.0.0.1:3030/api/dashboards | jq`
-- Verify `agentping` (`:6006`) and `sofia` (`:6007`) Storybooks are online.
-- Verify unknown theme or mode errors immediately instead of fallback rendering.
+If this file conflicts with `docs/architecture.md`, follow `docs/architecture.md`.

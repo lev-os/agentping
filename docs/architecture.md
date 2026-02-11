@@ -59,6 +59,11 @@ Definition of done for this handoff:
 - all shared imports in Studio/web-ui/canvas resolve to `packages/ui` for canonical primitives
 - architecture docs and runtime behavior agree on current state and target state without contradiction
 
+Handoff references:
+
+- `docs/handoff-consolidation.md` (execution order and source->target mapping)
+- `docs/open-questions.md` (decision points to resolve with design/implementation partner)
+
 ### Ordered Execution Plan (Do In This Order)
 
 1. Baseline and runtime sanity.
