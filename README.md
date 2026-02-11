@@ -89,13 +89,13 @@ pnpm --filter @agentping/daemon dev
 
 ## Docs Map
 
-Single handoff file (use this first):
-
-- `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/architecture.md`
-
-- Product + architecture:
+- Primary handoff narrative:
   - `docs/architecture.md`
+- UI companion:
   - `docs/web-ui-architecture.md`
+- Consolidation handoff:
+  - `docs/handoff-consolidation.md`
+  - `docs/open-questions.md`
 - Runtime + commands:
   - `docs/getting-started.md`
 - Component inventory:
@@ -110,4 +110,4 @@ Thesys/C1 reverse-engineering artifacts are promoted into `docs/genui/` as resea
 Important:
 
 - `docs/genui/` contains candidate patterns and design direction.
-- Runtime truth and cutover rules are defined in `docs/architecture.md` and `docs/web-ui-architecture.md`.
+- Runtime truth and cutover rules are defined in `docs/architecture.md` (primary), with UI-boundary detail in `docs/web-ui-architecture.md` (companion).
