@@ -9,7 +9,8 @@ import {
     questionParser,
     notificationParser,
 } from '../parsers';
-import type { Ping, PingPayload, ParsedInteraction } from '../domain/ping';
+import { CanvasInteractionPayloadSchema } from '../domain/ping';
+import type { Ping, PingPayload } from '../domain/ping';
 
 // ============================================================================
 // Helper
@@ -165,6 +166,67 @@ describe('Parsers', () => {
             const result = stepApprovalParser.parse(ping);
             const steps = (result.uiHints as Record<string, unknown>).steps as Array<{ defaultChecked: boolean }>;
             expect(steps[0].defaultChecked).toBe(false);
+        });
+    });
+
+    describe('CanvasInteractionPayloadSchema', () => {
+        it('accepts canonical Sofia render payload', () => {
+            const result = CanvasInteractionPayloadSchema.safeParse({
+                type: 'canvas_interaction',
+                action: 'render',
+                componentType: 'sofia-widget',
+                componentName: 'BD Dashboard',
+                props: {
+                    provider: 'sofia',
+                    widgetId: 'bd-dashboard',
+                    variant: 'kanban',
+                    data: {
+                        columns: ['open', 'in_progress'],
+                        cards: [],
+                    },
+                },
+            });
+
+            expect(result.success).toBe(true);
+        });
+
+        it('rejects non-Sofia provider', () => {
+            const result = CanvasInteractionPayloadSchema.safeParse({
+                type: 'canvas_interaction',
+                action: 'render',
+                componentType: 'sofia-widget',
+                props: {
+                    provider: 'pencil',
+                    widgetId: 'bd-dashboard',
+                },
+            });
+
+            expect(result.success).toBe(false);
+        });
+
+        it('rejects legacy render payload shape', () => {
+            const result = CanvasInteractionPayloadSchema.safeParse({
+                type: 'canvas_interaction',
+                action: 'render',
+                componentType: 'kanban',
+                props: {
+                    columns: ['open'],
+                    cards: [],
+                },
+            });
+
+            expect(result.success).toBe(false);
+        });
+
+        it('accepts selection payloads', () => {
+            const result = CanvasInteractionPayloadSchema.safeParse({
+                type: 'canvas_interaction',
+                action: 'selection',
+                instruction: 'Select one object',
+                selectionType: 'object',
+            });
+
+            expect(result.success).toBe(true);
         });
     });
 });

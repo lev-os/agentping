@@ -186,6 +186,47 @@ Now, you can simply tell Claude:
 
 ---
 
+## 🧩 Canonical Canvas Payload (Sofia-Only)
+
+`canvas_interaction` render pings now use one canonical payload shape:
+
+- `payload.type` must be `canvas_interaction`
+- `payload.action` must be `render`
+- `payload.componentType` must be `sofia-widget`
+- `payload.props.provider` must be `sofia`
+- `payload.props.widgetId` is required
+- `payload.props.variant` and `payload.props.data` are optional
+
+Selection pings stay supported with `payload.action = selection`.
+
+### Example (`sofia-widget`)
+
+```json
+{
+  "agentId": "lev-canvas",
+  "agentName": "Lev Canvas",
+  "sessionId": "canvas-1700000000",
+  "payload": {
+    "type": "canvas_interaction",
+    "action": "render",
+    "componentType": "sofia-widget",
+    "componentName": "BD Dashboard",
+    "instruction": "Current BD epics and tasks",
+    "props": {
+      "provider": "sofia",
+      "widgetId": "bd-dashboard",
+      "variant": "kanban",
+      "data": {
+        "columns": ["open", "in_progress", "blocked", "closed"],
+        "cards": []
+      }
+    }
+  }
+}
+```
+
+---
+
 ## 🚀 Quick Start
 
 ### 1. Start the System

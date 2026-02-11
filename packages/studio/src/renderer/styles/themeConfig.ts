@@ -1,120 +1,153 @@
 /**
- * AgentPing Studio - Theme Configuration System
+ * AgentPing Studio Theme Configuration
  *
- * Provides programmatic control over theme switching and customization.
- * Supports multiple themes: default (original), kingly (cyber-terminal)
+ * Fail-fast contract:
+ * - Theme MUST be one of: agentping | skynet | syslog
+ * - Mode MUST be one of: dark | light
  */
 
-export type Theme = 'default' | 'kingly';
+export type Theme = 'agentping' | 'skynet' | 'syslog';
+export type ThemeMode = 'dark' | 'light';
 
 export interface ThemeConfig {
   name: Theme;
   displayName: string;
   description: string;
-  colors: {
-    primary: string;
-    background: string;
-    surface: string;
-  };
 }
 
-/**
- * Available theme configurations
- */
+export interface ModeConfig {
+  name: ThemeMode;
+  displayName: string;
+}
+
+const STORAGE_THEME_KEY = 'agentping-theme';
+const STORAGE_MODE_KEY = 'agentping-theme-mode';
+
 export const THEMES: Record<Theme, ThemeConfig> = {
-  default: {
-    name: 'default',
-    displayName: 'AgentPing Default',
-    description: 'Original cyber-premium design with teal accents',
-    colors: {
-      primary: '#00ffaa',
-      background: '#0a0a0f',
-      surface: '#12121a',
-    },
+  agentping: {
+    name: 'agentping',
+    displayName: 'AgentPing',
+    description: 'Core AgentPing visual language',
   },
-  kingly: {
-    name: 'kingly',
-    displayName: 'Kingly',
-    description: 'Cyber-terminal aesthetic with neon green and void black',
-    colors: {
-      primary: '#22c55e',
-      background: '#000000',
-      surface: '#0a0a0a',
-    },
+  skynet: {
+    name: 'skynet',
+    displayName: 'Skynet',
+    description: 'Sofia-import tactical/cyber theme',
+  },
+  syslog: {
+    name: 'syslog',
+    displayName: 'Syslog',
+    description: 'System utility theme for diagnostics and operations',
   },
 };
 
-/**
- * Get the current theme from the document body
- */
-export function getCurrentTheme(): Theme {
-  const theme = document.body.getAttribute('data-theme');
-  return (theme as Theme) || 'default';
+export const MODES: Record<ThemeMode, ModeConfig> = {
+  dark: { name: 'dark', displayName: 'Dark' },
+  light: { name: 'light', displayName: 'Light' },
+};
+
+function assertValidTheme(theme: string | null): asserts theme is Theme {
+  if (!theme || !(theme in THEMES)) {
+    throw new Error(
+      `Invalid theme "${theme ?? 'null'}". Valid themes: ${Object.keys(THEMES).join(', ')}`,
+    );
+  }
 }
 
-/**
- * Set the active theme
- * @param theme - Theme name to apply
- */
-export function setTheme(theme: Theme): void {
-  if (theme === 'default') {
-    // Remove the data-theme attribute to restore default
-    document.body.removeAttribute('data-theme');
-  } else {
-    document.body.setAttribute('data-theme', theme);
+function assertValidMode(mode: string | null): asserts mode is ThemeMode {
+  if (!mode || !(mode in MODES)) {
+    throw new Error(
+      `Invalid theme mode "${mode ?? 'null'}". Valid modes: ${Object.keys(MODES).join(', ')}`,
+    );
   }
+}
 
-  // Store preference in localStorage
+function applyThemeAttributes(theme: Theme, mode: ThemeMode): void {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.setAttribute('data-mode', mode);
+  document.body.setAttribute('data-theme', theme);
+  document.body.setAttribute('data-mode', mode);
+}
+
+export function getCurrentTheme(): Theme {
+  const theme = document.body.getAttribute('data-theme');
+  assertValidTheme(theme);
+  return theme;
+}
+
+export function getCurrentMode(): ThemeMode {
+  const mode = document.body.getAttribute('data-mode');
+  assertValidMode(mode);
+  return mode;
+}
+
+export function setTheme(theme: Theme): void {
+  const currentMode = document.body.getAttribute('data-mode');
+  assertValidMode(currentMode);
+  const mode: ThemeMode = currentMode;
+  applyThemeAttributes(theme, mode);
+
   try {
-    localStorage.setItem('agentping-theme', theme);
+    localStorage.setItem(STORAGE_THEME_KEY, theme);
   } catch (error) {
     console.warn('Failed to save theme preference:', error);
   }
 }
 
-/**
- * Load saved theme preference from localStorage
- */
+export function setMode(mode: ThemeMode): void {
+  const currentTheme = document.body.getAttribute('data-theme');
+  assertValidTheme(currentTheme);
+  const theme: Theme = currentTheme;
+  applyThemeAttributes(theme, mode);
+
+  try {
+    localStorage.setItem(STORAGE_MODE_KEY, mode);
+  } catch (error) {
+    console.warn('Failed to save mode preference:', error);
+  }
+}
+
 export function loadSavedTheme(): Theme {
   try {
-    const saved = localStorage.getItem('agentping-theme');
-    if (saved && saved in THEMES) {
-      return saved as Theme;
-    }
+    const saved = localStorage.getItem(STORAGE_THEME_KEY);
+    if (!saved) return 'skynet';
+    assertValidTheme(saved);
+    return saved;
   } catch (error) {
-    console.warn('Failed to load theme preference:', error);
+    if (error instanceof Error) throw error;
+    throw new Error(`Unable to load theme preference: ${String(error)}`);
   }
-  return 'kingly'; // Default to Kingly theme
 }
 
-/**
- * Initialize theme system on app startup
- */
+export function loadSavedMode(): ThemeMode {
+  try {
+    const saved = localStorage.getItem(STORAGE_MODE_KEY);
+    if (!saved) return 'dark';
+    assertValidMode(saved);
+    return saved;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error(`Unable to load mode preference: ${String(error)}`);
+  }
+}
+
 export function initializeTheme(): void {
   const theme = loadSavedTheme();
-  setTheme(theme);
+  const mode = loadSavedMode();
+  applyThemeAttributes(theme, mode);
 }
 
-/**
- * Toggle between available themes
- */
-export function toggleTheme(): Theme {
-  const current = getCurrentTheme();
-  const next = current === 'default' ? 'kingly' : 'default';
-  setTheme(next);
+export function toggleThemeMode(): ThemeMode {
+  const current = getCurrentMode();
+  const next: ThemeMode = current === 'dark' ? 'light' : 'dark';
+  setMode(next);
   return next;
 }
 
-/**
- * Get theme configuration
- */
 export function getThemeConfig(theme: Theme): ThemeConfig {
   return THEMES[theme];
 }
 
-/**
- * Get all available themes
- */
 export function getAllThemes(): ThemeConfig[] {
   return Object.values(THEMES);
 }

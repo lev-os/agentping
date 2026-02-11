@@ -5,6 +5,7 @@
  */
 
 import { EventEmitter } from 'events';
+import type { ChildProcess } from 'child_process';
 import type { DashboardProcess, HealthCheckConfig, HealthStatus } from './types.js';
 import type { DashboardLogger } from './logger.js';
 import type { ProcessManager } from './process-manager.js';
@@ -43,9 +44,20 @@ export class HealthMonitor extends EventEmitter {
   /**
    * Check if process is alive
    */
-  private checkProcessHealth(process: any): boolean {
+  private checkProcessHealth(childProcess: ChildProcess): boolean {
+    if (!childProcess.pid) {
+      return false;
+    }
+
+    // Child process already reported completion.
+    if (childProcess.exitCode !== null || childProcess.signalCode !== null) {
+      return false;
+    }
+
     try {
-      return process.pid !== undefined && !process.killed;
+      // Signal 0 checks process liveness without terminating it.
+      process.kill(childProcess.pid, 0);
+      return true;
     } catch {
       return false;
     }

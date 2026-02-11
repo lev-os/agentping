@@ -246,15 +246,16 @@ export class StudioServer {
                 },
                 {
                     name: 'render_canvas_component',
-                    description: 'Render a UI component directly onto the Studio canvas.',
+                    description: 'Render a Sofia widget directly onto the Studio canvas.',
                     inputSchema: {
                         type: 'object',
                         properties: {
-                            type: { type: 'string', enum: ['button', 'card', 'input', 'table', 'chart'] },
+                            widgetId: { type: 'string' },
                             name: { type: 'string' },
-                            props: { type: 'object', additionalProperties: true }
+                            variant: { type: 'string' },
+                            data: { type: 'object', additionalProperties: true }
                         },
-                        required: ['type', 'name']
+                        required: ['widgetId']
                     }
                 },
                 {
@@ -371,11 +372,13 @@ export class StudioServer {
                 case 'render_canvas_component': {
                     if (!this.mainWindow.isDestroyed() && !this.mainWindow.webContents.isDestroyed()) {
                         this.mainWindow.webContents.send('canvas:add_automated', {
-                            type: args.type,
-                            name: args.name,
-                            props: args.props
+                            provider: 'sofia',
+                            widgetId: args.widgetId,
+                            name: args.name || args.widgetId,
+                            variant: args.variant,
+                            data: args.data
                         });
-                        return { content: [{ type: 'text', text: `Rendered ${args.name} on canvas.` }] };
+                        return { content: [{ type: 'text', text: `Rendered Sofia widget ${args.widgetId} on canvas.` }] };
                     }
                     return { content: [{ type: 'text', text: 'Failed to render: Window destroyed.' }] };
                 }
@@ -454,5 +457,4 @@ export class StudioServer {
         });
     }
 }
-
 

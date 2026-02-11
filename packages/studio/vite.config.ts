@@ -9,7 +9,7 @@ export default defineConfig({
             name: 'spa-fallback',
             configureServer(server) {
                 server.middlewares.use((req, res, next) => {
-                    // Route /navigator to index.html for SPA routing
+                    // Route retired navigator path to SPA dashboards route
                     if (req.url === '/navigator' || req.url?.startsWith('/navigator?')) {
                         req.url = '/';
                     }
@@ -30,7 +30,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: path.resolve(__dirname, 'src/renderer/index.html'),
-                navigator: path.resolve(__dirname, 'src/renderer/navigator.html'),
             },
         },
     },

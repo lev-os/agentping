@@ -17,12 +17,27 @@ const preview: Preview = {
     theme: {
       name: 'Theme',
       description: 'Global theme for components',
-      defaultValue: 'dark',
+      defaultValue: 'skynet',
       toolbar: {
         icon: 'circlehollow',
         items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'agentping', title: 'AgentPing', icon: 'mirror' },
+          { value: 'skynet', title: 'Skynet', icon: 'lightning' },
+          { value: 'syslog', title: 'Syslog', icon: 'database' },
+        ],
+        showName: true,
+        dynamicTitle: true,
+      },
+    },
+    mode: {
+      name: 'Mode',
+      description: 'Theme mode',
+      defaultValue: 'dark',
+      toolbar: {
+        icon: 'contrast',
+        items: [
           { value: 'dark', title: 'Dark', icon: 'moon' },
+          { value: 'light', title: 'Light', icon: 'sun' },
         ],
         showName: true,
         dynamicTitle: true,
@@ -31,15 +46,18 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme || 'dark';
+      const theme = context.globals.theme || 'skynet';
+      const mode = context.globals.mode || 'dark';
 
-      // Apply theme to document root
+      // Apply theme contract to document root
       if (typeof document !== 'undefined') {
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-mode', mode);
         document.body.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-mode', mode);
       }
 
-      return <Story />;
+      return Story();
     },
   ],
 };

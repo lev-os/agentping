@@ -1,78 +1,94 @@
 /**
  * ThemeToggle Component
  *
- * Switches between light and dark themes.
- * Persists preference to localStorage and respects system preference.
+ * Fail-fast theme toggle:
+ * - Theme MUST be one of: agentping | skynet | syslog
+ * - Mode MUST be one of: dark | light
  */
 
 import React, { useEffect, useState } from 'react';
 import './ThemeToggle.css';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'agentping' | 'skynet' | 'syslog';
+type ThemeMode = 'light' | 'dark';
 
 export interface ThemeToggleProps {
     defaultTheme?: Theme;
+    defaultMode?: ThemeMode;
     onThemeChange?: (theme: Theme) => void;
+    onModeChange?: (mode: ThemeMode) => void;
     showLabel?: boolean;
 }
 
-const STORAGE_KEY = 'agentping-theme';
+const STORAGE_THEME_KEY = 'agentping-theme';
+const STORAGE_MODE_KEY = 'agentping-theme-mode';
 
-function getSystemTheme(): 'light' | 'dark' {
-    if (typeof window === 'undefined') return 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+const THEMES: Theme[] = ['agentping', 'skynet', 'syslog'];
+const MODES: ThemeMode[] = ['dark', 'light'];
+
+function assertValidTheme(theme: string | null): asserts theme is Theme {
+    if (!theme || !THEMES.includes(theme as Theme)) {
+        throw new Error(`Invalid theme "${theme ?? 'null'}". Valid themes: ${THEMES.join(', ')}`);
+    }
+}
+
+function assertValidMode(mode: string | null): asserts mode is ThemeMode {
+    if (!mode || !MODES.includes(mode as ThemeMode)) {
+        throw new Error(`Invalid mode "${mode ?? 'null'}". Valid modes: ${MODES.join(', ')}`);
+    }
 }
 
 function getInitialTheme(): Theme {
-    if (typeof window === 'undefined') return 'system';
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    return stored || 'system';
+    const stored = localStorage.getItem(STORAGE_THEME_KEY);
+    if (!stored) return 'skynet';
+    assertValidTheme(stored);
+    return stored;
 }
 
-export function ThemeToggle({ defaultTheme, onThemeChange, showLabel = false }: ThemeToggleProps) {
+function getInitialMode(): ThemeMode {
+    const stored = localStorage.getItem(STORAGE_MODE_KEY);
+    if (!stored) return 'dark';
+    assertValidMode(stored);
+    return stored;
+}
+
+export function ThemeToggle({
+    defaultTheme,
+    defaultMode,
+    onThemeChange,
+    onModeChange,
+    showLabel = false,
+}: ThemeToggleProps) {
     const [theme, setTheme] = useState<Theme>(defaultTheme ?? getInitialTheme);
+    const [mode, setMode] = useState<ThemeMode>(defaultMode ?? getInitialMode);
     const [mounted, setMounted] = useState(false);
 
     // Apply theme to document
     useEffect(() => {
         setMounted(true);
 
-        const applyTheme = (t: Theme) => {
-            const root = document.documentElement;
-            const resolvedTheme = t === 'system' ? getSystemTheme() : t;
+        const root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+        root.setAttribute('data-mode', mode);
+        root.style.colorScheme = mode;
+        document.body.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-mode', mode);
 
-            root.setAttribute('data-theme', resolvedTheme);
-            root.style.colorScheme = resolvedTheme;
-        };
-
-        applyTheme(theme);
-        localStorage.setItem(STORAGE_KEY, theme);
-
-        // Listen for system preference changes
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        const handleChange = () => {
-            if (theme === 'system') {
-                applyTheme('system');
-            }
-        };
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, [theme]);
+        localStorage.setItem(STORAGE_THEME_KEY, theme);
+        localStorage.setItem(STORAGE_MODE_KEY, mode);
+    }, [theme, mode]);
 
     const cycleTheme = () => {
-        const themes: Theme[] = ['system', 'light', 'dark'];
-        const currentIndex = themes.indexOf(theme);
-        const nextTheme = themes[(currentIndex + 1) % themes.length];
+        const currentIndex = THEMES.indexOf(theme);
+        const nextTheme = THEMES[(currentIndex + 1) % THEMES.length];
         setTheme(nextTheme);
         onThemeChange?.(nextTheme);
     };
 
     const toggleDarkLight = () => {
-        const resolvedCurrent = theme === 'system' ? getSystemTheme() : theme;
-        const nextTheme = resolvedCurrent === 'dark' ? 'light' : 'dark';
-        setTheme(nextTheme);
-        onThemeChange?.(nextTheme);
+        const nextMode: ThemeMode = mode === 'dark' ? 'light' : 'dark';
+        setMode(nextMode);
+        onModeChange?.(nextMode);
     };
 
     // Prevent hydration mismatch
@@ -84,16 +100,15 @@ export function ThemeToggle({ defaultTheme, onThemeChange, showLabel = false }: 
         );
     }
 
-    const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
-    const icon = resolvedTheme === 'dark' ? '☀️' : '🌙';
-    const label = theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light';
+    const icon = mode === 'dark' ? '☀️' : '🌙';
+    const label = `${theme} / ${mode}`;
 
     return (
         <button
             className="theme-toggle"
             onClick={toggleDarkLight}
             onDoubleClick={cycleTheme}
-            aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} theme`}
+            aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
             title={`Current: ${label}. Click to toggle, double-click to cycle.`}
         >
             <span className="theme-toggle-icon" aria-hidden="true">
@@ -109,25 +124,25 @@ export function ThemeToggle({ defaultTheme, onThemeChange, showLabel = false }: 
  */
 export function useTheme() {
     const [theme, setTheme] = useState<Theme>(getInitialTheme);
+    const [mode, setMode] = useState<ThemeMode>(getInitialMode);
 
     useEffect(() => {
         const root = document.documentElement;
-        const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
-
-        root.setAttribute('data-theme', resolvedTheme);
-        root.style.colorScheme = resolvedTheme;
-        localStorage.setItem(STORAGE_KEY, theme);
-    }, [theme]);
-
-    const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
+        root.setAttribute('data-theme', theme);
+        root.setAttribute('data-mode', mode);
+        root.style.colorScheme = mode;
+        localStorage.setItem(STORAGE_THEME_KEY, theme);
+        localStorage.setItem(STORAGE_MODE_KEY, mode);
+    }, [theme, mode]);
 
     return {
         theme,
-        resolvedTheme,
+        mode,
         setTheme,
-        isDark: resolvedTheme === 'dark',
-        isLight: resolvedTheme === 'light',
-        toggleTheme: () => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark'),
+        setMode,
+        isDark: mode === 'dark',
+        isLight: mode === 'light',
+        toggleMode: () => setMode(mode === 'dark' ? 'light' : 'dark'),
     };
 }
 

@@ -14,11 +14,12 @@ import {
     ChevronDown, Clock, Download, Share2, Search, Sun, Moon
 } from 'lucide-react';
 import { IconButton, Kbd, Dropdown, Tooltip } from './ui';
+import { getCurrentMode, setMode } from '../styles/themeConfig';
 import './Toolbar.css';
 
 type Tool = 'select' | 'rectangle' | 'ellipse' | 'text';
 type SidebarMode = 'chat' | 'components' | 'files' | 'layers';
-type LayoutMode = 'design' | 'dashboard' | 'code' | 'preview' | 'navigator';
+type LayoutMode = 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards';
 
 interface ToolbarProps {
     activeTool: Tool;
@@ -66,7 +67,7 @@ const LAYOUT_MODES: { id: LayoutMode; icon: typeof Palette; label: string }[] = 
     { id: 'code', icon: FolderTree, label: 'Code' },
     { id: 'preview', icon: Eye, label: 'Preview' },
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { id: 'navigator', icon: LayoutDashboard, label: 'Navigator' },
+    { id: 'dashboards', icon: LayoutDashboard, label: 'Dashboards' },
 ];
 
 export function Toolbar({
@@ -96,7 +97,7 @@ export function Toolbar({
     onOpenRecent
 }: ToolbarProps) {
     const [showRecentFiles, setShowRecentFiles] = useState(false);
-    const [isDarkTheme, setIsDarkTheme] = useState(true);
+    const [isDarkTheme, setIsDarkTheme] = useState(() => getCurrentMode() === 'dark');
     const recentFilesRef = useRef<HTMLDivElement>(null);
 
     // Keyboard shortcuts
@@ -172,8 +173,9 @@ export function Toolbar({
     }, [showRecentFiles]);
 
     const toggleTheme = () => {
-        setIsDarkTheme(!isDarkTheme);
-        document.documentElement.setAttribute('data-theme', isDarkTheme ? 'light' : 'dark');
+        const nextIsDark = !isDarkTheme;
+        setIsDarkTheme(nextIsDark);
+        setMode(nextIsDark ? 'dark' : 'light');
     };
 
     return (

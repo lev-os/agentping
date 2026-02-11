@@ -351,26 +351,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         {
             name: 'render_canvas_component',
-            description: 'Render a UI component directly onto the Studio canvas. Use this when you want to visualize a design idea.',
+            description: 'Render a Sofia widget directly onto the Studio canvas using the canonical canvas_interaction payload.',
             inputSchema: {
                 type: 'object',
                 properties: {
-                    type: {
+                    widgetId: {
                         type: 'string',
-                        enum: ['button', 'card', 'input', 'table', 'chart'],
-                        description: 'Type of component to render',
+                        description: 'Sofia widget identifier (e.g., "bd-dashboard", "todo-list", "markdown-card")',
                     },
                     name: {
                         type: 'string',
-                        description: 'Label or name for the component',
+                        description: 'Optional display name for the rendered widget',
                     },
-                    props: {
+                    variant: {
+                        type: 'string',
+                        description: 'Optional Sofia widget variant (e.g., "kanban", "todo", "markdown")',
+                    },
+                    data: {
                         type: 'object',
-                        description: 'Visual properties (x, y, width, height, color)',
+                        description: 'Widget data payload',
                         additionalProperties: true,
                     },
                 },
-                required: ['type', 'name'],
+                required: ['widgetId'],
             },
         },
         {
@@ -792,18 +795,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             }
 
             case 'render_canvas_component': {
-                const { type, name, props } = args as {
-                    type: string;
-                    name: string;
-                    props?: Record<string, any>;
+                const { widgetId, name, variant, data } = args as {
+                    widgetId: string;
+                    name?: string;
+                    variant?: string;
+                    data?: Record<string, any>;
                 };
 
                 const ping = await sendPing({
                     type: 'canvas_interaction',
                     action: 'render',
-                    componentType: type,
-                    componentName: name,
-                    props: props || {},
+                    componentType: 'sofia-widget',
+                    componentName: name || widgetId,
+                    props: {
+                        provider: 'sofia',
+                        widgetId,
+                        variant,
+                        data: data || {},
+                    },
                 }) as { id: string };
 
                 const response = await waitForResponse(ping.id) as {
@@ -820,7 +829,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `Component rendered successfully. ID: ${response.data?.objectId || 'unknown'}`,
+                        text: `Sofia widget rendered successfully. ID: ${response.data?.objectId || 'unknown'}`,
                     }],
                 };
             }

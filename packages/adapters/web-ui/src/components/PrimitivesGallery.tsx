@@ -2,7 +2,7 @@
  * PrimitivesGallery - Premium Showcase for AgentPing UI Primitives
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     InfoSidebar,
     ConfirmationModal,
@@ -24,12 +24,17 @@ import { GalleryFeedbackSection } from './gallery/GalleryFeedbackSection';
 import { GallerySystemSection } from './gallery/GallerySystemSection';
 import { GalleryVisualsSection } from './gallery/GalleryVisualsSection';
 import { GalleryFinanceSection } from './gallery/GalleryFinanceSection';
+import { GallerySofiaSection } from './gallery/GallerySofiaSection';
 // GalleryDataSection imported above
 import { GalleryLogsSection } from './gallery/GalleryLogsSection';
 import { TabsContainer } from './TabsContainer';
 
-export function PrimitivesGallery() {
-    const [activeSection, setActiveSection] = useState('dashboard');
+interface PrimitivesGalleryProps {
+    initialSection?: string;
+}
+
+export function PrimitivesGallery({ initialSection }: PrimitivesGalleryProps) {
+    const [activeSection, setActiveSection] = useState(initialSection ?? 'dashboard');
 
     // Interactive States
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -58,7 +63,20 @@ export function PrimitivesGallery() {
         },
         { id: 'feedback', label: 'Feedback & Status', content: <GalleryFeedbackSection /> },
         { id: 'system', label: 'System Ops & Security', content: <GallerySystemSection /> },
+        { id: 'sofia', label: 'Sofia Primitives', content: <GallerySofiaSection /> },
     ];
+
+    useEffect(() => {
+        if (initialSection) {
+            setActiveSection(initialSection);
+        }
+    }, [initialSection]);
+
+    useEffect(() => {
+        if (!tabs.some((tab) => tab.id === activeSection)) {
+            setActiveSection('dashboard');
+        }
+    }, [activeSection, tabs]);
 
     return (
         <div className="app-layout">

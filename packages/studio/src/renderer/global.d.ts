@@ -91,7 +91,7 @@ export interface IStudioControl {
 }
 
 export interface ICanvas {
-    onAddAutomated: (callback: (data: { type: string; name: string; props?: any }) => void) => () => void;
+    onAddAutomated: (callback: (data: { provider: 'sofia'; widgetId: string; name?: string; variant?: string; data?: Record<string, unknown> }) => void) => () => void;
     onRequestSelection: (callback: (data: { requestId: string; instruction: string }) => void) => () => void;
     respondToSelection: (requestId: string, selectionData: any) => void;
 }

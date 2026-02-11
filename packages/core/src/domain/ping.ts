@@ -168,15 +168,35 @@ export const TaskWorkflowPayloadSchema = z.object({
 
 export type TaskWorkflowPayload = z.infer<typeof TaskWorkflowPayloadSchema>;
 
-export const CanvasInteractionPayloadSchema = z.object({
+export const SofiaWidgetPropsSchema = z.object({
+    provider: z.literal('sofia'),
+    widgetId: z.string().min(1, "Widget ID is required"),
+    variant: z.string().optional(),
+    data: z.record(z.string(), z.unknown()).optional(),
+});
+
+export type SofiaWidgetProps = z.infer<typeof SofiaWidgetPropsSchema>;
+
+const CanvasRenderPayloadSchema = z.object({
     type: z.literal('canvas_interaction'),
-    action: z.enum(['render', 'selection']),
-    componentType: z.string().optional(),
+    action: z.literal('render'),
+    componentType: z.literal('sofia-widget'),
     componentName: z.string().optional(),
-    props: z.record(z.string(), z.unknown()).optional(),
+    props: SofiaWidgetPropsSchema,
+    instruction: z.string().optional(),
+});
+
+const CanvasSelectionPayloadSchema = z.object({
+    type: z.literal('canvas_interaction'),
+    action: z.literal('selection'),
     instruction: z.string().optional(),
     selectionType: z.string().optional(),
 });
+
+export const CanvasInteractionPayloadSchema = z.discriminatedUnion('action', [
+    CanvasRenderPayloadSchema,
+    CanvasSelectionPayloadSchema,
+]);
 
 export type CanvasInteractionPayload = z.infer<typeof CanvasInteractionPayloadSchema>;
 

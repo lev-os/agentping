@@ -175,7 +175,7 @@ contextBridge.exposeInMainWorld('terminal', {
 
 // Expose Canvas Automated Action API (MCP)
 contextBridge.exposeInMainWorld('canvas', {
-    onAddAutomated: (callback: (data: { type: string; name: string; props?: any }) => void) => {
+    onAddAutomated: (callback: (data: { provider: 'sofia'; widgetId: string; name?: string; variant?: string; data?: Record<string, unknown> }) => void) => {
         const handler = (_: any, data: any) => callback(data);
         ipcRenderer.on('canvas:add_automated', handler);
         return () => ipcRenderer.removeListener('canvas:add_automated', handler);

@@ -5,6 +5,7 @@
 import { useState, useCallback } from 'react';
 import type { Ping, Directive } from '@agentping/core';
 import { usePings, useWebSocket, useKeyboard, usePingResponse } from './hooks';
+import { useAgentPing } from './hooks/useAgentPing';
 import { respondToPing, dismissPing, buildStepApprovalResponse, buildSelectionResponse, buildApprovalResponse, buildAnswerResponse, buildTaskWorkflowResponse, buildLeaseResponse } from './api';
 import {
     PingCard,
@@ -23,17 +24,46 @@ import {
     LandingPage,
     LeaseApproval
 } from './components';
+import { CanvasRenderer } from './components/canvas/CanvasRenderer';
 import { componentRegistry } from './renderers';
 import './components/Layout.css';
 import './App.css';
 
+type AppView = 'queue' | 'history' | 'gallery' | 'studio' | 'landing';
+
+const VALID_VIEWS: AppView[] = ['queue', 'history', 'gallery', 'studio', 'landing'];
+
+function getInitialView(): AppView {
+    const queryValue = new URLSearchParams(window.location.search).get('view');
+    return VALID_VIEWS.includes(queryValue as AppView) ? (queryValue as AppView) : 'landing';
+}
+
+function getInitialGallerySection(): string | undefined {
+    const section = new URLSearchParams(window.location.search).get('section');
+    return section ?? undefined;
+}
+
 export default function App() {
     const { pings, loading, error, refresh } = usePings();
+    const { pings: canvasPings, respond: respondToCanvasPing } = useAgentPing();
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [view, setView] = useState<'queue' | 'history' | 'gallery' | 'landing'>('landing');
+    const [view, setView] = useState<AppView>(() => getInitialView());
+    const [initialGallerySection] = useState<string | undefined>(() => getInitialGallerySection());
+    const [expanded, setExpanded] = useState(false);
+    const [sidebarManuallyCollapsed, setSidebarManuallyCollapsed] = useState(false);
 
     const selectedPing = pings[selectedIndex] || null;
     const responseState = usePingResponse(selectedPing);
+
+    // Toggle Expand Mode
+    const toggleExpand = useCallback(() => {
+        setExpanded(prev => !prev);
+    }, []);
+
+    // Toggle Sidebar
+    const toggleSidebar = useCallback(() => {
+        setSidebarManuallyCollapsed(prev => !prev);
+    }, []);
 
     // WebSocket for real-time updates
     useWebSocket(useCallback((data) => {
@@ -49,6 +79,7 @@ export default function App() {
         onApproveAll: () => handleApproveAll(),
         onDenyAll: () => handleDenyAll(),
         onDismiss: () => handleDismiss(),
+        onExpandToggle: () => toggleExpand(),
     });
 
     // Response handlers
@@ -361,12 +392,19 @@ export default function App() {
     };
 
     return (
-        <div className="app app-layout">
+        <div className={`app app-layout ${expanded ? 'expanded' : ''}`}>
             {/* Header */}
             <header className="header">
                 <div className="header-left">
                     <h1 className="logo" onClick={() => setView('landing')} style={{ cursor: 'pointer' }}>⚡ AgentPing</h1>
                     <nav className="nav">
+                        <button
+                            className={`nav-btn ${!sidebarManuallyCollapsed ? 'active' : ''}`}
+                            onClick={toggleSidebar}
+                            title={sidebarManuallyCollapsed ? "Show Sidebar" : "Hide Sidebar"}
+                        >
+                            {sidebarManuallyCollapsed ? '◨' : '◧'}
+                        </button>
                         <button
                             className={`nav-btn ${view === 'queue' ? 'active' : ''}`}
                             onClick={() => setView('queue')}
@@ -385,9 +423,22 @@ export default function App() {
                         >
                             Gallery
                         </button>
+                        <button
+                            className={`nav-btn ${view === 'studio' ? 'active' : ''}`}
+                            onClick={() => setView('studio')}
+                        >
+                            Studio
+                        </button>
                     </nav>
                 </div>
                 <div className="header-right">
+                    <button
+                        className={`nav-btn ${expanded ? 'active' : ''}`}
+                        onClick={toggleExpand}
+                        title={expanded ? "Contract View (Cmd+.)" : "Expand View (Cmd+.)"}
+                    >
+                        {expanded ? '↙' : '↗'}
+                    </button>
                     <div className="shortcuts-hint">
                         <span className="kbd">j</span>/<span className="kbd">k</span> navigate
                         <span className="kbd">a</span> approve
@@ -402,7 +453,34 @@ export default function App() {
                     <LandingPage onGetStarted={() => setView('queue')} />
                 ) : view === 'gallery' ? (
                     <div style={{ height: 'calc(100vh - 57px)' }}>
-                        <PrimitivesGallery />
+                        <PrimitivesGallery initialSection={initialGallerySection} />
+                    </div>
+                ) : view === 'studio' ? (
+                    <div className="app-canvas studio-view" style={{ height: 'calc(100vh - 57px)', padding: '32px' }}>
+                        {canvasPings.length === 0 ? (
+                            <div className="empty" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-secondary)' }}>
+                                <div className="empty-icon" style={{ fontSize: '48px', marginBottom: '16px' }}>🎨</div>
+                                <h2>Studio Empty</h2>
+                                <p>No active canvas interactions.</p>
+                            </div>
+                        ) : (
+                            <div className="app-grid app-grid-full">
+                                {canvasPings.map(ping => (
+                                    <div key={ping.id} className="app-card mb-8">
+                                         <div className="app-card-header">
+                                            <h3>{ping.agentName}</h3>
+                                            <p>{new Date(ping.createdAt).toLocaleTimeString()}</p>
+                                        </div>
+                                        <div className="app-card-body">
+                                            <CanvasRenderer 
+                                                payload={ping.payload} 
+                                                onRespond={(data) => respondToCanvasPing(ping.id, data)} 
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 ) : view === 'history' ? (
                     <HistoryView
@@ -424,10 +502,11 @@ export default function App() {
                 ) : (
                     <div className="app-layout" style={{ height: 'calc(100vh - 57px)' }}>
                         {/* Ping Queue (Sidebar) */}
-                        <aside className="app-sidebar">
+                        <aside className={`app-sidebar ${sidebarManuallyCollapsed ? 'collapsed' : ''}`}>
                             <div className="app-sidebar-header">
                                 <h2>Pending Items</h2>
                                 <span className="badge">{pings.length}</span>
+                                <button className="icon-btn" onClick={toggleSidebar} title="Collapse Sidebar">◀</button>
                             </div>
                             <div className="app-sidebar-nav">
                                 {pings.map((ping, index) => (

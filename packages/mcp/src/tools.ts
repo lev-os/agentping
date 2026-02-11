@@ -94,6 +94,14 @@ export const RespondToPingSchema = z.object({
     }),
 });
 
+export const GeneratePlaygroundSchema = z.object({
+    template: z.enum(['design', 'data', 'concept', 'critique']),
+    topic: z.string().describe('Subject of the playground'),
+    mode: z.enum(['html', 'pencil', 'react']).default('html'),
+    theme: z.enum(['terminal-swiss', 'skynet', 'system']).default('terminal-swiss'),
+    initialValues: z.record(z.unknown()).optional(),
+});
+
 // ============================================================================
 // Tool Definitions
 // ============================================================================
@@ -144,6 +152,11 @@ export const AGENTPING_TOOLS = [
         description: 'Respond to a pending ping on behalf of automation. Use for programmatic responses.',
         inputSchema: RespondToPingSchema,
     },
+    {
+        name: 'generate_playground',
+        description: 'Generate an interactive playground for exploring AgentPing components. Returns HTML, Pencil operations, or React catalog entries.',
+        inputSchema: GeneratePlaygroundSchema,
+    },
 ] as const;
 
 // ============================================================================
@@ -159,3 +172,4 @@ export type ResearchDirectionInput = z.infer<typeof ResearchDirectionSchema>;
 export type RenderCustomUIInput = z.infer<typeof RenderCustomUISchema>;
 export type GetPendingPingsInput = z.infer<typeof GetPendingPingsSchema>;
 export type RespondToPingInput = z.infer<typeof RespondToPingSchema>;
+export type GeneratePlaygroundInput = z.infer<typeof GeneratePlaygroundSchema>;

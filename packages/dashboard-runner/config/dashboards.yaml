@@ -5,8 +5,8 @@ dashboards:
     port_range:
       - 6006
       - 6010
-    command: pnpm storybook --port {port}
-    cwd: ~/digital/leviathan/core/agent-harness/vendor/AgentPing/packages/studio
+    command: pnpm exec storybook dev --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/studio
     health_check:
       type: http
       path: /
@@ -22,14 +22,14 @@ dashboards:
         - 4000
         - 8000
         - 16000
-  - name: Sofia UI Storybook
+  - name: Sofia Storybook
     id: sofia
     port: 6007
     port_range:
       - 6007
       - 6011
-    command: pnpm storybook --port {port} --no-open
-    cwd: ~/digital/kingly/apps/production/Sofia/packages/ui
+    command: pnpm exec storybook dev -p {port} --no-open
+    cwd: ~/digital/leviathan/community/agentping/packages/ui
     health_check:
       type: http
       path: /
@@ -45,60 +45,14 @@ dashboards:
         - 4000
         - 8000
         - 16000
-  - name: Flight Deck Dashboard
-    id: flight-deck
-    port: 3001
+  - name: AgentPing Web UI
+    id: web-ui
+    port: 5173
     port_range:
-      - 3001
-      - 3005
-    command: pnpm dev --port {port}
-    cwd: ~/clawd/apps/dashboard
-    health_check:
-      type: http
-      path: /
-      timeout_ms: 5000
-      expected_status:
-        - 200
-        - 500
-      interval_ms: 10000
-    restart_policy:
-      enabled: true
-      max_retries: 3
-      backoff_ms:
-        - 2000
-        - 4000
-        - 8000
-  - name: CEO Stack
-    id: ceo-stack
-    port: 3003
-    port_range:
-      - 3003
-      - 3007
-    command: npm run dev -- --port {port}
-    cwd: ~/digital/kingly/hub/ceo/stack
-    health_check:
-      type: http
-      path: /
-      timeout_ms: 5000
-      expected_status:
-        - 200
-        - 307
-      interval_ms: 10000
-    restart_policy:
-      enabled: true
-      max_retries: 3
-      backoff_ms:
-        - 2000
-        - 4000
-        - 8000
-  - name: Jarvis Voice Dashboard
-    id: jarvis
-    port: 8080
-    port_range:
-      - 8080
-      - 8084
-    command: bunx vite --port {port}
-    cwd: ~/clawd/.lev/poc/jarvis-dashboard
+      - 5173
+      - 5178
+    command: pnpm exec vite --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/adapters/web-ui
     health_check:
       type: http
       path: /
@@ -114,17 +68,63 @@ dashboards:
         - 4000
         - 8000
         - 16000
-  - name: Navigator
-    id: navigator
+  - name: AgentPing Canvas
+    id: canvas
+    port: 5174
+    port_range:
+      - 5174
+      - 5179
+    command: pnpm exec vite --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/canvas
+    health_check:
+      type: http
+      path: /
+      timeout_ms: 5000
+      expected_status: 200
+      interval_ms: 10000
+    restart_policy:
+      enabled: true
+      max_retries: 5
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
+  - name: Dashboard Manager UI
+    id: dashboard-manager-ui
+    port: 5175
+    port_range:
+      - 5175
+      - 5182
+    command: pnpm exec vite --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/dashboard-manager-ui
+    health_check:
+      type: http
+      path: /
+      timeout_ms: 5000
+      expected_status: 200
+      interval_ms: 10000
+    restart_policy:
+      enabled: true
+      max_retries: 5
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
+  - name: AgentPing Studio
+    id: studio
     port: 5180
     port_range:
       - 5180
       - 5184
-    command: pnpm dev
-    cwd: ~/digital/leviathan/core/agent-harness/vendor/AgentPing/packages/studio
+    command: pnpm exec vite --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/studio
     health_check:
       type: http
-      path: /navigator
+      path: /
       timeout_ms: 5000
       expected_status: 200
       interval_ms: 10000

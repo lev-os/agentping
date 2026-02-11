@@ -554,6 +554,108 @@ for (const [name, config] of Object.entries(BROWSER_SUGAR)) {
 }
 
 // ============================================================================
+// Playground Commands
+// ============================================================================
+
+const playground = program.command('playground').description('Interactive component playgrounds');
+
+playground
+  .command('create')
+  .description('Generate a playground')
+  .option('-t, --template <template>', 'Template: design|data|concept|critique', 'design')
+  .option('--topic <topic>', 'Playground topic', 'Component Explorer')
+  .option('-m, --mode <mode>', 'Output mode: html|pencil|react', 'html')
+  .option('--theme <theme>', 'Theme: terminal-swiss|skynet|system', 'terminal-swiss')
+  .option('-o, --output <path>', 'Output file path')
+  .option('--no-open', 'Do not open the file after creation')
+  .action(async (options) => {
+    const spinner = ora('Generating playground...').start();
+
+    try {
+      // Variable path prevents tsc from resolving cross-package source
+      const polymorphPath = '../../../canvas/src/polymorph/index.js';
+      const { templates, renderToHTML, renderToPencil, renderToReact } = await import(
+        polymorphPath
+      );
+
+      const template = templates[options.template];
+      if (!template) {
+        spinner.fail(`Unknown template: ${options.template}`);
+        process.exit(1);
+      }
+
+      const primitives = template.previewRenderer({});
+      const renderOpts = {
+        template: options.template,
+        topic: options.topic,
+        mode: options.mode,
+        theme: options.theme,
+      };
+
+      if (options.mode === 'html') {
+        const html = renderToHTML(primitives, renderOpts);
+        const outputDir = join(homedir(), '.agentping', 'playgrounds');
+        const { mkdirSync } = await import('fs');
+        mkdirSync(outputDir, { recursive: true });
+        const fileName = `playground-${options.template}-${Date.now()}.html`;
+        const filePath = options.output || join(outputDir, fileName);
+        writeFileSync(filePath, html, 'utf-8');
+        spinner.succeed(`Playground created: ${filePath}`);
+
+        if (options.open !== false) {
+          const { execSync: exec } = await import('child_process');
+          try {
+            exec(`open "${filePath}"`);
+          } catch {
+            // open may not be available on all platforms
+          }
+        }
+      } else if (options.mode === 'pencil') {
+        const ops = renderToPencil(primitives, '"document"', { theme: options.theme });
+        spinner.stop();
+        console.log(ops.join('\n'));
+      } else {
+        const entries = renderToReact(primitives);
+        spinner.stop();
+        console.log(JSON.stringify(entries, null, 2));
+      }
+    } catch (err) {
+      spinner.fail(`Failed: ${(err as Error).message}`);
+      process.exit(3);
+    }
+  });
+
+playground
+  .command('list')
+  .description('List available templates')
+  .option('--json', 'Output as JSON')
+  .action(async (options) => {
+    try {
+      const polymorphListPath = '../../../canvas/src/polymorph/index.js';
+      const { templates } = await import(
+        polymorphListPath
+      );
+
+      if (options.json) {
+        const list = Object.entries(templates).map(([name, t]: [string, any]) => ({
+          name,
+          description: t.description,
+        }));
+        console.log(JSON.stringify(list, null, 2));
+      } else {
+        console.log('\nAvailable playground templates:\n');
+        for (const [name, t] of Object.entries(templates) as [string, any][]) {
+          console.log(`  ${name.padEnd(12)} ${t.description}`);
+        }
+        console.log('');
+      }
+    } catch (err) {
+      console.error(`Failed: ${(err as Error).message}`);
+      process.exit(3);
+    }
+  });
+
+// ============================================================================
 // API Helpers
 // ============================================================================
 

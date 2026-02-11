@@ -128,10 +128,19 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
       const id = c.req.param('id');
       console.log(`[API] Restart request for dashboard: ${id}`);
 
-      await runner.restart(id);
+      // Fire-and-track restart so the HTTP request does not block on process teardown.
+      void runner.restart(id)
+        .then(() => {
+          console.log(`[API] Restart completed for dashboard: ${id}`);
+        })
+        .catch((error) => {
+          console.error(`[API] Restart failed for dashboard ${id}:`, error);
+        });
 
-      console.log(`[API] Restart completed for dashboard: ${id}`);
-      return c.json({ success: true, message: `Dashboard ${id} restart initiated` });
+      return c.json(
+        { success: true, message: `Dashboard ${id} restart scheduled` },
+        202,
+      );
     } catch (error) {
       console.error('[API] Error restarting dashboard:', error);
       console.error('[API] Error stack:', (error as Error).stack);
@@ -152,20 +161,19 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
     try {
       console.log('[API] Restart-all request received');
 
-      const results = await runner.restartAll();
-      const successCount = results.filter(r => r.success).length;
-      const failedCount = results.filter(r => !r.success).length;
-
-      console.log(`[API] Restart-all completed: ${successCount} succeeded, ${failedCount} failed`);
+      const dashboardIds = runner.getAllConfigs().map((cfg) => cfg.id);
+      for (const id of dashboardIds) {
+        void runner.restart(id).catch((error) => {
+          console.error(`[API] Restart-all: restart failed for ${id}:`, error);
+        });
+      }
 
       return c.json({
         success: true,
-        message: `Restarted ${successCount} dashboard(s)`,
-        total: results.length,
-        succeeded: successCount,
-        failed: failedCount,
-        results
-      });
+        message: `Scheduled restart for ${dashboardIds.length} dashboard(s)`,
+        total: dashboardIds.length,
+        scheduled: dashboardIds,
+      }, 202);
     } catch (error) {
       console.error('[API] Error restarting all dashboards:', error);
       console.error('[API] Error stack:', (error as Error).stack);

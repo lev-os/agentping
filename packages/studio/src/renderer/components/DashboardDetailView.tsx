@@ -66,11 +66,17 @@ export function DashboardDetailView({ dashboardId, onBack }: DashboardDetailView
     }, [dashboardId]);
 
     const handleRestart = async () => {
-        if (!window.electron || isRestarting) return;
+        if (isRestarting) return;
 
         setIsRestarting(true);
         try {
-            await window.electron.invoke('dashboard:restart', { dashboardId });
+            if (window.dashboardManager) {
+                await window.dashboardManager.restart(dashboardId);
+            } else if (window.electron) {
+                await window.electron.invoke('dashboard:restart', dashboardId);
+            } else {
+                throw new Error('Dashboard API unavailable in renderer');
+            }
         } catch (err) {
             console.error('[DashboardDetailView] Restart failed:', err);
         } finally {

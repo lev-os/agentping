@@ -31,6 +31,7 @@ import {
     RenderCustomUISchema,
     GetPendingPingsSchema,
     RespondToPingSchema,
+    GeneratePlaygroundSchema,
 } from './tools.js';
 
 // ============================================================================
@@ -237,6 +238,58 @@ export function createAgentPingMCPServer(config: AgentPingMCPConfig) {
                     return {
                         content: [{ type: 'text', text: `Response recorded for ping ${input.pingId}` }],
                     };
+                }
+
+                case 'generate_playground': {
+                    const input = GeneratePlaygroundSchema.parse(args);
+
+                    // Dynamic import — variable path prevents tsc from resolving cross-package source
+                    const polymorphPath = '../../canvas/src/polymorph/index.js';
+                    const { templates, renderToHTML, renderToPencil, renderToReact } = await import(
+                        polymorphPath
+                    );
+
+                    const template = templates[input.template];
+                    if (!template) {
+                        throw new Error(`Unknown template: ${input.template}`);
+                    }
+
+                    const primitives = template.previewRenderer(input.initialValues ?? {});
+                    const renderOpts = {
+                        template: input.template,
+                        topic: input.topic,
+                        mode: input.mode,
+                        theme: input.theme,
+                    };
+
+                    if (input.mode === 'html') {
+                        const html = renderToHTML(primitives, renderOpts);
+                        // Write to temp file
+                        const { writeFileSync, mkdirSync } = await import('fs');
+                        const { join } = await import('path');
+                        const { homedir } = await import('os');
+                        const dir = join(homedir(), '.agentping', 'playgrounds');
+                        mkdirSync(dir, { recursive: true });
+                        const fileName = `playground-${input.template}-${Date.now()}.html`;
+                        const filePath = join(dir, fileName);
+                        writeFileSync(filePath, html, 'utf-8');
+                        return {
+                            content: [{
+                                type: 'text',
+                                text: JSON.stringify({ path: filePath, template: input.template, topic: input.topic, theme: input.theme }),
+                            }],
+                        };
+                    } else if (input.mode === 'pencil') {
+                        const ops = renderToPencil(primitives, '"document"', { theme: input.theme });
+                        return {
+                            content: [{ type: 'text', text: ops.join('\n') }],
+                        };
+                    } else {
+                        const entries = renderToReact(primitives);
+                        return {
+                            content: [{ type: 'text', text: JSON.stringify(entries, null, 2) }],
+                        };
+                    }
                 }
 
                 default:

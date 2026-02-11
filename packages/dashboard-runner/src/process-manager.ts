@@ -154,23 +154,45 @@ export class ProcessManager extends EventEmitter {
       const pid = dashboardProcess.process.pid;
       if (pid) {
         // Kill entire process group
-        process.kill(-pid, 'SIGTERM');
+        try {
+          process.kill(-pid, 'SIGTERM');
+        } catch (err) {
+          // Already exited/no such process should not block stop flow
+          const message = err instanceof Error ? err.message : String(err);
+          if (!message.includes('ESRCH')) {
+            this.logger.warn(`SIGTERM failed for ${dashboardId}: ${message}`, { dashboardId });
+          }
+        }
       }
 
       // Wait for process to exit (with timeout)
       await new Promise<void>((resolve) => {
+        let settled = false;
+        const complete = () => {
+          if (settled) return;
+          settled = true;
+          resolve();
+        };
+
         const timeout = setTimeout(() => {
           // Force kill if still running
           if (!dashboardProcess.process.killed && pid) {
             this.logger.warn(`Force killing dashboard: ${dashboardId}`, { dashboardId });
-            process.kill(-pid, 'SIGKILL');
+            try {
+              process.kill(-pid, 'SIGKILL');
+            } catch (err) {
+              const message = err instanceof Error ? err.message : String(err);
+              if (!message.includes('ESRCH')) {
+                this.logger.warn(`SIGKILL failed for ${dashboardId}: ${message}`, { dashboardId });
+              }
+            }
           }
-          resolve();
+          complete();
         }, 5000);
 
         dashboardProcess.process.once('exit', () => {
           clearTimeout(timeout);
-          resolve();
+          complete();
         });
       });
 
@@ -178,6 +200,9 @@ export class ProcessManager extends EventEmitter {
       this.logger.info(`Dashboard ${dashboardId} stopped`, { dashboardId });
     } catch (err) {
       this.logger.error(`Failed to stop ${dashboardId}: ${err instanceof Error ? err.message : String(err)}`, { dashboardId });
+    } finally {
+      // Ensure stale process entries never block future restarts
+      this.processes.delete(dashboardId);
     }
   }
 

@@ -1,0 +1,169 @@
+/**
+ * Widget Container Queries
+ *
+ * CSS container queries for responsive widget layouts.
+ * Primary mechanism for layout changes - ResizeObserver only for React variant prop.
+ *
+ * Breakpoints:
+ * - compact: <300px
+ * - standard: 300-500px
+ * - expanded: >500px
+ */
+
+/* Compact variant (<300px) */
+@container (max-width: 299px) {
+  .widget-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .widget-label-text {
+    display: none;
+  }
+
+  .widget-label-icon {
+    display: inline;
+  }
+
+  .widget-details {
+    display: none;
+  }
+
+  .widget-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .widget-chart {
+    height: 120px;
+  }
+
+  .widget-table-header {
+    display: none;
+  }
+
+  .widget-gauge {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Standard variant (300-499px) */
+@container (min-width: 300px) and (max-width: 499px) {
+  .widget-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .widget-label-text {
+    display: inline;
+  }
+
+  .widget-label-icon {
+    display: inline;
+  }
+
+  .widget-details {
+    display: none;
+  }
+
+  .widget-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .widget-chart {
+    height: 160px;
+  }
+
+  .widget-table-header {
+    display: grid;
+  }
+
+  .widget-gauge {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Expanded variant (500px+) */
+@container (min-width: 500px) {
+  .widget-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .widget-label-text {
+    display: inline;
+  }
+
+  .widget-label-icon {
+    display: inline;
+  }
+
+  .widget-details {
+    display: block;
+  }
+
+  .widget-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .widget-chart {
+    height: 200px;
+  }
+
+  .widget-table-header {
+    display: grid;
+  }
+
+  .widget-gauge {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* Drag handle styling */
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Grid item transitions */
+.react-grid-item {
+  transition: transform 200ms ease;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: hsl(var(--primary) / 0.2);
+  border: 2px dashed hsl(var(--primary));
+  border-radius: var(--radius);
+}
+
+/* Resize handle styling */
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  background: transparent;
+}
+
+.react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid hsl(var(--muted-foreground) / 0.4);
+  border-bottom: 2px solid hsl(var(--muted-foreground) / 0.4);
+}
+
+.react-resizable-handle:hover::after {
+  border-color: hsl(var(--primary));
+}

@@ -6,13 +6,13 @@
 }
 
 /* Sofia theme - sharp edges, monospace aesthetic */
-[data-theme="sofia"] .table-container {
+[data-theme="skynet"] .table-container {
   border-radius: 0;
   border: 1px solid var(--sofia-border-default);
   background: var(--sofia-surface);
 }
 
-[data-theme="sofia"] .table th {
+[data-theme="skynet"] .table th {
   font-family: var(--sofia-font-mono);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -20,13 +20,13 @@
   color: var(--sofia-text-muted);
 }
 
-[data-theme="sofia"] .table td {
+[data-theme="skynet"] .table td {
   font-family: var(--sofia-font-mono);
   font-size: 12px;
   border-bottom: 1px solid var(--sofia-border-subtle);
 }
 
-[data-theme="sofia"] .table tbody tr:hover {
+[data-theme="skynet"] .table tbody tr:hover {
   background: var(--sofia-hover-overlay);
 }
 

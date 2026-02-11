@@ -14,7 +14,7 @@
     padding: var(--spacing-lg);
 }
 
-[data-theme="sofia"] .chart-container {
+[data-theme="skynet"] .chart-container {
     border-radius: 0;
     background: linear-gradient(135deg, var(--sofia-surface) 0%, hsl(220 20% 6%) 100%);
     border: 1px solid var(--sofia-border-default);
@@ -34,41 +34,41 @@
    ========================================================================== */
 
 /* Grid lines - use subtle cyan */
-[data-theme="sofia"] .recharts-cartesian-grid-horizontal line,
-[data-theme="sofia"] .recharts-cartesian-grid-vertical line {
+[data-theme="skynet"] .recharts-cartesian-grid-horizontal line,
+[data-theme="skynet"] .recharts-cartesian-grid-vertical line {
     stroke: var(--sofia-border-subtle);
 }
 
 /* Axis lines */
-[data-theme="sofia"] .recharts-cartesian-axis-line {
+[data-theme="skynet"] .recharts-cartesian-axis-line {
     stroke: var(--sofia-border-default);
 }
 
 /* Axis ticks */
-[data-theme="sofia"] .recharts-cartesian-axis-tick-line {
+[data-theme="skynet"] .recharts-cartesian-axis-tick-line {
     stroke: var(--sofia-border-default);
 }
 
 /* Axis text - use monospace */
-[data-theme="sofia"] .recharts-cartesian-axis-tick-value {
+[data-theme="skynet"] .recharts-cartesian-axis-tick-value {
     fill: var(--sofia-text-muted);
     font-family: var(--sofia-font-mono);
     font-size: 11px;
 }
 
 /* Legend text */
-[data-theme="sofia"] .recharts-legend-item-text {
+[data-theme="skynet"] .recharts-legend-item-text {
     color: var(--sofia-text-secondary);
     font-family: var(--sofia-font-body);
     font-size: 12px;
 }
 
 /* Tooltip */
-[data-theme="sofia"] .recharts-tooltip-wrapper {
+[data-theme="skynet"] .recharts-tooltip-wrapper {
     outline: none;
 }
 
-[data-theme="sofia"] .recharts-default-tooltip {
+[data-theme="skynet"] .recharts-default-tooltip {
     background: var(--sofia-bg-elevated) !important;
     border: 1px solid var(--sofia-border-accent) !important;
     border-radius: 0 !important;
@@ -77,14 +77,14 @@
     font-size: 11px !important;
 }
 
-[data-theme="sofia"] .recharts-tooltip-label {
+[data-theme="skynet"] .recharts-tooltip-label {
     color: var(--sofia-text-primary) !important;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-[data-theme="sofia"] .recharts-tooltip-item {
+[data-theme="skynet"] .recharts-tooltip-item {
     color: var(--sofia-text-secondary) !important;
 }
 
@@ -92,12 +92,12 @@
    AREA CHART - SOFIA THEME
    ========================================================================== */
 
-[data-theme="sofia"] .recharts-area {
+[data-theme="skynet"] .recharts-area {
     filter: drop-shadow(0 0 4px currentColor);
 }
 
 /* Cyber cyan gradient for area fills */
-[data-theme="sofia"] .recharts-area-area {
+[data-theme="skynet"] .recharts-area-area {
     fill: url(#sofiaCyberGradient);
 }
 
@@ -105,7 +105,7 @@
    BAR CHART - SOFIA THEME
    ========================================================================== */
 
-[data-theme="sofia"] .recharts-bar-rectangle {
+[data-theme="skynet"] .recharts-bar-rectangle {
     filter: drop-shadow(0 0 4px currentColor);
 }
 
@@ -113,13 +113,13 @@
    PIE CHART - SOFIA THEME
    ========================================================================== */
 
-[data-theme="sofia"] .recharts-pie-sector {
+[data-theme="skynet"] .recharts-pie-sector {
     filter: drop-shadow(0 0 6px currentColor);
     stroke: var(--sofia-bg);
     stroke-width: 2px;
 }
 
-[data-theme="sofia"] .recharts-pie-label-text {
+[data-theme="skynet"] .recharts-pie-label-text {
     fill: var(--sofia-text-primary);
     font-family: var(--sofia-font-mono);
     font-size: 12px;
@@ -130,11 +130,11 @@
    LINE CHART - SOFIA THEME
    ========================================================================== */
 
-[data-theme="sofia"] .recharts-line-curve {
+[data-theme="skynet"] .recharts-line-curve {
     filter: drop-shadow(0 0 4px currentColor);
 }
 
-[data-theme="sofia"] .recharts-line-dot {
+[data-theme="skynet"] .recharts-line-dot {
     filter: drop-shadow(0 0 6px currentColor);
 }
 
@@ -161,7 +161,7 @@
     margin-bottom: var(--spacing-md);
 }
 
-[data-theme="sofia"] .chart-title {
+[data-theme="skynet"] .chart-title {
     font-family: var(--sofia-font-display);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -188,7 +188,7 @@
     border-radius: 2px;
 }
 
-[data-theme="sofia"] .chart-legend-color {
+[data-theme="skynet"] .chart-legend-color {
     border-radius: 0;
     box-shadow: 0 0 8px currentColor;
 }
@@ -206,8 +206,8 @@
     color: var(--text-muted);
 }
 
-[data-theme="sofia"] .chart-loading,
-[data-theme="sofia"] .chart-empty {
+[data-theme="skynet"] .chart-loading,
+[data-theme="skynet"] .chart-empty {
     font-family: var(--sofia-font-mono);
     color: var(--sofia-text-muted);
 }

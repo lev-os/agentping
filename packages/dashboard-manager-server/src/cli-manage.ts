@@ -30,7 +30,7 @@ function resolveConfigPath(configPath?: string): string {
   // Default path
   return resolve(
     homedir(),
-    'digital/leviathan/core/agent-harness/vendor/AgentPing/packages/dashboard-runner/config/dashboards.yaml'
+    'digital/leviathan/community/agentping/packages/dashboard-runner/config/dashboards.yaml'
   );
 }
 

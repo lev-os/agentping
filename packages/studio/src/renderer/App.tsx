@@ -9,7 +9,6 @@ import { AgentStatusOverlay } from '@/renderer/components/AgentStatusOverlay';
 import { AgentDropdown } from '@/renderer/components/AgentDropdown';
 import { Dashboard } from '@/renderer/components/Dashboard';
 import { DashboardDetailView } from '@/renderer/components/DashboardDetailView';
-import { NavigatorWithRunner } from '@/renderer/components/NavigatorWithRunner';
 import { NavigatorWithDashboards } from '@/renderer/components/NavigatorWithDashboards';
 import { Layers } from '@/renderer/components/Layers';
 import { ComponentGallery } from '@/renderer/components/ComponentGallery';
@@ -21,10 +20,10 @@ import '@/renderer/styles/App.css';
 
 export default function App() {
     // Detect route from URL path
-    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'navigator' | 'dashboards' => {
+    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards' => {
         const path = window.location.pathname;
         if (path.includes('/dashboards')) return 'dashboards';
-        if (path.includes('/navigator')) return 'navigator';
+        if (path.includes('/navigator')) return 'dashboards';
         if (path.includes('/dashboard')) return 'dashboard';
         if (path.includes('/preview')) return 'preview';
         if (path.includes('/code')) return 'code';
@@ -42,7 +41,7 @@ export default function App() {
     const [selectedPreviewElement, setSelectedPreviewElement] = useState<any>(null);
     const [activeTool, setActiveTool] = useState<'select' | 'rectangle' | 'ellipse' | 'text'>('select');
     const [activeSidebar, setActiveSidebar] = useState<'chat' | 'components' | 'files' | 'layers'>('chat');
-    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'navigator' | 'dashboards'>(getInitialLayoutMode());
+    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'dashboards'>(getInitialLayoutMode());
     const [isSyncing, setIsSyncing] = useState(false);
     const [workspacePath, setWorkspacePath] = useState<string | null>(null);
     const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
@@ -131,7 +130,7 @@ export default function App() {
 
         const unsubLayout = window.studioControl.onLayoutModeChange((mode) => {
             console.log('[StudioControl] Layout mode change:', mode);
-            setLayoutMode(mode as 'design' | 'dashboard' | 'code' | 'preview');
+            setLayoutMode(mode as 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards');
         });
 
         const unsubOpenFile = window.studioControl.onOpenFile((filePath) => {
@@ -177,7 +176,6 @@ export default function App() {
             'dashboard': selectedDashboardId ? `/dashboard/${selectedDashboardId}` : '/dashboard',
             'code': '/code',
             'preview': '/preview',
-            'navigator': '/navigator',
             'dashboards': '/dashboards'
         };
 
@@ -296,10 +294,10 @@ export default function App() {
     useEffect(() => {
         if (!window.canvas) return;
 
-        const cleanup = window.canvas.onAddAutomated(({ type, name, props }) => {
-            console.log('MCP Automated Add:', type, name);
+        const cleanup = window.canvas.onAddAutomated(({ provider, widgetId, name }) => {
+            console.log('MCP Automated Add:', provider, widgetId, name);
             if (canvasRef.current) {
-                canvasRef.current.addComponent(type, name || 'Automated Component');
+                canvasRef.current.addComponent('sofia-widget', name || widgetId);
             }
         });
 
@@ -334,17 +332,32 @@ export default function App() {
 
             // Handle Canvas Interactions via MCP
             if (ping.type === 'canvas_interaction') {
-                const { action, componentType, componentName, props } = ping.payload;
+                const payload = ping.payload as {
+                    action?: string;
+                    componentType?: string;
+                    componentName?: string;
+                    props?: {
+                        provider?: string;
+                        widgetId?: string;
+                    };
+                };
 
-                if (action === 'render' && canvasRef.current && componentType) {
+                if (
+                    payload.action === 'render' &&
+                    payload.componentType === 'sofia-widget' &&
+                    payload.props?.provider === 'sofia' &&
+                    payload.props.widgetId &&
+                    canvasRef.current
+                ) {
                     // Execute the render on the canvas
-                    canvasRef.current.addComponent(componentType, componentName || 'AI Component');
+                    const widgetId = payload.props.widgetId;
+                    canvasRef.current.addComponent('sofia-widget', payload.componentName || widgetId);
 
                     // Auto-respond to the ping to unblock the agent
                     // In a real app, we might wait for user approval or interaction or return an object ID
                     await window.agentPing?.respond(ping.id, {
                         action: 'custom',
-                        data: { success: true, objectId: `${componentType}-${Date.now()}` }
+                        data: { success: true, objectId: `sofia-widget-${widgetId}-${Date.now()}` }
                     });
                 }
             }
@@ -548,13 +561,6 @@ export default function App() {
                         )
                     ) : layoutMode === 'dashboards' ? (
                         <NavigatorWithDashboards
-                            onSelectDashboard={(dashboardId) => {
-                                setSelectedDashboardId(dashboardId);
-                                setLayoutMode('dashboard');
-                            }}
-                        />
-                    ) : layoutMode === 'navigator' ? (
-                        <NavigatorWithRunner
                             onSelectDashboard={(dashboardId) => {
                                 setSelectedDashboardId(dashboardId);
                                 setLayoutMode('dashboard');

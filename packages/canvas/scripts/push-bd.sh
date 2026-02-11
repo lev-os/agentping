@@ -9,7 +9,10 @@ SESSION_ID="${AGENTPING_SESSION_ID:-canvas-$(date +%s)}"
 
 # Parse BD text output into JSON cards
 bd_to_json() {
-  bd list 2>/dev/null | while IFS= read -r line; do
+  local bd_output
+  bd_output="$(bd --no-db list 2>/dev/null || true)"
+
+  while IFS= read -r line; do
     # Skip empty lines
     [[ -z "$line" ]] && continue
 
@@ -17,9 +20,10 @@ bd_to_json() {
     status="open"
     [[ "$line" == ◐* ]] && status="in_progress"
     [[ "$line" == ●* ]] && status="closed"
+    [[ "$line" == ✓* ]] && status="closed"
 
     # Extract fields
-    id=$(echo "$line" | sed -E 's/^[○◐●] ([^ ]+).*/\1/')
+    id=$(echo "$line" | sed -E 's/^[○◐●✓] ([^ ]+).*/\1/')
     priority=$(echo "$line" | sed -E 's/.*\[● (P[0-3])\].*/\1/' | grep -E '^P[0-3]$' || echo "P3")
     type=$(echo "$line" | sed -E 's/.*\[(epic|task|bug)\].*/\1/' | grep -E '^(epic|task|bug)$' || echo "task")
     title="${line#* - }"
@@ -31,7 +35,7 @@ bd_to_json() {
     printf '{"id":"%s","title":"%s","column":"%s","priority":"%s","type":"%s"}' \
       "$id" "$title_escaped" "$status" "$priority" "$type"
     echo ","
-  done
+  done <<< "$bd_output"
 }
 
 # Build cards JSON array
@@ -47,12 +51,17 @@ curl -s -X POST "${API_URL}/api/v1/pings" \
     \"payload\": {
       \"type\": \"canvas_interaction\",
       \"action\": \"render\",
-      \"componentType\": \"kanban\",
+      \"componentType\": \"sofia-widget\",
       \"componentName\": \"BD Dashboard\",
       \"instruction\": \"Current BD epics and tasks\",
       \"props\": {
-        \"columns\": [\"open\", \"in_progress\", \"blocked\", \"closed\"],
-        \"cards\": $CARDS
+        \"provider\": \"sofia\",
+        \"widgetId\": \"bd-dashboard\",
+        \"variant\": \"kanban\",
+        \"data\": {
+          \"columns\": [\"open\", \"in_progress\", \"blocked\", \"closed\"],
+          \"cards\": $CARDS
+        }
       }
     }
   }"

@@ -91,6 +91,7 @@ interface KeyboardHandlers {
     onApproveAll?: () => void;
     onDenyAll?: () => void;
     onDismiss?: () => void;
+    onExpandToggle?: () => void;
 }
 
 export function useKeyboard(handlers: KeyboardHandlers) {
@@ -102,6 +103,12 @@ export function useKeyboard(handlers: KeyboardHandlers) {
             }
 
             switch (e.key) {
+                case '.':
+                    if (e.metaKey || e.ctrlKey) {
+                        e.preventDefault();
+                        handlers.onExpandToggle?.();
+                    }
+                    break;
                 case 'j':
                 case 'ArrowDown':
                     e.preventDefault();

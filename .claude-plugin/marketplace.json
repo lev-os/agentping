@@ -1,0 +1,45 @@
+{
+  "name": "agentping",
+  "version": "0.1.0",
+  "description": "Agent-human interaction protocol with interactive playgrounds",
+  "author": "lev-os",
+  "license": "MIT",
+  "entry": "SKILL.md",
+  "triggers": [
+    "playground",
+    "visual builder",
+    "agent approval",
+    "human-in-the-loop",
+    "step approval",
+    "canvas interaction"
+  ],
+  "tags": [
+    "hitl",
+    "agent-interaction",
+    "playground",
+    "canvas",
+    "mcp",
+    "polymorph"
+  ],
+  "references": [
+    "packages/canvas/README.md",
+    "packages/canvas/src/polymorph/index.ts",
+    "docs/"
+  ],
+  "compatibility": {
+    "claude-code": true,
+    "cursor": true,
+    "windsurf": true,
+    "continue-dev": true,
+    "cline": true,
+    "roo-code": true
+  },
+  "install": {
+    "command": "npx skills add lev-os/agentping",
+    "paths": {
+      "claude-code": "~/.claude/commands/agentping/",
+      "cursor": "~/.cursor/skills/agentping/",
+      "generic": "~/.agents/skills/agentping/"
+    }
+  }
+}

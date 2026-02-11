@@ -21,6 +21,22 @@
     flex-direction: column;
     flex-shrink: 0;
     backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+    opacity: 1;
+}
+
+.app-sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    border-right: none;
+}
+
+.app-layout.expanded .app-sidebar {
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    border-right: none;
 }
 
 .app-sidebar-header {

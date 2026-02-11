@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react'
 import { useAgentPing } from './hooks/useAgentPing'
 import { CanvasRenderer } from './components/CanvasRenderer'
 import { ConnectionStatus } from './components/ConnectionStatus'
+import { PolymorphPlayground } from './components/PolymorphPlayground'
 
 function timeAgo(iso: string): string {
   const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
@@ -22,6 +24,15 @@ const statusStyles: Record<string, string> = {
 }
 
 export default function App() {
+  const [route, setRoute] = useState(window.location.hash)
+  useEffect(() => {
+    const handler = () => setRoute(window.location.hash)
+    window.addEventListener('hashchange', handler)
+    return () => window.removeEventListener('hashchange', handler)
+  }, [])
+
+  if (route === '#playground') return <PolymorphPlayground />
+
   const { pings, connected, respond } = useAgentPing()
 
   const sorted = [...pings].sort(
@@ -35,6 +46,7 @@ export default function App() {
         <span className="font-mono text-[var(--primary)] text-lg font-semibold">
           Lev Canvas
         </span>
+        <a href="#playground" className="text-xs font-mono text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">Playground</a>
         <ConnectionStatus connected={connected} />
       </header>
 
@@ -57,7 +69,9 @@ export default function App() {
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <h2 className="font-semibold text-[var(--text-primary)]">
-                    {ping.payload.componentName ?? ping.payload.componentType ?? 'Canvas Interaction'}
+                    {ping.payload.action === 'render'
+                      ? ping.payload.componentName ?? ping.payload.props.widgetId ?? 'Sofia Widget'
+                      : 'Canvas Selection'}
                   </h2>
                   <p className="text-sm text-[var(--text-secondary)]">
                     {ping.payload.instruction ??
@@ -80,8 +94,7 @@ export default function App() {
 
               {/* Canvas render area */}
               <CanvasRenderer
-                componentType={ping.payload?.componentType}
-                props={ping.payload?.props}
+                payload={ping.payload}
                 onRespond={(data) => respond(ping.id, data)}
               />
             </div>

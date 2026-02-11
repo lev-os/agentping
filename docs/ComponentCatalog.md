@@ -1,120 +1,83 @@
-# Component Catalog Reference
+# Component Catalog
 
-This document provides a comprehensive reference for the **78 UI components** available in the AgentPing `PrimitivesGallery`. These components are designed for high-fidelity, keyboard-first interaction and follow the "Cyber-Premium" design aesthetic.
+Current consolidation baseline for AgentPing + Sofia import readiness.
 
-## 🧭 Navigation & Graph (10)
+## Dashboard Surfaces (runner source of truth)
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `Stepper` | Visual progress tracker with stages. | `steps`: { id, label, status }[], `currentStepId`: string |
-| `RadarChart` | Multi-axis data visualization. | `data`: { label, value }[] |
-| `Timeline` | Horizontal event sequence. | `events`: { date, title, description }[] |
-| `SankeyDiagram` | Flow visualization between nodes. | `nodes`, `links` |
-| `NetworkGraph` | Interactive node-link diagram. | `nodes`, `links` |
-| `OrgChart` | Organizational hierarchy tree. | `data`: TreeStructure |
-| `MindMap` | Brainstorming/logic tree view. | `data`: TreeStructure |
-| `RadialNav` | Circular navigation menu. | `items`: { id, label, icon }[] |
-| `DockMenu` | macOS-style bottom dock. | `items`: { id, label, icon }[] |
-| `SidePanel` | Collapsible side drawer. | `items`: { id, label }[] |
+| id | name | target |
+|---|---|---|
+| `agentping` | AgentPing Storybook | `http://localhost:6006` |
+| `sofia` | Sofia Storybook | `http://localhost:6007` |
+| `web-ui` | AgentPing Web UI | `http://localhost:5173` |
+| `canvas` | AgentPing Canvas | `http://localhost:5174` |
+| `dashboard-manager-ui` | Dashboard Manager UI | `http://localhost:5175` |
+| `studio` | AgentPing Studio | `http://localhost:5180` |
 
-## 📊 Data & Logs (10)
+Legacy dashboard entries (`jarvis`, `flight-deck`, `ceo-stack`, `clawd`) are removed from runner-managed surfaces.
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `LiveLogStream` | Real-time scrolling log viewer. | `lines`: string[], `autoScroll`: boolean |
-| `StackTraceProfiler` | Interactive exception explorer. | `exception`: string, `frames`: StackFrame[] |
-| `AuditLogTable` | Security and action history. | `logs`: { actor, action, result }[] |
-| `HttpInspector` | Request/Response debugger. | `request`, `response` |
-| `EventTimeline` | Waterfall performance chart. | `events`: { start, width, label }[] |
-| `BuildStatusLogs` | CI/CD pipeline steps view. | `buildId`: string, `steps`: { name, status }[] |
-| `DockerStats` | Container resource metrics. | `containers`: { name, cpu, memory }[] |
-| `DistributedTrace` | Microservice trace spans. | `traceId`: string, `spans`: { service, duration }[] |
-| `LogSearchQuery` | Search results with highlighting. | `query`: string, `results`: { line, content }[] |
-| `AlertFeed` | Real-time system notifications. | `alerts`: { severity, message }[] |
+## Component Inventory (2026-02-11 local audit)
 
-## 💰 Finance & Markets (10)
+### AgentPing
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `OrderBook` | L2 Market Depth view (Bids/Asks). | `bids`, `asks`: { price, size, total }[] |
-| `CandleStickChart` | OHLCV Price action chart. | `data`: { time, open, high, low, close }[] |
-| `TickerTape` | Scrolling price ticker. | `items`: { symbol, price, change }[] |
-| `TradeHistory` | Recent market executions list. | `trades`: { price, size, side }[] |
-| `PortfolioPie` | Asset allocation donut chart. | `assets`: { label, value }[] |
-| `DepthChart` | Visual market depth graph. | `bids`, `asks`: [price, vol][] |
-| `AssetCard` | Single asset performance view. | `asset`, `balance`, `value`, `pnl` |
-| `MarketHeatmap` | Sector performance grid. | `sectors`: { name, performance }[] |
-| `ForecastingLine` | Predictive trend analysis. | `historical`, `forecast`: { time, value }[] |
-| `ExchangeStatus` | Platform operational status. | `status`, `latency`, `services`[] |
+- `packages/adapters/web-ui/src/components`: **281** `.tsx` components total
+  - non-Sofia local set: **210** `.tsx` components (`!*/sofia/*`)
+  - Sofia-imported set: **71** `.tsx` components (`*/sofia/*`)
 
-## ⚙️ System & Ops (9)
+- `packages/studio/src/renderer/components`: **54** `.tsx` components (excluding stories)
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `EncryptionStatus` | Security posture & algorithm view.| `status`: secure/vulnerable, `algorithm` |
-| `SignalMonitor` | Radio frequency/Strength gauge. | `frequency`: number, `strength`: number |
-| `ProcessTable` | Task manager style process list. | `processes`: { pid, name, cpu, mem }[] |
-| `TerminalConsole` | Interactive command shell output. | `lines`: string[], `prompt`: string |
-| `FirewallRules` | Network policy visualization. | `rules`: { type, source, port }[] |
-| `SystemHealthGauge` | CPU/Mem/Temp circular gauges. | `cpu`, `memory`, `temp` |
-| `PacketInspector` | Network packet analyzer. | `packets`: { source, dest, protocol }[] |
-| `ServerRackStatus` | Physical hardware status view. | `racks`: { id, status }[] |
-| `AccessPad` | Security access control visual. | `method`, `status` |
+- `packages/canvas/src/components`: **6** canvas-focused components
 
-## 📝 Content & Diffs (13)
+- `packages/dashboard-manager-ui/src/components`: **8** `.tsx` components
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `PdfPreview` | Native PDF viewer with download. | `file`: string, `url`: string |
-| `CodeDiffViewer` | Side-by-side or unified code diff. | `oldCode`, `newCode`, `language` |
-| `MarkdownEditor` | Rich text editor with preview. | `initialValue`: string, `readOnly`: boolean |
-| `ImageCompare` | Before/After image slider. | `before`, `after`, `labels` |
-| `HexInspector` | Binary data explorer. | `data`: Uint8Array |
-| `RichMarkdownRenderer` | Advanced Markdown display. | `content`: string |
-| `JsonDiff` | Structural JSON comparison. | `oldJson`, `newJson` |
-| `CsvViewer` | Tabular CSV data viewer. | `data`: string |
-| `ConflictResolver` | Merge conflict decision tool. | `base`, `current`, `incoming` |
-| `DiffStatSummary` | Git-style +/- stats line. | `added`, `removed`, `files` |
-| `FileMetadataCard` | Detailed file info view. | `file`: { name, size, type } |
-| `RegexTester` | Interactive regex debugger. | `pattern`, `testString` |
-| `FileAssetPicker` | Grid/List asset selector. | `files`: { name, type }[] |
+- Storybook stories:
+  - studio: **16**
+  - web-ui/Sofia: **1**
 
-## 🧱 Core & Feedback (15)
+### Sofia UI kit (imported into AgentPing)
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `PingCard` | Main agent message container. | `title`, `agentName`, `status` |
-| `StatusCard` | Operation status indicator. | `status`, `progress`, `eta` |
-| `ToastManager` | Flash notification system. | `toasts`: { message, type }[] |
-| `Badge` | Small status indicator. | `label`, `type` |
-| `AlertBanner` | Inline warning/error alert. | `title`, `message`, `type` |
-| `Skeleton` | Loading placeholder state. | `variant`, `width`, `height` |
-| `CircularProgress` | Round loading spinner. | `value`, `label` |
-| `LoadingProgress` | Linear progress bar. | `value`, `total` |
-| `RiskBadge` | Security risk level indicator. | `risk`: low/med/high |
-| `EffortBadge` | Work unit estimate indicator. | `effort`: quick/med/deep |
-| `ConfirmationModal` | Action verification dialog. | `title`, `message`, `onConfirm` |
-| `InfoSidebar` | Contextual help drawer. | `title`, `content` |
-| `InlineTutorialTooltip` | Onboarding guidance tip. | `target`, `content` |
-| `QuickActionBar` | Bottom shortcut toolbar. | `actions`: { label, icon }[] |
-| `EnrichmentPanel` | AI context/metadata sidecar. | `notes`, `directives`[] |
+- `packages/adapters/web-ui/src/components/sofia`: **71** `.tsx` components
 
-## 🖱️ Interaction & Forms (11)
+- Unique normalized component names in Sofia set: **64**
 
-| Component | Description | Props |
-|-----------|-------------|-------|
-| `StepChecklist` | Multi-step standard procedure. | `steps`: { id, checked }[] |
-| `DirectionPicker` | Strategic choice selector. | `directions`: { rationale, effort }[] |
-| `SelectionList` | Options list with preview. | `options`: { label, preview }[] |
-| `ApprovalButtons` | Big Approve/Deny controls. | `risk`, `details` |
-| `QuestionInput` | Freeform text response field. | `question`, `placeholder` |
-| `NotificationBanner` | Top-level system notice. | `message`, `level` |
-| `DirectiveChip` | Interactive meta-instruction. | `type`, `value` |
-| `DirectiveInput` | New instruction entry field. | `type`, `label` |
-| `Checkbox` | Boolean toggle. | `label`, `checked` |
-| `DependencyGraph` | Task dependency visualizer. | `nodes`, `dependencies` |
-| `ProgressTimeline` | Step-based history view. | `steps`: { label, status }[] |
+## Direct Overlap (name-normalized)
 
-## usage
+- Overlap between AgentPing local web-ui components and Sofia set: **3** normalized names (`badge`, `searchinput`, `textarea`).
 
-All components are registered in `catalog.ts` and can be invoked by Claude Code by specifying the component name and matching props in the `artifact_name` field of the response.
+- Remaining components in AgentPing local web-ui set are consolidation candidates (merge, wrap, or deprecate).
+
+## Sofia Import Delta
+
+- One-time import baseline is now local-first under `packages/adapters/web-ui/src/components/sofia`.
+
+- Source repo path for external Sofia is not currently mounted in this workspace snapshot, so parity is measured against local normalized overlap + compile/runtime validation.
+
+## Theme Contract (fail-fast)
+
+- Canonical themes: `agentping`, `skynet`, `syslog`
+
+- Canonical modes: `dark`, `light`
+
+- Unknown theme or mode is treated as invalid configuration (fail-fast), not fallback.
+
+## Canonical Verification Commands
+
+```bash
+# Kill legacy dashboard/Next servers
+pnpm dashboards:kill
+
+# Start consolidated dashboard manager (single control plane)
+pnpm dashboards:start
+
+# Dashboard runtime inventory
+pnpm dashboards:status
+
+# AgentPing component count
+find packages/adapters/web-ui/src/components -type f -name '*.tsx' | wc -l
+
+# Sofia local component count
+find packages/adapters/web-ui/src/components/sofia -type f -name '*.tsx' | wc -l
+
+# Full component name lists (sorted)
+find packages/adapters/web-ui/src/components -type f -name '*.tsx' -exec basename {} .tsx \\\; | sort
+find packages/adapters/web-ui/src/components/sofia -type f -name '*.tsx' -exec basename {} .tsx \\\; | sort
+```

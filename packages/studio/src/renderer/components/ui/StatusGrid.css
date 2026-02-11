@@ -63,7 +63,7 @@
 }
 
 /* Sofia theme - sharp edges, cyber panel styling */
-[data-theme="sofia"] .status-card {
+[data-theme="skynet"] .status-card {
   border-radius: 0;
   background: linear-gradient(135deg, var(--sofia-surface) 0%, hsl(220 20% 6%) 100%);
   border: 1px solid var(--sofia-border-default);
@@ -78,7 +78,7 @@
   box-shadow: 0 2px 12px hsl(220 20% 0% / 0.4);
 }
 
-[data-theme="sofia"] .status-card.clickable:hover {
+[data-theme="skynet"] .status-card.clickable:hover {
   border-color: var(--sofia-border-accent);
   box-shadow: 0 4px 20px hsl(220 20% 0% / 0.6), 0 0 10px hsla(195 100% 50% / 0.2);
 }
@@ -114,22 +114,22 @@
 }
 
 /* Sofia theme - use cyber colors with glow */
-[data-theme="sofia"] .status-card.success::before {
+[data-theme="skynet"] .status-card.success::before {
   background: var(--sofia-cyber-green);
   box-shadow: 0 0 8px var(--sofia-cyber-green);
 }
 
-[data-theme="sofia"] .status-card.error::before {
+[data-theme="skynet"] .status-card.error::before {
   background: var(--sofia-cyber-red);
   box-shadow: 0 0 8px var(--sofia-cyber-red);
 }
 
-[data-theme="sofia"] .status-card.warning::before {
+[data-theme="skynet"] .status-card.warning::before {
   background: var(--sofia-cyber-yellow);
   box-shadow: 0 0 8px var(--sofia-cyber-yellow);
 }
 
-[data-theme="sofia"] .status-card.active::before {
+[data-theme="skynet"] .status-card.active::before {
   background: var(--sofia-cyber-cyan);
   box-shadow: 0 0 8px var(--sofia-cyber-cyan);
 }
