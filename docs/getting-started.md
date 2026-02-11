@@ -1,0 +1,108 @@
+# AgentPing Getting Started (Consolidated Runtime)
+
+This guide reflects the current runtime topology in this repository.
+
+For product definition and target architecture, read:
+
+- `docs/architecture.md`
+- `docs/web-ui-architecture.md`
+- `docs/genui/readme.md`
+
+## Prerequisites
+
+- Node.js `>=18`
+- `pnpm` (workspace package manager)
+
+## Runtime Surfaces (Dashboard Runner Source of Truth)
+
+| id | URL | package |
+|---|---|---|
+| `agentping` | `http://127.0.0.1:6006` | `packages/studio` Storybook |
+| `sofia` | `http://127.0.0.1:6007` | `packages/ui` Storybook |
+| `web-ui` | `http://127.0.0.1:5173` | `packages/adapters/web-ui` |
+| `canvas` | `http://127.0.0.1:5174` | `packages/canvas` |
+| `dashboard-manager-ui` | `http://127.0.0.1:5175` | `packages/dashboard-manager-ui` |
+| `studio` | `http://127.0.0.1:5180` | `packages/studio` |
+
+## 1. Install And Build
+
+```bash
+pnpm install
+pnpm -r build
+```
+
+## 2. Reset Old Dashboard Processes
+
+```bash
+pnpm dashboards:kill
+```
+
+This kills known legacy dashboard ports and common Next.js dev servers.
+
+## 3. Start Dashboard Control Plane
+
+```bash
+pnpm dashboards:start
+```
+
+This starts the dashboard manager server on `127.0.0.1:3030` and launches surfaces from:
+`packages/dashboard-runner/config/dashboards.yaml`
+
+## 4. Verify Dashboard Status
+
+```bash
+pnpm dashboards:status
+curl -s http://127.0.0.1:3030/api/dashboards | jq '.[] | {id, status: .status.status, port: .status.port}'
+```
+
+## 5. Start Protocol Daemon (API + Ping Runtime)
+
+In a second terminal:
+
+```bash
+pnpm --filter @agentping/daemon dev
+```
+
+Daemon endpoints:
+
+- API: `http://127.0.0.1:7890/api/v1`
+- WebSocket: `ws://127.0.0.1:7890/api/v1/ws`
+
+## 6. Start Full Workspace Dev (Optional)
+
+If you want all package dev watchers at once:
+
+```bash
+pnpm dev
+```
+
+Use this only when you need broad parallel development; it is noisier than runner-managed startup.
+
+## Theme Contract (Fail-Fast)
+
+- Allowed themes: `agentping`, `skynet`, `syslog`
+- Allowed modes: `light`, `dark`
+- Invalid theme or mode should throw immediately (no fallback selection)
+
+## Quick Ping Smoke Test
+
+```bash
+curl -X POST http://127.0.0.1:7890/api/v1/pings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agentId": "smoke-agent",
+    "agentName": "Smoke Agent",
+    "sessionId": "smoke-1",
+    "payload": {
+      "type": "question",
+      "question": "Smoke check?",
+      "options": ["yes", "no"]
+    }
+  }'
+```
+
+Then check pending pings:
+
+```bash
+curl -s "http://127.0.0.1:7890/api/v1/pings"
+```

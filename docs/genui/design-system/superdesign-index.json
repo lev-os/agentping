@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "title": "Superdesign GenUI Prompts - Quick Reference",
+    "total_prompts": 16,
+    "categories": {
+      "style_prompts": 10,
+      "layout_prompts": 10,
+      "component_prompts": 10
+    },
+    "generated": "2026-02-10",
+    "source": "~/.agents/skills/superdesign-prompt-library/references/superdesign-prompts.jsonl"
+  },
+  "featured_themes": [
+    {
+      "slug": "mosaic-grid-architecture-style",
+      "title": "Mosaic Grid Architecture Style",
+      "best_for": "B2B SaaS, developer tools, technical portfolios",
+      "colors": ["#1A3C2B forest green", "#F7F7F5 cream", "#FF8C69 coral", "#9EFFBF mint"],
+      "fonts": ["Space Grotesk", "General Sans", "JetBrains Mono"],
+      "keywords": ["minimal", "architectural", "technical-blueprint", "bento-grid"]
+    },
+    {
+      "slug": "linear-inspired-developer-tool-dashboard",
+      "title": "Linear Inspired Developer Tool Dashboard",
+      "best_for": "Developer tools, project management, technical dashboards",
+      "colors": ["neutral palette", "high contrast", "subtle accents"],
+      "keywords": ["clean", "minimal", "developer-focused", "keyboard-first"]
+    },
+    {
+      "slug": "analytics-dashboard",
+      "title": "Analytics Dashboard",
+      "best_for": "Analytics platforms, data visualization, enterprise monitoring",
+      "colors": ["#3B82F6 blue", "gray scales", "high contrast"],
+      "fonts": ["Inter", "JetBrains Mono"],
+      "keywords": ["data-driven", "enterprise", "sidebar-nav", "metrics"]
+    },
+    {
+      "slug": "enterprise-admin-platform",
+      "title": "Enterprise Admin Platform",
+      "best_for": "Complex workflows, admin tools, enterprise SaaS",
+      "keywords": ["professional", "scalable", "command-center"]
+    },
+    {
+      "slug": "modular-card-dashboard",
+      "title": "Modular Card Dashboard",
+      "best_for": "Flexible layouts, dynamic content, customizable dashboards",
+      "keywords": ["card-based", "modular", "responsive", "draggable"]
+    },
+    {
+      "slug": "glassmorphism-hr-dashboard",
+      "title": "Glassmorphism HR Dashboard",
+      "best_for": "Modern SaaS, premium feel, elevated design",
+      "keywords": ["glassmorphic", "backdrop-blur", "premium", "modern"]
+    },
+    {
+      "slug": "zen-design-dashboard",
+      "title": "Zen Design Dashboard",
+      "best_for": "B2B SaaS marketing, calm professional aesthetic",
+      "keywords": ["minimal", "calm", "professional", "trustworthy"]
+    },
+    {
+      "slug": "neon-edge-or-cinematic-dashboard",
+      "title": "Neon Edge | Cinematic Dashboard",
+      "best_for": "Eye-catching accents, modern forward-thinking design",
+      "keywords": ["neon", "cinematic", "high-contrast", "bold"]
+    }
+  ],
+  "recommended_combinations": {
+    "agentping_dashboard": {
+      "style": "linear-inspired-developer-tool-dashboard",
+      "layout": "modular-card-dashboard",
+      "components": "glassmorphism-hr-dashboard",
+      "special": "mosaic-grid-architecture-style"
+    },
+    "saas_marketing": {
+      "style": "zen-design-dashboard",
+      "layout": "summary-to-detail-dashboard",
+      "components": "neon-edge-or-cinematic-dashboard"
+    },
+    "analytics_tools": {
+      "style": "analytics-dashboard",
+      "layout": "card-grid-browse",
+      "components": "neumorphictradedashboard"
+    },
+    "enterprise_admin": {
+      "style": "enterprise-admin-platform",
+      "layout": "fedmindy-or-empire-command-dashboard",
+      "components": "horizon-minimalist-command-dashboard"
+    }
+  },
+  "all_slugs": [
+    "mosaic-grid-architecture-style",
+    "analytics-dashboard",
+    "linear-inspired-developer-tool-dashboard",
+    "enterprise-admin-platform",
+    "modular-card-dashboard",
+    "bento-configuration-dashboard",
+    "glassmorphism-hr-dashboard",
+    "horizon-minimalist-command-dashboard",
+    "card-grid-browse",
+    "zen-design-dashboard",
+    "summary-to-detail-dashboard",
+    "neon-edge-or-cinematic-dashboard",
+    "fedmindy-or-empire-command-dashboard",
+    "hudson-mcdaniel-or-compact-elite-dashboard",
+    "dashboardpro",
+    "neumorphictradedashboard"
+  ]
+}

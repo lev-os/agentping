@@ -1,0 +1,533 @@
+product: Thesys C1
+extraction_date: 2026-02-10
+total_features: 42
+categories:
+  core_api:
+    features:
+      - id: openai-compatible-api
+        name: OpenAI-Compatible API Endpoint
+        description: API middleware that wraps LLM calls with UI generation capabilities
+        thesys_impl: "OpenAI SDK → api.thesys.dev/v1/embed/ → model selection (Claude 3.5 Sonnet, Claude Sonnet 4) + metadata schema"
+        agentping_status: missing
+        agentping_gap: "AgentPing uses custom MCP protocol only, no OpenAI-compatible REST endpoint"
+        effort: large
+        priority: low
+        notes: "MCP-native is fine for agent use cases; OpenAI compatibility needed for broader ecosystem integration"
+        files_to_modify:
+          - community/agentping/packages/adapters/http-api/src/index.ts
+          - community/agentping/packages/core/src/services/ping-service.ts
+
+      - id: bearer-token-auth
+        name: Bearer Token Authentication
+        description: Standard HTTP bearer token authentication for API access
+        thesys_impl: "Authorization: Bearer <token> header validation"
+        agentping_status: missing
+        agentping_gap: "No HTTP API auth layer; MCP uses stdio transport only"
+        effort: medium
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/adapters/http-api/src/auth.ts
+          - community/agentping/packages/core/src/ports/index.ts
+
+      - id: model-selection
+        name: Dynamic Model Selection
+        description: Allow callers to choose which LLM model to use per request
+        thesys_impl: "model: 'claude-3-5-sonnet' | 'claude-sonnet-4' in request payload"
+        agentping_status: missing
+        agentping_gap: "AgentPing doesn't abstract over LLM provider; tightly coupled to caller's MCP client"
+        effort: large
+        priority: low
+        notes: "AgentPing is UI-focused, not LLM orchestration layer"
+        files_to_modify:
+          - community/agentping/packages/core/src/domain/ping.ts
+
+      - id: component-metadata-schema
+        name: Component Metadata Schema
+        description: Structured metadata for component registration and discovery
+        thesys_impl: "c1_custom_components, c1_included_components arrays in API metadata"
+        agentping_status: partial
+        agentping_gap: "Has 12 primitives + 71 premium components but no formal registry/discovery API"
+        effort: small
+        priority: high
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/index.ts
+          - community/agentping/packages/canvas/src/registry.ts
+
+      - id: tool-calling-standard
+        name: Standard Tool Calling (OpenAI Format)
+        description: Support OpenAI-style tool/function calling in requests
+        thesys_impl: "tools array with type: 'function', parameters in JSON Schema format"
+        agentping_status: has
+        agentping_gap: "None - MCP tools use similar JSON Schema contract"
+        effort: small
+        priority: low
+        notes: "Already compatible via MCP tooling"
+        files_to_modify:
+          - community/agentping/packages/mcp/src/tools.ts
+
+      - id: mcp-integration
+        name: Model Context Protocol Integration
+        description: Native MCP server for tool calling and resource access
+        thesys_impl: "MCP servers for filesystem, databases, external APIs"
+        agentping_status: has
+        agentping_gap: "None - AgentPing is MCP-native with 10+ tools"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+  streaming:
+    features:
+      - id: sse-streaming
+        name: SSE Streaming Render
+        description: Progressive component rendering via Server-Sent Events
+        thesys_impl: "text/event-stream with incremental DOM updates as stream arrives"
+        agentping_status: missing
+        agentping_gap: "All renderers (HTML, Pencil, React) are static; no streaming support"
+        effort: large
+        priority: critical
+        notes: "Core gap - Thesys streaming is their differentiator"
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/renderers/react.ts
+          - community/agentping/packages/canvas/src/polymorph/renderers/html.ts
+          - community/agentping/packages/adapters/web-ui/src/App.tsx
+          - community/agentping/packages/adapters/web-ui/src/components/StreamRenderer.tsx
+
+      - id: progressive-component-rendering
+        name: Progressive Component Rendering
+        description: Components update incrementally as LLM streams response
+        thesys_impl: "transformStream utility for stream accumulation + partial renders"
+        agentping_status: missing
+        agentping_gap: "Components are static payloads; no incremental update mechanism"
+        effort: large
+        priority: critical
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/streaming/index.ts
+          - community/agentping/packages/core/src/services/ping-service.ts
+
+      - id: stream-accumulation
+        name: Stream Accumulation for Persistence
+        description: Accumulate streamed chunks for final persistence/replay
+        thesys_impl: "Stream buffering with final message persistence"
+        agentping_status: missing
+        agentping_gap: "No stream buffer; all pings are discrete events"
+        effort: medium
+        priority: high
+        files_to_modify:
+          - community/agentping/packages/core/src/ports/store.ts
+          - community/agentping/packages/core/src/services/stream-buffer.ts
+
+      - id: incremental-dom-updates
+        name: Incremental DOM Updates
+        description: Patch DOM efficiently as stream chunks arrive
+        thesys_impl: "React setState with partial component state updates"
+        agentping_status: missing
+        agentping_gap: "No DOM diffing/patching; full re-renders only"
+        effort: medium
+        priority: high
+        files_to_modify:
+          - community/agentping/packages/adapters/web-ui/src/components/StreamRenderer.tsx
+          - community/agentping/packages/studio/src/renderer/canvas/CanvasWorkspace.tsx
+
+  components:
+    features:
+      - id: chat-interface
+        name: Full Chat Interface Component (C1Chat)
+        description: Complete chat UI with customization options
+        thesys_impl: "C1Chat component with message history, input, streaming"
+        agentping_status: partial
+        agentping_gap: "Has message list primitives but no integrated chat container component"
+        effort: medium
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/studio/src/renderer/components/ChatInterface.tsx
+          - community/agentping/packages/canvas/src/polymorph/primitives.ts
+
+      - id: standalone-component-renderer
+        name: Standalone Component Renderer (C1Component)
+        description: Render individual components outside chat context
+        thesys_impl: "C1Component for embedding components in custom layouts"
+        agentping_status: has
+        agentping_gap: "None - CanvasRenderer handles standalone component rendering"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: theme-provider
+        name: Theme Provider with Light/Dark Mode
+        description: Global theming system with mode switching
+        thesys_impl: "ThemeProvider component wrapping app with light/dark mode toggle"
+        agentping_status: has
+        agentping_gap: "None - 3 themes (terminal-swiss, skynet, system) with light/dark support"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: builtin-charts
+        name: Built-in Chart Components
+        description: Line, bar, pie, area charts for data visualization
+        thesys_impl: "Multiple chart types in Crayon component library"
+        agentping_status: partial
+        agentping_gap: "Has MetricValue and basic data display, no interactive charts"
+        effort: large
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/studio/src/renderer/components/charts/index.tsx
+          - community/agentping/packages/canvas/src/polymorph/primitives.ts
+
+      - id: builtin-tables
+        name: Built-in Table Components
+        description: Sortable, filterable data tables
+        thesys_impl: "Table component with sorting, pagination, filtering"
+        agentping_status: partial
+        agentping_gap: "Has Table UI component but no sorting/filtering logic"
+        effort: medium
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/studio/src/renderer/components/ui/Table.tsx
+          - community/agentping/packages/canvas/src/polymorph/primitives.ts
+
+      - id: builtin-cards
+        name: Built-in Card Components
+        description: Multi-variant card layouts for content grouping
+        thesys_impl: "Card component with header, footer, variants"
+        agentping_status: has
+        agentping_gap: "None - Card primitive with children support exists"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: builtin-forms
+        name: Built-in Form Components
+        description: Form controls with validation and submission
+        thesys_impl: "Form, Input, Select, Checkbox, Radio components"
+        agentping_status: partial
+        agentping_gap: "Has InputField primitive but no form container or validation"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/primitives.ts
+          - community/agentping/packages/studio/src/renderer/components/forms/index.tsx
+
+      - id: builtin-slides
+        name: Built-in Slide/Carousel Components
+        description: Presentation slides or carousel UI
+        thesys_impl: "Slide component for sequential content display"
+        agentping_status: missing
+        agentping_gap: "No carousel or slide presentation components"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/studio/src/renderer/components/Carousel.tsx
+
+      - id: builtin-markdown
+        name: Built-in Markdown Renderer
+        description: Render markdown content with syntax highlighting
+        thesys_impl: "Markdown component with code block highlighting"
+        agentping_status: has
+        agentping_gap: "None - RichMarkdownRenderer exists"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: editable-table
+        name: Editable Table Component
+        description: Tables with in-cell editing capabilities
+        thesys_impl: "EditableTable for data manipulation"
+        agentping_status: missing
+        agentping_gap: "Table is display-only, no editing support"
+        effort: large
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/studio/src/renderer/components/ui/EditableTable.tsx
+
+      - id: custom-components-zod
+        name: Custom Components via Zod Schema
+        description: Define custom components with Zod schema → JSON Schema conversion
+        thesys_impl: "Zod schema → JSON Schema → component registration pipeline"
+        agentping_status: missing
+        agentping_gap: "No schema-driven component generation; components are hardcoded"
+        effort: large
+        priority: high
+        notes: "Would enable dynamic component creation from agent definitions"
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/schema-compiler.ts
+          - community/agentping/packages/core/src/parsers/index.ts
+
+  sdk_hooks:
+    features:
+      - id: use-on-action
+        name: useOnAction Hook (Bidirectional)
+        description: React hook for user action → new LLM response cycle
+        thesys_impl: "useOnAction(() => { ... }) triggers new API call on user interaction"
+        agentping_status: missing
+        agentping_gap: "No bidirectional event handlers on primitives; one-way agent→human only"
+        effort: large
+        priority: critical
+        notes: "Core interactivity gap - primitives have no onClick/onChange handlers"
+        files_to_modify:
+          - community/agentping/packages/canvas/src/polymorph/types.ts
+          - community/agentping/packages/adapters/web-ui/src/hooks/useOnAction.ts
+          - community/agentping/packages/core/src/services/action-service.ts
+
+      - id: use-c1-state
+        name: useC1State Hook (Persistent State)
+        description: Persistent component state scoped to thread
+        thesys_impl: "useC1State(key, defaultValue) with thread-scoped persistence"
+        agentping_status: missing
+        agentping_gap: "No component state persistence; pings are stateless"
+        effort: medium
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/adapters/web-ui/src/hooks/useC1State.ts
+          - community/agentping/packages/core/src/ports/store.ts
+
+      - id: use-thread-manager
+        name: useThreadManager Hook
+        description: Thread CRUD operations via React hook
+        thesys_impl: "useThreadManager() for creating, listing, deleting threads"
+        agentping_status: missing
+        agentping_gap: "No thread concept; pings are session-scoped only"
+        effort: large
+        priority: low
+        notes: "Would require thread abstraction layer"
+        files_to_modify:
+          - community/agentping/packages/core/src/domain/thread.ts
+          - community/agentping/packages/adapters/web-ui/src/hooks/useThreadManager.ts
+
+      - id: transform-stream
+        name: transformStream Utility
+        description: Stream transformation utility for custom processing
+        thesys_impl: "transformStream(chunks) for accumulation and parsing"
+        agentping_status: missing
+        agentping_gap: "No streaming infrastructure at all"
+        effort: large
+        priority: critical
+        files_to_modify:
+          - community/agentping/packages/core/src/utils/transform-stream.ts
+          - community/agentping/packages/canvas/src/polymorph/streaming/transform.ts
+
+  state_management:
+    features:
+      - id: thread-based-persistence
+        name: Thread-Based Conversation Persistence
+        description: Conversations organized into persistent threads
+        thesys_impl: "Thread ID → message history with metadata"
+        agentping_status: missing
+        agentping_gap: "Pings are ephemeral within session; no thread abstraction"
+        effort: large
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/core/src/domain/thread.ts
+          - community/agentping/packages/core/src/ports/store.ts
+
+      - id: message-store-adapters
+        name: Message Store Adapters (In-Memory, Prisma, Firebase)
+        description: Pluggable persistence backends for messages
+        thesys_impl: "In-memory, Prisma, Firebase adapters for message storage"
+        agentping_status: partial
+        agentping_gap: "Has in-memory store only; no database adapters"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/core/src/ports/store.ts
+          - community/agentping/packages/adapters/prisma-store/src/index.ts
+          - community/agentping/packages/adapters/firebase-store/src/index.ts
+
+      - id: component-state-persistence
+        name: Component State Persistence (useC1State)
+        description: Per-component state that survives page refresh
+        thesys_impl: "useC1State stores values scoped to thread + component"
+        agentping_status: missing
+        agentping_gap: "No component-level state; primitives are stateless"
+        effort: medium
+        priority: medium
+        files_to_modify:
+          - community/agentping/packages/core/src/services/component-state-service.ts
+          - community/agentping/packages/adapters/web-ui/src/hooks/useC1State.ts
+
+      - id: tool-execution-state
+        name: Tool Execution State (Thinking Indicators)
+        description: Track tool execution status with UI feedback
+        thesys_impl: "Loading states during tool calls with 'thinking' indicators"
+        agentping_status: partial
+        agentping_gap: "Has ping status (pending/approved/rejected) but no tool-level execution state"
+        effort: small
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/core/src/domain/ping.ts
+          - community/agentping/packages/adapters/web-ui/src/components/ThinkingIndicator.tsx
+
+  theming:
+    features:
+      - id: theme-provider-component
+        name: ThemeProvider Component
+        description: React context provider for theme distribution
+        thesys_impl: "ThemeProvider wrapping app with theme prop"
+        agentping_status: has
+        agentping_gap: "None - Theme system exists with 3 themes"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: css-imports
+        name: CSS Imports from Component Library
+        description: Styled components with external CSS imports
+        thesys_impl: "import '@crayonai/react-ui/styles.css' for component styles"
+        agentping_status: partial
+        agentping_gap: "Inline styles in renderers; no external CSS package"
+        effort: small
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/canvas/src/styles/index.css
+          - community/agentping/package.json
+
+      - id: tailwind-integration
+        name: Tailwind CSS Integration
+        description: Use Tailwind utility classes in custom components
+        thesys_impl: "Tailwind config + className props support"
+        agentping_status: has
+        agentping_gap: "None - Studio uses Tailwind extensively"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: dynamic-theme-switching
+        name: Dynamic Theme Switching (Light/Dark)
+        description: Runtime theme toggle without page refresh
+        thesys_impl: "setTheme('light' | 'dark') function"
+        agentping_status: has
+        agentping_gap: "None - ThemeConfig supports runtime switching"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+  integrations:
+    features:
+      - id: nextjs-integration
+        name: Next.js Framework Integration
+        description: Official Next.js support with SSR/SSG compatibility
+        thesys_impl: "Next.js app router + server components support"
+        agentping_status: missing
+        agentping_gap: "No Next.js adapter; React rendering is client-only"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/nextjs/src/index.ts
+
+      - id: vercel-ai-sdk
+        name: Vercel AI SDK Integration
+        description: Works with Vercel AI SDK for streaming
+        thesys_impl: "Compatible with useChat, useCompletion hooks"
+        agentping_status: missing
+        agentping_gap: "No Vercel AI SDK integration"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/vercel-ai/src/index.ts
+
+      - id: langchain-integration
+        name: LangChain Integration
+        description: Use with LangChain agents and chains
+        thesys_impl: "LangChain tool integration examples"
+        agentping_status: partial
+        agentping_gap: "Could work via MCP but no official LangChain adapter"
+        effort: small
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/langchain/src/index.ts
+
+      - id: autogen-integration
+        name: AutoGen Integration
+        description: Use with Microsoft AutoGen agents
+        thesys_impl: "AutoGen agent tool registration"
+        agentping_status: missing
+        agentping_gap: "No AutoGen adapter"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/autogen/src/index.ts
+
+      - id: copilotkit-integration
+        name: CopilotKit Integration
+        description: Works with CopilotKit framework
+        thesys_impl: "CopilotKit action integration"
+        agentping_status: missing
+        agentping_gap: "No CopilotKit adapter"
+        effort: medium
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/copilotkit/src/index.ts
+
+  infrastructure:
+    features:
+      - id: zero-data-retention
+        name: Zero Data Retention Policy
+        description: No message/conversation data stored server-side
+        thesys_impl: "Stateless API, client-side persistence only"
+        agentping_status: has
+        agentping_gap: "None - AgentPing is client-side first"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+      - id: compliance-certifications
+        name: Compliance Certifications (GDPR, SOC2, ISO27001)
+        description: Security and privacy certifications
+        thesys_impl: "Certified infrastructure with audit reports"
+        agentping_status: missing
+        agentping_gap: "Community project, no formal certifications"
+        effort: n/a
+        priority: low
+        notes: "Not applicable for OSS project; enterprise deployment consideration"
+        files_to_modify: []
+
+      - id: vercel-deployment
+        name: Vercel Deployment Optimization
+        description: Optimized for Vercel platform deployment
+        thesys_impl: "Vercel-specific configs and edge function support"
+        agentping_status: missing
+        agentping_gap: "No deployment tooling; manual setup required"
+        effort: small
+        priority: low
+        files_to_modify:
+          - community/agentping/vercel.json
+          - community/agentping/packages/adapters/vercel/src/index.ts
+
+      - id: rate-limiting
+        name: Rate Limiting
+        description: API rate limiting and quota management
+        thesys_impl: "Per-user rate limits with quota tracking"
+        agentping_status: missing
+        agentping_gap: "No rate limiting in HTTP adapter"
+        effort: small
+        priority: low
+        files_to_modify:
+          - community/agentping/packages/adapters/http-api/src/middleware/rate-limit.ts
+
+      - id: websocket-transport
+        name: WebSocket Transport
+        description: Real-time bidirectional communication via WebSocket
+        thesys_impl: "WebSocket for live updates and streaming"
+        agentping_status: has
+        agentping_gap: "None - dashboard-manager-server uses WebSocket"
+        effort: n/a
+        priority: n/a
+        files_to_modify: []
+
+summary:
+  has: 14
+  partial: 10
+  missing: 18
+  coverage_percent: 57.1
+  critical_gaps:
+    - SSE streaming render (missing)
+    - Progressive component rendering (missing)
+    - useOnAction bidirectional events (missing)
+    - transformStream utility (missing)
+    - Custom components via Zod schema (missing)
+  high_priority_additions:
+    - Component metadata registry
+    - Incremental DOM updates
+    - Stream accumulation
+    - Component state persistence
+    - Schema-driven component generation

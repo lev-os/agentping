@@ -1,294 +1,113 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/AgentPing-v2.1-cyan?style=for-the-badge&logo=dependabot&logoColor=white" alt="AgentPing Version" />
-  <img src="https://img.shields.io/badge/Status-Production_Ready-success?style=for-the-badge" alt="Status" />
-  <img src="https://img.shields.io/badge/Protocol-Hexagonal-purple?style=for-the-badge&logo=hexagon" alt="Architecture" />
-  <img src="https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge" alt="License" />
-</p>
+# AgentPing
 
-<h1 align="center">⚡ AgentPing v2</h1>
+AgentPing is an AI-native interaction protocol: agents emit structured intent, and humans respond through rich action surfaces instead of plain chat.
 
-<p align="center">
-  <strong>The High-Fidelity Agent-Human Interaction Protocol</strong><br/>
-  <em>"Don't just notify. Orchestrate."</em>
-</p>
+## What This Product Is
 
-<p align="center">
-  <a href="#-the-mission">Mission</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-human-in-the-loop-gallery">Capabilities</a> •
-  <a href="#-mcp--agent-integration">MCP Protocol</a> •
-  <a href="#-quick-start">Quick Start</a>
-</p>
+AgentPing is built around one idea:
 
----
+- Any action surface can be an AgentPing surface.
 
-## 🌌 The Mission
+That includes:
 
-**The chat box is a bottleneck.**
+- web apps
+- desktop apps
+- browser extension surfaces
+- mobile surfaces (including iOS/Swift adapters)
+- chat channels (Telegram, Slack, Discord)
 
-We are entering the age of autonomous agents—programs that code, trade, research, and operate infrastructure. Yet, our main way of directing them is still... texting?
+Chat is supported, but it is not the primary UX model.
 
-When a high-performance agent needs human guidance, it usually dumps a wall of text and asks for a "yes/no". This is low-fidelity, fragile, and frankly, boring. It forces you to function as a spell-checker rather than a commander.
+## Current State (2026-02-11)
 
-**AgentPing exists to change the topology of collaboration.**
+What is working now in this repo:
 
-We believe that **High-Agency AI deserves High-Fidelity UI**. When your agent drafts a deployment plan, it shouldn't just send text; it should present an interactive checklist with risk scores. When it analyzes a market, it should render an interactive heatmap, not a CSV summary.
+- Hexagonal core domain (`@agentping/core`) with ports and adapters
+- Dashboard runner control plane (`dashboard-runner` + `dashboard-manager-server`)
+- Active UI surfaces:
+  - Studio Storybook (`:6006`)
+  - Sofia/UI-kit Storybook (`:6007`)
+  - web-ui (`:5173`)
+  - canvas (`:5174`)
+  - dashboard-manager-ui (`:5175`)
+  - studio web shell (`:5180`)
+- Canonical canvas payload is Sofia-first for render pings
+- Fail-fast theme contract in Studio/web-ui: `agentping | skynet | syslog` and `light | dark`
 
-**We are building the protocol for Orchestration.**
-AgentPing transforms your relationship with AI from "chatting" to "conducting". It gives your agents the power to summon rich, "Cyber-Premium" interfaces on demand, allowing you to visualize their internal state, adjust their trajectory with precision, and approve their critical actions with confidence.
+Known consolidation gaps:
 
-It's not just a tool. It's the **Mission Control** for the agentic future.
+- Duplicate canvas/renderer logic still exists across packages
+- Adapter-owned component trees still exist outside `packages/ui`
+- Studio still has embedded dashboard orchestration paths alongside runner/server
 
----
+## End-State Goals
 
-## 🏗 Architecture
+1. One UI kit (`packages/ui`) as shared source of primitives.
+2. One canvas implementation with explicit modes.
+3. One dashboard control plane (runner + manager server only).
+4. Strict fail-fast config (no hidden theme/mode fallback).
+5. Open-source adapter model so new channels are easy to build.
 
-AgentPing is built on a strict **Hexagonal Architecture (Ports & Adapters)**, ensuring the core logic is isolated from the "Real World" (UIs, APIs, Databases).
+## Immediate Handoff Scope
 
-```mermaid
-graph TD
-    subgraph "External World (Adapters)"
-        Client[🤖 Claude / Cursor] -->|MCP Protocol| API[Input Adapter: MCP/HTTP]
-        Browser[🖥️ Web Browser] <-->|WebSocket| UI[Output Adapter: React UI]
-        DB[(Validation Store)] <-->|SQL| Storage[Storage Adapter: SQLite]
-    end
+Current dev handoff focuses on three items:
 
-    subgraph "AgentPing Core Application"
-        API -->|Submit Ping| Service[Ping Service]
-        Service -->|Parse & Route| Parser{Payload Parser}
-        Parser -->|Wait for Human| State[State Machine]
-        State -->|Emit Event| EventBus
-        EventBus -->|Push Update| UI
-    end
-```
+1. Make Sofia primitives generic (remove aviation/domain-bound naming from canonical shared components).
+2. Enforce single component library ownership in `packages/ui`.
+3. Execute GenUI upgrades against target architecture while clearly labeling temporary current-state exceptions.
 
-### The "Ping" Lifecycle
+## Open-Source Adapter Vision
 
-```mermaid
-sequenceDiagram
-    participant AI as 🤖 Agent (Claude)
-    participant Core as ⚡ AgentPing Core
-    participant Human as 👤 Human (Web UI)
+The target developer experience:
 
-    AI->>Core: request_step_approval(Plan JSON)
-    activate Core
-    Core->>Human: 🔔 Push Notification
-    Core->>Human: Render Interactive Checklist
-    
-    loop Deliberation
-        Human->>Human: Reviews Items
-        Human->>Human: Checks Diffs/Logs
-    end
-    
-    Human->>Core: ✅ Submit Approval (Steps 1,3 verified)
-    deactivate Core
-    
-    Core->>AI: Return Structured Response
-    Note right of AI: Resume Execution
-```
+- install AgentPing core/runtime packages
+- implement one adapter contract
+- render AgentPing primitives in your surface (browser extension, SwiftUI, Telegram, etc.)
+- receive typed action callbacks back to your agent runtime
 
----
+Design principle:
 
-## 🎨 Human-in-the-Loop Gallery
+- strong primitives + typed contracts + deterministic rendering
 
-We have digitized every possible interaction pattern into **150+ "Primitives"**. The Gallery is categorized into specialized domains:
+This is the base needed for voice-driven generative UI where chat is secondary.
 
-### 📊 1. Mission Control Dashboard
-*   **System Health**: `SystemHealthGauge` (CPU/Mem/Net), `ResourceGauge` (Neon Glow), `BatteryMeter`.
-*   **Live Metrics**: `MetricChart`, `StorageDistribution`, `ActiveSessions`.
-*   **Status**: `StatusCard`, `AlertBanner` (Critical/Warning), `LiveBadge`.
-
-### 🧠 2. AI Intelligence & Telemetry
-> *Visualize what your agent is "thinking".*
-*   **Thought Process**: `TokenStream` (Real-time LLM output), `ConfidenceMeter`.
-*   **Operation**: `ModelSelector`, `ContextUsage`, `ToolInvocation` (Function calls).
-*   **Analysis**: `VectorCluster` (Embedding viz), `BrainActivity` (Neural pulses).
-*   **Identity**: `AgentAvatar`, `MessageBubble` (Typewriter effect).
-
-### 🛠 3. Data Engineering & Logs
-> *Deep-dive into system internals.*
-*   **Logs**: `LiveLogStream` (Tail-F style), `LogSearchQuery`, `StackTraceProfiler`.
-*   **Inspector**: `HttpInspector` (Headers/Bodies), `JsonDiffViewer`, `HexInspector`.
-*   **Pipelines**: `SankeyDiagram` (Data flow), `SchemaGraph` (ER Diagrams).
-*   **Structure**: `DataGrid` (Virtual scroll), `TreeBrowser`, `FileMetadataCard`.
-
-### 💵 4. Financial Operations
-> *High-frequency trading interfaces.*
-*   **Market Data**: `CandleStickChart`, `OrderBook` (L2 Data), `DepthChart`.
-*   **Portfolio**: `AssetCard`, `PortfolioPie`, `TradeHistory`.
-*   **Analysis**: `MarketHeatmap`, `ForecastingLine`, `ExchangeStatus`.
-
-### 📝 5. Content & Code
-*   **Code Review**: `CodeDiffViewer` (Syntax highlighted), `DiffStatSummary`, `MergeConflictResolver`.
-*   **Files**: `FileAssetPicker`, `ImageCompare` (Slider/Overlay), `PdfPreview`, `CsvViewer`.
-*   **Text**: `RichMarkdownRenderer` (GFM), `MarkdownEditor`.
-
-### 📅 6. Scheduling & Time
-*   **Calendars**: `CalendarView` (Interactive), `WeeklySchedule`, `DailyAgenda`.
-*   **Time**: `WorldClock`, `TimezoneSlider`, `RecurringRuleEditor`.
-*   **Events**: `EventCard`, `CountdownWidget`, `Timeline`.
-
-### 🔐 7. Forms & Inputs
-*   **Input**: `PinInput` (OTP), `TagInput`, `SecretInput` (Masked).
-*   **Controls**: `Knob` (Rotary), `RangeSlider`, `ColorPicker`, `Rating`.
-*   **Selection**: `TransferList` (Dual list), `SegmentedControl`.
-
-### 🛡️ 8. System Ops & Security
-*   **NetSec**: `FirewallRules`, `PacketInspector`, `EncryptionStatus` (Quantum-Safe).
-*   **Hardware**: `ServerRackStatus`, `SignalMonitor` (RF), `ProcessTable`.
-*   **Console**: `TerminalConsole` (Interactive TUI), `AccessPad`.
-    > *Now supporting fully interactive Text UIs via `agentping` console.*
-
-### 🧩 9. Core & Feedback
-*   **Notifications**: `ToastManager`, `NotificationBanner`.
-*   **Progress**: `CircularProgress`, `LoadingProgress`, `Skeleton` (Shimmer).
-*   **Navigation**: `DockMenu` (macOS style), `RadialNav`, `SidePanel`.
-
----
-
-## 🔗 MCP & Agent Integration
-
-AgentPing is fully compatible with the **Model Context Protocol (MCP)**. This means you can add it to **Claude Desktop**, **Cursor**, or any MCP client with zero code.
-
-### Supported Tools
-
-| Tool Name | Description |
-| :--- | :--- |
-| `request_step_approval` | **Best Seller**. Agent proposes a plan (checklist). You verify items, check boxes, and approve/deny specific steps. |
-| `request_research_direction` | Agent asks: *"I found 3 paths. Which should I prefer?"*. You select priorities and effort levels. |
-| `request_selection` | Agent presents options (databases, APIs, strategies). You pick one or many. |
-| `ask_human` | The classic. Agent asks a question, you type an answer. |
-| `notify_human` | Fire-and-forget. *"Deployment complete."* |
-| `request_code_review` | Agent shows a diff. You review lines and approve changes. |
-| `request_secret` | Securely request API keys or passwords. Input is masked in UI. |
-| `render_custom_ui` | **The Power Tool**. Render ANY component from the Premium Gallery (Charts, Logs, Diffs, etc.) by name. |
-
-### Config for Claude Desktop
-
-Add this to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "agentping": {
-      "command": "npx",
-      "args": ["-y", "@agentping/mcp"],
-      "env": {
-        "AGENTPING_URL": "http://localhost:3000"
-      }
-    }
-  }
-}
-```
-
-Now, you can simply tell Claude:
-> *"Scan the codebase for errors. If you find any critical ones, ping me with a 'Step Approval' request before fixing them."*
-
----
-
-## 🧩 Canonical Canvas Payload (Sofia-Only)
-
-`canvas_interaction` render pings now use one canonical payload shape:
-
-- `payload.type` must be `canvas_interaction`
-- `payload.action` must be `render`
-- `payload.componentType` must be `sofia-widget`
-- `payload.props.provider` must be `sofia`
-- `payload.props.widgetId` is required
-- `payload.props.variant` and `payload.props.data` are optional
-
-Selection pings stay supported with `payload.action = selection`.
-
-### Example (`sofia-widget`)
-
-```json
-{
-  "agentId": "lev-canvas",
-  "agentName": "Lev Canvas",
-  "sessionId": "canvas-1700000000",
-  "payload": {
-    "type": "canvas_interaction",
-    "action": "render",
-    "componentType": "sofia-widget",
-    "componentName": "BD Dashboard",
-    "instruction": "Current BD epics and tasks",
-    "props": {
-      "provider": "sofia",
-      "widgetId": "bd-dashboard",
-      "variant": "kanban",
-      "data": {
-        "columns": ["open", "in_progress", "blocked", "closed"],
-        "cards": []
-      }
-    }
-  }
-}
-```
-
----
-
-## 🚀 Quick Start
-
-### 1. Start the System
-AgentPing runs as a local daemon + web server.
+## Quick Start (Consolidated Runtime)
 
 ```bash
-# 1. Install Dependencies
 pnpm install
-
-# 2. Start the Daemon & UI (Parallel)
-npm run dev
-# This starts:
-# - HTTP Server (:3000)
-# - Web UI (:5173)
-# - MCP Server (Stdio/SSE)
+pnpm -r build
+pnpm dashboards:kill
+pnpm dashboards:start
+pnpm dashboards:status
 ```
 
-### 2. View the Interface
-Open [http://localhost:5173](http://localhost:5173). You will see the **Primitives Gallery** by default.
-
-### 3. Launch the Console (TUI)
-Open a new terminal tab to start the interactive Mission Control:
+In another terminal, run protocol daemon:
 
 ```bash
-agentping
-```
-*(Or use `npm run tui` if you prefer)*
-
-### 4. Send a Test Ping
-Open another terminal:
-
-```bash
-# Send a notification
-agentping notify "System Initialized 🚀"
-
-# Send a checklist
-agentping approve-steps --file urgent_plan.json
+pnpm --filter @agentping/daemon dev
 ```
 
----
+## Docs Map
 
-## 📂 Project Structure
+Single handoff file (use this first):
 
-```text
-/
-├── packages/
-│   ├── core/               # 🧠 Domain Logic (No Ext. Deps)
-│   ├── daemon/             # 🦾 Main Orchestrator
-│   └── adapters/
-│       ├── web-ui/         # ⚛️ React + Vite + Cyber-Premium CSS
-│       ├── mcp/            # 🔌 Claude/Cursor Integration
-│       ├── http-api/       # 🌐 REST + WebSocket Layer
-│       ├── storage-sqlite/ # 💾 Local Persistence
-│       ├── cli/            # 💻 Terminal Interface
-│       ├── slack/          # 💬 Chat Adaptation
-│       └── webhook/        # 🔗 Event Hooks
-└── docs/                   # 📚 Architectural Decision Records (ADRs)
-```
+- `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/architecture.md`
 
----
+- Product + architecture:
+  - `docs/architecture.md`
+  - `docs/web-ui-architecture.md`
+- Runtime + commands:
+  - `docs/getting-started.md`
+- Component inventory:
+  - `docs/component-catalog.md`
+- GenUI research and implementation specs:
+  - `docs/genui/readme.md`
 
-<p align="center">
-  <sub>Built with ❤️ by <strong>Kingly Agency</strong></sub><br/>
-  <sub><em>Advanced Agentic Coding</em></sub>
-</p>
+## GenUI Relationship
+
+Thesys/C1 reverse-engineering artifacts are promoted into `docs/genui/` as research + implementation inputs.
+
+Important:
+
+- `docs/genui/` contains candidate patterns and design direction.
+- Runtime truth and cutover rules are defined in `docs/architecture.md` and `docs/web-ui-architecture.md`.
