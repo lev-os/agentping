@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/react';
+import '../src/renderer/styles/global.css';
+import '../src/renderer/styles/App.css';
 import '../src/renderer/components/ui/ui.css';
 
 const preview: Preview = {
@@ -51,10 +53,14 @@ const preview: Preview = {
 
       // Apply theme contract to document root
       if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-storybook', 'true');
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-mode', mode);
+        document.body.setAttribute('data-storybook', 'true');
         document.body.setAttribute('data-theme', theme);
         document.body.setAttribute('data-mode', mode);
+        document.body.style.fontFamily =
+          "var(--font-sans, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)";
       }
 
       return Story();

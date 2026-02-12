@@ -127,6 +127,12 @@ body::after {
   animation: scanline 8s linear infinite;
 }
 
+/* Disable global visual overlays in Storybook preview */
+body[data-storybook='true']::before,
+body[data-storybook='true']::after {
+  content: none;
+}
+
 @keyframes scanline {
   0% { background-position: 0 0; }
   100% { background-position: 0 100vh; }
@@ -755,4 +761,3 @@ select:focus option:checked {
   background-color: hsl(195 100% 50% / 0.3);
   color: hsl(195 100% 50%);
 }
-

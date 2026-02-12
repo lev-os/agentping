@@ -434,7 +434,7 @@ var content=function(){"use strict";var oe=Object.defineProperty;var de=(w,b,$)=
       </div>
 
       <div class="drawer-footer">
-        <a href="http://localhost:7890" target="_blank" rel="noopener" class="footer-link">
+        <a href="http://localhost:5175" target="_blank" rel="noopener" class="footer-link">
           🔗 Dashboard
         </a>
         <div class="version">v0.1.0</div>

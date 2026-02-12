@@ -20,6 +20,28 @@ These are the primary component sources currently in play:
 - `packages/dashboard-manager-ui/src/components` (8 `.tsx`)
 - `packages/ui/src/components` (64 `.tsx`; target canonical kit)
 
+## Critical Known Gap (Read Before Implementation)
+
+Current canvas payload naming uses Sofia as a strict envelope, but render ownership is not fully migrated:
+
+- Payloads are validated as `componentType: "sofia-widget"` with `props.provider: "sofia"`.
+- Canvas rendering still resolves through local app widgets for kanban/todo/markdown and generic fallback payload views.
+- This is not equivalent to full Sofia UI-kit consumption.
+
+Implementation implication:
+
+- Do not treat the Sofia envelope as completed UI unification.
+- Unification is complete only when shared widget render paths are sourced from `packages/ui` and adapter/surface-local duplicates are removed.
+
+## Canvas + Playground Merge Rule
+
+Treat current canvas and playground efforts as one convergence stream:
+
+- keep one canonical canvas runtime in `packages/canvas`
+- keep experimentation in isolated modules until promoted
+- promote only typed, reusable primitives into `packages/ui`
+- do not create a second long-lived canvas runtime under adapter packages
+
 ## Target Folder (Where Reusable Components Must Live)
 
 Canonical target:

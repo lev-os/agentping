@@ -13,12 +13,12 @@ Source of truth: `packages/dashboard-runner/config/dashboards.yaml`
 
 | id | name | URL | package |
 |---|---|---|---|
-| `agentping` | AgentPing Storybook | `http://127.0.0.1:6006` | `packages/studio` |
-| `sofia` | Sofia Storybook | `http://127.0.0.1:6007` | `packages/ui` |
-| `web-ui` | AgentPing Web UI | `http://127.0.0.1:5173` | `packages/adapters/web-ui` |
-| `canvas` | AgentPing Canvas | `http://127.0.0.1:5174` | `packages/canvas` |
-| `dashboard-manager-ui` | Dashboard Manager UI | `http://127.0.0.1:5175` | `packages/dashboard-manager-ui` |
-| `studio` | AgentPing Studio | `http://127.0.0.1:5180` | `packages/studio` |
+| `agentping` | AgentPing Storybook | `http://localhost:6006` | `packages/studio` |
+| `sofia` | Sofia Storybook | `http://localhost:6007` | `packages/ui` |
+| `web-ui` | AgentPing Web UI | `http://localhost:5173` | `packages/adapters/web-ui` |
+| `canvas` | AgentPing Canvas | `http://localhost:5174` | `packages/canvas` |
+| `dashboard-manager-ui` | Dashboard Manager UI | `http://localhost:5175` | `packages/dashboard-manager-ui` |
+| `studio` | AgentPing Studio | `http://localhost:5180` | `packages/studio` |
 
 Legacy entries (`jarvis`, `flight-deck`, `ceo-stack`, `clawd`) are not in the active runner manifest.
 
@@ -53,6 +53,7 @@ Interpretation:
 
 - `packages/ui` mirrors the Sofia name set and is the right canonical target for one-time Sofia consumption.
 - Web UI still carries a large non-Sofia local set that must be merged, wrapped, or deprecated.
+- `sofia-widget` payload naming is an envelope contract and does not by itself prove full canvas render unification with `packages/ui`.
 
 ## Consolidation Rules (Current)
 
@@ -90,7 +91,7 @@ pnpm dashboards:start
 pnpm dashboards:status
 
 # Detailed surface inventory
-curl -s http://127.0.0.1:3030/api/dashboards | jq
+curl -s http://localhost:3030/api/dashboards | jq
 
 # Component counts
 find packages/adapters/web-ui/src/components -type f -name '*.tsx' | wc -l

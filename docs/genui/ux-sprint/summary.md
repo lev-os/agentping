@@ -6,7 +6,7 @@
 
 **Design Sprint:** 7-Step UX Pipeline (AUTO MODE)
 **Date:** 2026-02-10
-**Run Directory:** `/Users/jean-patricksmith/digital/leviathan/.lev/ux/20260210-185755-agentping-genui-premium`
+**Source Artifact Batch:** `docs/genui/ux-sprint/`
 
 ---
 
@@ -458,7 +458,6 @@ This design sprint delivered a **battle-tested blueprint** for elevating AgentPi
 
 ---
 
-**Run Directory:** `/Users/jean-patricksmith/digital/leviathan/.lev/ux/20260210-185755-agentping-genui-premium`
+**Source Artifact Batch:** `docs/genui/ux-sprint/`
 
-**Contact:** Review artifacts in run directory, then schedule implementation kickoff.
-
+**Contact:** Review artifacts in this folder, then schedule implementation kickoff.

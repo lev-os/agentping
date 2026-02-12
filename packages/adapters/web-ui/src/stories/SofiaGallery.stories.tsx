@@ -4,9 +4,11 @@ import { GallerySofiaSection } from '../components/gallery/GallerySofiaSection';
 const meta: Meta<typeof GallerySofiaSection> = {
   title: 'Sofia/Gallery',
   component: GallerySofiaSection,
-  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      disable: true,
+    },
   },
 };
 

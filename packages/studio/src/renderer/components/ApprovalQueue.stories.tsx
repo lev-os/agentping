@@ -12,7 +12,16 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ width: '100vw', height: '100vh', background: '#0a0a0a', position: 'relative' }}>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          background:
+            'radial-gradient(1200px 600px at 70% 10%, rgba(0, 200, 255, 0.08), transparent), var(--bg-primary, #0c0f14)',
+          position: 'relative',
+          fontFamily: "var(--font-sans, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+        }}
+      >
         {/* Mock window.claudeCode for Storybook */}
         <Story />
       </div>

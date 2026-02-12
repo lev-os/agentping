@@ -47,6 +47,7 @@ export default function App() {
     const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
     const [fileRevision, setFileRevision] = useState(0);
     const [isBridgeReady, setIsBridgeReady] = useState(false);
+    const [isDaemonConnected, setIsDaemonConnected] = useState(false);
     const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
     const [currentFileName, setCurrentFileName] = useState<string>('Untitled.apen');
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -54,6 +55,7 @@ export default function App() {
     const [previewUrl, setPreviewUrl] = useState<string>('http://localhost:5173');
     const canvasRef = useRef<CanvasRef>(null);
     const chatPanelRef = useRef<ChatPanelRef>(null);
+    const handledCanvasPingIds = useRef<Set<string>>(new Set());
 
     // Resizable Panel State
     const [leftWidth, setLeftWidth] = useState(380);
@@ -329,41 +331,92 @@ export default function App() {
 
         const cleanup = window.agentPing.onPing(async (ping) => {
             console.log('Received Ping:', ping);
-
-            // Handle Canvas Interactions via MCP
-            if (ping.type === 'canvas_interaction') {
-                const payload = ping.payload as {
-                    action?: string;
-                    componentType?: string;
-                    componentName?: string;
-                    props?: {
-                        provider?: string;
-                        widgetId?: string;
-                    };
-                };
-
-                if (
-                    payload.action === 'render' &&
-                    payload.componentType === 'sofia-widget' &&
-                    payload.props?.provider === 'sofia' &&
-                    payload.props.widgetId &&
-                    canvasRef.current
-                ) {
-                    // Execute the render on the canvas
-                    const widgetId = payload.props.widgetId;
-                    canvasRef.current.addComponent('sofia-widget', payload.componentName || widgetId);
-
-                    // Auto-respond to the ping to unblock the agent
-                    // In a real app, we might wait for user approval or interaction or return an object ID
-                    await window.agentPing?.respond(ping.id, {
-                        action: 'custom',
-                        data: { success: true, objectId: `sofia-widget-${widgetId}-${Date.now()}` }
-                    });
-                }
-            }
+            await handleCanvasInteractionPing(ping, async (pingId, response) => {
+                await window.agentPing?.respond(pingId, response);
+            });
         });
 
         return cleanup;
+    }, []);
+
+    // Browser fallback: consume daemon pings directly when Electron bridge is unavailable.
+    useEffect(() => {
+        if (window.agentPing) return;
+
+        let ws: WebSocket | null = null;
+        let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+        let disposed = false;
+
+        const wsUrl = import.meta.env.VITE_AGENTPING_WS_URL ?? 'ws://localhost:7890/api/v1/ws';
+        const apiBase = import.meta.env.VITE_AGENTPING_API_BASE ?? 'http://localhost:7890/api/v1/pings';
+
+        const respond = async (
+            pingId: string,
+            response: { action: string; data?: Record<string, unknown> }
+        ): Promise<void> => {
+            await fetch(`${apiBase}/${pingId}/respond`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(response),
+            });
+        };
+
+        const fetchPending = async () => {
+            try {
+                const res = await fetch(`${apiBase}?status=pending&limit=50`);
+                if (!res.ok) return;
+                const json = (await res.json()) as { pings?: any[] };
+                for (const ping of json.pings ?? []) {
+                    await handleCanvasInteractionPing(ping, respond);
+                }
+            } catch {
+                // Daemon may not be available yet.
+            }
+        };
+
+        const connect = () => {
+            if (disposed) return;
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                if (disposed) return;
+                setIsDaemonConnected(true);
+                void fetchPending();
+            };
+
+            ws.onclose = () => {
+                if (disposed) return;
+                setIsDaemonConnected(false);
+                reconnectTimer = setTimeout(() => connect(), 1500);
+            };
+
+            ws.onerror = () => {
+                ws?.close();
+            };
+
+            ws.onmessage = async (event) => {
+                if (disposed) return;
+                try {
+                    const message = JSON.parse(event.data as string) as { type?: string; data?: any };
+                    if (message.type === 'ping:created' && message.data) {
+                        await handleCanvasInteractionPing(message.data, respond);
+                    }
+                } catch {
+                    // Ignore malformed frames.
+                }
+            };
+        };
+
+        connect();
+
+        return () => {
+            disposed = true;
+            setIsDaemonConnected(false);
+            if (reconnectTimer) clearTimeout(reconnectTimer);
+            if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+                ws.close();
+            }
+        };
     }, []);
 
     // Sync Canvas State to Coordinator
@@ -444,6 +497,48 @@ export default function App() {
         setLayoutMode('design');
     };
 
+    async function handleCanvasInteractionPing(
+        ping: any,
+        respondFn: (pingId: string, response: { action: string; data?: Record<string, unknown> }) => Promise<void>
+    ): Promise<void> {
+        if (!ping || handledCanvasPingIds.current.has(ping.id)) return;
+        if (ping.type !== 'canvas_interaction') return;
+
+        const payload = ping.payload as {
+            action?: string;
+            componentType?: string;
+            componentName?: string;
+            props?: {
+                provider?: string;
+                widgetId?: string;
+            };
+        };
+
+        if (
+            payload.action !== 'render' ||
+            payload.componentType !== 'sofia-widget' ||
+            payload.props?.provider !== 'sofia' ||
+            !payload.props.widgetId ||
+            !canvasRef.current
+        ) {
+            return;
+        }
+
+        handledCanvasPingIds.current.add(ping.id);
+
+        const widgetId = payload.props.widgetId;
+        canvasRef.current.addComponent('sofia-widget', payload.componentName || widgetId);
+
+        try {
+            await respondFn(ping.id, {
+                action: 'custom',
+                data: { success: true, objectId: `sofia-widget-${widgetId}-${Date.now()}` },
+            });
+        } catch (err) {
+            console.warn('Failed to auto-respond to canvas ping:', err);
+        }
+    }
+
     return (
         <div className={`studio-app ${resizing ? 'resizing' : ''}`}>
             {/* Integrated Header with Title and Toolbar */}
@@ -476,9 +571,9 @@ export default function App() {
                 />
                 <div className="header-right">
                     <AgentDropdown />
-                    <div className={`bridge-status ${isBridgeReady ? 'connected' : 'disconnected'}`}>
+                    <div className={`bridge-status ${isBridgeReady || isDaemonConnected ? 'connected' : 'disconnected'}`}>
                         <div className="status-indicator" />
-                        <span>{isBridgeReady ? 'Mission Link Active' : 'Offline'}</span>
+                        <span>{isBridgeReady ? 'Mission Link Active' : isDaemonConnected ? 'Daemon Live' : 'Offline'}</span>
                     </div>
                 </div>
             </header>

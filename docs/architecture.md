@@ -10,7 +10,7 @@ AgentPing uses **Hexagonal Architecture** (Ports & Adapters) to keep the core do
 
 Use this file as the implementation handoff source:
 
-- `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/architecture.md`
+- `community/agentping/docs/architecture.md`
 
 If any other doc conflicts with this file, this file wins.
 
@@ -18,11 +18,11 @@ If any other doc conflicts with this file, this file wins.
 
 | File | Role | Trust Level |
 |---|---|---|
-| `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/architecture.md` | Product definition, current vs ideal architecture, execution order, decomposition rules | Canonical |
-| `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/web-ui-architecture.md` | UI-surface and package responsibility details for consolidation | High (subordinate to canonical) |
-| `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/component-catalog.md` | Component inventory, overlap evidence, neutralization checks | High (inventory source) |
-| `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/getting-started.md` | Runtime startup and verification commands | Operational |
-| `/Users/jean-patricksmith/digital/leviathan/community/agentping/docs/genui/readme.md` | GenUI research index and design inputs | Input only (not runtime truth) |
+| `community/agentping/docs/architecture.md` | Product definition, current vs ideal architecture, execution order, decomposition rules | Canonical |
+| `community/agentping/docs/web-ui-architecture.md` | UI-surface and package responsibility details for consolidation | High (subordinate to canonical) |
+| `community/agentping/docs/component-catalog.md` | Component inventory, overlap evidence, neutralization checks | High (inventory source) |
+| `community/agentping/docs/getting-started.md` | Runtime startup and verification commands | Operational |
+| `community/agentping/docs/genui/readme.md` | GenUI research index and design inputs | Input only (not runtime truth) |
 
 ### Product Definition
 
@@ -37,6 +37,45 @@ The product is not "a single dashboard app." It is a protocol + primitive system
 ### North-Star Use Case
 
 Any app should be able to install AgentPing and quickly ship an adapter that renders AgentPing primitives in its native UI framework (for example SwiftUI on iOS), with strict typed action callbacks back into agent workflows.
+
+### Runtime Boundary Contract
+
+This is the canonical split for AgentPing package ownership:
+
+| Domain | Owns | Does not own |
+|---|---|---|
+| AgentPing interaction layer | human-loop protocol, action surfaces, render contracts, approval/review UX, dashboard control-plane UI | long-running worker execution runtime internals |
+| Authorization integration boundary | step-up auth request/response wiring and evidence passthrough | provider-specific auth implementation details |
+| Execution integration boundary | execution/runtime event ingestion and progress rendering | provider-specific worker lifecycle internals |
+
+Implementation rule:
+
+- AgentPing is the interaction layer.
+- authorization and execution engines are integrated through explicit contracts.
+- protected actions require explicit authorization evidence.
+
+### North-Star Runtime Flow (Target)
+
+Example: user says "fill out this DMV form."
+
+1. User intent arrives through an AgentPing surface (voice/text/mobile/desktop).
+2. AgentPing renders required review state and requests protected-action authorization.
+3. Configured authorization provider performs step-up auth and returns scoped authorization evidence.
+4. Configured execution runtime enforces policy and spins up an ephemeral worker (sandboxed, browser-capable).
+5. Worker executes task and streams progress/events.
+6. AgentPing renders progress and returns structured approval/exception checkpoints.
+7. Worker is destroyed after completion; artifacts and provenance persist.
+
+### Current vs Ideal
+
+| Area | Current | Ideal |
+|---|---|---|
+| UI canon | multiple component sources | one shared `packages/ui` canon |
+| Canvas surfaces | multiple implementations | one canvas runtime with modes |
+| Control plane | runner/server + embedded Studio path | runner/server only (Studio as client) |
+| Protected action gate | partial / in-progress | explicit authorization gate before high-risk actions |
+| Worker execution security | mixed patterns | ephemeral sandbox workers by default for protected execution |
+| Adapter model | `packages/adapters` overloaded in places | adapters own transport/integration only |
 
 ### Dev Handoff Goals (Current Priority)
 
@@ -62,7 +101,8 @@ Definition of done for this handoff:
 Handoff references:
 
 - `docs/handoff-consolidation.md` (execution order and source->target mapping)
-- `docs/open-questions.md` (decision points to resolve with design/implementation partner)
+- `docs/web-ui-architecture.md` (UI-surface ownership details)
+- `docs/component-catalog.md` (component inventory and overlap checks)
 
 ### Ordered Execution Plan (Do In This Order)
 
@@ -165,8 +205,8 @@ Runtime surfaces are declared in `packages/dashboard-runner/config/dashboards.ya
 
 Runtime stack components:
 
-- `@lev-os/dashboard-runner`: process lifecycle, port allocation, health, restart policy
-- `@lev-os/dashboard-manager-server`: REST/WebSocket API (`/api/dashboards`)
+- `packages/dashboard-runner`: process lifecycle, port allocation, health, restart policy
+- `packages/dashboard-manager-server`: REST/WebSocket API (`/api/dashboards`)
 - Studio renderer navigator: consumes dashboard-manager API
 
 Important current-state caveat:
@@ -193,6 +233,12 @@ Important current-state caveat:
 
 - Canvas render contract is Sofia-first and strict at core schema level, but renderer/hook code is duplicated between packages.
 
+- Critical known gap: Sofia label != full Sofia UI-kit integration.
+  - Current canvas payloads enforce `componentType: "sofia-widget"` and `props.provider: "sofia"` as the canonical envelope.
+  - Current canvas renderer still resolves to local widget implementations (`KanbanBoard`, `TodoList`, `MarkdownCard`) and a generic JSON fallback.
+  - `packages/ui` is not yet the live render source for these canvas widgets.
+  - Treat this as migration-in-progress and do not describe it as "Sofia fully consumed" until renderer imports come from shared UI-kit exports.
+
 - Theme contract is mostly fail-fast (`agentping | skynet | syslog`, `dark | light`) in Studio/web-ui, but legacy polymorph theme variants still exist in web-ui (`terminal-swiss`, `system`) with fallback behavior.
 
 - `packages/ui` (Sofia import) now exists locally, but is not yet the sole source for all shared components consumed by Studio/web-ui/canvas.
@@ -207,18 +253,10 @@ AgentPing BD (`community/agentping/.beads/issues.jsonl`):
 - `ap-n2l.3` Clawd Dashboard audit: `in_progress`
 - Component coverage tasks are partially created (`ap-n2l.7`, `.8`, `.9`, `.10`, plus section QA tasks) and still `open`
 
-Lev BD (`~/digital/leviathan/.beads/issues.jsonl`):
-
-- `lev-my90` Dashboard Component Migration to AgentPing: `open`
-- `lev-my90.1` Clawd audit: `open`
-- `lev-my90.2` CEO stack audit: `open`
-- `lev-my90.3` Jarvis audit: `open`
-- `lev-my90.4` Kingly agency dashboard visualization: `open`
-
 Interpretation:
 
-- Tracking exists in both repos, but coverage is not yet at strict one-task-per-component across all dashboard sources.
-- Active consolidation should be driven from AgentPing package ownership first, with Lev BD used as cross-repo coordination.
+- Coverage is not yet at strict one-task-per-component across all dashboard sources.
+- Consolidation tracking should stay package-owned and inventory-driven from AgentPing docs + AgentPing BD.
 
 #### Ideal Future State (Production Target)
 
@@ -263,7 +301,7 @@ AgentPing ships stable primitive and action contracts so external developers can
 | Package | Keep | Move In | Move Out | Remove/Deprecate | Temporary Compatibility |
 |---|---|---|---|---|---|
 | `packages/ui` | Canonical shared component kit | Sofia primitives, merged AgentPing primitives, tokens/themes | none (becomes source) | n/a | Keep old import aliases for one cutover window |
-| `packages/adapters/web-ui` | Adapter shell for queue/history/review flows | UI-kit consumption (`@kingly/ui` or renamed internal package) | `components/sofia`, gallery ownership, duplicated canvas renderer/hook | adapter-local component ownership | Temporary wrapper exports that re-export from `packages/ui` |
+| `packages/adapters/web-ui` | Adapter shell for queue/history/review flows | UI-kit consumption (`packages/ui`) | `components/sofia`, gallery ownership, duplicated canvas renderer/hook | adapter-local component ownership | Temporary wrapper exports that re-export from `packages/ui` |
 | `packages/canvas` | Canonical canvas app + mode system | shared renderer contracts and mode controllers | none | duplicate render logic outside package | Accept canonical payload only; reject legacy shapes |
 | `packages/studio` | Desktop shell + orchestration UX | dashboard API client, shared UI-kit usage, canvas mode integrations | embedded dashboard-runner bootstrapping | local runner startup path in Electron main | Keep `/navigator` route alias to `/dashboards` during transition |
 | `packages/dashboard-runner` | process manager | none | none | none | n/a |
@@ -427,11 +465,11 @@ PingService.respond()
 ```
 @agentping/studio (desktop shell)
     │
-    ├── @lev-os/dashboard-runner (process control)
+    ├── dashboard-runner package (process control)
     │
-    ├── @lev-os/dashboard-manager-server (dashboard API)
+    ├── dashboard-manager-server package (dashboard API)
     │
-    └── @kingly/ui (target shared kit; currently partial adoption)
+    └── packages/ui (target shared kit; currently partial adoption)
             │
             ├── studio renderer
             ├── web-ui adapter

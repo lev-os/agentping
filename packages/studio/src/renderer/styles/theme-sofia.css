@@ -181,6 +181,12 @@ body[data-theme="skynet"]::after {
     animation: sofia-scanline 8s linear infinite;
 }
 
+/* Disable global visual overlays in Storybook preview */
+body[data-storybook="true"][data-theme="skynet"]::before,
+body[data-storybook="true"][data-theme="skynet"]::after {
+    content: none;
+}
+
 @keyframes sofia-scanline {
     0% { background-position: 0 0; }
     100% { background-position: 0 100vh; }

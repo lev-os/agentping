@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/react-vite";
+import { createElement } from "react";
 import { create } from "storybook/theming";
+import { LoadingStateProvider } from "../src/components/dashboard/LoadingStateProvider";
 
 // Import SKYNET theme
 import "../src/theme/skynet.css";
@@ -77,6 +79,20 @@ const preview: Preview = {
     },
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => {
+      if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-storybook", "true");
+        document.body.setAttribute("data-storybook", "true");
+        document.documentElement.setAttribute("data-theme", "skynet");
+        document.documentElement.setAttribute("data-mode", "dark");
+        document.body.setAttribute("data-theme", "skynet");
+        document.body.setAttribute("data-mode", "dark");
+      }
+
+      return createElement(LoadingStateProvider, null, Story());
+    },
+  ],
 };
 
 export default preview;

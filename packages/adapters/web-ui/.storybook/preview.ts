@@ -1,7 +1,9 @@
 import type { Preview } from '@storybook/react';
+import { createElement } from 'react';
 import '../src/styles/tokens.css';
 import '../src/styles/global.css';
 import '../src/styles/theme-sofia.css';
+import { LoadingStateProvider } from '../src/components/sofia/dashboard/LoadingStateProvider';
 
 const preview: Preview = {
   parameters: {
@@ -52,13 +54,15 @@ const preview: Preview = {
       const mode = context.globals.mode || 'dark';
 
       if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-storybook', 'true');
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-mode', mode);
+        document.body.setAttribute('data-storybook', 'true');
         document.body.setAttribute('data-theme', theme);
         document.body.setAttribute('data-mode', mode);
       }
 
-      return Story();
+      return createElement(LoadingStateProvider, null, Story());
     },
   ],
 };

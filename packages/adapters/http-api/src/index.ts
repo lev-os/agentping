@@ -73,9 +73,10 @@ export function createHttpApi(config: HttpApiConfig) {
     const { pingService, browserCDPAdapter, corsOrigins = ['*'], enableLogger = true } = config;
 
     const app = new Hono();
+    const corsOrigin = corsOrigins.includes('*') ? '*' : corsOrigins;
 
     // Middleware
-    app.use('*', cors({ origin: corsOrigins }));
+    app.use('*', cors({ origin: corsOrigin }));
     if (enableLogger) {
         app.use('*', logger());
     }

@@ -17,12 +17,14 @@ For product definition and target architecture, read:
 
 | id | URL | package |
 |---|---|---|
-| `agentping` | `http://127.0.0.1:6006` | `packages/studio` Storybook |
-| `sofia` | `http://127.0.0.1:6007` | `packages/ui` Storybook |
-| `web-ui` | `http://127.0.0.1:5173` | `packages/adapters/web-ui` |
-| `canvas` | `http://127.0.0.1:5174` | `packages/canvas` |
-| `dashboard-manager-ui` | `http://127.0.0.1:5175` | `packages/dashboard-manager-ui` |
-| `studio` | `http://127.0.0.1:5180` | `packages/studio` |
+| `agentping` | `http://localhost:6006` | `packages/studio` Storybook |
+| `sofia` | `http://localhost:6007` | `packages/ui` Storybook |
+| `web-ui` | `http://localhost:5173` | `packages/adapters/web-ui` |
+| `canvas` | `http://localhost:5174` | `packages/canvas` |
+| `dashboard-manager-ui` | `http://localhost:5175` | `packages/dashboard-manager-ui` |
+| `studio` | `http://localhost:5180` | `packages/studio` |
+
+Use `localhost` for UI surfaces in this workspace. Some Vite apps bind localhost/IPv6 and may not answer on `127.0.0.1`.
 
 ## 1. Install And Build
 
@@ -45,14 +47,14 @@ This kills known legacy dashboard ports and common Next.js dev servers.
 pnpm dashboards:start
 ```
 
-This starts the dashboard manager server on `127.0.0.1:3030` and launches surfaces from:
+This starts the dashboard manager server on `localhost:3030` and launches surfaces from:
 `packages/dashboard-runner/config/dashboards.yaml`
 
 ## 4. Verify Dashboard Status
 
 ```bash
 pnpm dashboards:status
-curl -s http://127.0.0.1:3030/api/dashboards | jq '.[] | {id, status: .status.status, port: .status.port}'
+curl -s http://localhost:3030/api/dashboards | jq '.[] | {id, status: .status.status, port: .status.port}'
 ```
 
 ## 5. Start Protocol Daemon (API + Ping Runtime)
@@ -65,8 +67,8 @@ pnpm --filter @agentping/daemon dev
 
 Daemon endpoints:
 
-- API: `http://127.0.0.1:7890/api/v1`
-- WebSocket: `ws://127.0.0.1:7890/api/v1/ws`
+- API: `http://localhost:7890/api/v1`
+- WebSocket: `ws://localhost:7890/api/v1/ws`
 
 ## 6. Start Full Workspace Dev (Optional)
 
@@ -87,7 +89,7 @@ Use this only when you need broad parallel development; it is noisier than runne
 ## Quick Ping Smoke Test
 
 ```bash
-curl -X POST http://127.0.0.1:7890/api/v1/pings \
+curl -X POST http://localhost:7890/api/v1/pings \
   -H "Content-Type: application/json" \
   -d '{
     "agentId": "smoke-agent",
@@ -104,5 +106,5 @@ curl -X POST http://127.0.0.1:7890/api/v1/pings \
 Then check pending pings:
 
 ```bash
-curl -s "http://127.0.0.1:7890/api/v1/pings"
+curl -s "http://localhost:7890/api/v1/pings"
 ```

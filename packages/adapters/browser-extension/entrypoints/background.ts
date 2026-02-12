@@ -31,9 +31,11 @@ export default defineBackground(() => {
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   let attachedTabs = new Set<number>();
 
-  const DAEMON_URL = 'ws://localhost:7890/browser-cdp';
+  const DEFAULT_DAEMON_URL = 'ws://localhost:7890/browser-cdp';
+  const DAEMON_URL_STORAGE_KEY = 'agentping_daemon_ws_url';
   const RECONNECT_DELAY_MS = 3000;
   const KEEPALIVE_ALARM = 'agentping-keepalive';
+  let daemonUrl = DEFAULT_DAEMON_URL;
 
   // Icon pulse animation state
   let iconPulseInterval: ReturnType<typeof setInterval> | null = null;
@@ -74,12 +76,26 @@ export default defineBackground(() => {
     updateIcon();
   }
 
+  async function resolveDaemonUrl(): Promise<string> {
+    try {
+      const stored = await chrome.storage.local.get(DAEMON_URL_STORAGE_KEY);
+      const configured = stored[DAEMON_URL_STORAGE_KEY];
+      if (typeof configured === 'string' && configured.trim().length > 0) {
+        daemonUrl = configured.trim();
+      }
+    } catch {
+      // Keep default URL on storage failures.
+    }
+    return daemonUrl;
+  }
+
   // WebSocket Connection
-  function connect() {
-    if (ws && ws.readyState === WebSocket.OPEN) return;
+  async function connect() {
+    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
     setState('connecting');
-    ws = new WebSocket(DAEMON_URL);
+    const targetUrl = await resolveDaemonUrl();
+    ws = new WebSocket(targetUrl);
 
     ws.onopen = () => {
       setState('connected');
@@ -117,7 +133,7 @@ export default defineBackground(() => {
     if (reconnectTimer) return;
     reconnectTimer = setTimeout(() => {
       reconnectTimer = null;
-      connect();
+      void connect();
     }, RECONNECT_DELAY_MS);
   }
 
@@ -403,12 +419,25 @@ export default defineBackground(() => {
     }
   });
 
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== 'local') return;
+    if (!changes[DAEMON_URL_STORAGE_KEY]) return;
+
+    const next = changes[DAEMON_URL_STORAGE_KEY].newValue;
+    if (typeof next !== 'string' || next.trim().length === 0) return;
+    if (next.trim() === daemonUrl) return;
+
+    daemonUrl = next.trim();
+    ws?.close();
+    void connect();
+  });
+
   // MV3 Keep-Alive + lease GC
   chrome.alarms.create(KEEPALIVE_ALARM, { periodInMinutes: 0.4 });
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === KEEPALIVE_ALARM) {
       if (!ws || ws.readyState !== WebSocket.OPEN) {
-        connect();
+        void connect();
       }
       // Garbage-collect expired leases every tick
       gcLeases();
@@ -456,8 +485,9 @@ export default defineBackground(() => {
       startIconPulse();
     }
 
-    connect();
+    await resolveDaemonUrl();
+    void connect();
   }
 
-  init();
+  void init();
 });
