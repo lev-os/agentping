@@ -8,7 +8,7 @@
       "component_prompts": 10
     },
     "generated": "2026-02-10",
-    "source": "~/.agents/skills/superdesign-prompt-library/references/superdesign-prompts.jsonl"
+    "source": "~/.agents/skills-db/design-ux/superdesign-prompt-library/references/superdesign-prompts.jsonl"
   },
   "featured_themes": [
     {
