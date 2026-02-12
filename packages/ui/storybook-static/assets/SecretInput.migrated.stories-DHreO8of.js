@@ -1,0 +1,11 @@
+import{r as d,j as e}from"./iframe-CzJrb7DT.js";import{c as m}from"./utils-CDN07tui.js";import"./preload-helper-PPVm8Dsz.js";function n({value:l="",onChange:c,placeholder:i="Enter secret...",label:o,className:p}){const[r,u]=d.useState(!1);return e.jsxs("div",{className:m("font-mono",p),children:[o&&e.jsx("label",{className:"block text-xs text-cyan-400 uppercase tracking-wider mb-1.5",children:o}),e.jsxs("div",{className:"relative flex items-center border border-cyan-500/20 bg-black/60 rounded-lg overflow-hidden",children:[e.jsx("input",{type:r?"text":"password",value:l,onChange:s=>c?.(s.target.value),placeholder:i,className:"flex-1 bg-transparent px-3 py-2 text-sm text-cyan-100 placeholder:text-cyan-500/30 focus:outline-none"}),e.jsx("button",{type:"button",onClick:()=>u(s=>!s),className:"px-3 py-2 text-cyan-500/60 hover:text-cyan-300 transition-colors text-sm","aria-label":r?"Hide secret":"Show secret",children:r?"👁":"🔒"})]})]})}try{n.displayName="SecretInput",n.__docgenInfo={description:"",displayName:"SecretInput",props:{value:{defaultValue:{value:""},description:"",name:"value",required:!1,type:{name:"string"}},onChange:{defaultValue:null,description:"",name:"onChange",required:!1,type:{name:"((value: string) => void)"}},placeholder:{defaultValue:{value:"Enter secret..."},description:"",name:"placeholder",required:!1,type:{name:"string"}},label:{defaultValue:null,description:"",name:"label",required:!1,type:{name:"string"}},className:{defaultValue:null,description:"",name:"className",required:!1,type:{name:"string"}}}}}catch{}const y={title:"Migrations/WebUI/Root/SecretInput",component:n,parameters:{layout:"centered"},tags:["autodocs"]},a={args:{label:"API Key",placeholder:"sk-..."}},t={args:{label:"Password",value:"supersecret123"}};a.parameters={...a.parameters,docs:{...a.parameters?.docs,source:{originalSource:`{
+  args: {
+    label: "API Key",
+    placeholder: "sk-..."
+  }
+}`,...a.parameters?.docs?.source}}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  args: {
+    label: "Password",
+    value: "supersecret123"
+  }
+}`,...t.parameters?.docs?.source}}};const b=["Default","WithValue"];export{a as Default,t as WithValue,b as __namedExportsOrder,y as default};

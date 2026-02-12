@@ -1,6 +1,16 @@
-import { useState, useRef, useEffect, KeyboardEvent, ReactNode } from 'react';
-import { Search } from 'lucide-react';
-import { Input } from './Input';
+/**
+ * SearchInput - Studio wrapper
+ * Migrated to @kingly/ui canonical component
+ * @see packages/ui/src/components/migrations/search-input-conflict.tsx
+ */
+import {
+    useState,
+    useRef,
+    useEffect,
+    type KeyboardEvent,
+    type ReactNode,
+} from 'react';
+import { SearchInputCandidate } from '@kingly/ui/components';
 
 export interface SearchResult {
     id: string;
@@ -78,17 +88,14 @@ export function SearchInput({
 
     return (
         <div className={`ui-search ui-search--${size} ${className}`}>
-            <Input
-                ref={inputRef}
-                type="text"
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
+            <SearchInputCandidate
+                query={value}
+                onQueryChange={onChange}
+                loading={loading}
                 onKeyDown={handleKeyDown}
                 onFocus={() => value.length > 0 && results.length > 0 && setShowResults(true)}
                 onBlur={() => setTimeout(() => setShowResults(false), 150)}
                 placeholder={placeholder}
-                icon={<Search size={14} />}
-                onClear={() => onChange('')}
                 aria-expanded={showResults}
                 aria-controls="search-results"
                 aria-autocomplete="list"

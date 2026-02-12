@@ -91,6 +91,8 @@ This is the current execution contract for implementation handoff:
 
 3. GenUI architecture alignment.
 - Implement toward target architecture (single canvas, single control plane, adapter portability), while documenting any temporary current-state deviations explicitly.
+- Target design contract for consolidation: 9 registered runtime theme families and 24 canonical GenUI primitives.
+- Current runtime may remain below those targets during migration, but unknown theme/mode selection must still fail fast.
 
 Definition of done for this handoff:
 
@@ -100,7 +102,7 @@ Definition of done for this handoff:
 
 Handoff references:
 
-- `docs/handoff-consolidation.md` (execution order and source->target mapping)
+- `docs/00-handoff.md` (single mutable status handoff; bead-native workflow)
 - `docs/web-ui-architecture.md` (UI-surface ownership details)
 - `docs/component-catalog.md` (component inventory and overlap checks)
 

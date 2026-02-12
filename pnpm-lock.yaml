@@ -191,6 +191,9 @@ importers:
       '@json-render/react':
         specifier: ^0.2.0
         version: 0.2.0(react@19.2.4)(zod@4.3.6)
+      '@kingly/ui':
+        specifier: workspace:*
+        version: link:../../ui
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -503,6 +506,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.4.1
         version: 1.19.9(hono@4.11.9)
+      '@kingly/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@lev-os/dashboard-manager-server':
         specifier: workspace:*
         version: link:../dashboard-manager-server

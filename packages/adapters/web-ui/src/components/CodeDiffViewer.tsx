@@ -3,7 +3,14 @@
  */
 
 import { useMemo } from 'react';
-import './CodeDiffViewer.css';
+import {
+    Badge,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from '@kingly/ui/components';
 
 interface CodeDiffViewerProps {
     oldCode: string;
@@ -85,48 +92,75 @@ export function CodeDiffViewer({
     }, [diffLines]);
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(newCode);
+        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            void navigator.clipboard.writeText(newCode);
+        }
     };
 
     return (
-        <div className={`code-diff-viewer diff-${mode} ${className || ''}`}>
-            <div className="diff-header">
-                <span className="diff-filepath">{filePath || 'Untitled'}</span>
-
-                <div className="diff-actions">
-                    <span className="diff-stats" style={{ marginRight: 16 }}>
-                        <span className="diff-added">+{stats.added}</span>
-                        <span className="diff-removed">-{stats.removed}</span>
-                    </span>
-                    <button className="diff-action-btn" onClick={handleCopy} title="Copy New Code">
-                        Copy
-                    </button>
-                    {/* Placeholder for raw view toggle if needed */}
-                    <button className="diff-action-btn" title="View Raw">
-                        Raw
-                    </button>
+        <Card className={className}>
+            <CardHeader className="pb-2">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                        <CardTitle className="text-sm">{filePath || 'Untitled'}</CardTitle>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                            {language} • {mode}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant="success" className="font-mono">
+                            +{stats.added}
+                        </Badge>
+                        <Badge variant="destructive" className="font-mono">
+                            -{stats.removed}
+                        </Badge>
+                        <Button variant="outline" size="sm" onClick={handleCopy} title="Copy new code">
+                            Copy
+                        </Button>
+                        <Button variant="ghost" size="sm" title="View raw (not implemented)" disabled>
+                            Raw
+                        </Button>
+                    </div>
                 </div>
-            </div>
-            <div className="diff-scroll-container">
-                <pre className="diff-content" data-language={language}>
+            </CardHeader>
+            <CardContent>
+                <pre
+                    data-language={language}
+                    className="max-h-[360px] overflow-auto rounded-md border bg-background/60 p-3 text-xs"
+                >
                     <code>
                         {diffLines.map((line, i) => (
-                            <div key={i} className={`diff-line diff-line-${line.type}`}>
-                                <span className="diff-line-num">
+                            <div
+                                key={i}
+                                className={[
+                                    'grid grid-cols-[56px_56px_18px_1fr] gap-2 px-1 py-0.5 font-mono',
+                                    line.type === 'add' ? 'bg-emerald-500/10' : '',
+                                    line.type === 'remove' ? 'bg-red-500/10' : ''
+                                ].join(' ')}
+                            >
+                                <span className="text-muted-foreground">
                                     {line.oldLineNum || ' '}
                                 </span>
-                                <span className="diff-line-num">
+                                <span className="text-muted-foreground">
                                     {line.newLineNum || ' '}
                                 </span>
-                                <span className="diff-line-prefix">
+                                <span
+                                    className={
+                                        line.type === 'add'
+                                            ? 'text-emerald-500'
+                                            : line.type === 'remove'
+                                                ? 'text-red-500'
+                                                : 'text-muted-foreground'
+                                    }
+                                >
                                     {line.type === 'add' ? '+' : line.type === 'remove' ? '-' : ' '}
                                 </span>
-                                <span className="diff-line-content">{line.content || ' '}</span>
+                                <span>{line.content || ' '}</span>
                             </div>
                         ))}
                     </code>
                 </pre>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 }

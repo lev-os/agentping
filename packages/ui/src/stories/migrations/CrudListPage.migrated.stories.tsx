@@ -1,0 +1,25 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { CrudListPage } from "../../components/migrations/crud-list-page";
+import { mockCrudConfig, mockCrudItems } from "../.storybook-helpers/mock-crud-decorator";
+
+const meta: Meta<typeof CrudListPage> = {
+  title: "Migrations/WebUI/Recipes/CrudListPage",
+  component: CrudListPage,
+  tags: ["autodocs"],
+};
+export default meta;
+type Story = StoryObj<typeof CrudListPage>;
+
+export const Default: Story = {
+  args: {
+    config: mockCrudConfig,
+    initialItems: mockCrudItems,
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    config: mockCrudConfig,
+    initialItems: [],
+  },
+};

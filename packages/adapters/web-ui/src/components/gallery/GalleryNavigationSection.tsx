@@ -248,13 +248,13 @@ export const GalleryNavigationSection = () => {
                 </div>
                 <div className="app-card-body">
                     <Timeline
-                        events={[
-                            { id: '1', date: '2024 Q1', title: 'Project Start', description: 'Initial kickoff', type: 'milestone' },
-                            { id: '2', date: 'Feb 2024', title: 'Design Phase', description: 'UI/UX Mockups' },
-                            { id: '3', date: 'Mar 2024', title: 'Development', description: 'Core implementation' },
-                            { id: '4', date: 'Apr 2024', title: 'Alpha Release', description: 'Internal testing', type: 'marker' },
-                            { id: '5', date: 'May 2024', title: 'Beta Release', description: 'Public beta' },
-                            { id: '6', date: 'Jun 2024', title: 'Launch', description: 'Global rollout', type: 'milestone' }
+                        items={[
+                            { id: '1', time: '2024 Q1', title: 'Project Start', detail: 'Initial kickoff', status: 'done' },
+                            { id: '2', time: 'Feb 2024', title: 'Design Phase', detail: 'UI/UX Mockups', status: 'done' },
+                            { id: '3', time: 'Mar 2024', title: 'Development', detail: 'Core implementation', status: 'done' },
+                            { id: '4', time: 'Apr 2024', title: 'Alpha Release', detail: 'Internal testing', status: 'active' },
+                            { id: '5', time: 'May 2024', title: 'Beta Release', detail: 'Public beta' },
+                            { id: '6', time: 'Jun 2024', title: 'Launch', detail: 'Global rollout' }
                         ]}
                     />
                 </div>

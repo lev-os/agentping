@@ -1,0 +1,3 @@
+import{G as t}from"./gallery-forms-section-B-BDnMEh.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-Hxm9uu1u.js";import"./pin-input-CaupNEQD.js";import"./range-slider-HQL4d7dW.js";import"./regex-tester-CkGgB8JA.js";import"./date-picker-B1Y_WlPc.js";import"./color-picker-DQst08sg.js";import"./textarea-DSOyAXy_.js";const u={title:"Migrations/WebUI/Gallery/GalleryFormsSection",component:t,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...r.parameters?.docs?.source}}};const g=["Default"];export{r as Default,g as __namedExportsOrder,u as default};

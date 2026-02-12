@@ -1,12 +1,15 @@
+/**
+ * LogViewer - Web-UI adapter shell
+ * data-migration-status="needs-review"
+ *
+ * Rendering delegated to LogViewerWebUiRaw from migration candidate.
+ * Local search/filter logic retained as adapter layer.
+ *
+ * @see packages/ui/src/components/migrations/log-viewer-conflict.tsx
+ */
 import { useState, useMemo } from 'react';
+import { LogViewerWebUiRaw, type LogEntry } from '@kingly/ui/components';
 import './LogViewer.css';
-
-interface LogEntry {
-    id: string;
-    timestamp: string;
-    level: 'info' | 'warn' | 'error' | 'debug';
-    message: string;
-}
 
 interface LogViewerProps {
     logs: LogEntry[];
@@ -39,20 +42,10 @@ export function LogViewer({ logs, allowSearch = true }: LogViewerProps) {
                     />
                 </div>
             )}
-            <div className="log-content">
-                {filteredLogs.map(log => (
-                    <div key={log.id} className="log-line">
-                        <span className="log-timestamp">{new Date(log.timestamp).toLocaleTimeString()}</span>
-                        <span className={`log-level-${log.level}`} style={{ marginRight: '8px', fontWeight: 'bold' }}>
-                            [{log.level.toUpperCase()}]
-                        </span>
-                        <span>{log.message}</span>
-                    </div>
-                ))}
-                {filteredLogs.length === 0 && (
-                    <div className="log-empty">No logs found</div>
-                )}
-            </div>
+            <LogViewerWebUiRaw entries={filteredLogs} />
+            {filteredLogs.length === 0 && (
+                <div className="log-empty">No logs found</div>
+            )}
         </div>
     );
 }

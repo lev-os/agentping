@@ -1,16 +1,14 @@
-export interface SpinnerProps {
-    size?: 'sm' | 'md' | 'lg';
-    className?: string;
+/**
+ * Spinner - Studio wrapper
+ * Migrated to @kingly/ui canonical component
+ * @see packages/ui/src/components/migrations/spinner-conflict.tsx
+ */
+import { SpinnerCandidate, type SpinnerConflictProps } from '@kingly/ui/components';
+
+export type SpinnerProps = SpinnerConflictProps;
+
+export function Spinner({ size = 'md', label = 'Loading', className }: SpinnerProps) {
+    return <SpinnerCandidate size={size} label={label} className={className} />;
 }
 
-export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
-    return (
-        <span
-            className={`ui-spinner ui-spinner--${size} ${className}`}
-            role="status"
-            aria-label="Loading"
-        >
-            <span className="ui-sr-only">Loading...</span>
-        </span>
-    );
-}
+export default Spinner;

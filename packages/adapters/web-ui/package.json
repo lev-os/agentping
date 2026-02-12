@@ -12,6 +12,7 @@
         "clean": "rm -rf dist"
     },
     "dependencies": {
+        "@kingly/ui": "workspace:*",
         "@agentping/core": "workspace:*",
         "@base-ui/react": "^1.1.0",
         "@json-render/core": "^0.2.0",

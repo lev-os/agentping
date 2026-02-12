@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { HolographicCard } from "../../components/migrations/holographic-card";
 
 const meta = {

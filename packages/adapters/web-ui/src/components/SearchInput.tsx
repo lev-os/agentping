@@ -1,5 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import './SearchInput.css';
+/**
+ * SearchInput - Web-UI wrapper
+ * Migrated to @kingly/ui canonical component
+ * @see packages/ui/src/components/migrations/search-input-conflict.tsx
+ */
+import { useEffect, useState } from 'react';
+import { SearchInputCandidate } from '@kingly/ui/components';
 
 export interface SearchInputProps {
     value: string;
@@ -20,17 +25,17 @@ export function SearchInput({
 }: SearchInputProps) {
     const [localValue, setLocalValue] = useState(value);
 
-    // Sync local value if prop changes externally
     useEffect(() => {
         setLocalValue(value);
     }, [value]);
 
-    // Debounce logic
     useEffect(() => {
+        if (debounceMs <= 0 || localValue === value || localValue === '') {
+            return;
+        }
+
         const handler = setTimeout(() => {
-            if (localValue !== value) {
-                onChange(localValue);
-            }
+            onChange(localValue);
         }, debounceMs);
 
         return () => {
@@ -38,30 +43,20 @@ export function SearchInput({
         };
     }, [localValue, debounceMs, onChange, value]);
 
+    const handleLocalChange = (nextValue: string) => {
+        setLocalValue(nextValue);
+        if (nextValue === '' || debounceMs <= 0) {
+            onChange(nextValue);
+        }
+    };
+
     return (
-        <div className={`search-input-wrapper ${className}`}>
-            <span className="search-icon" aria-hidden="true">🔍</span>
-            <input
-                type="text"
-                className="cyber-input search-input"
-                value={localValue}
-                onChange={(e) => setLocalValue(e.target.value)}
-                placeholder={placeholder}
-                autoFocus={autoFocus}
-                aria-label="Search"
-            />
-            {localValue && (
-                <button
-                    className="search-clear"
-                    onClick={() => {
-                        setLocalValue('');
-                        onChange('');
-                    }}
-                    aria-label="Clear search"
-                >
-                    ×
-                </button>
-            )}
-        </div>
+        <SearchInputCandidate
+            query={localValue}
+            onQueryChange={handleLocalChange}
+            placeholder={placeholder}
+            autoFocus={autoFocus}
+            containerClassName={className}
+        />
     );
 }

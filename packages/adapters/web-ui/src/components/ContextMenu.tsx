@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import './ContextMenu.css';
+import { Card, MenuList } from '@kingly/ui/components';
 
 interface MenuItem {
     id: string;
@@ -21,31 +21,61 @@ export function ContextMenu({ items, children, className = '' }: ContextMenuProp
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const menuRef = useRef<HTMLDivElement>(null);
+    const closeMenu = () => setVisible(false);
 
     const handleContextMenu = (e: React.MouseEvent) => {
         e.preventDefault();
         setVisible(true);
-        setPosition({ x: e.pageX, y: e.pageY });
+
+        const maxX = window.scrollX + window.innerWidth - 240;
+        const maxY = window.scrollY + window.innerHeight - 240;
+        setPosition({
+            x: Math.min(e.pageX, maxX),
+            y: Math.min(e.pageY, maxY)
+        });
     };
 
     const handleClickOutside = (e: MouseEvent) => {
         if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-            setVisible(false);
+            closeMenu();
+        }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            closeMenu();
         }
     };
 
     useEffect(() => {
-        if (visible) {
-            document.addEventListener('mousedown', handleClickOutside);
-            document.addEventListener('scroll', () => setVisible(false));
-            window.addEventListener('resize', () => setVisible(false));
+        if (!visible) {
+            return undefined;
         }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
+        document.addEventListener('scroll', closeMenu, true);
+        window.addEventListener('resize', closeMenu);
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
-            document.removeEventListener('scroll', () => setVisible(false));
-            window.removeEventListener('resize', () => setVisible(false));
+            document.removeEventListener('keydown', handleEscape);
+            document.removeEventListener('scroll', closeMenu, true);
+            window.removeEventListener('resize', closeMenu);
         };
     }, [visible]);
+
+    const groupedItems = items.reduce<MenuItem[][]>((groups, item) => {
+        if (item.separator) {
+            if (groups[groups.length - 1].length > 0) {
+                groups.push([]);
+            }
+            return groups;
+        }
+
+        groups[groups.length - 1].push(item);
+        return groups;
+    }, [[]]).filter((group) => group.length > 0);
 
     return (
         <div className={`context-menu-trigger ${className}`} onContextMenu={handleContextMenu}>
@@ -53,30 +83,41 @@ export function ContextMenu({ items, children, className = '' }: ContextMenuProp
             {visible && createPortal(
                 <div
                     ref={menuRef}
-                    className="context-menu"
-                    style={{ top: position.y, left: position.x }}
+                    style={{
+                        position: 'absolute',
+                        top: position.y,
+                        left: position.x,
+                        zIndex: 1000
+                    }}
                     role="menu"
+                    aria-label="Context menu"
                 >
-                    {items.map((item, index) => (
-                        item.separator ? (
-                            <div key={`sep-${index}`} className="context-menu-separator" />
-                        ) : (
-                            <div
-                                key={item.id}
-                                className={`context-menu-item ${item.disabled ? 'disabled' : ''}`}
-                                role="menuitem"
-                                onClick={() => {
-                                    if (!item.disabled && item.action) {
-                                        item.action();
-                                        setVisible(false);
-                                    }
-                                }}
-                            >
-                                <span className="context-menu-label">{item.label}</span>
-                                {item.shortcut && <span className="context-menu-shortcut">{item.shortcut}</span>}
-                            </div>
-                        )
-                    ))}
+                    <Card className="min-w-[220px] p-1">
+                        {groupedItems.map((group, groupIdx) => (
+                            <React.Fragment key={`group-${groupIdx}`}>
+                                <MenuList
+                                    items={group.map((item) => ({
+                                        id: item.id,
+                                        label: item.label,
+                                        description: item.shortcut,
+                                        disabled: item.disabled
+                                    }))}
+                                    onSelect={(itemId: string) => {
+                                        const selected = group.find((entry) => entry.id === itemId);
+                                        if (!selected?.disabled && selected?.action) {
+                                            selected.action();
+                                            closeMenu();
+                                        }
+                                    }}
+                                    className="py-0"
+                                    aria-label="Context actions"
+                                />
+                                {groupIdx < groupedItems.length - 1 ? (
+                                    <div className="my-1 h-px bg-border" />
+                                ) : null}
+                            </React.Fragment>
+                        ))}
+                    </Card>
                 </div>,
                 document.body
             )}

@@ -87,7 +87,8 @@ AgentPing needs to move from a single cyber-locked aesthetic to a multi-theme de
 
 ## Unified Token Architecture
 
-All 4 themes share the same token STRUCTURE — only VALUES change:
+All themes share the same token STRUCTURE — only VALUES change.
+Current foundation set is 4 themes; target registration set is 9:
 
 ```yaml
 tokens:
@@ -181,7 +182,7 @@ Shows how the same component looks across themes:
 
 2. **Theme provider** — Inject token set based on active theme
 
-3. **4 starter themes** — Terminal (existing), Zen (new light), Executive (new editorial), Neon (new bold)
+3. **9 registered runtime themes (phased)** — start with the 4 foundation themes (Terminal, Zen, Executive, Neon), then expand to 9 without changing token structure
 
 4. **Component entrance animations** — Not just static render, progressive reveal
 
@@ -194,7 +195,8 @@ Shows how the same component looks across themes:
 AgentPing's Pencil renderer can use Pencil's built-in variable/theme system:
 
 - Define tokens as Pencil variables
-- Theme axis: "Terminal" | "Zen" | "Executive" | "Neon"
+- Theme axis phase-1: "Terminal" | "Zen" | "Executive" | "Neon"
+- Theme axis target: 9 registered families using the same token schema
 - Components reference variables, not hardcoded values
 - Same .pen file renders correctly in any theme
 
@@ -212,7 +214,7 @@ AgentPing's Pencil renderer can use Pencil's built-in variable/theme system:
 
 ### Phase 3: Pencil Integration (Week 3)
 - Define tokens as Pencil variables
-- Create 4 theme variants in Pencil
+- Create 4 foundation theme variants in Pencil, then expand to 9 registered runtime families
 - Test renderer output in each theme
 
 ### Phase 4: GenUI Rendering (Week 4)
@@ -227,7 +229,7 @@ AgentPing's Pencil renderer can use Pencil's built-in variable/theme system:
 - [ ] Executive theme with monochrome palette working
 - [ ] Neon theme with glow effects rendering correctly
 - [ ] Shared spacing scale applied consistently
-- [ ] Component matrix validates across all 4 themes
+- [ ] Component matrix validates across 4 foundation themes, then across 9 registered runtime themes
 - [ ] Pencil variables system correctly themed
 - [ ] GenUI renderer respects active theme
 - [ ] Responsive token variants working at breakpoints
@@ -237,4 +239,3 @@ AgentPing's Pencil renderer can use Pencil's built-in variable/theme system:
 - Superdesign prompt library (355 entries, pending extraction)
 - Thesys Crayon design system research
 - AgentPing `docs/component-catalog.md` + theme CSS files
-

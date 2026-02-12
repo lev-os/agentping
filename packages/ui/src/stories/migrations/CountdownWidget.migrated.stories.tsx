@@ -1,0 +1,17 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { CountdownWidget } from "../../components/migrations/countdown-widget";
+
+const meta: Meta<typeof CountdownWidget> = {
+  title: "Migrations/WebUI/CountdownWidget",
+  component: CountdownWidget,
+  tags: ["autodocs"],
+};
+export default meta;
+type Story = StoryObj<typeof CountdownWidget>;
+
+export const Default: Story = {
+  args: {
+    targetDate: new Date(Date.now() + 86400000 * 3).toISOString(),
+    title: "Launch",
+  },
+};

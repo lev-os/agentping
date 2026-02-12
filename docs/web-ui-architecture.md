@@ -71,7 +71,7 @@ Adapters should not own:
 
 Detailed sequence and acceptance checks:
 
-- `docs/handoff-consolidation.md`
+- `docs/00-handoff.md`
 - `docs/component-catalog.md`
 
 ## Validation Commands

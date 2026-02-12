@@ -167,7 +167,7 @@ export function DocCard({
 
         {/* Expandable content */}
         <AnimatePresence>
-          {expandable && isExpanded && children && (
+          {!!(expandable && isExpanded && children) && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}

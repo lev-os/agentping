@@ -1,7 +1,7 @@
 import React from 'react';
+import { HolographicCard } from '@kingly/ui/components';
 import { GeoMap } from '../visuals/GeoMap';
 import { GlobeWireframe } from '../visuals/GlobeWireframe';
-import { HolographicCard } from '../visuals/HolographicCard';
 import { HexGridBackground } from '../visuals/HexGridBackground';
 import { RadarSweep } from '../visuals/RadarSweep';
 import { VoiceVisualizer } from '../visuals/VoiceVisualizer';

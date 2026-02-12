@@ -120,9 +120,9 @@ export const GalleryFeedbackSection = () => {
                     <p>Techno wait states</p>
                 </div>
                 <div className="app-card-body" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-                    <Spinner variant="ring" />
-                    <Spinner variant="dots" color="var(--accent-secondary)" />
-                    <Spinner variant="pulse" size={32} />
+                    <Spinner size="sm" />
+                    <Spinner size="md" />
+                    <Spinner size="lg" />
                     <TypingIndicator />
                 </div>
             </div>

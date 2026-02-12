@@ -1,5 +1,10 @@
 import React from 'react';
-import './EmptyState.css';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardTitle
+} from '@kingly/ui/components';
 
 interface EmptyStateProps {
     icon?: React.ReactNode;
@@ -17,11 +22,19 @@ export function EmptyState({
     className = ''
 }: EmptyStateProps) {
     return (
-        <div className={`empty-state ${className}`}>
-            <div className="empty-icon">{icon}</div>
-            <h4 className="empty-title">{title}</h4>
-            {description && <p className="empty-description">{description}</p>}
-            {action && <div className="empty-action">{action}</div>}
-        </div>
+        <Card className={className}>
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+                <div className="mb-3 text-2xl" aria-hidden="true">
+                    {icon}
+                </div>
+                <CardTitle className="text-base">{title}</CardTitle>
+                {description ? (
+                    <CardDescription className="mt-2 max-w-md">
+                        {description}
+                    </CardDescription>
+                ) : null}
+                {action ? <div className="mt-4">{action}</div> : null}
+            </CardContent>
+        </Card>
     );
 }

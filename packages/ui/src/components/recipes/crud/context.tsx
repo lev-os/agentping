@@ -86,16 +86,24 @@ export function CrudProvider<T extends Record<string, unknown>>({
 
   // Persist view mode preference
   React.useEffect(() => {
-    const storageKey = `crud-view-${config.entity.name.toLowerCase()}`
-    localStorage.setItem(storageKey, viewMode)
+    try {
+      const storageKey = `crud-view-${config.entity.name.toLowerCase()}`
+      localStorage.setItem(storageKey, viewMode)
+    } catch {
+      // localStorage unavailable (SSR, sandboxed iframe)
+    }
   }, [viewMode, config.entity.name])
 
   // Load view mode preference
   React.useEffect(() => {
-    const storageKey = `crud-view-${config.entity.name.toLowerCase()}`
-    const saved = localStorage.getItem(storageKey)
-    if (saved && config.views?.available.includes(saved as ViewMode)) {
-      setViewMode(saved as ViewMode)
+    try {
+      const storageKey = `crud-view-${config.entity.name.toLowerCase()}`
+      const saved = localStorage.getItem(storageKey)
+      if (saved && config.views?.available.includes(saved as ViewMode)) {
+        setViewMode(saved as ViewMode)
+      }
+    } catch {
+      // localStorage unavailable (SSR, sandboxed iframe)
     }
   }, [config.entity.name, config.views?.available])
 

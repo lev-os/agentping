@@ -1,4 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+/**
+ * LogViewer - Studio adapter shell
+ * data-migration-status="needs-review"
+ *
+ * This component retains local Electron IPC streaming and data management.
+ * Rendering is delegated to LogViewerStudioRaw from the migration candidate.
+ * Full migration requires evaluating virtualization and ANSI rendering parity.
+ *
+ * @see packages/ui/src/components/migrations/log-viewer-conflict.tsx
+ */
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { LogViewerStudioRaw, type LogEntry } from '@kingly/ui/components';
 import { Download, Copy, Search, Scroll, Play, Pause } from 'lucide-react';
 import './LogViewer.css';
 
@@ -14,14 +25,32 @@ interface LogViewerProps {
     maxLines?: number;
 }
 
+function toLogEntry(log: LogLine, index: number): LogEntry {
+    return {
+        id: `${log.line}-${index}`,
+        timestamp: log.timestamp,
+        level: log.level,
+        message: log.message,
+    };
+}
+
 export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
     const [logs, setLogs] = useState<LogLine[]>([]);
-    const [filteredLogs, setFilteredLogs] = useState<LogLine[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [autoScroll, setAutoScroll] = useState(true);
     const [isStreaming, setIsStreaming] = useState(false);
     const logsEndRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const filteredLogs = useMemo(() => {
+        if (searchQuery.trim() === '') return logs;
+        const query = searchQuery.toLowerCase();
+        return logs.filter(log =>
+            log.message.toLowerCase().includes(query) ||
+            log.level.toLowerCase().includes(query) ||
+            log.timestamp.includes(query)
+        );
+    }, [searchQuery, logs]);
 
     // Auto-scroll effect
     useEffect(() => {
@@ -30,21 +59,7 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
         }
     }, [filteredLogs, autoScroll]);
 
-    // Filter logs based on search query
-    useEffect(() => {
-        if (searchQuery.trim() === '') {
-            setFilteredLogs(logs);
-        } else {
-            const query = searchQuery.toLowerCase();
-            setFilteredLogs(logs.filter(log =>
-                log.message.toLowerCase().includes(query) ||
-                log.level.toLowerCase().includes(query) ||
-                log.timestamp.includes(query)
-            ));
-        }
-    }, [searchQuery, logs]);
-
-    // Start log streaming
+    // Start log streaming (Electron IPC - local runtime coupling)
     useEffect(() => {
         if (!dashboardId || !window.electron) return;
 
@@ -52,9 +67,6 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
 
         const startStream = async () => {
             setIsStreaming(true);
-            console.log('[LogViewer] Starting stream for:', dashboardId);
-
-            // Start streaming
             await window.electron.invoke('dashboard:stream-logs', {
                 dashboardId,
                 lines: 100,
@@ -62,12 +74,10 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
             });
         };
 
-        // Listen for log lines
         const handleLogLine = (data: { dashboardId: string } & LogLine) => {
             if (data.dashboardId === dashboardId && isMounted) {
                 setLogs(prev => {
                     const updated = [...prev, data];
-                    // Keep only last maxLines
                     return updated.slice(-maxLines);
                 });
             }
@@ -75,19 +85,16 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
 
         const handleStreamEnd = (data: { dashboardId: string; totalLines: number }) => {
             if (data.dashboardId === dashboardId) {
-                console.log('[LogViewer] Stream ended:', data.totalLines, 'lines');
                 setIsStreaming(false);
             }
         };
 
         const handleStreamError = (data: { dashboardId: string; error: string }) => {
             if (data.dashboardId === dashboardId) {
-                console.error('[LogViewer] Stream error:', data.error);
                 setIsStreaming(false);
-                // Show error in logs
                 setLogs(prev => [...prev, {
                     timestamp: new Date().toISOString(),
-                    level: 'error',
+                    level: 'error' as const,
                     message: `Log stream error: ${data.error}`,
                     line: prev.length
                 }]);
@@ -106,42 +113,32 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
             window.electron.removeListener('dashboard:log-stream-end', handleStreamEnd);
             window.electron.removeListener('dashboard:log-stream-error', handleStreamError);
 
-            // Stop streaming
             if (window.electron) {
                 window.electron.invoke('dashboard:stop-stream-logs', { dashboardId });
             }
         };
     }, [dashboardId, maxLines]);
 
-    // Handle manual scroll - disable auto-scroll if user scrolls up
     const handleScroll = () => {
         if (!containerRef.current) return;
-
         const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
         const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 50;
-
         if (!isAtBottom && autoScroll) {
             setAutoScroll(false);
         }
     };
 
-    // Copy logs to clipboard
     const handleCopy = () => {
         const logText = filteredLogs.map(log =>
             `[${log.timestamp}] ${log.level.toUpperCase()}: ${log.message}`
         ).join('\n');
-
-        navigator.clipboard.writeText(logText).then(() => {
-            console.log('[LogViewer] Copied', filteredLogs.length, 'lines to clipboard');
-        });
+        navigator.clipboard.writeText(logText);
     };
 
-    // Download logs as file
     const handleDownload = () => {
         const logText = filteredLogs.map(log =>
             `[${log.timestamp}] ${log.level.toUpperCase()}: ${log.message}`
         ).join('\n');
-
         const blob = new Blob([logText], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -153,15 +150,15 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
         URL.revokeObjectURL(url);
     };
 
-    // Toggle auto-scroll and scroll to bottom
     const handleToggleAutoScroll = () => {
-        const newAutoScroll = !autoScroll;
-        setAutoScroll(newAutoScroll);
-
-        if (newAutoScroll && logsEndRef.current) {
+        const next = !autoScroll;
+        setAutoScroll(next);
+        if (next && logsEndRef.current) {
             logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
+    const entries: LogEntry[] = filteredLogs.map(toLogEntry);
 
     return (
         <div className="log-viewer">
@@ -204,23 +201,18 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
                 </div>
             </div>
 
+            {/* Delegate rendering to migration candidate */}
             <div
                 ref={containerRef}
-                className="log-viewer-content"
                 onScroll={handleScroll}
+                className="log-viewer-content"
             >
-                {filteredLogs.length === 0 ? (
+                {entries.length === 0 ? (
                     <div className="log-empty">
                         {searchQuery ? 'No logs match your search' : 'No logs available'}
                     </div>
                 ) : (
-                    filteredLogs.map((log, index) => (
-                        <div key={`${log.line}-${index}`} className={`log-line log-${log.level}`}>
-                            <span className="log-timestamp">[{log.timestamp}]</span>
-                            <span className={`log-level level-${log.level}`}>{log.level.toUpperCase()}</span>
-                            <span className="log-message" dangerouslySetInnerHTML={{ __html: log.message }} />
-                        </div>
-                    ))
+                    <LogViewerStudioRaw entries={entries} maxHeight={undefined} />
                 )}
                 <div ref={logsEndRef} />
             </div>

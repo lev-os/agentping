@@ -51,9 +51,10 @@ import { dataTemplate } from './templates/data.js';
 import { conceptTemplate } from './templates/concept.js';
 import { critiqueTemplate } from './templates/critique.js';
 import { docsTemplate } from './templates/docs.js';
+import { diffTemplate } from './templates/diff.js';
 import type { Template } from './types.js';
 
-export { designTemplate, dataTemplate, conceptTemplate, critiqueTemplate, docsTemplate };
+export { designTemplate, dataTemplate, conceptTemplate, critiqueTemplate, docsTemplate, diffTemplate };
 
 export const templates: Record<string, Template> = {
   design: designTemplate,
@@ -61,4 +62,5 @@ export const templates: Record<string, Template> = {
   concept: conceptTemplate,
   critique: critiqueTemplate,
   docs: docsTemplate,
+  diff: diffTemplate,
 };

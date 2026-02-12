@@ -178,7 +178,7 @@ export function SpecPanel({
                   </button>
 
                   <AnimatePresence>
-                    {isExpanded && section.content && (
+                    {!!(isExpanded && section.content) && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}

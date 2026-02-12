@@ -28,7 +28,7 @@ export interface PolymorphPrimitive {
 
 export type ThemeName = 'agentping' | 'skynet' | 'syslog';
 export type ThemeMode = 'dark' | 'light';
-export type TemplateName = 'design' | 'data' | 'concept' | 'critique' | 'docs';
+export type TemplateName = 'design' | 'data' | 'concept' | 'critique' | 'docs' | 'diff';
 
 export interface ThemeTokens {
   bg: string;

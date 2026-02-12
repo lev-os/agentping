@@ -25,6 +25,7 @@
         "test:e2e:debug": "playwright test --debug"
     },
     "dependencies": {
+        "@kingly/ui": "workspace:*",
         "@agentping/core": "workspace:*",
         "@agentping/http-api": "workspace:*",
         "@agentping/storage-sqlite": "workspace:*",

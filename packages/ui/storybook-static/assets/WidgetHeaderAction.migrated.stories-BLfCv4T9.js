@@ -1,0 +1,3 @@
+import{W as t}from"./WidgetHeaderAction-B1rhcdMG.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./button-D3q81IEX.js";import"./index-DiN5Zsj0.js";import"./index-Czr-OA3y.js";import"./index-B_jtOnfb.js";import"./utils-CDN07tui.js";import"./loader-circle-0-I84ZsA.js";import"./createLucideIcon-qiJ1pPWj.js";const g={title:"Migrations/WebUI/Dashboard/WidgetHeaderAction",component:t,tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...r.parameters?.docs?.source}}};const u=["Default"];export{r as Default,u as __namedExportsOrder,g as default};

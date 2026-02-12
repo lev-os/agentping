@@ -1,48 +1,14 @@
-import React from 'react';
-import './Spinner.css';
+/**
+ * Spinner - Web-UI wrapper
+ * Migrated to @kingly/ui canonical component
+ * @see packages/ui/src/components/migrations/spinner-conflict.tsx
+ */
+import { SpinnerCandidate, type SpinnerConflictProps } from '@kingly/ui/components';
 
-interface SpinnerProps {
-    size?: number; // size in px
-    color?: string;
-    variant?: 'ring' | 'dots' | 'pulse';
-    className?: string;
+export type SpinnerProps = SpinnerConflictProps;
+
+export function Spinner(props: SpinnerProps) {
+    return <SpinnerCandidate {...props} />;
 }
 
-export function Spinner({
-    size = 40,
-    color = 'var(--accent-primary)',
-    variant = 'ring',
-    className = ''
-}: SpinnerProps) {
-    return (
-        <div
-            className={`spinner-container spinner-${variant} ${className}`}
-            style={{
-                width: size,
-                height: size,
-                '--spinner-color': color,
-                '--spinner-size': `${size}px`
-            } as React.CSSProperties}
-            aria-label="Loading"
-        >
-            {variant === 'ring' && (
-                <>
-                    <div className="spinner-ring-bg" />
-                    <div className="spinner-ring-fg" />
-                </>
-            )}
-
-            {variant === 'dots' && (
-                <div className="spinner-dots">
-                    <div className="dot" />
-                    <div className="dot" />
-                    <div className="dot" />
-                </div>
-            )}
-
-            {variant === 'pulse' && (
-                <div className="spinner-pulse" />
-            )}
-        </div>
-    );
-}
+export default Spinner;

@@ -1,4 +1,8 @@
-import './Badge.css';
+import * as React from 'react';
+import {
+    Badge as KinglyBadge,
+    type BadgeProps as KinglyBadgeProps
+} from '@kingly/ui/components';
 
 export interface BadgeProps {
     label: string | number;
@@ -8,6 +12,18 @@ export interface BadgeProps {
     onClick?: () => void;
 }
 
+const TYPE_TO_VARIANT: Record<
+    NonNullable<BadgeProps['type']>,
+    NonNullable<KinglyBadgeProps['variant']>
+> = {
+    default: 'default',
+    success: 'success',
+    warning: 'warning',
+    error: 'destructive',
+    info: 'secondary',
+    outline: 'outline'
+};
+
 export function Badge({
     label,
     type = 'default',
@@ -15,22 +31,31 @@ export function Badge({
     className = '',
     onClick
 }: BadgeProps) {
+    const handleKeyDown = onClick
+        ? (e: React.KeyboardEvent<HTMLSpanElement>) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+            }
+        }
+        : undefined;
+
     return (
-        <span
-            className={`badge badge-${type} ${className}`}
+        <KinglyBadge
+            variant={TYPE_TO_VARIANT[type]}
+            className={className}
             role={onClick ? 'button' : 'status'}
-            aria-label={typeof label === 'string' ? label : undefined}
+            aria-label={String(label)}
             onClick={onClick}
             tabIndex={onClick ? 0 : undefined}
-            onKeyDown={onClick ? (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onClick();
-                }
-            } : undefined}
+            onKeyDown={handleKeyDown}
         >
-            {icon && <span className="badge-icon" aria-hidden="true" style={{ marginRight: 4 }}>{icon}</span>}
+            {icon ? (
+                <span aria-hidden="true" style={{ marginRight: 4 }}>
+                    {icon}
+                </span>
+            ) : null}
             {label}
-        </span>
+        </KinglyBadge>
     );
 }

@@ -73,7 +73,7 @@ export function FieldRenderer<T extends Record<string, unknown>>({
             value={(value as number) || ''}
             onChange={(e) => onChange(Number(e.target.value))}
             placeholder={field.placeholder}
-            error={!!error}
+            status={error ? "error" : undefined}
             aria-describedby={error ? `${fieldId}-error` : undefined}
           />
           {error && (
@@ -148,7 +148,7 @@ export function FieldRenderer<T extends Record<string, unknown>>({
             value={(value as string) || ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
-            error={!!error}
+            status={error ? "error" : undefined}
             aria-describedby={error ? `${fieldId}-error` : undefined}
           />
           {error && (

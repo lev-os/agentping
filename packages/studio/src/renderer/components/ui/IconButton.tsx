@@ -1,4 +1,10 @@
-import { forwardRef, ButtonHTMLAttributes, ReactNode, useState } from 'react';
+/**
+ * IconButton - Studio wrapper
+ * Migrated to @kingly/ui canonical component
+ * @see packages/ui/src/components/migrations/icon-button-conflict.tsx
+ */
+import { forwardRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { IconButtonCandidate, type IconButtonConflictProps } from '@kingly/ui/components';
 import { Tooltip } from './Tooltip';
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,6 +15,12 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
     shortcut?: string;
     tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
+
+const SIZE_TO_CONFLICT: Record<string, IconButtonConflictProps['size']> = {
+    sm: 'sm',
+    md: 'md',
+    lg: 'lg',
+};
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
     icon,
@@ -22,9 +34,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
 }, ref) => {
     const [showTooltip, setShowTooltip] = useState(false);
 
-    const classes = [
-        'ui-icon-button',
-        size !== 'md' && `ui-icon-button--${size}`,
+    const resolvedClassName = [
         active && 'ui-icon-button--active',
         className,
     ].filter(Boolean).join(' ');
@@ -35,14 +45,14 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
         >
-            <button
-                ref={ref}
-                className={classes}
-                aria-label={label}
+            <IconButtonCandidate
+                label={label}
+                icon={icon}
+                tone={active ? 'primary' : 'neutral'}
+                size={SIZE_TO_CONFLICT[size] ?? 'md'}
+                className={resolvedClassName}
                 {...props}
-            >
-                {icon}
-            </button>
+            />
             <Tooltip
                 text={label}
                 shortcut={shortcut}

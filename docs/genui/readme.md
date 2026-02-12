@@ -24,12 +24,12 @@
 
 - **42** features cataloged in [feature inventory](research/feature-inventory.yaml)
 - **28** gaps analyzed in [gap analysis](research/gap-analysis.md)
-- **18** rendering primitives documented in [rendering pipeline](research/rendering-pipeline.md)
-- **12** theme presets in [superdesign index](design-system/superdesign-index.json)
+- **24** primitive target for the GenUI runtime architecture (current research baseline documents 18 in [rendering pipeline](research/rendering-pipeline.md))
+- **9** runtime theme families target; **12** design presets remain in [superdesign index](design-system/superdesign-index.json) as source candidates
 
 Note:
 
-- Theme preset counts here describe design-system candidates.
+- Theme preset counts here describe design-system candidates and are not a runtime contract.
 - Production runtime only allows explicitly registered themes and must fail fast on invalid selections.
 
 ## Research
@@ -63,4 +63,3 @@ Note:
 - [visual-identity.md](ux-sprint/visual-identity.md) -- Visual identity and brand alignment
 - [components.md](ux-sprint/components.md) -- Component inventory and specs
 - [wireframes.md](ux-sprint/wireframes.md) -- Wireframe designs and layout specs
-
