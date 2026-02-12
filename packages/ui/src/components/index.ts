@@ -252,3 +252,16 @@ export type {
   TileCardConfig,
   ArchiveConfig,
 } from "./recipes";
+
+// =============================================================================
+// RAW MIGRATION CANDIDATES
+// Imported from Studio/Web-UI for consolidation evaluation.
+// =============================================================================
+export {
+  StatusGrid,
+  type StatusGridProps,
+  type StatusCard,
+  type StatusType,
+  HolographicCard,
+  type HolographicCardProps,
+} from "./migrations";

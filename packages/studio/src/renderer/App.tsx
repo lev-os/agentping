@@ -61,7 +61,7 @@ export default function App() {
     const [leftWidth, setLeftWidth] = useState(380);
     const [rightWidth, setRightWidth] = useState(320);
     const [footerHeight, setFooterHeight] = useState(250);
-    const [isFooterExpanded, setIsFooterExpanded] = useState(false);
+    const [isFooterExpanded, setIsFooterExpanded] = useState(true);
     const [resizing, setResizing] = useState<'left' | 'right' | 'footer' | null>(null);
 
     useEffect(() => {

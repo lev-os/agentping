@@ -1,0 +1,28 @@
+# AgentPing UI Migration Progress
+# Status values: pass | fail | pending
+# Rule: if migrated_path is non-empty, component has been migrated into @kingly/ui.
+#
+# source_path | migrated_path | mode(copy|reimplement|hybrid) | migrated | agent_visual_qa | human_qa | swapped | notes
+
+packages/studio/src/renderer/components/ui/StatusGrid.tsx | packages/ui/src/components/migrations/status-grid.tsx | hybrid | pass | pending | pass | pending | Raw migrated candidate in kingly-ui Storybook
+packages/adapters/web-ui/src/components/visuals/HolographicCard.tsx | packages/ui/src/components/migrations/holographic-card.tsx | hybrid | pass | pending | pass | pending | Raw migrated candidate in kingly-ui Storybook
+
+packages/studio/src/renderer/components/ui/Modal.tsx |  | hybrid | pending | pending | pending | pending | Next batch: Studio UI
+packages/studio/src/renderer/components/ui/Dropdown.tsx |  | hybrid | pending | pending | pending | pending | Next batch: Studio UI
+packages/studio/src/renderer/components/ui/Table.tsx |  | hybrid | pending | pending | pending | pending | Next batch: Studio UI
+packages/studio/src/renderer/components/ui/Timeline.tsx |  | hybrid | pending | pending | pending | pending | Next batch: Studio UI
+packages/studio/src/renderer/components/ui/Toast.tsx |  | hybrid | pending | pending | pending | pending | Next batch: Studio UI
+packages/studio/src/renderer/components/chat/ToolCard.tsx |  | reimplement | pending | pending | pending | pending | Chat/tool contract likely needs canonical API design
+packages/studio/src/renderer/components/ApprovalQueue.tsx |  | reimplement | pending | pending | pending | pending | Runtime-coupled approval logic; may stay local if not generic
+
+packages/adapters/web-ui/src/components/visuals/HexGridBackground.tsx |  | hybrid | pending | pending | pending | pending | Web gallery visual primitive
+packages/adapters/web-ui/src/components/visuals/SonarDisplay.tsx |  | hybrid | pending | pending | pending | pending | Web gallery visual primitive
+packages/adapters/web-ui/src/components/visuals/GlobeWireframe.tsx |  | hybrid | pending | pending | pending | pending | Web gallery visual primitive
+packages/adapters/web-ui/src/components/system/ServerRackStatus.tsx |  | reimplement | pending | pending | pending | pending | Needs tokenization + deterministic data + a11y
+packages/adapters/web-ui/src/components/system/SystemHealthGauge.tsx |  | reimplement | pending | pending | pending | pending | Needs API + style normalization
+packages/adapters/web-ui/src/components/system/TerminalConsole.tsx |  | reimplement | pending | pending | pending | pending | Likely runtime-coupled, evaluate local-only
+
+packages/adapters/web-ui/src/components/sofia/ui/Button.tsx |  | reimplement | pending | pending | pending | pending | Replace adapter-local Sofia UI with @kingly/ui canonical
+packages/adapters/web-ui/src/components/sofia/ui/Dialog.tsx |  | reimplement | pending | pending | pending | pending | Replace adapter-local Sofia UI with @kingly/ui canonical
+packages/adapters/web-ui/src/components/sofia/ui/FilteredDropdown.tsx |  | reimplement | pending | pending | pending | pending | Replace adapter-local Sofia UI with @kingly/ui canonical
+packages/adapters/web-ui/src/components/sofia/dashboard/DashboardWidget.tsx |  | reimplement | pending | pending | pending | pending | Replace adapter-local Sofia dashboard primitives

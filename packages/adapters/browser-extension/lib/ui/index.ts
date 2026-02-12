@@ -15,7 +15,7 @@ import {
 import { ModalNotificationUI } from './modal';
 import { DrawerNotificationUI, type DrawerState } from './drawer';
 import { ToastNotificationUI } from './toast';
-import { ThemeManager, initGlobalThemeManager, loadThemeConfig } from '../theme-utils';
+import { ThemeManager, initGlobalThemeManager, type ThemeConfig } from '../theme-utils';
 
 // Re-export types
 export type {
@@ -142,6 +142,13 @@ export class NotificationManager {
       this.initialized = false;
       await this.initialize();
     }
+  }
+
+  /**
+   * Update theme configuration without recreating UI
+   */
+  updateThemeConfig(themeConfig: Partial<ThemeConfig>): void {
+    this.themeManager?.setConfig(themeConfig);
   }
 
   /**

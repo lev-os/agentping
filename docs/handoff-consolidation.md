@@ -109,6 +109,85 @@ Not intended:
 - Remove duplicate/forked component implementations after import updates.
 - Document remaining local-only components and why they are local.
 
+## Pilot Migration Snapshot (Analysis-Only, No Normalization Yet)
+
+Two raw migration candidates were pulled into `packages/ui` to establish real comparison baselines:
+
+- From Studio Storybook:
+  - Source: `packages/studio/src/renderer/components/ui/StatusGrid.tsx`
+  - Candidate now in UI kit: `packages/ui/src/components/migrations/status-grid.tsx`
+  - Story: `packages/ui/src/stories/migrations/StatusGrid.migrated.stories.tsx`
+
+- From Web-UI gallery:
+  - Source: `packages/adapters/web-ui/src/components/visuals/HolographicCard.tsx`
+  - Candidate now in UI kit: `packages/ui/src/components/migrations/holographic-card.tsx`
+  - Story: `packages/ui/src/stories/migrations/HolographicCard.migrated.stories.tsx`
+
+Observed style/code pattern deltas (to normalize later, not now):
+
+1. Styling model mismatch
+- Studio/Web-UI candidates use component-scoped CSS files and hardcoded values.
+- Canonical UI kit mostly uses tokenized utility composition (`cn`, variant systems, theme vars).
+
+2. Token adoption inconsistency
+- Candidates mix fallback CSS literals (`#000`, `#333`, `Courier New`) with partial token usage.
+- Canonical target requires theme-token-first styling with explicit mode behavior.
+
+3. API shape inconsistency
+- Legacy candidates expose ad-hoc props and status enums without shared interfaces.
+- Canonical target should align common status/value/event contracts across surfaces.
+
+4. Interaction state contracts
+- Candidate components use local hover/animation behavior not standardized with kit motion patterns.
+- Consolidation should define animation and interaction primitives centrally.
+
+5. Story coverage model
+- Raw candidates are now visible in canonical Storybook, but still tagged as migration candidates.
+- Final phase should re-home accepted components under canonical sections and remove raw migration namespace.
+
+## Migration Process (Batch, Trackable)
+
+Use this exact loop for each batch of components:
+
+1. Select batch candidates from Studio stories + web-ui gallery sections.
+2. Decide migration mode per component:
+   - `copy`: direct copy when dependency surface is small and styling is isolated
+   - `reimplement`: safer rebuild using UI-kit patterns (`cva`, `cn`, tokenized theme vars)
+   - `hybrid`: copy structure first, then refactor styling/API to canonical patterns
+3. Add/Update component in `packages/ui`.
+4. Add migration Storybook story under `packages/ui/src/stories/migrations`.
+5. Update `docs/progress.txt` with statuses.
+6. Run visual checks:
+   - agent visual QA (automated browser run)
+   - human QA
+7. Swap imports in target surfaces only after QA pass.
+8. Mark `swapped=pass` only when target app renders correctly after import switch.
+
+### CP vs Reimplement Decision
+
+Use `hybrid` as default.
+
+- Prefer `copy` for self-contained visual components with minimal runtime coupling.
+- Prefer `reimplement` for components that:
+  - depend on app runtime APIs
+  - rely heavily on hardcoded colors/layout values
+  - have weak accessibility contracts
+- Prefer `hybrid` when visual behavior is good but API/style model needs canonicalization.
+
+### Status Contract (progress.txt)
+
+Each row tracks one source component and follows this lifecycle:
+
+- `migrated`: `pass|fail|pending`
+- `agent_visual_qa`: `pass|fail|pending`
+- `human_qa`: `pass|fail|pending`
+- `swapped`: `pass|fail|pending`
+
+Rule:
+
+- A row with non-empty `migrated_path` is considered migrated-in-progress/completed.
+- `swapped=pass` is the final gate for that component.
+
 ## End-State Deliverable
 
 Primary deliverable:

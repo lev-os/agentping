@@ -341,14 +341,46 @@ export class DrawerNotificationUI extends BaseNotification {
     const reducedMotion = prefersReducedMotion();
     const transitionDuration = reducedMotion ? '0ms' : animation.duration.slow;
     const isLeft = this.config.position === 'left';
+    const drawerShadow = getThemeBoxShadow(this.themeManager.getTheme(), 'drawer');
 
     return `
       ${getBaseStyles()}
 
+      :host {
+        --ap-bg-primary: #0a0a0a;
+        --ap-bg-secondary: #111111;
+        --ap-bg-tertiary: #1a1a1a;
+        --ap-bg-overlay: rgba(5, 5, 5, 0.92);
+        --ap-accent: #00e5ff;
+        --ap-accent-muted: rgba(0, 229, 255, 0.15);
+        --ap-accent-glow: rgba(0, 229, 255, 0.3);
+        --ap-success: #00ff9d;
+        --ap-success-muted: rgba(0, 255, 157, 0.15);
+        --ap-success-glow: rgba(0, 255, 157, 0.3);
+        --ap-danger: #ff2a6d;
+        --ap-danger-muted: rgba(255, 42, 109, 0.15);
+        --ap-danger-glow: rgba(255, 42, 109, 0.3);
+        --ap-warning: #f59e0b;
+        --ap-warning-muted: rgba(245, 158, 11, 0.15);
+        --ap-text-primary: #ffffff;
+        --ap-text-secondary: #e0e0e0;
+        --ap-text-muted: rgba(255, 255, 255, 0.5);
+        --ap-border-primary: rgba(255, 255, 255, 0.1);
+        --ap-border-secondary: rgba(255, 255, 255, 0.06);
+        --ap-border-accent: rgba(0, 229, 255, 0.2);
+        --ap-font-mono: ${typography.fontFamily};
+        --ap-font-sans: ${typography.fontFamilySans};
+      }
+
+      .drawer,
+      .drawer * {
+        font-family: var(--ap-font-sans, ${typography.fontFamilySans});
+      }
+
       .drawer-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--ap-bg-overlay, rgba(0, 0, 0, 0.3));
         backdrop-filter: blur(2px);
         opacity: 0;
         visibility: hidden;
@@ -368,9 +400,9 @@ export class DrawerNotificationUI extends BaseNotification {
         top: 0;
         height: 100vh;
         width: 320px;
-        background: var(--ap-bg-primary);
-        border-${isLeft ? 'right' : 'left'}: 1px solid var(--ap-border-accent);
-        box-shadow: ${isLeft ? '' : '-'}4px 0 20px rgba(0, 0, 0, 0.5);
+        background: var(--ap-bg-primary, #0a0a0a);
+        border-${isLeft ? 'right' : 'left'}: 1px solid var(--ap-border-accent, rgba(0, 229, 255, 0.2));
+        box-shadow: ${isLeft ? '' : '-'}${drawerShadow.replace(/^-/, '')};
         transform: translateX(${isLeft ? '-100%' : '100%'});
         transition: transform ${transitionDuration} ${animation.easing.default};
         display: flex;
@@ -387,7 +419,7 @@ export class DrawerNotificationUI extends BaseNotification {
         align-items: center;
         justify-content: space-between;
         padding: ${spacing.lg} ${spacing.xl};
-        border-bottom: 1px solid var(--ap-border-accent);
+        border-bottom: 1px solid var(--ap-border-accent, rgba(0, 229, 255, 0.2));
       }
 
       .drawer-title {
@@ -396,7 +428,7 @@ export class DrawerNotificationUI extends BaseNotification {
         gap: ${spacing.sm};
         font-size: ${typography.fontSize.lg};
         font-weight: ${typography.fontWeight.bold};
-        color: var(--ap-text-primary);
+        color: var(--ap-text-primary, #ffffff);
       }
 
       .drawer-icon {
@@ -434,8 +466,8 @@ export class DrawerNotificationUI extends BaseNotification {
         align-items: center;
         gap: ${spacing.sm};
         padding: ${spacing.md} ${spacing.xl};
-        background: var(--ap-accent-muted);
-        border-bottom: 1px solid var(--ap-border-secondary);
+        background: var(--ap-accent-muted, rgba(0, 229, 255, 0.12));
+        border-bottom: 1px solid var(--ap-border-secondary, rgba(255, 255, 255, 0.06));
         font-size: ${typography.fontSize.base};
       }
 

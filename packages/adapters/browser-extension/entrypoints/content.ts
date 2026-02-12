@@ -21,7 +21,7 @@ export default defineContentScript({
     // ========================================================================
 
     // Load config from storage (synced from daemon via background)
-    const stored = await chrome.storage.local.get(['notificationConfig', 'themeConfig']);
+    const stored = await chrome.storage.local.get(['notificationConfig', 'agentping_theme_config']);
 
     const notificationStyle: NotificationStyle = stored.notificationConfig?.style || 'drawer';
     const notificationConfig = {
@@ -138,6 +138,11 @@ export default defineContentScript({
             notification: newConfig,
           });
         }
+      }
+
+      // Handle theme config changes
+      if (changes.agentping_theme_config?.newValue) {
+        manager.updateThemeConfig(changes.agentping_theme_config.newValue);
       }
     });
 
