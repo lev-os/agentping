@@ -1,0 +1,29 @@
+import{r as d,j as e}from"./iframe-rZoXeK5l.js";import{c as t}from"./utils-CDN07tui.js";import{c as v}from"./createLucideIcon-oH0TnkMA.js";import{C as N}from"./chevron-down-iJpBzq2S.js";import{B as j}from"./bot-BKYtWU8Y.js";import{S as z}from"./square-DQVkq2r2.js";import{T as b}from"./trash-2-DbqV1OwA.js";import{P as A}from"./plus-CdbGrWjK.js";import"./preload-helper-PPVm8Dsz.js";const I=[["path",{d:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",key:"1yyitq"}],["path",{d:"M16 3.128a4 4 0 0 1 0 7.744",key:"16gr8j"}],["path",{d:"M22 21v-2a4 4 0 0 0-3-3.87",key:"kshegd"}],["circle",{cx:"9",cy:"7",r:"4",key:"nufk8"}]],S=v("users",I),w={idle:"bg-zinc-500",running:"bg-cyan-500 animate-pulse",error:"bg-red-500",stopped:"bg-zinc-600"};function m({agents:n=[],activeSessionId:u,onSelectAgent:h,onCreateAgent:p,onTerminateAgent:x,onStopAgent:g,className:y}){const[a,o]=d.useState(!1),l=d.useRef(null);d.useEffect(()=>{const s=r=>{l.current&&!l.current.contains(r.target)&&o(!1)};return a&&document.addEventListener("mousedown",s),()=>document.removeEventListener("mousedown",s)},[a]),n.find(s=>s.sessionId===u);const f=n.filter(s=>s.status==="running").length;return e.jsxs("div",{ref:l,className:t("relative",y),children:[e.jsxs("button",{onClick:()=>o(!a),className:t("flex items-center gap-2 px-3 py-1.5 rounded-lg","bg-zinc-800/50 border border-zinc-700/50","text-sm text-zinc-200 hover:border-zinc-600/50","transition-colors"),children:[e.jsx(S,{size:14,className:"text-cyan-400"}),e.jsxs("span",{children:[n.length," Agent",n.length!==1?"s":""]}),f>0&&e.jsxs("span",{className:"px-1.5 py-0.5 rounded text-[10px] bg-cyan-500/10 text-cyan-400",children:[f," running"]}),e.jsx(N,{size:12,className:t("text-zinc-500 transition-transform",a&&"rotate-180")})]}),a&&e.jsxs("div",{className:t("absolute right-0 top-full mt-1 z-50 w-72","bg-zinc-900 border border-zinc-700/50 rounded-xl","shadow-xl shadow-black/30","animate-in fade-in slide-in-from-top-1 duration-150"),children:[e.jsx("div",{className:"max-h-64 overflow-y-auto py-1",children:n.length===0?e.jsx("div",{className:"px-4 py-6 text-center text-xs text-zinc-500",children:"No agents active"}):n.map(s=>e.jsxs("div",{className:t("group flex items-center gap-2 px-3 py-2 cursor-pointer","hover:bg-white/[0.03] transition-colors",s.sessionId===u&&"bg-cyan-500/5"),onClick:()=>{h?.(s.sessionId),o(!1)},children:[e.jsx("span",{className:t("w-2 h-2 rounded-full flex-shrink-0",w[s.status])}),e.jsx(j,{size:14,className:"text-zinc-500 flex-shrink-0"}),e.jsxs("div",{className:"flex-1 min-w-0",children:[e.jsx("div",{className:"text-xs text-zinc-300 truncate",children:s.name}),s.model&&e.jsx("div",{className:"text-[10px] text-zinc-600",children:s.model})]}),e.jsxs("div",{className:"flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity",children:[s.status==="running"&&g&&e.jsx("button",{onClick:r=>{r.stopPropagation(),g(s.sessionId)},className:"p-1 text-zinc-500 hover:text-amber-400",title:"Stop",children:e.jsx(z,{size:10})}),x&&e.jsx("button",{onClick:r=>{r.stopPropagation(),x(s.sessionId)},className:"p-1 text-zinc-500 hover:text-red-400",title:"Terminate",children:e.jsx(b,{size:10})})]})]},s.sessionId))}),p&&e.jsx("div",{className:"border-t border-zinc-800 p-1",children:e.jsxs("button",{onClick:()=>{p(),o(!1)},className:t("w-full flex items-center gap-2 px-3 py-2 rounded-lg","text-xs text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]","transition-colors"),children:[e.jsx(A,{size:12,className:"text-cyan-500"}),"New Agent"]})})]})]})}try{m.displayName="AgentDropdown",m.__docgenInfo={description:"",displayName:"AgentDropdown",props:{agents:{defaultValue:{value:"[]"},description:"List of active agents",name:"agents",required:!1,type:{name:"AgentState[]"}},activeSessionId:{defaultValue:null,description:"Currently active agent session",name:"activeSessionId",required:!1,type:{name:"string"}},onSelectAgent:{defaultValue:null,description:"Select an agent session",name:"onSelectAgent",required:!1,type:{name:"((sessionId: string) => void)"}},onCreateAgent:{defaultValue:null,description:"Create a new agent",name:"onCreateAgent",required:!1,type:{name:"(() => void)"}},onTerminateAgent:{defaultValue:null,description:"Terminate an agent",name:"onTerminateAgent",required:!1,type:{name:"((sessionId: string) => void)"}},onStopAgent:{defaultValue:null,description:"Stop an agent",name:"onStopAgent",required:!1,type:{name:"((sessionId: string) => void)"}},className:{defaultValue:null,description:"",name:"className",required:!1,type:{name:"string"}}}}}catch{}const R={title:"Migrations/Studio/AgentDropdown",component:m,parameters:{layout:"centered"},tags:["autodocs"]},i={args:{agents:[{sessionId:"s1",name:"Claude Opus",status:"running",model:"opus-4.6"},{sessionId:"s2",name:"Researcher",status:"idle",model:"sonnet-4.5"},{sessionId:"s3",name:"Tester",status:"error",model:"haiku-4.5"}],activeSessionId:"s1",onSelectAgent:()=>{},onCreateAgent:()=>{},onTerminateAgent:()=>{}}},c={args:{agents:[],onCreateAgent:()=>{}}};i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  args: {
+    agents: [{
+      sessionId: "s1",
+      name: "Claude Opus",
+      status: "running",
+      model: "opus-4.6"
+    }, {
+      sessionId: "s2",
+      name: "Researcher",
+      status: "idle",
+      model: "sonnet-4.5"
+    }, {
+      sessionId: "s3",
+      name: "Tester",
+      status: "error",
+      model: "haiku-4.5"
+    }],
+    activeSessionId: "s1",
+    onSelectAgent: () => {},
+    onCreateAgent: () => {},
+    onTerminateAgent: () => {}
+  }
+}`,...i.parameters?.docs?.source}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  args: {
+    agents: [],
+    onCreateAgent: () => {}
+  }
+}`,...c.parameters?.docs?.source}}};const L=["Default","Empty"];export{i as Default,c as Empty,L as __namedExportsOrder,R as default};

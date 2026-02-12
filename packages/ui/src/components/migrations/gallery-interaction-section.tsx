@@ -4,9 +4,12 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 import { GalleryCard } from "./gallery-card";
 import { DraggableList } from "./draggable-list";
+import { TransferList } from "./transfer-list";
+import { SelectionList } from "./selection-list";
 import { SplitView } from "./split-view";
 import { CommandPalette } from "./command-palette";
 import { QuickActions } from "./quick-actions";
+import { WizardStep } from "./wizard-step";
 
 export interface GalleryInteractionSectionProps { className?: string; }
 
@@ -52,8 +55,26 @@ export function GalleryInteractionSection({ className }: GalleryInteractionSecti
         <GalleryCard name="DraggableList">
           <DraggableList items={demoListItems} />
         </GalleryCard>
-        <GalleryCard name="TransferList" shell />
-        <GalleryCard name="SelectionList" shell />
+        <GalleryCard name="TransferList">
+          <TransferList
+            available={[
+              { id: "a1", label: "Agent Alpha" },
+              { id: "a2", label: "Agent Beta" },
+            ]}
+            selected={[
+              { id: "s1", label: "Agent Gamma" },
+            ]}
+          />
+        </GalleryCard>
+        <GalleryCard name="SelectionList">
+          <SelectionList
+            items={[
+              { id: "1", label: "Deploy pipeline", selected: true },
+              { id: "2", label: "Run test suite", selected: false },
+              { id: "3", label: "Build artifacts", selected: true },
+            ]}
+          />
+        </GalleryCard>
         <GalleryCard name="SplitView">
           <SplitView
             left={<div className="text-xs font-mono text-cyan-300 p-2">Left pane</div>}
@@ -67,7 +88,16 @@ export function GalleryInteractionSection({ className }: GalleryInteractionSecti
         <GalleryCard name="QuickActions">
           <QuickActions actions={demoActions} />
         </GalleryCard>
-        <GalleryCard name="WizardStep" shell />
+        <GalleryCard name="WizardStep">
+          <WizardStep
+            title="Configure Agent"
+            description="Set up the agent parameters"
+            stepNumber={2}
+            totalSteps={4}
+          >
+            <div className="text-xs font-mono text-cyan-300">Agent config form goes here</div>
+          </WizardStep>
+        </GalleryCard>
       </div>
     </div>
   );

@@ -10,6 +10,9 @@ import { ContextUsage } from "./context-usage";
 import { PromptEditor } from "./prompt-editor";
 import { ToolInvocation } from "./tool-invocation";
 import { BrainActivity } from "./brain-activity";
+import { TokenStream } from "./token-stream";
+import { MessageBubble } from "./message-bubble";
+import { VectorCluster } from "./vector-cluster";
 
 export interface GalleryAISectionProps {
   className?: string;
@@ -69,9 +72,35 @@ export function GalleryAISection({ className }: GalleryAISectionProps) {
           />
         </GalleryCard>
 
-        <GalleryCard name="TokenStream" shell />
-        <GalleryCard name="MessageBubble" shell />
-        <GalleryCard name="VectorCluster" shell />
+        <GalleryCard name="TokenStream">
+          <TokenStream
+            tokens={["The ", "agent ", "is ", "analyzing ", "your ", "request..."]}
+            isStreaming
+            speed={80}
+          />
+        </GalleryCard>
+
+        <GalleryCard name="MessageBubble">
+          <div className="flex flex-col gap-2">
+            <MessageBubble content="Deploy the staging env" sender="User" isOwn />
+            <MessageBubble content="Deploying to staging now..." sender="Agent" />
+          </div>
+        </GalleryCard>
+
+        <GalleryCard name="VectorCluster">
+          <VectorCluster
+            width={200}
+            height={140}
+            points={[
+              { x: 1, y: 2, cluster: 0, label: "embed-a" },
+              { x: 1.5, y: 2.2, cluster: 0 },
+              { x: 4, y: 5, cluster: 1, label: "embed-b" },
+              { x: 4.3, y: 4.8, cluster: 1 },
+              { x: 7, y: 1, cluster: 2, label: "embed-c" },
+              { x: 7.2, y: 1.5, cluster: 2 },
+            ]}
+          />
+        </GalleryCard>
       </div>
     </div>
   );

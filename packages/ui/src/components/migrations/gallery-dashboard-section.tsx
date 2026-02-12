@@ -7,6 +7,8 @@ import { StatsGrid } from "./stats-grid";
 import { StatusCard } from "./status-card";
 import { ProgressBar } from "./progress-bar";
 import { ResourceGauge } from "./resource-gauge";
+import { SystemHealthGauge } from "./system-health-gauge";
+import { StorageDistribution } from "./storage-distribution";
 
 export interface GalleryDashboardSectionProps {
   className?: string;
@@ -48,8 +50,26 @@ export function GalleryDashboardSection({ className }: GalleryDashboardSectionPr
           <ResourceGauge />
         </GalleryCard>
 
-        <GalleryCard name="SystemHealthGauge" shell />
-        <GalleryCard name="StorageDistribution" shell />
+        <GalleryCard name="SystemHealthGauge">
+          <SystemHealthGauge
+            metrics={[
+              { label: "CPU", value: 62, unit: "%", status: "ok" },
+              { label: "Memory", value: 78, unit: "%", status: "warning" },
+              { label: "Disk", value: 45, unit: "%", status: "ok" },
+            ]}
+          />
+        </GalleryCard>
+
+        <GalleryCard name="StorageDistribution">
+          <StorageDistribution
+            segments={[
+              { label: "Models", value: 45, color: "#06b6d4" },
+              { label: "Logs", value: 25, color: "#f59e0b" },
+              { label: "Cache", value: 15, color: "#10b981" },
+              { label: "Other", value: 15, color: "#8b5cf6" },
+            ]}
+          />
+        </GalleryCard>
       </div>
     </div>
   );

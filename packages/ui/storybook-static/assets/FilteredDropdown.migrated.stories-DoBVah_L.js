@@ -1,0 +1,3 @@
+import{F as o}from"./filtered-dropdown-CXtG8ZmN.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./index-p5YmI0II.js";import"./index-fvHFeWab.js";import"./utils-CDN07tui.js";import"./chevron-down-iJpBzq2S.js";import"./createLucideIcon-oH0TnkMA.js";import"./search-C6nlid9P.js";import"./x-B6dVGlgb.js";import"./arrow-right-B1l1_sll.js";import"./plus-CdbGrWjK.js";const f={title:"Migrations/WebUI/Sofia/FilteredDropdown",component:o,tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...r.parameters?.docs?.source}}};const g=["Default"];export{r as Default,g as __namedExportsOrder,f as default};

@@ -6,6 +6,8 @@ import { GalleryCard } from "./gallery-card";
 import { AlertBanner } from "./alert-banner";
 import { ConfirmationModal } from "./confirmation-modal";
 import { Rating } from "./rating";
+import { TypingIndicator } from "./typing-indicator";
+import { Skeleton } from "./skeleton";
 
 export interface GalleryFeedbackSectionProps {
   className?: string;
@@ -48,9 +50,19 @@ export function GalleryFeedbackSection({ className }: GalleryFeedbackSectionProp
           <Rating value={3} max={5} readOnly />
         </GalleryCard>
 
-        <GalleryCard name="ToastManager" shell />
-        <GalleryCard name="TypingIndicator" shell />
-        <GalleryCard name="Skeleton" shell />
+        <GalleryCard name="TypingIndicator">
+          <TypingIndicator />
+        </GalleryCard>
+
+        <GalleryCard name="Skeleton">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <Skeleton variant="circle" width={32} />
+              <Skeleton variant="text" count={2} />
+            </div>
+            <Skeleton variant="rect" height={40} />
+          </div>
+        </GalleryCard>
       </div>
     </div>
   );

@@ -1,6 +1,0 @@
-import{r as o,j as t}from"./iframe-CzJrb7DT.js";import{c as d}from"./utils-CDN07tui.js";function i({count:a=30,speed:r=3,className:l}){const n=o.useMemo(()=>Array.from({length:a},(e,s)=>({id:s,x:Math.random()*100,delay:Math.random()*r,size:Math.random()*2+1,opacity:Math.random()*.5+.2})),[a,r]);return t.jsxs("div",{className:d("relative overflow-hidden bg-black/60 rounded-lg border border-cyan-500/10",l),children:[n.map(e=>t.jsx("div",{className:"absolute rounded-full bg-cyan-400",style:{left:`${e.x}%`,width:e.size,height:e.size,opacity:e.opacity,animation:`particle-fall ${r}s linear infinite`,animationDelay:`${e.delay}s`}},e.id)),t.jsx("style",{children:`
-        @keyframes particle-fall {
-          0% { top: -2%; }
-          100% { top: 102%; }
-        }
-      `})]})}try{i.displayName="ParticleStream",i.__docgenInfo={description:"ParticleStream - Migrated from",displayName:"ParticleStream",props:{count:{defaultValue:{value:"30"},description:"",name:"count",required:!1,type:{name:"number"}},speed:{defaultValue:{value:"3"},description:"",name:"speed",required:!1,type:{name:"number"}},className:{defaultValue:null,description:"",name:"className",required:!1,type:{name:"string"}}}}}catch{}export{i as P};

@@ -1,0 +1,3 @@
+import{G as e}from"./gallery-feedback-section-2G9NzmHV.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-CzB3T1UD.js";import"./alert-banner-CUkL1MLj.js";import"./confirmation-modal-DLESJf2J.js";import"./rating-D2CkiO3k.js";import"./typing-indicator-n-PYoez6.js";import"./skeleton-D5Wo-IFr.js";const d={title:"Migrations/WebUI/Gallery/GalleryFeedbackSection",component:e,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...r.parameters?.docs?.source}}};const u=["Default"];export{r as Default,u as __namedExportsOrder,d as default};

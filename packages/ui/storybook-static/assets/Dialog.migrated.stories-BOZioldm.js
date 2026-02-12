@@ -1,3 +1,0 @@
-import{D as r}from"./dialog-ClFGVCRK.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./index-CUv_qpSJ.js";import"./index-B2sAhb2p.js";import"./index-WHAuAub8.js";import"./index-Dwoj57sw.js";import"./index-Czr-OA3y.js";import"./index-CLxGLQCi.js";import"./utils-CDN07tui.js";import"./x-CMkHq2ts.js";import"./createLucideIcon-qiJ1pPWj.js";const u={title:"Migrations/WebUI/Sofia/Dialog",component:r,tags:["autodocs"]},o={args:{}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...o.parameters?.docs?.source}}};const f=["Default"];export{o as Default,f as __namedExportsOrder,u as default};

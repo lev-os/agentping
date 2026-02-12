@@ -4,6 +4,7 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 import { GalleryCard } from "./gallery-card";
 import { AudioPlayer } from "./audio-player";
+import { VideoPlayer } from "./video-player";
 import { PdfPreview } from "./pdf-preview";
 import { VoiceVisualizer } from "./voice-visualizer";
 
@@ -17,7 +18,9 @@ export function GalleryMediaSection({ className }: GalleryMediaSectionProps) {
         <GalleryCard name="AudioPlayer">
           <AudioPlayer src="" title="Ambient Loop" duration="3:42" />
         </GalleryCard>
-        <GalleryCard name="VideoPlayer" shell />
+        <GalleryCard name="VideoPlayer">
+          <VideoPlayer />
+        </GalleryCard>
         <GalleryCard name="PdfPreview">
           <PdfPreview file="report-q4.pdf" pages={12} />
         </GalleryCard>

@@ -1,0 +1,3 @@
+import{W as r}from"./WidgetFooter-BaC1luNA.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./button-OgTxl8kR.js";import"./index-DBhjKPQa.js";import"./index-DqYXjM1N.js";import"./index-B_jtOnfb.js";import"./utils-CDN07tui.js";import"./loader-circle-DU_QOWZs.js";import"./createLucideIcon-oH0TnkMA.js";const g={title:"Migrations/WebUI/Dashboard/WidgetFooter",component:r,tags:["autodocs"]},o={args:{}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...o.parameters?.docs?.source}}};const u=["Default"];export{o as Default,u as __namedExportsOrder,g as default};

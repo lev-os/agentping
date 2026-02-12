@@ -1,3 +1,0 @@
-import{G as t}from"./gallery-dashboard-section-DNNi9OGX.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-Hxm9uu1u.js";import"./stats-grid-c3eQdF1j.js";import"./status-card-DjfGGxz9.js";import"./progress-bar-CE-MEHmy.js";import"./resource-gauge-CiV0CHDE.js";const l={title:"Migrations/WebUI/Gallery/GalleryDashboardSection",component:t,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...r.parameters?.docs?.source}}};const d=["Default"];export{r as Default,d as __namedExportsOrder,l as default};

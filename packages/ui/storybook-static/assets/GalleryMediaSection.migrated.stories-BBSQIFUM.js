@@ -1,3 +1,0 @@
-import{G as e}from"./gallery-media-section-XlWjwYUa.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-Hxm9uu1u.js";import"./audio-player-SoJRqhv-.js";import"./pdf-preview-IBE8pzVr.js";import"./voice-visualizer-W_2T8hUJ.js";const n={title:"Migrations/WebUI/Gallery/GalleryMediaSection",component:e,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...r.parameters?.docs?.source}}};const l=["Default"];export{r as Default,l as __namedExportsOrder,n as default};

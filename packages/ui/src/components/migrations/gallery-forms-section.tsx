@@ -9,6 +9,8 @@ import { Textarea } from "./textarea";
 import { RegexTester } from "./regex-tester";
 import { DatePicker } from "./date-picker";
 import { ColorPicker } from "./color-picker";
+import { SecretInput } from "./secret-input";
+import { TagInput } from "./tag-input";
 
 export interface GalleryFormsSectionProps { className?: string; }
 
@@ -20,8 +22,12 @@ export function GalleryFormsSection({ className }: GalleryFormsSectionProps) {
         <GalleryCard name="PinInput">
           <PinInput length={4} label="Enter PIN" />
         </GalleryCard>
-        <GalleryCard name="SecretInput" shell />
-        <GalleryCard name="TagInput" shell />
+        <GalleryCard name="SecretInput">
+          <SecretInput label="API Key" placeholder="sk-..." />
+        </GalleryCard>
+        <GalleryCard name="TagInput">
+          <TagInput tags={["agent", "deploy", "v2"]} placeholder="Add tag..." />
+        </GalleryCard>
         <GalleryCard name="RangeSlider">
           <RangeSlider min={0} max={100} value={65} label="Volume" />
         </GalleryCard>

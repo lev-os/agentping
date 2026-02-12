@@ -1,0 +1,3 @@
+import{S as t}from"./StreamingIndicator-D1Kp9BEY.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./badge-G0y1RK3D.js";import"./index-B_jtOnfb.js";import"./utils-CDN07tui.js";import"./createLucideIcon-oH0TnkMA.js";import"./wifi-DyvCWorl.js";import"./wifi-off-BEcoz1N2.js";const d={title:"Migrations/WebUI/Dashboard/StreamingIndicator",component:t,tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {}
+}`,...r.parameters?.docs?.source}}};const g=["Default"];export{r as Default,g as __namedExportsOrder,d as default};

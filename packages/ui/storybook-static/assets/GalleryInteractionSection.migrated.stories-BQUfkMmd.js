@@ -1,3 +1,0 @@
-import{G as t}from"./gallery-interaction-section-CmmBD2I-.js";import"./iframe-CzJrb7DT.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-Hxm9uu1u.js";import"./draggable-list-Bm5XiYz5.js";import"./split-view-CpuntWIA.js";import"./command-palette-mmV6_-_J.js";import"./quick-actions-pRgnJJYM.js";const l={title:"Migrations/WebUI/Gallery/GalleryInteractionSection",component:t,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...r.parameters?.docs?.source}}};const d=["Default"];export{r as Default,d as __namedExportsOrder,l as default};

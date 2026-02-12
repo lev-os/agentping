@@ -7,7 +7,6 @@ import { Breadcrumbs } from "./breadcrumbs";
 import { Pagination } from "./pagination";
 import { SegmentedControl } from "./segmented-control";
 import { TabsContainer } from "./tabs-container";
-import { SidePanel } from "./side-panel";
 import { RadialNav } from "./radial-nav";
 import { Stepper } from "./stepper";
 
@@ -24,20 +23,32 @@ export function GalleryNavigationSection({ className }: GalleryNavigationSection
         <GalleryCard name="Pagination">
           <Pagination currentPage={3} totalPages={7} />
         </GalleryCard>
-        <GalleryCard name="SegmentedControl" shell>
-          <SegmentedControl />
+        <GalleryCard name="SegmentedControl">
+          <SegmentedControl options={["Agents", "Tasks", "Logs"]} selected="Agents" />
         </GalleryCard>
-        <GalleryCard name="TabsContainer" shell>
-          <TabsContainer />
+        <GalleryCard name="TabsContainer">
+          <TabsContainer
+            tabs={[
+              { id: "overview", label: "Overview", content: <span className="text-xs text-cyan-300">System overview</span> },
+              { id: "metrics", label: "Metrics" },
+              { id: "logs", label: "Logs" },
+            ]}
+            activeTab="overview"
+          />
         </GalleryCard>
-        <GalleryCard name="SidePanel" shell>
-          <SidePanel />
+        <GalleryCard name="RadialNav">
+          <RadialNav
+            size={140}
+            items={[
+              { id: "deploy", label: "Deploy", icon: "\u25B6" },
+              { id: "monitor", label: "Monitor", icon: "\u25C9" },
+              { id: "logs", label: "Logs", icon: "\u2630" },
+              { id: "config", label: "Config", icon: "\u2699" },
+            ]}
+          />
         </GalleryCard>
-        <GalleryCard name="RadialNav" shell>
-          <RadialNav />
-        </GalleryCard>
-        <GalleryCard name="Stepper" shell>
-          <Stepper />
+        <GalleryCard name="Stepper">
+          <Stepper steps={["Connect", "Configure", "Deploy"]} currentStep={1} />
         </GalleryCard>
       </div>
     </div>
