@@ -277,6 +277,9 @@ importers:
 
   packages/canvas:
     dependencies:
+      '@kingly/ui':
+        specifier: workspace:*
+        version: link:../ui
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -413,6 +416,9 @@ importers:
 
   packages/dashboard-manager-ui:
     dependencies:
+      '@kingly/ui':
+        specifier: workspace:*
+        version: link:../ui
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

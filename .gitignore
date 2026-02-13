@@ -37,3 +37,4 @@ playwright/.cache/
 .agentping/
 *.db
 packages/studio/out/
+storybook-static
