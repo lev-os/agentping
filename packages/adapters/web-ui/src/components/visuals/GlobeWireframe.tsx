@@ -1,22 +1,3 @@
-import React from 'react';
-import './GlobeWireframe.css';
-
-export const GlobeWireframe: React.FC = () => {
-    return (
-        <div className="globe-container">
-            <div className="globe">
-                <div className="globe-latitude"></div>
-                <div className="globe-latitude"></div>
-                <div className="globe-latitude"></div>
-                <div className="globe-longitude"></div>
-                <div className="globe-longitude"></div>
-                <div className="globe-longitude"></div>
-                <div className="globe-core"></div>
-            </div>
-            <div className="globe-data">
-                <span>ORBIT: LEO</span>
-                <span>ALT: 400KM</span>
-            </div>
-        </div>
-    );
-};
+// Re-export from @kingly/ui — source migrated in Pass 3
+export { GlobeWireframe } from "@kingly/ui/components";
+export type { GlobeWireframeProps } from "@kingly/ui/components";

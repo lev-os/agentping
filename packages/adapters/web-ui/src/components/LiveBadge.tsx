@@ -1,17 +1,3 @@
-import React from 'react';
-import './LiveBadge.css';
-
-interface LiveBadgeProps {
-    label?: string;
-    pulsing?: boolean;
-    className?: string;
-}
-
-export function LiveBadge({ label = 'LIVE', pulsing = true, className = '' }: LiveBadgeProps) {
-    return (
-        <div className={`live-badge ${pulsing ? 'pulsing' : ''} ${className}`}>
-            <div className="live-dot" />
-            <span className="live-text">{label}</span>
-        </div>
-    );
-}
+// Re-export from @kingly/ui — source migrated in Pass 3
+export { LiveBadge } from "@kingly/ui/components";
+export type { LiveBadgeProps } from "@kingly/ui/components";

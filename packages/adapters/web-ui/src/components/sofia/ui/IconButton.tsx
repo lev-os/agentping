@@ -1,6 +1,3 @@
-/**
- * IconButton - Web-UI wrapper (thin re-export)
- * @see packages/ui/src/components/migrations/icon-button-conflict.tsx
- */
-export { IconButtonCandidate as IconButton, type IconButtonConflictProps as IconButtonProps } from "@kingly/ui/components";
-export { IconButtonCandidate as default } from "@kingly/ui/components";
+// Re-export from @kingly/ui — source migrated in Pass 3
+export { IconButtonStudioRaw, IconButtonWebUiRaw, IconButtonCandidate } from "@kingly/ui/components";
+export type { IconButtonConflictProps } from "@kingly/ui/components";

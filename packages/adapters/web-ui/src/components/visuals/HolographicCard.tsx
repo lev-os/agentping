@@ -1,6 +1,3 @@
-import React from 'react';
-import { HolographicCard as MigratedHolographicCard } from '@kingly/ui/components';
-
-export const HolographicCard: React.FC = () => {
-    return <MigratedHolographicCard />;
-};
+// Re-export from @kingly/ui — source migrated in Pass 3
+export { HolographicCard } from "@kingly/ui/components";
+export type { HolographicCardProps } from "@kingly/ui/components";

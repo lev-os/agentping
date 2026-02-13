@@ -1,16 +1,3 @@
-import React from 'react';
-import './TypingIndicator.css';
-
-interface TypingIndicatorProps {
-    className?: string;
-}
-
-export function TypingIndicator({ className = '' }: TypingIndicatorProps) {
-    return (
-        <div className={`typing-indicator ${className}`}>
-            <span className="typing-dot" />
-            <span className="typing-dot" />
-            <span className="typing-dot" />
-        </div>
-    );
-}
+// Re-export from @kingly/ui — source migrated in Pass 3
+export { TypingIndicator } from "@kingly/ui/components";
+export type { TypingIndicatorProps } from "@kingly/ui/components";
