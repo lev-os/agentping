@@ -18,27 +18,45 @@ import { GallerySofiaSection } from "./gallery-sofia-section";
 import { GallerySystemSection } from "./gallery-system-section";
 import { GalleryVisualsSection } from "./gallery-visuals-section";
 
-export interface PrimitivesGalleryProps { className?: string; }
+export interface PrimitivesGalleryProps {
+  className?: string;
+  initialSection?: string;
+}
 
-export function PrimitivesGallery({ className }: PrimitivesGalleryProps) {
+const SECTIONS = [
+  { id: "ai", Component: GalleryAISection },
+  { id: "content", Component: GalleryContentSection },
+  { id: "dashboard", Component: GalleryDashboardSection },
+  { id: "data", Component: GalleryDataSection },
+  { id: "feedback", Component: GalleryFeedbackSection },
+  { id: "finance", Component: GalleryFinanceSection },
+  { id: "forms", Component: GalleryFormsSection },
+  { id: "interaction", Component: GalleryInteractionSection },
+  { id: "logs", Component: GalleryLogsSection },
+  { id: "media", Component: GalleryMediaSection },
+  { id: "navigation", Component: GalleryNavigationSection },
+  { id: "scheduling", Component: GallerySchedulingSection },
+  { id: "sofia", Component: GallerySofiaSection },
+  { id: "system", Component: GallerySystemSection },
+  { id: "visuals", Component: GalleryVisualsSection },
+] as const;
+
+export function PrimitivesGallery({ className, initialSection }: PrimitivesGalleryProps) {
+  React.useEffect(() => {
+    if (initialSection) {
+      const el = document.getElementById(`gallery-section-${initialSection}`);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [initialSection]);
+
   return (
     <div className={cn("space-y-8 p-4", className)}>
       <div className="text-sm font-mono text-cyan-400 uppercase tracking-widest">Primitives Gallery</div>
-      <GalleryAISection />
-      <GalleryContentSection />
-      <GalleryDashboardSection />
-      <GalleryDataSection />
-      <GalleryFeedbackSection />
-      <GalleryFinanceSection />
-      <GalleryFormsSection />
-      <GalleryInteractionSection />
-      <GalleryLogsSection />
-      <GalleryMediaSection />
-      <GalleryNavigationSection />
-      <GallerySchedulingSection />
-      <GallerySofiaSection />
-      <GallerySystemSection />
-      <GalleryVisualsSection />
+      {SECTIONS.map(({ id, Component }) => (
+        <div key={id} id={`gallery-section-${id}`}>
+          <Component />
+        </div>
+      ))}
     </div>
   );
 }

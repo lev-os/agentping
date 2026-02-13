@@ -1,3 +1,0 @@
-import{C as r}from"./checkbox-Bmm6JN_L.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./index-DqYXjM1N.js";import"./index-BabMczZl.js";import"./index-p5YmI0II.js";import"./index-fvHFeWab.js";import"./index-DgHvID4o.js";import"./index-CqSIw0EQ.js";import"./utils-CDN07tui.js";import"./check-C6g1ZBL2.js";import"./createLucideIcon-oH0TnkMA.js";const g={title:"Migrations/WebUI/Sofia/Checkbox",component:r,tags:["autodocs"]},o={args:{}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...o.parameters?.docs?.source}}};const l=["Default"];export{o as Default,l as __namedExportsOrder,g as default};

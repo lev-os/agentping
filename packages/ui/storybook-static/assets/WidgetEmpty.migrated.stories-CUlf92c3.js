@@ -1,3 +1,0 @@
-import{W as r}from"./WidgetEmpty-CDBq53m4.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./button-OgTxl8kR.js";import"./index-DBhjKPQa.js";import"./index-DqYXjM1N.js";import"./index-B_jtOnfb.js";import"./utils-CDN07tui.js";import"./createLucideIcon-oH0TnkMA.js";import"./wifi-off-BEcoz1N2.js";import"./settings-B1d6nvfc.js";import"./search-C6nlid9P.js";import"./inbox-Br7JJQB0.js";const f={title:"Migrations/WebUI/Dashboard/WidgetEmpty",component:r,tags:["autodocs"]},t={args:{}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...t.parameters?.docs?.source}}};const W=["Default"];export{t as Default,W as __namedExportsOrder,f as default};

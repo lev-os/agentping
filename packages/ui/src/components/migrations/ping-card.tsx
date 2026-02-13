@@ -7,7 +7,11 @@ export interface PingCardPing {
   id: string;
   type: string;
   payload: Record<string, unknown>;
-  createdAt?: string;
+  createdAt?: Date | string;
+  agent?: string;
+  sessionId?: string;
+  status?: string;
+  resolvedAt?: string | Date;
 }
 
 export interface PingCardProps {
@@ -47,7 +51,7 @@ export function PingCard({ ping, isSelected, onClick, className }: PingCardProps
       </div>
       <div className="flex items-center gap-2 mt-1">
         <span className="text-[10px] font-mono text-cyan-500/40 uppercase">{ping.type.replace(/_/g, " ")}</span>
-        {ping.createdAt && <span className="text-[10px] font-mono text-cyan-500/30 ml-auto">{ping.createdAt}</span>}
+        {ping.createdAt && <span className="text-[10px] font-mono text-cyan-500/30 ml-auto">{ping.createdAt instanceof Date ? ping.createdAt.toISOString() : ping.createdAt}</span>}
       </div>
     </div>
   );

@@ -2,19 +2,20 @@
  * Diff Template — Git Diff Viewer
  *
  * Renders structured diff hunks as polymorph primitives.
- * Composes Card, Badge, and TextBlock primitives for theme-aware rendering.
+ * Uses custom props (diffLines, diffType) so renderers can apply
+ * proper green/red/neutral styling instead of generic code blocks.
  */
 
 import type { Template, PolymorphPrimitive } from '../types.js';
 import * as P from '../primitives.js';
 
-interface DiffLine {
+export interface DiffLine {
   type: 'add' | 'del' | 'ctx';
   num: number;
   content: string;
 }
 
-interface DiffHunk {
+export interface DiffHunk {
   file: string;
   additions: number;
   deletions: number;
@@ -39,7 +40,7 @@ const MOCK_HUNKS: DiffHunk[] = [
     additions: 8,
     deletions: 1,
     lines: [
-      { type: 'ctx', num: 15, content: "switch (command) {" },
+      { type: 'ctx', num: 15, content: 'switch (command) {' },
       { type: 'add', num: 16, content: "  case 'diff': {" },
       { type: 'add', num: 17, content: '    const hunks = parseDiff(ref);' },
       { type: 'add', num: 18, content: '    console.log(JSON.stringify(hunks, null, 2));' },
@@ -50,11 +51,6 @@ const MOCK_HUNKS: DiffHunk[] = [
     ],
   },
 ];
-
-function formatLine(line: DiffLine): string {
-  const prefix = line.type === 'add' ? '+' : line.type === 'del' ? '-' : ' ';
-  return `${prefix} ${String(line.num).padStart(4)} \u2502 ${line.content}`;
-}
 
 export const diffTemplate: Template = {
   name: 'diff',
@@ -67,14 +63,20 @@ export const diffTemplate: Template = {
     const fileCards: PolymorphPrimitive[] = hunks.map((hunk) =>
       P.Card({
         title: hunk.file,
+        // Pass structured diff data for smart renderers
+        diffHunk: true,
+        additions: hunk.additions,
+        deletions: hunk.deletions,
+        diffLines: hunk.lines,
         children: [
           P.Badge({ text: `+${hunk.additions}`, variant: 'success' }),
-          P.Badge({ text: `-${hunk.deletions}`, variant: 'warning' }),
+          P.Badge({ text: `\u2212${hunk.deletions}`, variant: 'warning' }),
           ...hunk.lines.map((line) =>
             P.TextBlock({
-              content: formatLine(line),
+              content: `${line.type === 'add' ? '+' : line.type === 'del' ? '\u2212' : ' '} ${String(line.num).padStart(4)} \u2502 ${line.content}`,
               variant: 'code',
               size: 'sm',
+              diffType: line.type,
             }),
           ),
         ],
@@ -85,9 +87,10 @@ export const diffTemplate: Template = {
       P.Card({
         title: '> diff',
         subtitle: `${hunks.length} file${hunks.length !== 1 ? 's' : ''} changed`,
+        diffSummary: true,
         children: [
           P.MetricValue({ label: 'Additions', value: `+${totalAdded}`, trend: 'up' }),
-          P.MetricValue({ label: 'Deletions', value: `-${totalDeleted}`, trend: 'down' }),
+          P.MetricValue({ label: 'Deletions', value: `\u2212${totalDeleted}`, trend: 'down' }),
         ],
       }),
       ...fileCards,

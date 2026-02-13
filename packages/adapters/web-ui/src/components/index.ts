@@ -19,6 +19,9 @@ export { SearchInput } from './SearchInput';
 export { Spinner } from './Spinner';
 export { Timeline } from './Timeline';
 
+// Barrel-collision workarounds — stay local (shim resolves path)
+export { StatusCard } from './StatusCard';
+
 // All other components — direct re-export from @kingly/ui
 export {
     PingCard,
@@ -28,7 +31,6 @@ export {
     TaskWorkflow,
     PrimitivesGallery,
     DependencyGraph,
-    StatusCard,
     ProgressTimeline,
     InfoSidebar,
     InlineTutorialTooltip,

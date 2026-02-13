@@ -13,6 +13,7 @@ export interface HistoryEntry {
 export interface HistoryViewProps {
   entries?: HistoryEntry[];
   onSelectEntry?: (entry: HistoryEntry) => void;
+  onSelectPing?: (entry: HistoryEntry) => void;
   className?: string;
 }
 
@@ -22,13 +23,14 @@ export interface HistoryViewProps {
  * @migration-status candidate
  * @needs-review Original depends on @agentping/core Ping type and PingCard component. Simplified.
  */
-export function HistoryView({ entries = [], onSelectEntry, className }: HistoryViewProps) {
+export function HistoryView({ entries = [], onSelectEntry, onSelectPing, className }: HistoryViewProps) {
+  const handleSelect = onSelectPing ?? onSelectEntry;
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       {entries.map((entry) => (
         <button
           key={entry.id}
-          onClick={() => onSelectEntry?.(entry)}
+          onClick={() => handleSelect?.(entry)}
           className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors text-left w-full"
         >
           <div className="flex-1 min-w-0">

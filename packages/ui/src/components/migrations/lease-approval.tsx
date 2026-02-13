@@ -6,14 +6,20 @@ import { cn } from "../../lib/utils";
 export type LeaseStatus = "pending" | "active" | "expired" | "denied";
 
 export interface LeaseApprovalProps {
-  id: string;
-  agent: string;
-  resource: string;
+  id?: string;
+  agent?: string;
+  resource?: string;
   status: LeaseStatus;
-  requestedAt: string;
-  expiresAt?: string;
+  requestedAt?: string;
+  expiresAt?: Date | string;
   onApprove?: () => void;
   onDeny?: () => void;
+  agentId?: string;
+  agentName?: string;
+  scope?: string;
+  ttl?: number;
+  reason?: string;
+  constraints?: Record<string, unknown>;
   className?: string;
 }
 
@@ -30,19 +36,25 @@ const statusStyle: Record<LeaseStatus, string> = {
  * @migration-status candidate
  */
 export function LeaseApproval({
-  id, agent, resource, status, requestedAt, expiresAt, onApprove, onDeny, className
+  id: _id, agent, resource, status, requestedAt, expiresAt, onApprove, onDeny,
+  agentId: _agentId, agentName, scope, ttl: _ttl, reason, constraints: _constraints,
+  className
 }: LeaseApprovalProps) {
+  const expiresStr = expiresAt instanceof Date ? expiresAt.toISOString() : expiresAt;
+  const displayAgent = agent ?? agentName ?? "Unknown agent";
+  const displayResource = resource ?? scope ?? "Unknown resource";
   return (
     <div className={cn("border rounded-md bg-card p-4", statusStyle[status], className)}>
       <div className="flex items-start justify-between mb-2">
         <div>
-          <div className="text-sm font-medium text-foreground">{agent}</div>
-          <div className="text-xs text-muted-foreground">{resource}</div>
+          <div className="text-sm font-medium text-foreground">{displayAgent}</div>
+          <div className="text-xs text-muted-foreground">{displayResource}</div>
         </div>
         <span className="text-xs font-medium uppercase px-2 py-0.5 rounded">{status}</span>
       </div>
+      {reason && <div className="text-xs text-muted-foreground mb-1">Reason: {reason}</div>}
       <div className="text-xs text-muted-foreground mb-3">
-        Requested: {requestedAt}{expiresAt && ` \u00B7 Expires: ${expiresAt}`}
+        {requestedAt && <>Requested: {requestedAt}</>}{expiresStr && `${requestedAt ? " \u00B7 " : ""}Expires: ${expiresStr}`}
       </div>
       {status === "pending" && (
         <div className="flex gap-2">

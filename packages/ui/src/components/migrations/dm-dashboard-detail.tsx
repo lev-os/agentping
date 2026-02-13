@@ -36,7 +36,7 @@ export interface DmDashboardMetrics {
 }
 
 export interface DmDashboardDetailProps {
-  dashboard: DmDashboard;
+  dashboard?: DmDashboard;
   metrics?: DmDashboardMetrics;
   onBack?: () => void;
   onRestart?: () => Promise<void> | void;
@@ -59,6 +59,14 @@ export function DmDashboardDetail({
   className,
 }: DmDashboardDetailProps) {
   const [isRestarting, setIsRestarting] = React.useState(false);
+
+  if (!dashboard) {
+    return (
+      <div className={cn("flex items-center justify-center py-16", className)}>
+        <p className="text-sm font-mono text-cyan-500/40">No dashboard selected</p>
+      </div>
+    );
+  }
 
   const handleRestart = async () => {
     if (!onRestart) return;

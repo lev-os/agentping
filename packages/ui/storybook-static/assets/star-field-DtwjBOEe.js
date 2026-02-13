@@ -1,6 +1,0 @@
-import{r as l,j as r}from"./iframe-rZoXeK5l.js";import{c as d}from"./utils-CDN07tui.js";function i({count:a=100,speed:t=10,className:n}){const o=l.useMemo(()=>Array.from({length:a},(e,s)=>({id:s,x:Math.random()*100,y:Math.random()*100,size:Math.random()*2+.5,opacity:Math.random()*.7+.1,duration:t+Math.random()*t})),[a,t]);return r.jsxs("div",{className:d("absolute inset-0 overflow-hidden pointer-events-none bg-black",n),children:[o.map(e=>r.jsx("div",{className:"absolute rounded-full bg-white animate-[twinkle_ease-in-out_infinite_alternate]",style:{left:`${e.x}%`,top:`${e.y}%`,width:e.size,height:e.size,opacity:e.opacity,animationDuration:`${e.duration}s`}},e.id)),r.jsx("style",{children:`
-        @keyframes twinkle {
-          0% { opacity: 0.1; }
-          100% { opacity: 0.8; }
-        }
-      `})]})}try{i.displayName="StarField",i.__docgenInfo={description:"StarField - Migrated from",displayName:"StarField",props:{count:{defaultValue:{value:"100"},description:"",name:"count",required:!1,type:{name:"number"}},speed:{defaultValue:{value:"10"},description:"",name:"speed",required:!1,type:{name:"number"}},className:{defaultValue:null,description:"",name:"className",required:!1,type:{name:"string"}}}}}catch{}export{i as S};

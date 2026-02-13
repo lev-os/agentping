@@ -1,3 +1,0 @@
-import{G as t}from"./gallery-navigation-section-BHxCXbRA.js";import"./iframe-rZoXeK5l.js";import"./preload-helper-PPVm8Dsz.js";import"./utils-CDN07tui.js";import"./gallery-card-CzB3T1UD.js";import"./breadcrumbs-Chk9KI_q.js";import"./pagination-CUt6Ye4L.js";import"./segmented-control-Z1RdvUrn.js";import"./tabs-container-vh3ooeCH.js";import"./radial-nav-CDeZfMCd.js";import"./stepper-DTSxUOSm.js";const u={title:"Migrations/WebUI/Gallery/GalleryNavigationSection",component:t,parameters:{layout:"centered"},tags:["autodocs"]},r={args:{}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  args: {}
-}`,...r.parameters?.docs?.source}}};const g=["Default"];export{r as Default,g as __namedExportsOrder,u as default};

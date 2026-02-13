@@ -11,6 +11,21 @@
 - `ap-n2l` is the active dashboard consolidation epic.
 - Storybooks and runtime surfaces are operational from dashboard-runner.
 
+## Validation refresh (2026-02-13)
+
+### Pass 5 complete
+- 10 prop mismatches fixed (widened migration interfaces for consumer compat)
+- 205 orphaned CSS files deleted (shim companions)
+- 39 new files: 8 review infra, 19 review stories, 12 real sample pages (+8,555 LOC)
+- Build gates: `@kingly/ui build` PASS, `@kingly/ui build-storybook` PASS
+- `docs/qa/` deleted — beads are sole source of truth
+
+### QA totals (bead-tracked)
+- PASS: ~269/327 (82.3%)
+- FAIL: ~58 (38 SHELL, 16 HOLLOW, 4 actionable REAL)
+- 6 former REAL fails fixed by prop widening (DmDashboardDetail/List, HistoryView, LandingPage, LeaseApproval, PingCard)
+- 4 remaining REAL fails: ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback
+
 ## Known blocker
 
 - `bd` prints a legacy database warning in this repo:
@@ -35,6 +50,8 @@ bd ready
 
 ## Next actions
 
-1. Close human QA on `ap-4rs.*` tasks that are already visually validated.
-2. Execute import rewrites in task order and capture evidence in bead comments.
-3. Re-run smoke checks on storybook + studio + canvas before closing epic slices.
+1. Investigate 4 remaining REAL failures (ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback)
+2. Implement 38 SHELL components (placeholder → full build)
+3. Implement 16 HOLLOW gallery sections (summary text → real content)
+4. Visual QA: run storybook, validate review pages + sample pages render correctly
+5. Close passing `ap-4rs.*` beads after human visual sign-off

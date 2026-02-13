@@ -17,7 +17,7 @@ export interface DmDashboardSummary {
 }
 
 export interface DmDashboardListProps {
-  dashboards: DmDashboardSummary[];
+  dashboards?: DmDashboardSummary[];
   isLoading?: boolean;
   error?: string | null;
   onRowClick?: (dashboard: DmDashboardSummary) => void;
@@ -54,7 +54,7 @@ const statusColors: Record<string, string> = {
  * @needs-review Original uses react-router, useWebSocket, dashboardAPI; migration is prop-driven
  */
 export function DmDashboardList({
-  dashboards,
+  dashboards = [],
   isLoading,
   error,
   onRowClick,
