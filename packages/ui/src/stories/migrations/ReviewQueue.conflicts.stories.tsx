@@ -5,40 +5,60 @@ import {
   BadgeCandidate,
   BadgeStudioRaw,
   BadgeWebUiRaw,
+} from "../../components/migrations/badge-conflict";
+import {
   ButtonCandidate,
   ButtonStudioRaw,
   ButtonWebUiRaw,
+} from "../../components/migrations/button-conflict";
+import {
   CodeDiffViewerCandidate,
   CodeDiffViewerStudioRaw,
   CodeDiffViewerWebUiRaw,
+} from "../../components/migrations/code-diff-viewer-conflict";
+import {
   ContextMenuCandidate,
   ContextMenuStudioRaw,
   ContextMenuWebUiRaw,
+  type ContextMenuAction,
+} from "../../components/migrations/context-menu-conflict";
+import {
   EmptyStateCandidate,
   EmptyStateStudioRaw,
   EmptyStateWebUiRaw,
+} from "../../components/migrations/empty-state-conflict";
+import {
   IconButtonCandidate,
   IconButtonStudioRaw,
   IconButtonWebUiRaw,
+} from "../../components/migrations/icon-button-conflict";
+import {
   InputCandidate,
   InputStudioRaw,
   InputWebUiRaw,
-  LogViewerCandidate,
-  LogViewerStudioRaw,
-  LogViewerWebUiRaw,
+} from "../../components/migrations/input-conflict";
+import {
   SearchInputCandidate,
   SearchInputStudioRaw,
   SearchInputWebUiRaw,
+} from "../../components/migrations/search-input-conflict";
+import {
   SpinnerCandidate,
   SpinnerStudioRaw,
   SpinnerWebUiRaw,
+} from "../../components/migrations/spinner-conflict";
+import {
   TimelineCandidate,
   TimelineStudioRaw,
   TimelineWebUiRaw,
-  type ContextMenuAction,
-  type LogEntry,
   type TimelineItem,
-} from "../../components/migrations";
+} from "../../components/migrations/timeline-conflict";
+import {
+  LogViewerCandidate,
+  LogViewerStudioRaw,
+  LogViewerWebUiRaw,
+  type LogEntry,
+} from "../../components/migrations/log-viewer-conflict";
 
 interface ReviewRowProps {
   family: string;

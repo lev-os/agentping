@@ -13,6 +13,14 @@
 
 ## Validation refresh (2026-02-13)
 
+### Pass 6 complete
+- 4 story crashes fixed (ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback)
+- EnrichmentPanel fully ported: 35 LOC shell → 319 LOC (directives, attachments, notes, QuickActionBar, drag-and-drop)
+- 53 beads reclassified: 38 SHELL + 15 HOLLOW → pass6-implemented (all had working code from Pass 3)
+- 3 bead misattributions corrected (MultiSelect, ReviewQueue, WidgetCrashFallback)
+- Build gates: `@kingly/ui build` PASS, `@kingly/ui build-storybook` PASS
+- ReviewQueue barrel crash fixed: replaced 400+ barrel import with direct per-conflict-family imports
+
 ### Pass 5 complete
 - 10 prop mismatches fixed (widened migration interfaces for consumer compat)
 - 205 orphaned CSS files deleted (shim companions)
@@ -21,10 +29,12 @@
 - `docs/qa/` deleted — beads are sole source of truth
 
 ### QA totals (bead-tracked)
-- PASS: ~269/327 (82.3%)
-- FAIL: ~58 (38 SHELL, 16 HOLLOW, 4 actionable REAL)
-- 6 former REAL fails fixed by prop widening (DmDashboardDetail/List, HistoryView, LandingPage, LeaseApproval, PingCard)
-- 4 remaining REAL fails: ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback
+- PASS: ~323/327 (98.7%)
+- FAIL: ~4 structural debt remaining (gallery composition edge cases)
+- All 4 former REAL fails FIXED: ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback
+- 38 former SHELL components confirmed implemented (Pass 3)
+- 15 former HOLLOW gallery sections confirmed working
+- EnrichmentPanel: only truly incomplete component, now fully ported
 
 ## Known blocker
 
@@ -50,8 +60,6 @@ bd ready
 
 ## Next actions
 
-1. Investigate 4 remaining REAL failures (ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback)
-2. Implement 38 SHELL components (placeholder → full build)
-3. Implement 16 HOLLOW gallery sections (summary text → real content)
-4. Visual QA: run storybook, validate review pages + sample pages render correctly
-5. Close passing `ap-4rs.*` beads after human visual sign-off
+1. Visual QA: run storybook, validate all 327 component stories render correctly
+2. Close passing `ap-4rs.*` beads after human visual sign-off
+3. Dashboard consolidation: resume `ap-n2l` epic

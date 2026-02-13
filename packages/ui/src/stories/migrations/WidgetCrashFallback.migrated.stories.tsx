@@ -10,16 +10,20 @@ export default meta;
 type Story = StoryObj<typeof WidgetCrashFallback>;
 
 export const Default: Story = {
-  args: {
-    widgetId: "widget-1",
-    error: new Error("Cannot read property 'map' of undefined"),
-    resetError: () => {},
-  },
+  render: () => (
+    <WidgetCrashFallback
+      widgetId="widget-1"
+      error={new Error("Cannot read property 'map' of undefined")}
+      resetError={() => {}}
+    />
+  ),
 };
 
 export const WithoutReset: Story = {
-  args: {
-    widgetId: "widget-2",
-    error: new Error("Network timeout"),
-  },
+  render: () => (
+    <WidgetCrashFallback
+      widgetId="widget-2"
+      error={new Error("Network timeout")}
+    />
+  ),
 };

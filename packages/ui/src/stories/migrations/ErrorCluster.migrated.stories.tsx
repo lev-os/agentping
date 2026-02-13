@@ -5,6 +5,10 @@ const meta: Meta<typeof ErrorCluster> = {
   title: "Migrations/WebUI/ErrorCluster",
   component: ErrorCluster,
   tags: ["autodocs"],
+  argTypes: {
+    errors: { control: "object" },
+    className: { control: "text" },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof ErrorCluster>;
