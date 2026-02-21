@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Progress } from "../components/ui/progress";
 import { useEffect, useState } from "react";

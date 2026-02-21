@@ -1,0 +1,711 @@
+/**
+ * Unified Multi-Theme System
+ *
+ * Architecture:
+ * - @theme inline in skynet.css registers --color-* contract with Tailwind v4
+ * - This file provides theme-specific values via [data-theme] selectors
+ * - Each theme: Dark (default) + Light ([data-mode="light"]) = 8 visual states
+ * - Structural tokens (clip-path, glow, glass) are theme-specific
+ *
+ * Themes: agentping | canvas | sofia | lcars
+ * Modes:  dark (default) | light
+ *
+ * Variable Contract (what Tailwind reads via @theme inline):
+ *   --color-background, --color-foreground
+ *   --color-card, --color-card-foreground
+ *   --color-popover, --color-popover-foreground
+ *   --color-primary, --color-primary-foreground
+ *   --color-secondary, --color-secondary-foreground
+ *   --color-accent, --color-accent-foreground
+ *   --color-destructive, --color-destructive-foreground
+ *   --color-muted, --color-muted-foreground
+ *   --color-border, --color-input, --color-ring
+ *   --color-success, --color-warning, --color-info (+ foregrounds)
+ *   --radius, --font-display, --font-body, --font-mono
+ *
+ * Structural Tokens (theme-specific):
+ *   --card-clip, --card-bg, --card-border-glow, --card-glow-line
+ *   --glow-primary, --shadow-sm/md/lg, --glass-bg/border/blur
+ *   --heading-transform, --heading-tracking
+ *   --chart-1 through --chart-5
+ */
+
+/* ============================================================================
+ * BASE TOKENS (Theme-agnostic, always applied)
+ * ============================================================================ */
+
+:root {
+  /* Spacing Scale */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 550;
+  --z-tooltip: 600;
+  --z-toast: 700;
+
+  /* Animation Timing */
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+
+/* ============================================================================
+ * AGENTPING THEME - Dark Mode
+ * Cyber Premium: Neon Cyan on Jet Black
+ * ============================================================================ */
+
+[data-theme="agentping"] {
+  color-scheme: dark;
+
+  /* Semantic Colors */
+  --color-background: #050505;
+  --color-foreground: #fafafa;
+  --color-card: #0a0a0a;
+  --color-card-foreground: #fafafa;
+  --color-popover: #121212;
+  --color-popover-foreground: #fafafa;
+  --color-primary: #00e5ff;
+  --color-primary-foreground: #000000;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #fafafa;
+  --color-accent: #3b82f6;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #ff2a6d;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #171717;
+  --color-muted-foreground: #71717a;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(255, 255, 255, 0.12);
+  --color-ring: #00e5ff;
+
+  /* Status */
+  --color-success: #00ff9d;
+  --color-success-foreground: #000000;
+  --color-warning: #ffb800;
+  --color-warning-foreground: #000000;
+  --color-info: #3b82f6;
+  --color-info-foreground: #ffffff;
+
+  /* Structural */
+  --radius: 0.375rem;
+  --glow-primary: 0 0 10px rgba(0, 229, 255, 0.4), 0 0 20px rgba(0, 229, 255, 0.2);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.7);
+  --glass-bg: rgba(10, 10, 10, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 12px;
+
+  /* Card Shape */
+  --card-clip: none;
+  --card-bg: var(--color-card);
+  --card-border-glow: none;
+  --card-glow-line: transparent;
+  --card-radius: var(--radius);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --heading-transform: none;
+  --heading-tracking: normal;
+
+  /* Charts */
+  --chart-1: #00e5ff;
+  --chart-2: #00ff9d;
+  --chart-3: #ffb800;
+  --chart-4: #ff2a6d;
+  --chart-5: #8b5cf6;
+}
+
+
+/* AGENTPING - Light Mode */
+
+[data-theme="agentping"][data-mode="light"] {
+  color-scheme: light;
+
+  --color-background: #ffffff;
+  --color-foreground: #09090b;
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #09090b;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #09090b;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #09090b;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #2563eb;
+
+  --color-success: #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-foreground: #ffffff;
+  --color-info: #2563eb;
+  --color-info-foreground: #ffffff;
+
+  --glow-primary: none;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.08);
+
+  --chart-1: #2563eb;
+  --chart-2: #16a34a;
+  --chart-3: #d97706;
+  --chart-4: #dc2626;
+  --chart-5: #7c3aed;
+}
+
+
+/* ============================================================================
+ * CANVAS THEME - Dark Mode
+ * Frosted Glass: Translucent panels, soft glows, creative tooling aesthetic
+ * ============================================================================ */
+
+[data-theme="canvas"] {
+  color-scheme: dark;
+
+  --color-background: #050505;
+  --color-foreground: #fafafa;
+  --color-card: rgba(10, 10, 10, 0.7);
+  --color-card-foreground: #fafafa;
+  --color-popover: rgba(18, 18, 18, 0.85);
+  --color-popover-foreground: #fafafa;
+  --color-primary: #00e5ff;
+  --color-primary-foreground: #000000;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #fafafa;
+  --color-accent: #8b5cf6;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #ff2a6d;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #171717;
+  --color-muted-foreground: #71717a;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(255, 255, 255, 0.12);
+  --color-ring: #00e5ff;
+
+  --color-success: #00ff9d;
+  --color-success-foreground: #000000;
+  --color-warning: #ffb800;
+  --color-warning-foreground: #000000;
+  --color-info: #3b82f6;
+  --color-info-foreground: #ffffff;
+
+  /* Structural — glass-forward */
+  --radius: 0.75rem;
+  --glow-primary: 0 0 20px rgba(0, 229, 255, 0.15);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glass-bg: rgba(10, 10, 10, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 16px;
+
+  /* Card — frosted glass panel */
+  --card-clip: none;
+  --card-bg: var(--glass-bg);
+  --card-border-glow: none;
+  --card-glow-line: transparent;
+  --card-radius: var(--radius);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --heading-transform: none;
+  --heading-tracking: normal;
+
+  --chart-1: #00e5ff;
+  --chart-2: #8b5cf6;
+  --chart-3: #00ff9d;
+  --chart-4: #ffb800;
+  --chart-5: #ff2a6d;
+}
+
+
+/* CANVAS - Light Mode: Frosted White */
+
+[data-theme="canvas"][data-mode="light"] {
+  color-scheme: light;
+
+  --color-background: #f8f9fa;
+  --color-foreground: #1a1a2e;
+  --color-card: rgba(255, 255, 255, 0.85);
+  --color-card-foreground: #1a1a2e;
+  --color-popover: rgba(255, 255, 255, 0.92);
+  --color-popover-foreground: #1a1a2e;
+  --color-primary: #6366f1;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #1e293b;
+  --color-accent: #8b5cf6;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-input: rgba(0, 0, 0, 0.08);
+  --color-ring: #6366f1;
+
+  --color-success: #10b981;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
+  --color-info: #6366f1;
+  --color-info-foreground: #ffffff;
+
+  --glow-primary: none;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.06);
+
+  --card-bg: var(--glass-bg);
+
+  --chart-1: #6366f1;
+  --chart-2: #8b5cf6;
+  --chart-3: #10b981;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+}
+
+
+/* ============================================================================
+ * SOFIA THEME - Dark Mode
+ * SKYNET Tactical: Cut-corner cyber panels, grid pattern, Orbitron display font
+ * ============================================================================ */
+
+[data-theme="sofia"] {
+  color-scheme: dark;
+
+  --color-background: hsl(220 20% 4%);
+  --color-foreground: hsl(195 100% 95%);
+  --color-card: hsl(220 20% 8%);
+  --color-card-foreground: hsl(195 100% 95%);
+  --color-popover: hsl(220 20% 6%);
+  --color-popover-foreground: hsl(195 100% 95%);
+  --color-primary: hsl(195 100% 50%);
+  --color-primary-foreground: hsl(220 20% 4%);
+  --color-secondary: hsl(280 100% 60%);
+  --color-secondary-foreground: hsl(195 100% 95%);
+  --color-accent: hsl(45 100% 50%);
+  --color-accent-foreground: hsl(220 20% 4%);
+  --color-destructive: hsl(0 85% 55%);
+  --color-destructive-foreground: hsl(195 100% 95%);
+  --color-muted: hsl(220 15% 15%);
+  --color-muted-foreground: hsl(220 10% 55%);
+  --color-border: hsl(195 40% 20%);
+  --color-input: hsl(220 20% 12%);
+  --color-ring: hsl(195 100% 50%);
+
+  --color-success: hsl(150 100% 45%);
+  --color-success-foreground: hsl(220 20% 4%);
+  --color-warning: hsl(45 100% 50%);
+  --color-warning-foreground: hsl(220 20% 4%);
+  --color-info: hsl(195 100% 50%);
+  --color-info-foreground: hsl(220 20% 4%);
+
+  /* Structural — sharp, tactical */
+  --radius: 0px;
+  --glow-primary: 0 0 20px hsla(195, 100%, 50%, 0.3);
+  --shadow-sm: 0 2px 12px hsl(220 20% 0% / 0.4);
+  --shadow-md: 0 4px 20px hsl(220 20% 0% / 0.5), 0 0 1px hsl(195 100% 50% / 0.08);
+  --shadow-lg: 0 8px 40px hsl(220 20% 0% / 0.6), 0 0 1px hsl(195 100% 50% / 0.12);
+  --glass-bg: hsla(220, 20%, 4%, 0.95);
+  --glass-border: hsla(195, 50%, 25%, 0.3);
+  --glass-blur: 0px;
+
+  /* Card — cyber cut-corner panel */
+  --card-clip: polygon(
+    0 0,
+    calc(100% - 15px) 0,
+    100% 15px,
+    100% 100%,
+    15px 100%,
+    0 calc(100% - 15px)
+  );
+  --card-bg: linear-gradient(135deg, hsl(220 20% 8%) 0%, hsl(220 20% 6%) 100%);
+  --card-border-glow: 0 4px 20px hsl(220 20% 0% / 0.5), 0 8px 40px hsl(220 20% 0% / 0.3), 0 0 1px hsl(195 100% 50% / 0.08);
+  --card-glow-line: linear-gradient(90deg, transparent, hsl(195 100% 50% / 0.5), transparent);
+  --card-radius: 0px;
+
+  /* Sofia-specific structural tokens */
+  --sofia-grid-color: hsla(195, 100%, 50%, 0.05);
+  --sofia-grid-size: 30px;
+
+  /* Typography */
+  --font-sans: 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Orbitron', sans-serif;
+  --heading-transform: uppercase;
+  --heading-tracking: 0.05em;
+
+  --chart-1: hsl(195 100% 50%);
+  --chart-2: hsl(150 100% 45%);
+  --chart-3: hsl(45 100% 50%);
+  --chart-4: hsl(0 85% 55%);
+  --chart-5: hsl(280 100% 60%);
+}
+
+
+/* SOFIA - Light Mode: "Day Ops" — Light slate, dark accents, sharp edges */
+
+[data-theme="sofia"][data-mode="light"] {
+  color-scheme: light;
+
+  --color-background: hsl(220 15% 95%);
+  --color-foreground: hsl(220 25% 10%);
+  --color-card: hsl(220 15% 98%);
+  --color-card-foreground: hsl(220 25% 10%);
+  --color-popover: hsl(220 15% 97%);
+  --color-popover-foreground: hsl(220 25% 10%);
+  --color-primary: hsl(195 100% 35%);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: hsl(280 60% 50%);
+  --color-secondary-foreground: #ffffff;
+  --color-accent: hsl(45 80% 45%);
+  --color-accent-foreground: hsl(220 25% 10%);
+  --color-destructive: hsl(0 75% 50%);
+  --color-destructive-foreground: #ffffff;
+  --color-muted: hsl(220 15% 92%);
+  --color-muted-foreground: hsl(220 10% 45%);
+  --color-border: hsl(220 15% 85%);
+  --color-input: hsl(220 15% 88%);
+  --color-ring: hsl(195 100% 35%);
+
+  --color-success: hsl(150 70% 35%);
+  --color-success-foreground: #ffffff;
+  --color-warning: hsl(45 80% 40%);
+  --color-warning-foreground: hsl(220 25% 10%);
+  --color-info: hsl(195 100% 35%);
+  --color-info-foreground: #ffffff;
+
+  --glow-primary: none;
+  --shadow-sm: 0 1px 4px hsl(220 20% 0% / 0.08);
+  --shadow-md: 0 4px 12px hsl(220 20% 0% / 0.1);
+  --shadow-lg: 0 8px 24px hsl(220 20% 0% / 0.12);
+  --glass-bg: hsla(220, 15%, 98%, 0.9);
+  --glass-border: hsl(220 15% 85%);
+
+  /* Card — keep cut-corners but lighter */
+  --card-bg: linear-gradient(135deg, hsl(220 15% 98%) 0%, hsl(220 15% 96%) 100%);
+  --card-border-glow: 0 2px 12px hsl(220 20% 0% / 0.08);
+  --card-glow-line: linear-gradient(90deg, transparent, hsl(195 100% 35% / 0.3), transparent);
+
+  --sofia-grid-color: hsla(195, 100%, 35%, 0.04);
+
+  --chart-1: hsl(195 100% 35%);
+  --chart-2: hsl(150 70% 35%);
+  --chart-3: hsl(45 80% 40%);
+  --chart-4: hsl(0 75% 50%);
+  --chart-5: hsl(280 60% 50%);
+}
+
+
+/* ============================================================================
+ * LCARS THEME - Dark Mode
+ * Star Trek TNG/Picard: Elbow panels, solid colors, space black
+ * ============================================================================ */
+
+[data-theme="lcars"] {
+  color-scheme: dark;
+
+  /* LCARS Core Palette */
+  --lcars-blue: #99ccff;
+  --lcars-blue-dark: #6699cc;
+  --lcars-blue-light: #aaddff;
+  --lcars-orange: #ff9900;
+  --lcars-orange-dark: #cc6600;
+  --lcars-orange-light: #ffcc66;
+  --lcars-tan: #ffcc99;
+  --lcars-tan-dark: #cc9966;
+  --lcars-tan-light: #ffe6cc;
+  --lcars-red: #cc0000;
+  --lcars-red-alert: #ff3333;
+  --lcars-yellow: #ffff00;
+  --lcars-yellow-alert: #ffcc00;
+  --lcars-green: #00cc00;
+  --lcars-green-ok: #66ff66;
+  --lcars-purple: #cc99cc;
+  --lcars-violet: #9999cc;
+  --lcars-pink: #cc6699;
+  --lcars-lavender: #cc99ff;
+
+  /* Semantic Colors */
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-card: #0a0a0f;
+  --color-card-foreground: #ffffff;
+  --color-popover: #111118;
+  --color-popover-foreground: #ffffff;
+  --color-primary: var(--lcars-blue);
+  --color-primary-foreground: #000000;
+  --color-secondary: var(--lcars-tan);
+  --color-secondary-foreground: #000000;
+  --color-accent: var(--lcars-orange);
+  --color-accent-foreground: #000000;
+  --color-destructive: var(--lcars-red);
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #0f0f14;
+  --color-muted-foreground: #99aacc;
+  --color-border: var(--lcars-blue-dark);
+  --color-input: var(--lcars-blue-dark);
+  --color-ring: var(--lcars-orange);
+
+  --color-success: var(--lcars-green);
+  --color-success-foreground: #000000;
+  --color-warning: var(--lcars-yellow);
+  --color-warning-foreground: #000000;
+  --color-info: var(--lcars-violet);
+  --color-info-foreground: #000000;
+
+  /* Structural — flat, bold borders, no shadows */
+  --radius: 0px;
+  --glow-primary: none;
+  --shadow-sm: none;
+  --shadow-md: 0 0 8px rgba(153, 204, 255, 0.2);
+  --shadow-lg: 0 0 16px rgba(153, 204, 255, 0.3);
+  --glass-bg: #0a0a0f;
+  --glass-border: var(--lcars-blue-dark);
+  --glass-blur: 0px;
+
+  /* Card — LCARS solid panel with thick border */
+  --card-clip: none;
+  --card-bg: var(--color-card);
+  --card-border-glow: none;
+  --card-glow-line: transparent;
+  --card-radius: 0px;
+
+  /* LCARS Geometry */
+  --lcars-elbow-radius: 40px;
+  --lcars-elbow-radius-sm: 24px;
+  --lcars-elbow-radius-lg: 60px;
+  --lcars-sidebar-width: 180px;
+  --lcars-stripe-sm: 16px;
+  --lcars-stripe-md: 24px;
+  --lcars-stripe-lg: 40px;
+  --lcars-end-cap: 20px;
+  --lcars-border-width: 3px;
+
+  /* Typography */
+  --font-sans: 'Antonio', 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Orbitron', 'Michroma', sans-serif;
+  --heading-transform: uppercase;
+  --heading-tracking: 0.05em;
+
+  --chart-1: var(--lcars-blue);
+  --chart-2: var(--lcars-orange);
+  --chart-3: var(--lcars-tan);
+  --chart-4: var(--lcars-purple);
+  --chart-5: var(--lcars-green);
+}
+
+
+/* LCARS - Light Mode: "Good Jarvis" — Lavender/Purple on Cream */
+
+[data-theme="lcars"][data-mode="light"] {
+  color-scheme: light;
+
+  --color-background: #f5f0fa;
+  --color-foreground: #1a1028;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1028;
+  --color-popover: #faf8ff;
+  --color-popover-foreground: #1a1028;
+  --color-primary: #7c5cbf;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #d4a574;
+  --color-secondary-foreground: #1a1028;
+  --color-accent: #c77b30;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #c53030;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #ede8f5;
+  --color-muted-foreground: #6b5b8a;
+  --color-border: #c4b5d9;
+  --color-input: #d4c8e6;
+  --color-ring: #7c5cbf;
+
+  --color-success: #2d8a4e;
+  --color-success-foreground: #ffffff;
+  --color-warning: #b8860b;
+  --color-warning-foreground: #1a1028;
+  --color-info: #6b5b8a;
+  --color-info-foreground: #ffffff;
+
+  --glow-primary: none;
+  --shadow-sm: 0 1px 3px rgba(100, 60, 150, 0.08);
+  --shadow-md: 0 4px 12px rgba(100, 60, 150, 0.1);
+  --shadow-lg: 0 8px 24px rgba(100, 60, 150, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: #c4b5d9;
+
+  --card-bg: var(--color-card);
+
+  /* LCARS light palette */
+  --lcars-blue: #7c5cbf;
+  --lcars-blue-dark: #5a3d9e;
+  --lcars-blue-light: #9b7fd6;
+  --lcars-orange: #c77b30;
+  --lcars-orange-dark: #a56520;
+  --lcars-orange-light: #e8a860;
+  --lcars-tan: #d4a574;
+  --lcars-tan-dark: #b88a5c;
+  --lcars-tan-light: #f0d0a8;
+
+  --chart-1: #7c5cbf;
+  --chart-2: #c77b30;
+  --chart-3: #d4a574;
+  --chart-4: #9b7fd6;
+  --chart-5: #2d8a4e;
+}
+
+
+/* ============================================================================
+ * THEME-AWARE STRUCTURAL CLASSES
+ *
+ * .theme-card replaces hardcoded .cyber-panel for multi-theme support.
+ * .cyber-panel is kept as an alias for backward compatibility.
+ * ============================================================================ */
+
+.theme-card,
+.cyber-panel {
+  position: relative;
+  background: var(--card-bg, var(--color-card));
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius, var(--radius, 0));
+  clip-path: var(--card-clip, none);
+  box-shadow: var(--card-border-glow, var(--shadow-md));
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-card:hover,
+.cyber-panel:hover {
+  border-color: color-mix(in srgb, var(--color-border) 60%, var(--color-primary) 40%);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Glow line (top edge accent) — only renders when --card-glow-line is non-transparent */
+.theme-card::before,
+.cyber-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--card-glow-line, transparent);
+  pointer-events: none;
+}
+
+/* Small variant */
+.theme-card-sm,
+.cyber-panel-sm {
+  --card-clip: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+}
+
+/* Reset small variant clip for non-sofia themes */
+[data-theme="agentping"] .theme-card-sm,
+[data-theme="agentping"] .cyber-panel-sm,
+[data-theme="canvas"] .theme-card-sm,
+[data-theme="canvas"] .cyber-panel-sm,
+[data-theme="lcars"] .theme-card-sm,
+[data-theme="lcars"] .cyber-panel-sm {
+  --card-clip: none;
+}
+
+/* Canvas glass effect override */
+[data-theme="canvas"] .theme-card,
+[data-theme="canvas"] .cyber-panel {
+  backdrop-filter: blur(var(--glass-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
+}
+
+/* LCARS thick border override */
+[data-theme="lcars"] .theme-card,
+[data-theme="lcars"] .cyber-panel {
+  border-width: var(--lcars-border-width, 3px);
+  border-color: var(--lcars-blue-dark);
+}
+
+/* LCARS end-cap variant */
+.lcars-end-cap {
+  border-radius: 0 var(--lcars-end-cap, 20px) var(--lcars-end-cap, 20px) 0;
+}
+
+.lcars-end-cap-left {
+  border-radius: var(--lcars-end-cap, 20px) 0 0 var(--lcars-end-cap, 20px);
+}
+
+
+/* ============================================================================
+ * THEME-AWARE HEADING STYLES
+ * ============================================================================ */
+
+[data-theme] h1,
+[data-theme] h2,
+[data-theme] h3,
+[data-theme] h4,
+[data-theme] h5,
+[data-theme] h6 {
+  font-family: var(--font-display, inherit);
+  text-transform: var(--heading-transform, none);
+  letter-spacing: var(--heading-tracking, normal);
+}

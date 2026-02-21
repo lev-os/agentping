@@ -38,3 +38,6 @@ playwright/.cache/
 *.db
 packages/studio/out/
 storybook-static
+
+# Lev cascading context (ephemeral, per-machine)
+.lev/

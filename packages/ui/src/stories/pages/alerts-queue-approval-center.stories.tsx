@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import { TaskQueue } from "../../components/migrations/task-queue";

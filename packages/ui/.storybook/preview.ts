@@ -3,8 +3,9 @@ import { createElement } from "react";
 import { create } from "storybook/theming";
 import { LoadingStateProvider } from "../src/components/dashboard/LoadingStateProvider";
 
-// Import SKYNET theme
+// Import SKYNET theme + multi-theme system
 import "../src/theme/skynet.css";
+import "../src/theme/themes.css";
 
 /**
  * SKYNET Color Palette (Hex conversion for Storybook compatibility)
@@ -54,6 +55,36 @@ const skynetTheme = create({
 });
 
 const preview: Preview = {
+  globalTypes: {
+    theme: {
+      name: "Theme",
+      description: "Switch design theme",
+      defaultValue: "sofia",
+      toolbar: {
+        icon: "paintbrush",
+        items: [
+          { value: "agentping", title: "AgentPing" },
+          { value: "canvas", title: "Canvas" },
+          { value: "sofia", title: "Sofia / SKYNET" },
+          { value: "lcars", title: "LCARS" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    mode: {
+      name: "Mode",
+      description: "Switch light/dark mode",
+      defaultValue: "dark",
+      toolbar: {
+        icon: "sun",
+        items: [
+          { value: "dark", title: "Dark" },
+          { value: "light", title: "Light" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   parameters: {
     controls: {
       matchers: {
@@ -62,16 +93,12 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: "skynet-dark",
+      default: "theme-bg",
       values: [
-        {
-          name: "skynet-dark",
-          value: SKYNET_COLORS.background,
-        },
-        {
-          name: "skynet-card",
-          value: SKYNET_COLORS.card,
-        },
+        { name: "theme-bg", value: "var(--color-background)" },
+        { name: "theme-card", value: "var(--color-card)" },
+        { name: "white", value: "#ffffff" },
+        { name: "black", value: "#000000" },
       ],
     },
     docs: {
@@ -80,14 +107,17 @@ const preview: Preview = {
   },
   tags: ["autodocs"],
   decorators: [
-    (Story) => {
+    (Story, context) => {
+      const theme = context.globals.theme || "sofia";
+      const mode = context.globals.mode || "dark";
+
       if (typeof document !== "undefined") {
         document.documentElement.setAttribute("data-storybook", "true");
         document.body.setAttribute("data-storybook", "true");
-        document.documentElement.setAttribute("data-theme", "skynet");
-        document.documentElement.setAttribute("data-mode", "dark");
-        document.body.setAttribute("data-theme", "skynet");
-        document.body.setAttribute("data-mode", "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.setAttribute("data-mode", mode);
+        document.body.setAttribute("data-theme", theme);
+        document.body.setAttribute("data-mode", mode);
       }
 
       return createElement(LoadingStateProvider, null, Story());

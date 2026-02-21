@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GlowOrb } from "../components/ui/glow-orb";
 

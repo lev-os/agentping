@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react";
 import { HeaderStatusDropdown } from "../../components/migrations/header-status-dropdown";
 

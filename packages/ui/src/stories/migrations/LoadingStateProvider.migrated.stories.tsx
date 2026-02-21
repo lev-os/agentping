@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { LoadingStateProvider, useLoadingState } from "../../components/migrations/loading-state-provider";

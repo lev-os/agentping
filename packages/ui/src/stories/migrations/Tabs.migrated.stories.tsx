@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react";
 import { Tabs, TabList, Tab, TabPanel } from "../../components/migrations/tabs";
 

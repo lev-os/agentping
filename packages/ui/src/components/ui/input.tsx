@@ -33,7 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "placeholder:text-muted-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           "disabled:cursor-not-allowed disabled:opacity-60",
-          isInvalid && "border-2 border-red-500 focus-visible:ring-red-500",
+          isInvalid && "border-2 border-destructive focus-visible:ring-destructive",
           className
         )}
         ref={ref}

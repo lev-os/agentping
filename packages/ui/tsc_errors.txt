@@ -1,0 +1,216 @@
+src/stories/Button.stories.tsx(10,3): error TS2322: Type 'ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>' has no properties in common with type 'ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/stories/Button.stories.tsx(22,5): error TS2353: Object literal may only specify known properties, and 'variant' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>>>'.
+src/stories/Card.stories.tsx(19,3): error TS2322: Type 'ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>' has no properties in common with type 'CardProps & RefAttributes<HTMLDivElement>'.
+src/stories/Checkbox.stories.tsx(12,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' has no properties in common with type 'Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>'.
+src/stories/Checkbox.stories.tsx(24,5): error TS2353: Object literal may only specify known properties, and 'checked' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>>>'.
+src/stories/Dialog.stories.tsx(22,3): error TS2322: Type 'FC<DialogProps>' is not assignable to type 'ComponentType<FC<DialogProps>> | undefined'.
+  Type 'FunctionComponent<DialogProps>' is not assignable to type 'FunctionComponent<FC<DialogProps>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'FC<DialogProps>' has no properties in common with type 'DialogProps'.
+src/stories/FilteredDropdown.stories.tsx(762,3): error TS2322: Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FilteredDropdownProps & RefAttributes<HTMLDivElement>'.
+        Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is missing the following properties from type 'FilteredDropdownProps': variant, tabs, activeTab, onTabChange, and 4 more.
+src/stories/FilteredDropdown.stories.tsx(774,5): error TS2353: Object literal may only specify known properties, and 'variant' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>>>'.
+src/stories/Form.stories.tsx(22,3): error TS2322: Type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FormFieldProps & RefAttributes<HTMLDivElement>'.
+        Property 'children' is missing in type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' but required in type 'FormFieldProps'.
+src/stories/GlowOrb.stories.tsx(18,3): error TS2322: Type 'ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>' has no properties in common with type 'GlowOrbProps & RefAttributes<HTMLDivElement>'.
+src/stories/GlowOrb.stories.tsx(30,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>>>'.
+src/stories/GlowOrb.stories.tsx(83,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/GlowOrb.stories.tsx(95,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/GlowOrb.stories.tsx(107,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/GlowOrb.stories.tsx(119,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/GlowOrb.stories.tsx(131,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/GlowOrb.stories.tsx(145,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<{ propTypes?: any; displayName?: string | undefined; readonly $$typeof: symbol; }> & { propTypes?: any; displayName?: string | undefined; readonly $$typeof?: symbol | undefined; }'.
+src/stories/Input.stories.tsx(11,3): error TS2322: Type 'ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>' has no properties in common with type 'InputProps & RefAttributes<HTMLInputElement>'.
+src/stories/Input.stories.tsx(23,5): error TS2353: Object literal may only specify known properties, and 'type' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>>>'.
+src/stories/Label.stories.tsx(11,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/Label.stories.tsx(23,5): error TS2353: Object literal may only specify known properties, and 'htmlFor' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>>>'.
+src/stories/migrations/AlertDialog.migrated.stories.tsx(16,3): error TS2322: Type 'FC<AlertDialogProps>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'FunctionComponent<AlertDialogProps>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'ReactNode | Promise<ReactNode>' is not assignable to type 'ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/ButtonCanonical.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/ButtonCanonical.migrated.stories.tsx(12,41): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'Partial<ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>>'.
+src/stories/migrations/ButtonCanonical.migrated.stories.tsx(13,41): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'Partial<ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>>'.
+src/stories/migrations/Card.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Checkbox.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Dialog.migrated.stories.tsx(6,3): error TS2322: Type 'FC<DialogProps>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'FunctionComponent<DialogProps>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'ReactNode | Promise<ReactNode>' is not assignable to type 'ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/ErrorBoundary.migrated.stories.tsx(6,3): error TS2322: Type 'typeof ErrorBoundary' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'typeof ErrorBoundary' is not assignable to type 'ComponentClass<any, any>'.
+    Types of property 'contextType' are incompatible.
+      Type 'React.Context<any> | undefined' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").Context<any> | undefined'.
+        Type 'React.Context<any>' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").Context<any>'.
+          The types returned by 'Provider(...)' are incompatible between these types.
+            Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+              Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/FilteredDropdown.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<FilteredDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Form.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Form.migrated.stories.tsx(14,5): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Partial<ForwardRefExoticComponent<FormFieldProps & RefAttributes<HTMLDivElement>>>'.
+src/stories/migrations/GlowOrb.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<GlowOrbProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/HeaderStatusDropdown.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Hero.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/IconButtonCanonical.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<IconButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<IconButtonProps & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/IconButtonCanonical.migrated.stories.tsx(12,41): error TS2353: Object literal may only specify known properties, and '"aria-label"' does not exist in type 'Partial<ForwardRefExoticComponent<IconButtonProps & RefAttributes<HTMLButtonElement>>>'.
+src/stories/migrations/InputCanonical.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/InputCanonical.migrated.stories.tsx(12,41): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Partial<ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>>'.
+src/stories/migrations/InputCanonical.migrated.stories.tsx(13,43): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Partial<ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>>'.
+src/stories/migrations/Label.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Label.migrated.stories.tsx(14,5): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'Partial<ForwardRefExoticComponent<Omit<LabelProps & RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: ClassProp | undefined) => string> & RefAttributes<...>>>'.
+src/stories/migrations/LcarsButton.migrated.stories.tsx(14,33): error TS2322: Type '{}' is not assignable to type 'Partial<{ variant?: LcarsButtonVariant | undefined; size?: LcarsButtonSize | undefined; color?: LcarsButtonColor | undefined; ... 289 more ...; onTransitionStartCapture?: TransitionEventHandler<...> | undefined; }> & { ...; }'.
+  Property 'children' is missing in type '{}' but required in type '{ variant?: LcarsButtonVariant | undefined; size?: LcarsButtonSize | undefined; color?: LcarsButtonColor | undefined; ... 289 more ...; onTransitionStartCapture?: TransitionEventHandler<...> | undefined; }'.
+src/stories/migrations/LcarsPanel.migrated.stories.tsx(14,33): error TS2322: Type '{}' is not assignable to type 'Partial<{ variant?: LcarsPanelVariant | undefined; title?: string | undefined; headerColor?: "purple" | "blue" | "orange" | "tan" | undefined; showHeader?: boolean | undefined; ... 4 more ...; footer?: ReactNode; }> & { ...; }'.
+  Property 'children' is missing in type '{}' but required in type '{ variant?: LcarsPanelVariant | undefined; title?: string | undefined; headerColor?: "purple" | "blue" | "orange" | "tan" | undefined; showHeader?: boolean | undefined; ... 4 more ...; footer?: ReactNode; }'.
+src/stories/migrations/LoadingStateProvider.migrated.stories.tsx(6,11): error TS2339: Property 'isLoading' does not exist on type 'LoadingStateContextValue'.
+src/stories/migrations/MenuList.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<MenuListProps & RefAttributes<HTMLUListElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<MenuListProps & RefAttributes<HTMLUListElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/MenuList.migrated.stories.tsx(14,5): error TS2353: Object literal may only specify known properties, and 'items' does not exist in type 'Partial<ForwardRefExoticComponent<MenuListProps & RefAttributes<HTMLUListElement>>>'.
+src/stories/migrations/Modal.migrated.stories.tsx(7,3): error TS2322: Type '({ isOpen, onClose, title, children, footer, size, className, }: ModalProps) => ReactPortal | null' is not assignable to type 'ComponentType<any> | undefined'.
+  Type '({ isOpen, onClose, title, children, footer, size, className, }: ModalProps) => ReactPortal | null' is not assignable to type 'FunctionComponent<any>'.
+    Type 'ReactPortal | null' is not assignable to type 'ReactNode'.
+      Type 'ReactPortal' is not assignable to type 'ReactNode'.
+        Type 'React.ReactPortal' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactPortal'.
+          Types of property 'children' are incompatible.
+            Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+              Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Progress.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/SearchInputCanonical.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<SearchInputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<SearchInputProps & RefAttributes<HTMLInputElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/SearchInputCanonical.migrated.stories.tsx(12,41): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Partial<ForwardRefExoticComponent<SearchInputProps & RefAttributes<HTMLInputElement>>>'.
+src/stories/migrations/Sheet.migrated.stories.tsx(6,3): error TS2322: Type 'FC<DialogProps>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'FunctionComponent<DialogProps>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'ReactNode | Promise<ReactNode>' is not assignable to type 'ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/ShimmerText.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/ShimmerText.migrated.stories.tsx(14,5): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'Partial<ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>>'.
+src/stories/migrations/StatusDot.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<StatusDotProps & RefAttributes<HTMLSpanElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<StatusDotProps & RefAttributes<HTMLSpanElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/Switch.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/TabBar.migrated.stories.tsx(6,3): error TS2322: Type 'ForwardRefExoticComponent<TabBarProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<any> | undefined'.
+  Type 'ForwardRefExoticComponent<TabBarProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'React.ReactNode' is not assignable to type 'import("/Users/jean-patricksmith/digital/leviathan/community/agentping/node_modules/.pnpm/@types+react@18.3.28/node_modules/@types/react/index").ReactNode'.
+      Type 'bigint' is not assignable to type 'ReactNode'.
+src/stories/migrations/TabBar.migrated.stories.tsx(14,5): error TS2353: Object literal may only specify known properties, and 'tabs' does not exist in type 'Partial<ForwardRefExoticComponent<TabBarProps & RefAttributes<HTMLDivElement>>>'.
+src/stories/migrations/Tabs.migrated.stories.tsx(15,3): error TS2322: Type '{ defaultTab: string; }' is not assignable to type 'Partial<{ defaultTab?: string | undefined; value?: string | undefined; onChange?: ((tabId: string) => void) | undefined; children: ReactNode; className?: string | undefined; }> & { ...; }'.
+  Property 'children' is missing in type '{ defaultTab: string; }' but required in type '{ defaultTab?: string | undefined; value?: string | undefined; onChange?: ((tabId: string) => void) | undefined; children: ReactNode; className?: string | undefined; }'.
+src/stories/pages/alerts-queue-approval-center.stories.tsx(186,28): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/stories/Progress.stories.tsx(11,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>' has no properties in common with type 'Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>'.
+src/stories/Progress.stories.tsx(23,5): error TS2353: Object literal may only specify known properties, and 'value' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<Omit<ProgressProps & RefAttributes<HTMLDivElement>, "ref"> & { indicatorClassName?: string | undefined; "aria-label"?: string | undefined; } & RefAttributes<...>>>>'.
+src/stories/recipes/HeaderStatusDropdown.stories.tsx(454,3): error TS2322: Type 'ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>' has no properties in common with type 'HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>'.
+src/stories/recipes/HeaderStatusDropdown.stories.tsx(466,5): error TS2353: Object literal may only specify known properties, and 'variant' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<HeaderStatusDropdownProps & RefAttributes<HTMLDivElement>>>>'.
+src/stories/recipes/Hero.stories.tsx(22,3): error TS2322: Type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' is not assignable to type 'HeroProps & RefAttributes<HTMLElement>'.
+        Property 'title' is missing in type 'ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>' but required in type 'HeroProps'.
+src/stories/recipes/Hero.stories.tsx(33,5): error TS2353: Object literal may only specify known properties, and 'title' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<HeroProps & RefAttributes<HTMLElement>>>>'.
+src/stories/recipes/Hero.stories.tsx(168,6): error TS2741: Property 'title' is missing in type '{ children: Element; }' but required in type 'HeroProps'.
+src/stories/review/overlays/actionable-fails.stories.tsx(88,15): error TS2741: Property 'columns' is missing in type '{ entity: { singular: string; plural: string; icon: string; }; fields: ({ key: "name"; label: string; type: "text"; required: boolean; } | { key: "status"; label: string; type: "text"; required?: undefined; })[]; primaryKey: "id"; }' but required in type 'CrudConfig<{ id: string; name: string; status: string; }>'.
+src/stories/review/overlays/actionable-fails.stories.tsx(101,15): error TS2741: Property 'columns' is missing in type '{ entity: { singular: string; plural: string; icon: string; }; fields: ({ key: "name"; label: string; type: "text"; required: boolean; } | { key: "status"; label: string; type: "text"; required?: undefined; })[]; primaryKey: "id"; }' but required in type 'CrudConfig<{ id: string; name: string; status: string; }>'.
+src/stories/review/overlays/actionable-fails.stories.tsx(111,24): error TS2322: Type '{ children: Element; visible: boolean; }' is not assignable to type 'IntrinsicAttributes & FadeInOutProps'.
+  Property 'visible' does not exist on type 'IntrinsicAttributes & FadeInOutProps'.
+src/stories/review/overlays/actionable-fails.stories.tsx(122,14): error TS2739: Type '{ children: Element[]; }' is missing the following properties from type 'AnimatedListProps<unknown>': items, renderItem, keyExtractor
+src/stories/review/overlays/actionable-fails.stories.tsx(215,19): error TS2353: Object literal may only specify known properties, and 'label' does not exist in type 'StatusPieData'.
+src/stories/review/overlays/actionable-fails.stories.tsx(216,19): error TS2353: Object literal may only specify known properties, and 'label' does not exist in type 'StatusPieData'.
+src/stories/review/overlays/actionable-fails.stories.tsx(217,19): error TS2353: Object literal may only specify known properties, and 'label' does not exist in type 'StatusPieData'.
+src/stories/review/overlays/needs-review-markers.stories.tsx(159,64): error TS2353: Object literal may only specify known properties, and 'isDirectory' does not exist in type 'FileNode'.
+src/stories/review/overlays/needs-review-markers.stories.tsx(160,66): error TS2353: Object literal may only specify known properties, and 'isDirectory' does not exist in type 'FileNode'.
+src/stories/review/overlays/needs-review-markers.stories.tsx(273,53): error TS2353: Object literal may only specify known properties, and 'theme' does not exist in type 'StudioSettings'.
+src/stories/review/overlays/side-by-side.stories.tsx(177,64): error TS2353: Object literal may only specify known properties, and 'isDirectory' does not exist in type 'FileNode'.
+src/stories/review/overlays/side-by-side.stories.tsx(178,66): error TS2353: Object literal may only specify known properties, and 'isDirectory' does not exist in type 'FileNode'.
+src/stories/review/overlays/side-by-side.stories.tsx(181,64): error TS2353: Object literal may only specify known properties, and 'isDirectory' does not exist in type 'FileNode'.
+src/stories/ShimmerText.stories.tsx(16,3): error TS2322: Type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' is not assignable to type 'ShimmerTextProps & RefAttributes<HTMLDivElement>'.
+        Property 'children' is missing in type 'ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>' but required in type 'ShimmerTextProps'.
+src/stories/ShimmerText.stories.tsx(31,5): error TS2353: Object literal may only specify known properties, and 'size' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<ShimmerTextProps & RefAttributes<HTMLDivElement>>>>'.
+src/stories/Switch.stories.tsx(11,3): error TS2322: Type 'ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>' has no properties in common with type 'Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>'.
+src/stories/Switch.stories.tsx(23,5): error TS2353: Object literal may only specify known properties, and 'checked' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<Omit<SwitchProps & RefAttributes<HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>>>'.
+src/stories/Textarea.stories.tsx(12,3): error TS2322: Type 'ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>' is not assignable to type 'ComponentType<ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>> | undefined'.
+  Type 'ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>' is not assignable to type 'FunctionComponent<ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>' has no properties in common with type 'TextareaProps & RefAttributes<HTMLTextAreaElement>'.
+src/stories/Textarea.stories.tsx(24,5): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Partial<ArgTypes<ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>>>'.
