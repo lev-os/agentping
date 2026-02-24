@@ -15,6 +15,19 @@
 | `pnpm --filter @kingly/ui build-storybook` | GREEN | Built in 12.14s, output at `storybook-static/` |
 | HTTP validation (localhost:6006) | GREEN | All endpoints returned 200 |
 
+## Addendum (2026-02-24): Pass 26 Platform Stabilization
+
+- Storybook preview stabilization + theme/mode propagation hardening landed in:
+  - `packages/ui/.storybook/preview.ts`
+- Fresh focused browser audit executed with `agent-browser`:
+  - 3 random migration stories
+  - light/dark × desktop/tablet/mobile
+  - 18/18 rows PASS, 0 console error rows
+- Full artifact set:
+  - `docs/qa/pass26/mini-audit-results.csv`
+  - `docs/qa/pass26/screenshots/`
+  - `docs/qa/pass26/pass26-platform-stabilization.md`
+
 ---
 
 ## Story Compilation Summary

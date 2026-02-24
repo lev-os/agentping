@@ -32,6 +32,68 @@ const SKYNET_COLORS = {
   barBg: "#0C0F14",
 } as const;
 
+const STORYBOOK_STABILIZATION_STYLE_ID = "ap-storybook-stabilization";
+const STORYBOOK_STABILIZATION_CSS = `
+.sb-show-main.sb-main-centered #storybook-root,
+.sb-show-main.sb-main-padded #storybook-root {
+  width: min(2200px, calc(100vw - 24px));
+  max-width: none;
+}
+
+.sb-show-main.sb-main-centered {
+  padding-inline: 12px !important;
+}
+
+.docs-story,
+.sbdocs .docs-story > div {
+  max-width: none !important;
+}
+`;
+
+function ensureStorybookStabilizationStyles() {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  if (document.getElementById(STORYBOOK_STABILIZATION_STYLE_ID)) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = STORYBOOK_STABILIZATION_STYLE_ID;
+  style.textContent = STORYBOOK_STABILIZATION_CSS;
+  document.head.appendChild(style);
+}
+
+function applyThemeGlobals(theme: string, mode: string) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  const nextColorScheme = mode === "light" ? "light" : "dark";
+  const targets = [document.documentElement, document.body].filter(
+    Boolean,
+  ) as HTMLElement[];
+
+  targets.forEach((element) => {
+    element.setAttribute("data-storybook", "true");
+    element.setAttribute("data-theme", theme);
+    element.setAttribute("data-mode", mode);
+    element.style.colorScheme = nextColorScheme;
+  });
+
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem("storybook-theme", theme);
+    window.localStorage.setItem("storybook-mode", mode);
+    try {
+      window.parent?.document?.documentElement?.setAttribute("data-theme", theme);
+      window.parent?.document?.documentElement?.setAttribute("data-mode", mode);
+    } catch {
+      // Parent document access can fail in locked browser contexts.
+    }
+  }
+}
+
 /**
  * SKYNET Theme for Storybook Docs
  *
@@ -55,6 +117,10 @@ const skynetTheme = create({
 });
 
 const preview: Preview = {
+  initialGlobals: {
+    theme: "sofia",
+    mode: "dark",
+  },
   globalTypes: {
     theme: {
       name: "Theme",
@@ -86,6 +152,7 @@ const preview: Preview = {
     },
   },
   parameters: {
+    layout: "fullscreen",
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -93,10 +160,9 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: "theme-bg",
+      default: "transparent",
       values: [
-        { name: "theme-bg", value: "var(--color-background)" },
-        { name: "theme-card", value: "var(--color-card)" },
+        { name: "transparent", value: "transparent" },
         { name: "white", value: "#ffffff" },
         { name: "black", value: "#000000" },
       ],
@@ -110,17 +176,14 @@ const preview: Preview = {
     (Story, context) => {
       const theme = context.globals.theme || "sofia";
       const mode = context.globals.mode || "dark";
+      ensureStorybookStabilizationStyles();
+      applyThemeGlobals(theme, mode);
 
-      if (typeof document !== "undefined") {
-        document.documentElement.setAttribute("data-storybook", "true");
-        document.body.setAttribute("data-storybook", "true");
-        document.documentElement.setAttribute("data-theme", theme);
-        document.documentElement.setAttribute("data-mode", mode);
-        document.body.setAttribute("data-theme", theme);
-        document.body.setAttribute("data-mode", mode);
-      }
-
-      return createElement(LoadingStateProvider, null, Story());
+      return createElement(
+        LoadingStateProvider,
+        { key: `${theme}-${mode}` },
+        Story(),
+      );
     },
   ],
 };

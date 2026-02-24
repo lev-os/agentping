@@ -2,91 +2,91 @@
 
 ## Source of truth
 
-- Use Beads only (`bd`).
-- Do not create or maintain CSV/TXT trackers.
+- Beads DB (`.beads/beads.db`) is canonical for component QA state.
+- Storybook runtime and build outputs are canonical for render/build validation.
+- QA artifacts for this pass are under `docs/qa/pass26/`.
 
-## Current status
+## Live status snapshot (2026-02-24)
 
-- `ap-4rs` — **CLOSED** (327/327 beads closed, migration complete)
-- `ap-n2l` is the active dashboard consolidation epic.
-- `lev-my90` is the active dashboard component migration epic (4 open tasks).
-- Storybooks and runtime surfaces are operational from dashboard-runner.
+- `ap-4rs.*` child beads: `327`
+- `ap-4rs.*` bead status: `327 open`, `0 closed`
+- `ap-4rs.*` comment coverage: complete (`0` beads without comments; historical baseline `1245+` comments)
+- Migration Storybook families: `327` unique `Migrations/*` titles
+- Bead/component parity check: migration story file universe and bead universe align (`327 ↔ 327`)
 
-## Validation refresh (2026-02-16)
+## Build gates (current run)
 
-### Pass 7 complete — Migration DONE
-- **327/327 `ap-4rs` beads CLOSED** (including parent epic)
-- Storybook static build: GREEN (12.14s, zero real compilation errors)
-- Storybook dev server: serving on port 6006 (HTTP 200)
-- All `"use client"` sourcemap warnings — benign, expected in bundled builds
-- Dashboard consolidation triage complete → `docs/qa/pass7-dashboard-triage.md`
+- `pnpm --filter @kingly/ui build` → PASS (2026-02-24)
+- `pnpm --filter @kingly/ui build-storybook` → PASS (2026-02-24)
+- Warnings are still primarily `"use client"` bundling + sourcemap resolution and are non-blocking.
 
-### Pass 6 complete (2026-02-13)
-- 4 story crashes fixed (ErrorCluster, MultiSelect, ReviewQueue, WidgetCrashFallback)
-- EnrichmentPanel fully ported: 35 LOC shell → 319 LOC (directives, attachments, notes, QuickActionBar, drag-and-drop)
-- 53 beads reclassified: 38 SHELL + 15 HOLLOW → pass6-implemented (all had working code from Pass 3)
-- 3 bead misattributions corrected (MultiSelect, ReviewQueue, WidgetCrashFallback)
-- Build gates: `@kingly/ui build` PASS, `@kingly/ui build-storybook` PASS
-- ReviewQueue barrel crash fixed: replaced 400+ barrel import with direct per-conflict-family imports
+## Pass 26 platform stabilization (this run)
 
-### Pass 5 complete (2026-02-13)
-- 10 prop mismatches fixed (widened migration interfaces for consumer compat)
-- 205 orphaned CSS files deleted (shim companions)
-- 39 new files: 8 review infra, 19 review stories, 12 real sample pages (+8,555 LOC)
-- Build gates: `@kingly/ui build` PASS, `@kingly/ui build-storybook` PASS
+### Fixes applied
 
-### Final QA totals
-- **327/327 beads CLOSED** — all gates pass
-- Storybook static build: GREEN
-- 416 components migrated to `@kingly/ui`
-- 340 migration `.tsx` files, 327 Storybook stories
-- 318 consumer files shimmed across 4 packages (-33,915 LOC)
-- 205 orphaned CSS files deleted
+1. Storybook wide-canvas stabilization for centered/padded layouts on wide screens.
+2. Global Storybook layout default switched to `fullscreen` to reduce clipped/narrow preview behavior.
+3. Theme/mode propagation hardened in preview decorator:
+   - consistent `data-theme`/`data-mode` on preview root,
+   - `color-scheme` sync,
+   - toolbar state persistence keys.
 
-## Dashboard consolidation triage (2026-02-16)
+Implementation file:
+- `packages/ui/.storybook/preview.ts`
 
-### What's in `@kingly/ui`
-- 9 dashboard migration components + 25 supporting dashboard components
-- Original sources shimmed to re-export from `@kingly/ui/components`
+### Audit executed
 
-### What's missing
-1. **Jarvis monitoring** (DaemonMonitor, ProcessList, ExecTracker, StreamingOutput, MonitoringView) — zero in `@kingly/ui`
-2. **Flight Deck** (`packages/dashboard-core`) — 20+ components not deduplicated with `@kingly/ui`
-3. **CEO Stack** — deprecated, no active components
+- `agent-browser` matrix on 3 random migration stories:
+  - `migrations-webui-holographiccard--default`
+  - `migrations-studio-toast--error`
+  - `migrations-dashboardmanager-uptimechart--multi-day`
+- Coverage: `2 modes × 3 viewports × 3 stories = 18` screenshots
+- Result: `18/18 PASS`, `0 console error rows`
+- Artifact CSV: `docs/qa/pass26/mini-audit-results.csv`
+- Screenshots: `docs/qa/pass26/screenshots/`
+- Bead comments added for sampled components:
+  - `ap-4rs.151` (`HolographicCard`)
+  - `ap-4rs.296` (`Toast`)
+  - `ap-4rs.310` (`UptimeChart`)
+- Extra validation shots:
+  - toolbar theme/mode propagation check
+  - wide container validation shot
 
-### Next steps (`lev-my90`)
-- `lev-my90.1` — Port Jarvis monitoring components (P0)
-- `lev-my90.2` — Reconcile Flight Deck / dashboard-core with `@kingly/ui` (P0)
-- `lev-my90.3` — Resolve 3 `needs-review` dashboard migrations (P1)
-- `lev-my90.4` — Document CEO Stack as deprecated (P0)
+## Known failure inventory (for remediation planning)
 
-Full triage: `docs/qa/pass7-dashboard-triage.md`
+`pass2.5-all-gates` is present on `260/327`, so `67` remain in non-pass state.
 
-## Known blocker
+Breakdown:
+1. Structural debt cluster (`54`): labels `shell-needs-implementation` and/or `hollow-needs-ui`.
+2. Actionable fail cluster (`5` still non-pass): `ErrorCluster`, `MultiSelect`, `ReviewQueue.conflicts`, `WeatherCard`, `WidgetCrashFallback`.
+3. State-drift cluster (`9`): non-pass but missing both structural and actionable fail labels.
+   - `CanvasRenderer`, `ChatMessage`, `ConnectionStatus`, `CrudEntityForm`, `CrudFieldRenderer`, `DatePicker`, `DatePickerPro`, `FieldRenderer`, `MiniMap`
+4. Label drift (`2`): still tagged `pass5-actionable-fail` while already tagged `pass2.5-all-gates`.
+   - `ParticleStream`, `StatGridSkeleton`
 
-- `bd` prints a legacy database warning in this repo:
-  - `LEGACY DATABASE DETECTED`
-  - run `bd migrate --update-repo-id` once before normal operation
+## Remediation queue (next agent pass)
 
-## Operator commands
+1. Normalize metadata first:
+   - resolve `67` non-pass rows into exactly one failure class each,
+   - remove stale contradictory labels.
+2. Close actionable implementation fails next (the 5-component cluster above).
+3. Tackle structural debt in prioritized batches:
+   - batch A: gallery section hollows,
+   - batch B: shell controls/input primitives,
+   - batch C: data-visual shells.
+4. Re-run full matrix audit after each batch:
+   - desktop/tablet/mobile,
+   - light/dark,
+   - console + screenshot capture,
+   - bead comment update only (no auto-close).
 
-```bash
-cd community/agentping
-bd migrate --update-repo-id
-bd list --status open --limit 50
-bd show ap-4rs    # CLOSED
-bd show ap-n2l
-bd show lev-my90  # from parent repo
-bd ready
-```
+## Linked docs
 
-## Working agreement
+- `docs/qa/pass26/mini-audit-results.csv`
+- `docs/qa/pass26/screenshots/`
+- `docs/qa/pass7-visual-qa-report.md`
+- `docs/qa/pass7-dashboard-triage.md`
 
-- Status updates happen on beads (`bd comment`, `bd update`), not docs tables.
-- If scope/status changes, update this file only.
+## Operational note
 
-## Next actions
-
-1. Dashboard consolidation: begin `lev-my90.1` (Jarvis monitoring port)
-2. Dashboard consolidation: decide Flight Deck absorption strategy (`lev-my90.2`)
-3. Close `lev-my90.4` (CEO Stack deprecation — documentation only)
+- `bd`/Dolt reads are intermittently unstable in this workspace (`bd show` can panic with nil pointer in Dolt engine). Re-run usually succeeds; treat as toolchain instability, not component regression.
