@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * AgentPing MCP Server
- * 
+ *
  * Exposes AgentPing as an MCP server for LLM integration.
  * Allows LLMs to submit pings and receive human responses inline.
  */
@@ -13,55 +13,39 @@ import {
     ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-
-// ============================================================================
-// Configuration
-// ============================================================================
-
-const AGENTPING_URL = process.env.AGENTPING_URL || 'http://localhost:7890';
-const AGENT_ID = process.env.AGENTPING_AGENT_ID || 'mcp-agent';
-const AGENT_NAME = process.env.AGENTPING_AGENT_NAME || 'MCP Agent';
-const SESSION_ID = process.env.AGENTPING_SESSION_ID || `mcp-${Date.now()}`;
+import { createClient } from '@agentping/api-client';
+import type { CreatePingRequest, HumanResponse } from '@agentping/api-client';
 
 // ============================================================================
 // API Client
 // ============================================================================
 
-async function sendPing(payload: Record<string, unknown>): Promise<unknown> {
-    const res = await fetch(`${AGENTPING_URL}/api/v1/pings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            agentId: AGENT_ID,
-            agentName: AGENT_NAME,
-            sessionId: SESSION_ID,
-            payload,
-        }),
-    });
+// Create the client with MCP-specific defaults. The client reads AGENTPING_URL
+// from the environment to determine the daemon endpoint automatically.
+const mcpDefaults = {
+    agentId: process.env.AGENTPING_AGENT_ID || 'mcp-agent',
+    agentName: process.env.AGENTPING_AGENT_NAME || 'MCP Agent',
+    sessionId: process.env.AGENTPING_SESSION_ID || `mcp-${Date.now()}`,
+};
 
-    if (!res.ok) {
-        const error = await res.json() as { error?: string };
-        throw new Error(error.error || 'Failed to send ping');
-    }
+const client = createClient(mcpDefaults);
 
-    return (await res.json() as { ping: unknown }).ping;
-}
-
-async function waitForResponse(pingId: string, timeoutSeconds = 300): Promise<unknown> {
-    const res = await fetch(
-        `${AGENTPING_URL}/api/v1/pings/${pingId}/wait?timeout=${timeoutSeconds}`
-    );
-
-    if (res.status === 408) {
-        return { timedOut: true };
-    }
-
-    if (!res.ok) {
-        const error = await res.json() as { error?: string };
-        throw new Error(error.error || 'Failed to wait for response');
-    }
-
-    return (await res.json() as { response: unknown }).response;
+/**
+ * Submit a typed payload to the daemon and long-poll for the human response.
+ * Agent identity fields are filled in from mcpDefaults automatically.
+ * Returns the HumanResponse, or null on timeout.
+ */
+async function submitAndWait(
+    payload: Record<string, unknown>,
+    timeoutMs?: number,
+): Promise<HumanResponse | null> {
+    const ping = await client.submit({
+        agentId: mcpDefaults.agentId,
+        agentName: mcpDefaults.agentName,
+        sessionId: mcpDefaults.sessionId,
+        payload,
+    } as CreatePingRequest);
+    return client.waitForResponse(ping.id, timeoutMs);
 }
 
 // ============================================================================
@@ -414,20 +398,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     options?: string[];
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'question',
                     question,
                     context,
                     options,
                     allowFreeform: true,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: { value?: string };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not respond in time.' }],
                     };
@@ -436,7 +415,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: response.data?.value || 'No answer provided',
+                        text: (response.data as any)?.value || 'No answer provided',
                     }],
                 };
             }
@@ -448,20 +427,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     risk?: 'low' | 'medium' | 'high';
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'approval',
                     title: action,
                     action,
                     details,
                     risk: risk || 'medium',
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    action?: string;
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not respond in time. Action NOT approved.' }],
                     };
@@ -489,31 +463,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     }>;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'step_approval',
                     title,
                     context: context || '',
                     steps,
                     allowPartial: true,
                     defaultApproved: [],
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: {
-                        approvedSteps?: string[];
-                        deniedSteps?: string[];
-                    };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not respond in time. No steps approved.' }],
                     };
                 }
 
-                const approved = response.data?.approvedSteps || [];
-                const denied = response.data?.deniedSteps || [];
+                const approved = (response.data as any)?.approvedSteps || [];
+                const denied = (response.data as any)?.deniedSteps || [];
 
                 return {
                     content: [{
@@ -529,11 +495,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     level?: 'info' | 'success' | 'warning' | 'error';
                 };
 
-                await sendPing({
-                    type: 'notification',
-                    message,
-                    level: level || 'info',
-                });
+                await client.notify(message, { level: level || 'info' });
 
                 return {
                     content: [{ type: 'text', text: 'Notification sent.' }],
@@ -553,30 +515,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     allowNotes?: boolean;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'task_workflow',
                     title,
                     description,
                     steps,
                     allowNotes: allowNotes ?? true,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: {
-                        completedSteps?: string[];
-                        notes?: Record<string, string>;
-                    };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not complete the workflow in time.' }],
                     };
                 }
 
-                const completed = response.data?.completedSteps || [];
-                const notes = response.data?.notes || {};
+                const completed = (response.data as any)?.completedSteps || [];
+                const notes = (response.data as any)?.notes || {};
                 const notesSummary = Object.entries(notes)
                     .map(([stepId, note]) => `Step ${stepId}: ${note}`)
                     .join('\n');
@@ -597,29 +551,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     context?: string;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'selection',
                     title,
                     context,
                     options,
                     allowMultiple: allowMultiple || false,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: {
-                        selectedOptions?: string[];
-                        value?: string;
-                    };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not select an option in time.' }],
                     };
                 }
 
-                const selected = response.data?.selectedOptions || (response.data?.value ? [response.data.value] : []);
+                const selected = (response.data as any)?.selectedOptions || ((response.data as any)?.value ? [(response.data as any).value] : []);
 
                 return {
                     content: [{
@@ -636,36 +582,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     allowCustom?: boolean;
                 };
 
-                // Map to 'selection' type for TUI compatibility, or 'research_request' if Web UI supports it
-                // Web UI has 'research_request' which uses 'proposedDirections' and 'allowCustomDirection'
-                // TUI currently maps 'selection' to SelectionRenderer.
-                // We should send 'research_request' type if we want Web UI to pick it up specifically,
-                // BUT TUI standardizes on 'selection'.
-                // Strategy: Send 'research_request' but ensure TUI maps it to SelectionRenderer.
-
-                const ping = await sendPing({
+                // Send 'research_request' type for Web UI, with 'options' fallback for TUI
+                const response = await submitAndWait({
                     type: 'research_request',
-                    title: 'Research Direction', // Generic title for TUI
-                    question: problem,           // Use 'question' for TUI SelectionRenderer label
-                    context: problem,            // Context for Web UI
+                    title: 'Research Direction',
+                    question: problem,
+                    context: problem,
                     proposedDirections: directions.map(d => ({
                         id: d.direction,
                         title: d.direction,
                         description: d.description
                     })),
-                    // Also populate 'options' for pure TUI SelectionRenderer fallback
                     options: directions.map(d => d.direction),
                     allowCustomDirection: allowCustom,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: {
-                        selectedOptions?: string[]; // Generic selection response
-                    };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not select a direction in time.' }],
                     };
@@ -674,7 +606,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `SELECTED DIRECTION: ${response.data?.selectedOptions?.join(', ') || 'None'}`,
+                        text: `SELECTED DIRECTION: ${(response.data as any)?.selectedOptions?.join(', ') || 'None'}`,
                     }],
                 };
             }
@@ -689,37 +621,29 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 // Map to 'step_approval' for granular file review
                 const steps = files.map(f => ({
                     id: f.path,
-                    instruction: `Review ${f.path}`, // TUI will show this
+                    instruction: `Review ${f.path}`,
                     description: f.description || 'Code changes',
-                    details: f.diff, // Web UI might show this in expansion
+                    details: f.diff,
                     risk: 'medium',
                     reversible: true
                 }));
 
-                const ping = await sendPing({
-                    type: 'step_approval', // Reuse existing powerful checklist UI
+                const response = await submitAndWait({
+                    type: 'step_approval',
                     title: title || 'Code Review Request',
                     context: context || 'Please review the following file changes.',
                     steps,
                     allowPartial: true,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: {
-                        approvedSteps?: string[];
-                        deniedSteps?: string[];
-                    };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Review timed out.' }],
                     };
                 }
 
-                const approved = response.data?.approvedSteps || [];
-                const denied = response.data?.deniedSteps || [];
+                const approved = (response.data as any)?.approvedSteps || [];
+                const denied = (response.data as any)?.deniedSteps || [];
 
                 return {
                     content: [{
@@ -735,19 +659,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     description?: string;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'secret',
                     title: title || 'Secret Request',
                     question: description || title || 'Please enter the secret value:',
                     isSecret: true,
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: { value?: string };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Human did not provide key in time.' }],
                     };
@@ -756,7 +675,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `SECRET RECEIVED: ${response.data?.value ? '********' : 'Empty'}`,
+                        text: `SECRET RECEIVED: ${(response.data as any)?.value ? '********' : 'Empty'}`,
                     }],
                 };
             }
@@ -768,19 +687,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     props: Record<string, any>;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'custom',
                     title: title || `View: ${component}`,
-                    customType: component, // Web UI uses this to look up component
-                    data: props,           // Web UI passes this as props
-                }) as { id: string };
+                    customType: component,
+                    data: props,
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: Record<string, any>;
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'View timed out.' }],
                     };
@@ -789,7 +703,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `INTERACTION COMPLETE: ${JSON.stringify(response.data || {})}`,
+                        text: `INTERACTION COMPLETE: ${JSON.stringify((response.data as any) || {})}`,
                     }],
                 };
             }
@@ -802,7 +716,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     data?: Record<string, any>;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'canvas_interaction',
                     action: 'render',
                     componentType: 'sofia-widget',
@@ -813,14 +727,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                         variant,
                         data: data || {},
                     },
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: { success: boolean; objectId?: string };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Canvas render timed out.' }],
                     };
@@ -829,7 +738,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `Sofia widget rendered successfully. ID: ${response.data?.objectId || 'unknown'}`,
+                        text: `Sofia widget rendered successfully. ID: ${(response.data as any)?.objectId || 'unknown'}`,
                     }],
                 };
             }
@@ -840,19 +749,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     type?: string;
                 };
 
-                const ping = await sendPing({
+                const response = await submitAndWait({
                     type: 'canvas_interaction',
                     action: 'selection',
                     instruction,
                     selectionType: type || 'object',
-                }) as { id: string };
+                });
 
-                const response = await waitForResponse(ping.id) as {
-                    timedOut?: boolean;
-                    data?: { selection: any };
-                };
-
-                if (response.timedOut) {
+                if (!response) {
                     return {
                         content: [{ type: 'text', text: 'Selection request timed out.' }],
                     };
@@ -861,7 +765,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{
                         type: 'text',
-                        text: `Selection received: ${JSON.stringify(response.data?.selection)}`,
+                        text: `Selection received: ${JSON.stringify((response.data as any)?.selection)}`,
                     }],
                 };
             }

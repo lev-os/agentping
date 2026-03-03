@@ -7,6 +7,7 @@
 
 import { Command } from 'commander';
 import ora from 'ora';
+import { createClient, type AgentPingClient } from '@agentping/api-client';
 
 const API_BASE = process.env.AGENTPING_URL || 'http://localhost:7890';
 
@@ -51,16 +52,12 @@ program
         const spinner = ora('Sending notification...').start();
 
         try {
-            await sendPing({
+            const client = createClient({
                 agentId: options.agent,
                 agentName: options.agentName,
                 sessionId: options.session,
-                payload: {
-                    type: 'notification',
-                    message,
-                    level: options.level,
-                },
             });
+            await client.notify(message, { level: options.level });
 
             spinner.succeed('Notification sent');
         } catch (err) {
@@ -84,9 +81,14 @@ program
         const spinner = ora('Waiting for human response...').start();
 
         try {
+            const client = createClient({
+                agentId: options.agent,
+                agentName: options.agentName,
+                sessionId: options.session,
+            });
             const pingOptions = options.options ? options.options.split(',').map((s: string) => s.trim()) : undefined;
 
-            const ping = await sendPing({
+            const ping = await client.submit({
                 agentId: options.agent,
                 agentName: options.agentName,
                 sessionId: options.session,
@@ -98,7 +100,7 @@ program
                 },
             });
 
-            const response = await waitForResponse(ping.id, parseInt(options.timeout) * 1000);
+            const response = await client.waitForResponse(ping.id, parseInt(options.timeout) * 1000);
             spinner.stop();
 
             if (!response) {
@@ -136,36 +138,29 @@ program
         const spinner = ora('Waiting for approval...').start();
 
         try {
-            const ping = await sendPing({
+            const client = createClient({
                 agentId: options.agent,
                 agentName: options.agentName,
                 sessionId: options.session,
-                payload: {
-                    type: 'approval',
-                    title: action,
-                    action,
-                },
             });
-
-            const response = await waitForResponse(ping.id, parseInt(options.timeout) * 1000);
+            const timeoutMs = parseInt(options.timeout) * 1000;
+            const result = await client.requestApproval(action, { timeoutMs });
             spinner.stop();
 
-            if (!response) {
+            if (!result) {
                 console.error('Timeout waiting for response');
                 process.exit(2);
             }
 
-            const approved = response.action === 'approved';
-
             if (options.json) {
-                console.log(JSON.stringify({ approved, ...response }, null, 2));
+                console.log(JSON.stringify(result, null, 2));
             } else if (options.quiet) {
-                console.log(approved ? 'approved' : 'denied');
+                console.log(result.approved ? 'approved' : 'denied');
             } else {
-                console.log(approved ? '✓ Approved' : '✗ Denied');
+                console.log(result.approved ? '✓ Approved' : '✗ Denied');
             }
 
-            process.exit(approved ? 0 : 1);
+            process.exit(result.approved ? 0 : 1);
         } catch (err) {
             spinner.fail(`Failed: ${(err as Error).message}`);
             process.exit(3);
@@ -192,41 +187,31 @@ program
 
             spinner.text = 'Waiting for step approval...';
 
-            const ping = await sendPing({
+            const client = createClient({
                 agentId: options.agent,
                 agentName: options.agentName,
                 sessionId: options.session,
-                payload: {
-                    type: 'step_approval',
-                    title: data.title || 'Step Approval',
-                    context: data.context || '',
-                    steps: data.steps,
-                    allowPartial: data.allowPartial ?? true,
-                    defaultApproved: data.defaultApproved || [],
-                },
             });
 
-            const response = await waitForResponse(ping.id, parseInt(options.timeout) * 1000);
+            const steps = (data.steps as any[]).map((s: any) => ({
+                title: s.description || s.id || 'Untitled step',
+                description: s.description,
+                risk: s.risk,
+            }));
+
+            const timeoutMs = parseInt(options.timeout) * 1000;
+            const result = await client.requestStepApproval(steps, { timeoutMs });
             spinner.stop();
 
-            if (!response) {
+            if (!result) {
                 console.error('Timeout waiting for response');
                 process.exit(2);
             }
 
             if (options.json) {
-                console.log(JSON.stringify(response, null, 2));
+                console.log(JSON.stringify(result, null, 2));
             } else {
-                const stepData = response.data as any;
-                console.log(`\n✓ Approved: ${stepData.approvedSteps?.join(', ') || 'none'}`);
-                console.log(`✗ Denied: ${stepData.deniedSteps?.join(', ') || 'none'}`);
-
-                if (response.enrichment?.directives?.length) {
-                    console.log('\nDirectives:');
-                    response.enrichment.directives.forEach((d: any) => {
-                        console.log(`  - ${d.type}: ${JSON.stringify(d)}`);
-                    });
-                }
+                console.log(`\n✓ Approved: ${result.approvedSteps?.join(', ') || 'none'}`);
             }
         } catch (err) {
             spinner.fail(`Failed: ${(err as Error).message}`);
@@ -259,9 +244,14 @@ lease
         const spinner = ora('Requesting lease approval...').start();
 
         try {
+            const client = createClient({
+                agentId: options.agent,
+                agentName: options.agentName,
+                sessionId: options.session,
+            });
             const constraints = options.constraints ? JSON.parse(options.constraints) : undefined;
 
-            const ping = await sendPing({
+            const ping = await client.submit({
                 agentId: options.agent,
                 agentName: options.agentName,
                 sessionId: options.session,
@@ -280,12 +270,13 @@ lease
             if (options.wait) {
                 spinner.text = 'Waiting for lease activation...';
                 response = await waitForLeaseActivation(
+                    client,
                     ping.id,
                     timeoutMs,
                     parseInt(options.pollInterval),
                 );
             } else {
-                response = await waitForResponse(ping.id, timeoutMs);
+                response = await client.waitForResponse(ping.id, timeoutMs);
             }
 
             spinner.stop();
@@ -659,45 +650,13 @@ playground
 // API Helpers
 // ============================================================================
 
-async function sendPing(request: any): Promise<any> {
-    const res = await fetch(`${API_BASE}/api/v1/pings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request),
-    });
-
-    if (!res.ok) {
-        const error = await res.json() as { error?: string };
-        throw new Error(error.error || 'Failed to send ping');
-    }
-
-    const data = await res.json() as { ping: unknown };
-    return data.ping;
-}
-
-async function waitForResponse(pingId: string, timeoutMs: number): Promise<any> {
-    const res = await fetch(`${API_BASE}/api/v1/pings/${pingId}/wait?timeout=${Math.floor(timeoutMs / 1000)}`);
-
-    if (res.status === 408) {
-        return null;
-    }
-
-    if (!res.ok) {
-        const error = await res.json() as { error?: string };
-        throw new Error(error.error || 'Failed to wait for response');
-    }
-
-    const data = await res.json() as { response: unknown };
-    return data.response;
-}
-
 /**
  * Wait for a lease to be activated by the daemon lease-manager.
  *
  * Tries the dedicated /api/v1/lease/:id/wait endpoint first (long-poll).
  * Falls back to polling /api/v1/pings/:id/wait if the endpoint is unavailable.
  */
-async function waitForLeaseActivation(pingId: string, timeoutMs: number, pollIntervalMs = 1000): Promise<any> {
+async function waitForLeaseActivation(client: AgentPingClient, pingId: string, timeoutMs: number, pollIntervalMs = 1000): Promise<any> {
     const deadline = Date.now() + timeoutMs;
 
     // Try the dedicated lease wait endpoint (added by daemon, long-polls until lease activates)
@@ -746,7 +705,7 @@ async function waitForLeaseActivation(pingId: string, timeoutMs: number, pollInt
         const remaining = deadline - Date.now();
         const pollTimeout = Math.min(pollIntervalMs, remaining);
 
-        const response = await waitForResponse(pingId, pollTimeout);
+        const response = await client.waitForResponse(pingId, pollTimeout);
         if (response) return response;
 
         // If we still have time, sleep before next poll

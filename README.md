@@ -103,6 +103,32 @@ pnpm --filter @agentping/daemon dev
 - GenUI research and implementation specs:
   - `docs/genui/readme.md`
 
+## Project Structure
+
+```text
+/
+├── packages/
+│   ├── core/               # Domain Logic (No External Dependencies)
+│   ├── daemon/             # Main Orchestrator & HTTP Server
+│   ├── studio/             # Electron Desktop GUI
+│   ├── canvas/             # Shared React Component Library
+│   ├── api-client/         # Typed HTTP Client SDK
+│   ├── dashboard-runner/   # Process Management for External Apps
+│   ├── dashboard-manager-server/  # Dashboard HTTP + WebSocket Server
+│   ├── dashboard-manager-ui/      # Dashboard React Web UI
+│   └── adapters/
+│       ├── web-ui/         # React + Vite Web Interface
+│       ├── mcp/            # Claude/Cursor MCP Integration
+│       ├── http-api/       # REST + WebSocket API Layer
+│       ├── storage-sqlite/ # SQLite Persistence (Pure JS)
+│       ├── cli/            # Terminal Interface
+│       ├── slack/          # Slack Notification Channel
+│       ├── webhook/        # HTTP Webhook Delivery
+│       ├── browser-extension/ # Chrome Extension (CDP Bridge)
+│       └── ext-apps/       # MCP UI Extensions (SEP-1865)
+└── docs/                   # Architecture & ADRs
+```
+
 ## GenUI Relationship
 
 Thesys/C1 reverse-engineering artifacts are promoted into `docs/genui/` as research + implementation inputs.
