@@ -56,6 +56,66 @@ AgentPing's unique strengths (missing in Thesys C1):
 
 ---
 
+## External Fixture Anchor (2026-03-06)
+
+Use the live Paperclip instance as the primary board-orchestration fixture for Lev Gen UI parity work.
+
+### Golden Fixture Composition
+
+- **Paperclip** is the live board/company orchestration baseline.
+  Verified local topology: UI at `http://localhost:5173`, API at `http://127.0.0.1:3100`.
+- **OpenWork** remains the hosted workspace attachment target.
+  Use `docs/_inbox/lev-openwork-fractal-attachment.md` as the attachment model, not as the canonical shell.
+- **Dashboard Runner** is the operational host substrate for multi-dashboard and external-surface management.
+- **Lev shell / Jarvis mode** is the thin overlay host.
+  The shell should be able to disappear into a corner affordance, re-open via shortcut, and host external dashboards/apps instead of re-implementing them.
+
+### Paperclip Surfaces To Match
+
+- `/dashboard`
+- `/inbox/new`
+- `/issues`
+- `/issues/:issueId`
+- `/goals`
+- `/approvals/pending`
+- `/costs`
+- `/activity`
+- `/projects`
+- `/projects/:projectId/issues`
+- `/agents/all`
+- `/agents/:agentId`
+- `/agents/:agentId/runs/:runId`
+- `/org`
+- `/company/settings`
+- `/design-guide`
+
+### Responsive QA Findings Against The Live Fixture
+
+- `/KIN/projects/leviathan/issues`
+  Right-side project metadata clips off-canvas on desktop and tablet.
+- `/KIN/org`
+  Org chart content exceeds the usable desktop canvas and produces off-canvas nodes/cards.
+- `/KIN/issues/KIN-1`
+  Long inline URL content clips on tablet and mobile.
+- `/KIN/activity`
+  Secondary issue/title text clips on tablet and mobile activity rows.
+- `/KIN/agents/all`
+  Header controls clip at tablet width.
+- Shared mobile shell and detail actions repeatedly ship controls below a 44px target.
+  Verified examples: sidebar toggle, list/board view toggles, properties button, org-chart zoom controls, and several action chips/buttons.
+
+### Parity Acceptance For Lev Gen UI
+
+- Match Paperclip feature coverage for board, issue, project, agent, run, approval, cost, activity, org, and settings surfaces.
+- Eliminate horizontal clipping across desktop, tablet, and mobile on the fixture routes above.
+- Preserve runtime theme switching instead of build-time-only theme selection.
+- Support the meta-dashboard shell model:
+  hidden, overlay, split, and takeover host states.
+- Support hosted external surfaces through Dashboard Runner and iframe-first embedding before building bespoke replacements.
+- Treat AgentPing as the protocol/rendering layer and Paperclip/OpenWork as hosted fixture sources until Lev-native surfaces reach 1:1 parity.
+
+---
+
 ## Phase 1: Streaming Polymorph Renderer (Critical Priority)
 
 **Goal**: Enable progressive component rendering via SSE with incremental DOM updates
@@ -811,4 +871,3 @@ Total Scope (Phases 1-4):
 - **1,190 new LOC** + **1,670 modified LOC**
 - **29 files** (13 new, 16 modified)
 - **0 breaking changes**
-
