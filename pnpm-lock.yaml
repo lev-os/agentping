@@ -186,11 +186,11 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(@types/react@19.2.13)(react-dom@19.2.4)(react@19.2.4)
       '@json-render/core':
-        specifier: ^0.2.0
-        version: 0.2.0(zod@4.3.6)
+        specifier: ^0.12.0
+        version: 0.12.0(zod@4.3.6)
       '@json-render/react':
-        specifier: ^0.2.0
-        version: 0.2.0(react@19.2.4)(zod@4.3.6)
+        specifier: ^0.12.0
+        version: 0.12.0(react@19.2.4)(zod@4.3.6)
       '@kingly/ui':
         specifier: workspace:*
         version: link:../../ui
@@ -2395,20 +2395,20 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  /@json-render/core@0.2.0(zod@4.3.6):
-    resolution: {integrity: sha512-LBKv4M5skz7JRpTn53g6qF/zj5u/xUhuCp6WtJn/ZTIxGEAogH8sn3Ql/Nk/O0sgbQHtriRmoJuI23/5fGCXPw==}
+  /@json-render/core@0.12.0(zod@4.3.6):
+    resolution: {integrity: sha512-sRron2Dt+4ayKxRM/1ofQDfn8XgmD5jTjv1R8rXmkmV5HWVbnC/z5eQPILx/j6lqBFf9xeGnVW7neSfybZFOMQ==}
     peerDependencies:
       zod: ^4.0.0
     dependencies:
       zod: 4.3.6
     dev: false
 
-  /@json-render/react@0.2.0(react@19.2.4)(zod@4.3.6):
-    resolution: {integrity: sha512-4tdoMfc3t0Je+DMNsyJguz7aJkqfLhEY8/mvBchL9kweRfJHAZocT7doyqRCGAnCBtIXCKQ8YAbm0sb0Qr9OFw==}
+  /@json-render/react@0.12.0(react@19.2.4)(zod@4.3.6):
+    resolution: {integrity: sha512-sxsSRk0iozrz2bZwpqIPayH+fN4opDsFwjmwgwJOJTcD0ZobLKGyW4d45zx/LYVWmSpbUkRQWGOhJ5cXANtcWw==}
     peerDependencies:
-      react: ^19.0.0
+      react: ^19.2.3
     dependencies:
-      '@json-render/core': 0.2.0(zod@4.3.6)
+      '@json-render/core': 0.12.0(zod@4.3.6)
       react: 19.2.4
     transitivePeerDependencies:
       - zod

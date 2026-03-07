@@ -25,6 +25,7 @@ import {
     LeaseApproval
 } from './components';
 import { CanvasRenderer } from './components/canvas/CanvasRenderer';
+import { PolymorphPlayground } from './components/canvas/PolymorphPlayground';
 import { componentRegistry } from './renderers';
 import './components/Layout.css';
 import './App.css';
@@ -458,11 +459,7 @@ export default function App() {
                 ) : view === 'studio' ? (
                     <div className="app-canvas studio-view" style={{ height: 'calc(100vh - 57px)', padding: '32px' }}>
                         {canvasPings.length === 0 ? (
-                            <div className="empty" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-secondary)' }}>
-                                <div className="empty-icon" style={{ fontSize: '48px', marginBottom: '16px' }}>🎨</div>
-                                <h2>Studio Empty</h2>
-                                <p>No active canvas interactions.</p>
-                            </div>
+                            <PolymorphPlayground embedded />
                         ) : (
                             <div className="app-grid app-grid-full">
                                 {canvasPings.map(ping => (
