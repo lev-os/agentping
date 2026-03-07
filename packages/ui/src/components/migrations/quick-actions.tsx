@@ -23,7 +23,7 @@ export interface QuickActionsProps {
  */
 export function QuickActions({ actions = [], className }: QuickActionsProps) {
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
+    <div role="toolbar" aria-label="Quick actions" className={cn("flex flex-wrap gap-2", className)}>
       {actions.map((a) => (
         <button
           key={a.id}

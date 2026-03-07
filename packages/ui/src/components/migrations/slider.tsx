@@ -52,10 +52,15 @@ export function Slider({
           step={step}
           value={current}
           onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          aria-label={label ?? "Slider"}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={current}
+          aria-valuetext={`${current} of ${max}`}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer motion-reduce:transition-none"
         />
         <div
-          className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-cyan-400 border-2 border-black shadow-[0_0_6px_rgba(6,182,212,0.5)] pointer-events-none"
+          className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-cyan-400 border-2 border-black shadow-[0_0_6px_rgba(6,182,212,0.5)] pointer-events-none motion-reduce:shadow-none"
           style={{ left: `calc(${pct}% - 7px)` }}
         />
       </div>
