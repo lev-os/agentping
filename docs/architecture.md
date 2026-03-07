@@ -34,6 +34,14 @@ AgentPing is an AI-native interaction protocol where:
 
 The product is not "a single dashboard app." It is a protocol + primitive system that can be adapted into many surfaces (web, desktop, extension, mobile, chat).
 
+GenUI and voice are first-class in AgentPing.
+
+AgentPing must remain:
+
+- a standalone sister project
+- installable and operable without Lev
+- the default dashboard host, UI kit, and human-loop surface system for full Lev experiences
+
 ### North-Star Use Case
 
 Any app should be able to install AgentPing and quickly ship an adapter that renders AgentPing primitives in its native UI framework (for example SwiftUI on iOS), with strict typed action callbacks back into agent workflows.
@@ -47,6 +55,19 @@ This is the canonical split for AgentPing package ownership:
 | AgentPing interaction layer | human-loop protocol, action surfaces, render contracts, approval/review UX, dashboard control-plane UI | long-running worker execution runtime internals |
 | Authorization integration boundary | step-up auth request/response wiring and evidence passthrough | provider-specific auth implementation details |
 | Execution integration boundary | execution/runtime event ingestion and progress rendering | provider-specific worker lifecycle internals |
+
+### Documentation Boundary
+
+AgentPing mirrors Lev’s doc taxonomy:
+
+- `docs/specs/genui/`
+- `docs/specs/voice/`
+- `docs/specs/host/`
+
+But ownership differs:
+
+- Lev docs define the abstract system and `LevUI IR`
+- AgentPing docs define the concrete host/runtime implementation
 
 Implementation rule:
 
@@ -93,6 +114,10 @@ This is the current execution contract for implementation handoff:
 - Implement toward target architecture (single canvas, single control plane, adapter portability), while documenting any temporary current-state deviations explicitly.
 - Target design contract for consolidation: 9 registered runtime theme families and 24 canonical GenUI primitives.
 - Current runtime may remain below those targets during migration, but unknown theme/mode selection must still fail fast.
+
+4. Standalone viability.
+- AgentPing must keep its own product/runtime docs and remain runnable as a standalone project.
+- Lev integration should strengthen the host role, not collapse the project into Lev-only assumptions.
 
 Definition of done for this handoff:
 

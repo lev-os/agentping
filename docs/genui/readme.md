@@ -7,6 +7,14 @@
 > Canonical design specifications for AgentPing's Generative UI upgrade.
 > Sprint date: 2026-02-10
 
+Important:
+
+- This directory is research/input only unless content is promoted into `docs/specs/**` or `docs/ux/**`.
+- Runtime truth for active implementation should move to:
+  - `docs/specs/genui/`
+  - `docs/specs/voice/`
+  - `docs/specs/host/`
+
 ## Key Finding
 
 **Spec-based rendering > code generation.** The Thesys C1 reverse-engineering sprint confirmed that high-quality GenUI comes from structured specs (feature inventories, theme tokens, layout primitives) fed to deterministic renderers -- not from LLMs generating raw component code.
