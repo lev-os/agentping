@@ -58,11 +58,7 @@ This is the canonical split for AgentPing package ownership:
 
 ### Documentation Boundary
 
-AgentPing mirrors Lev’s doc taxonomy:
-
-- `docs/specs/genui/`
-- `docs/specs/voice/`
-- `docs/specs/host/`
+AgentPing mirrors Lev’s doc taxonomy conceptually, but keeps `docs/specs/` flat.
 
 But ownership differs:
 

@@ -25,9 +25,6 @@ docs/
   README.md
   architecture.md
   specs/
-    genui/
-    voice/
-    host/
   ux/
   genui/        # research/input only until promoted
   _archive/
@@ -35,7 +32,7 @@ docs/
 
 Rules:
 
-- `docs/specs/**` is runtime truth for AgentPing implementation.
+- `docs/specs/**` is runtime truth for AgentPing implementation and stays flat.
 - `docs/genui/**` is research/input unless promoted into `docs/specs/**` or `docs/ux/**`.
 - AgentPing must document itself as standalone.
 - AgentPing must also document its role as Lev’s default full-surface host.
