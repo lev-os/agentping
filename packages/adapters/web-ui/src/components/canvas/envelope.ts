@@ -1,3 +1,12 @@
+import type {
+  HostEnvelope,
+  HostEnvelopePayload,
+  HostErrorEnvelope,
+  HostSelectionEnvelope,
+  HostSurfaceEnvelope,
+} from "../../lib/host-envelope";
+import { isHostEnvelopePayload } from "../../lib/host-envelope";
+
 export interface SofiaWidgetProps {
   provider: "sofia";
   widgetId: string;
@@ -42,49 +51,11 @@ export interface CanvasTodoItem {
 
 export type CanvasSurfaceKind = "kanban" | "todo" | "markdown" | "unknown";
 
-export interface CanvasSelectionEnvelope {
-  kind: "selection";
-  instruction: string;
-  selectionType: string;
-}
-
-export interface CanvasSurfaceEnvelope {
-  kind: "surface";
-  surface: CanvasSurfaceKind;
-  title?: string;
-  meta: {
-    source: "legacy-sofia-widget" | "local-host-envelope";
-    widgetId?: string;
-    variant?: string;
-    componentName?: string;
-  };
-  data: Record<string, unknown>;
-}
-
-export interface CanvasErrorEnvelope {
-  kind: "error";
-  message: string;
-  details: unknown;
-}
-
-export type CanvasEnvelope =
-  | CanvasSelectionEnvelope
-  | CanvasSurfaceEnvelope
-  | CanvasErrorEnvelope;
-
-export type CanvasHostEnvelopePayload =
-  | {
-      type: "canvas_interaction";
-      action: "selection";
-      componentType: "host-envelope";
-      envelope: CanvasSelectionEnvelope;
-    }
-  | {
-      type: "canvas_interaction";
-      action: "render";
-      componentType: "host-envelope";
-      envelope: CanvasSurfaceEnvelope;
-    };
+export type CanvasSelectionEnvelope = HostSelectionEnvelope;
+export type CanvasSurfaceEnvelope = HostSurfaceEnvelope<CanvasSurfaceKind>;
+export type CanvasErrorEnvelope = HostErrorEnvelope;
+export type CanvasEnvelope = HostEnvelope<CanvasSurfaceKind>;
+export type CanvasHostEnvelopePayload = HostEnvelopePayload<CanvasSurfaceKind>;
 
 export type CanvasInputPayload =
   | LegacyCanvasInteractionPayload
@@ -177,7 +148,7 @@ function resolveLegacySurface(widget: SofiaWidgetProps): CanvasSurfaceKind {
 }
 
 export function toCanvasEnvelope(payload: CanvasInputPayload): CanvasEnvelope {
-  if ("componentType" in payload && payload.componentType === "host-envelope") {
+  if (isHostEnvelopePayload<CanvasSurfaceKind>(payload)) {
     return payload.envelope;
   }
 
@@ -216,6 +187,8 @@ export function toCanvasEnvelope(payload: CanvasInputPayload): CanvasEnvelope {
       widgetId: props.widgetId,
       variant: props.variant,
       componentName: payload.componentName,
+      provider: props.provider,
+      channel: "canvas",
     },
   };
 }
