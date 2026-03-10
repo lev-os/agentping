@@ -8,6 +8,20 @@ import { usePings, useWebSocket, useKeyboard, usePingResponse } from './hooks';
 import { useAgentPing } from './hooks/useAgentPing';
 import { respondToPing, dismissPing, buildStepApprovalResponse, buildSelectionResponse, buildApprovalResponse, buildAnswerResponse, buildTaskWorkflowResponse, buildLeaseResponse } from './api';
 import {
+    AlertFeed,
+    ApprovalQueue,
+    LeaseApproval as LeaseApprovalCard,
+    StatsGrid,
+    TaskChecklist as ProofTaskChecklist,
+    TaskQueue,
+    type Alert as ProofAlert,
+    type LeaseApprovalProps,
+    type PendingApproval,
+    type StatItem,
+    type Task,
+    type TaskStep,
+} from '@kingly/ui/components';
+import {
     PingCard,
     StepChecklist,
     SelectionList,
@@ -30,9 +44,62 @@ import { componentRegistry } from './renderers';
 import './components/Layout.css';
 import './App.css';
 
-type AppView = 'queue' | 'history' | 'gallery' | 'studio' | 'landing';
+type AppView = 'queue' | 'history' | 'gallery' | 'studio' | 'landing' | 'proof';
 
-const VALID_VIEWS: AppView[] = ['queue', 'history', 'gallery', 'studio', 'landing'];
+const VALID_VIEWS: AppView[] = ['queue', 'history', 'gallery', 'studio', 'landing', 'proof'];
+
+const FALLBACK_APPROVALS: PendingApproval[] = [
+    {
+        id: 'proof-ap-1',
+        toolName: 'Deploy',
+        description: 'Approve canary deploy for api-gateway v3.8.1',
+        input: { service: 'api-gateway', version: '3.8.1', env: 'production' },
+        timestamp: new Date('2026-03-10T02:00:00Z'),
+        diff: '+ canary: 10%\n+ rollout_strategy: progressive',
+    },
+    {
+        id: 'proof-ap-2',
+        toolName: 'Edit',
+        description: 'Review proposed worker-pool scaling change',
+        input: { file: '/etc/agentping/workers.yaml', change: 'replicas 8 -> 16' },
+        timestamp: new Date('2026-03-10T02:03:00Z'),
+    },
+];
+
+const FALLBACK_TASKS: Task[] = [
+    { id: 'proof-task-1', title: 'Approve production canary rollout', status: 'running', priority: 9 },
+    { id: 'proof-task-2', title: 'Rotate staging secrets', status: 'queued', priority: 7 },
+    { id: 'proof-task-3', title: 'Publish dashboard health digest', status: 'queued', priority: 5 },
+];
+
+const FALLBACK_STEPS: TaskStep[] = [
+    { id: 'proof-step-1', title: 'Validate deployment manifest', status: 'complete', agent: 'Deploy Agent' },
+    { id: 'proof-step-2', title: 'Run canary health checks', status: 'waiting_approval', agent: 'QA Validator' },
+    { id: 'proof-step-3', title: 'Promote canary to full production', status: 'pending', agent: 'Deploy Agent' },
+];
+
+const FALLBACK_ALERTS: ProofAlert[] = [
+    {
+        id: 'proof-alert-1',
+        severity: 'high',
+        title: 'Seeded proof dataset',
+        message: 'No live pending pings yet, showing the approval surface with seeded scenario data.',
+        timestamp: 'now',
+        source: 'proof-surface',
+    },
+];
+
+const FALLBACK_LEASES: LeaseApprovalProps[] = [
+    {
+        id: 'proof-lease-1',
+        agent: 'Research Bot',
+        resource: 'browser',
+        status: 'pending',
+        requestedAt: 'now',
+        expiresAt: '2026-03-10T03:15:00Z',
+        reason: 'Inspect release notes before rollout',
+    },
+];
 
 function getInitialView(): AppView {
     const queryValue = new URLSearchParams(window.location.search).get('view');
@@ -42,6 +109,38 @@ function getInitialView(): AppView {
 function getInitialGallerySection(): string | undefined {
     const section = new URLSearchParams(window.location.search).get('section');
     return section ?? undefined;
+}
+
+function getPingTitle(ping: Ping): string {
+    const payload = ping.payload as any;
+
+    switch (ping.payload.type) {
+        case 'approval':
+        case 'step_approval':
+        case 'selection':
+        case 'research_request':
+        case 'review_request':
+        case 'task_workflow':
+        case 'secret':
+            return payload.title ?? payload.question ?? ping.type;
+        case 'notification':
+            return payload.message ?? ping.type;
+        case 'lease_request':
+            return `${payload.scope} lease request`;
+        case 'canvas_interaction':
+            return payload.componentName ?? payload.props?.widgetId ?? 'Canvas interaction';
+        case 'question':
+            return payload.question ?? 'Question';
+        default:
+            return ping.type;
+    }
+}
+
+function toQueueStatus(ping: Ping): Task['status'] {
+    if (ping.status === 'responded') return 'done';
+    if (ping.status === 'dismissed' || ping.status === 'expired') return 'failed';
+    if (ping.type === 'approval' || ping.type === 'step_approval' || ping.type === 'lease_request') return 'running';
+    return 'queued';
 }
 
 export default function App() {
@@ -55,6 +154,116 @@ export default function App() {
 
     const selectedPing = pings[selectedIndex] || null;
     const responseState = usePingResponse(selectedPing);
+    const pendingPings = pings.filter((ping) => ping.status === 'pending');
+    const usingProofFallback = pendingPings.length === 0;
+
+    const proofApprovals: Array<PendingApproval & { pingId?: string; pingType?: Ping['type']; stepIds?: string[] }> = usingProofFallback
+        ? FALLBACK_APPROVALS
+        : pendingPings
+            .filter((ping) => ping.payload.type === 'approval' || ping.payload.type === 'step_approval')
+            .map((ping) => {
+                if (ping.payload.type === 'step_approval') {
+                    const payload = ping.payload as any;
+                    return {
+                        id: ping.id,
+                        pingId: ping.id,
+                        pingType: ping.payload.type,
+                        toolName: 'Step Approval',
+                        description: payload.context ?? payload.title,
+                        input: {
+                            title: payload.title,
+                            allowPartial: payload.allowPartial,
+                            totalSteps: payload.steps.length,
+                        },
+                        timestamp: new Date(ping.createdAt),
+                        stepIds: payload.steps.map((step: any) => step.id),
+                    };
+                }
+
+                const payload = ping.payload as any;
+                return {
+                    id: ping.id,
+                    pingId: ping.id,
+                    pingType: ping.payload.type,
+                    toolName: payload.action ?? 'Approval',
+                    description: payload.details ?? payload.title,
+                    input: {
+                        title: payload.title,
+                        risk: payload.risk ?? 'unknown',
+                    },
+                    timestamp: new Date(ping.createdAt),
+                };
+            });
+
+    const activeStepPing = pendingPings.find((ping) => ping.payload.type === 'step_approval');
+    const proofSteps: TaskStep[] = usingProofFallback
+        ? FALLBACK_STEPS
+        : activeStepPing
+            ? (activeStepPing.payload as any).steps.map((step: any) => ({
+                id: step.id,
+                title: step.description,
+                description: step.details ?? step.estimatedImpact,
+                status: 'waiting_approval' as const,
+                agent: activeStepPing.agentName,
+            }))
+            : [];
+
+    const proofLeases: Array<LeaseApprovalProps & { pingId?: string }> = usingProofFallback
+        ? FALLBACK_LEASES
+        : pendingPings
+            .filter((ping) => ping.payload.type === 'lease_request')
+            .map((ping) => {
+                const payload = ping.payload as any;
+                return {
+                    pingId: ping.id,
+                    agentId: ping.agentId,
+                    agentName: ping.agentName,
+                    resource: payload.scope,
+                    status: 'pending' as const,
+                    requestedAt: new Date(ping.createdAt).toLocaleTimeString(),
+                    expiresAt: ping.expiresAt ? new Date(ping.expiresAt) : undefined,
+                    reason: payload.reason,
+                };
+            });
+
+    const proofTasks: Task[] = usingProofFallback
+        ? FALLBACK_TASKS
+        : pendingPings.slice(0, 8).map((ping, index) => ({
+            id: ping.id,
+            title: getPingTitle(ping),
+            status: toQueueStatus(ping),
+            priority: Math.max(3, 9 - index),
+        }));
+
+    const proofAlerts: ProofAlert[] = usingProofFallback
+        ? FALLBACK_ALERTS
+        : [
+            ...(error ? [{
+                id: 'proof-alert-error',
+                severity: 'critical' as const,
+                title: 'Web UI fetch issue',
+                message: error,
+                timestamp: 'now',
+                source: 'web-ui',
+            }] : []),
+            ...pendingPings
+                .filter((ping) => ping.payload.type === 'approval' && (ping.payload as any).risk === 'high')
+                .map((ping) => ({
+                    id: `proof-alert-${ping.id}`,
+                    severity: 'high' as const,
+                    title: getPingTitle(ping),
+                    message: (ping.payload as any).details ?? 'High-risk approval pending human action.',
+                    timestamp: new Date(ping.createdAt).toLocaleTimeString(),
+                    source: ping.agentName,
+                })),
+        ];
+
+    const proofStats: StatItem[] = [
+        { label: 'Pending Pings', value: pendingPings.length },
+        { label: 'Approvals', value: proofApprovals.length },
+        { label: 'Leases', value: proofLeases.length },
+        { label: 'Fallback', value: usingProofFallback ? 'Seeded' : 'Live' },
+    ];
 
     // Toggle Expand Mode
     const toggleExpand = useCallback(() => {
@@ -199,6 +408,148 @@ export default function App() {
             console.error('Failed to dismiss:', e);
         }
     };
+
+    const handleProofApproval = async (
+        approval: PendingApproval & { pingId?: string; pingType?: Ping['type']; stepIds?: string[] },
+        approved: boolean,
+    ) => {
+        if (!approval.pingId || !approval.pingType) return;
+
+        try {
+            if (approval.pingType === 'approval') {
+                await respondToPing(approval.pingId, buildApprovalResponse(approved));
+            } else if (approval.pingType === 'step_approval') {
+                await respondToPing(
+                    approval.pingId,
+                    buildStepApprovalResponse(
+                        approved ? (approval.stepIds ?? []) : [],
+                        approved ? [] : (approval.stepIds ?? []),
+                    ),
+                );
+            }
+            refresh();
+        } catch (e) {
+            console.error('Failed to respond to proof approval:', e);
+        }
+    };
+
+    const handleProofLease = async (pingId: string | undefined, granted: boolean) => {
+        if (!pingId) return;
+
+        try {
+            await respondToPing(pingId, buildLeaseResponse(granted));
+            refresh();
+        } catch (e) {
+            console.error('Failed to respond to proof lease:', e);
+        }
+    };
+
+    const handleProofStep = async (stepId: string, approved: boolean) => {
+        if (!activeStepPing || activeStepPing.payload.type !== 'step_approval') return;
+
+        try {
+            await respondToPing(
+                activeStepPing.id,
+                buildStepApprovalResponse(
+                    approved ? [stepId] : [],
+                    approved ? [] : [stepId],
+                ),
+            );
+            refresh();
+        } catch (e) {
+            console.error('Failed to respond to proof step:', e);
+        }
+    };
+
+    const renderProofSurface = () => (
+        <div className="app-canvas" style={{ height: 'calc(100vh - 57px)', padding: '24px', overflow: 'auto' }}>
+            <div style={{ maxWidth: 1440, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <section className="app-card">
+                    <div className="app-card-header">
+                        <h3>Live Host Proof: Alerts, Queues & Approvals</h3>
+                        <p>{usingProofFallback ? 'Seeded fallback dataset because the live queue is empty.' : `Derived from ${pendingPings.length} live pending ping(s).`}</p>
+                    </div>
+                    <div className="app-card-body">
+                        <StatsGrid stats={proofStats} columns={4} />
+                    </div>
+                </section>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(260px, 1.1fr) minmax(420px, 1.8fr) minmax(280px, 1fr)', gap: 16 }}>
+                    <section className="app-card">
+                        <div className="app-card-header">
+                            <h3>Queue & Alerts</h3>
+                            <p>Standalone runtime work waiting on human confirmation.</p>
+                        </div>
+                        <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <TaskQueue tasks={proofTasks} />
+                            <AlertFeed alerts={proofAlerts} />
+                        </div>
+                    </section>
+
+                    <section className="app-card">
+                        <div className="app-card-header">
+                            <h3>Approval Center</h3>
+                            <p>First rich-surface proof on the live AgentPing host path.</p>
+                        </div>
+                        <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <ApprovalQueue
+                                approvals={proofApprovals}
+                                onApprove={(id) => {
+                                    const approval = proofApprovals.find((item) => item.id === id);
+                                    if (approval) void handleProofApproval(approval, true);
+                                }}
+                                onReject={(id) => {
+                                    const approval = proofApprovals.find((item) => item.id === id);
+                                    if (approval) void handleProofApproval(approval, false);
+                                }}
+                                onApproveAll={() => {
+                                    void Promise.all(
+                                        proofApprovals.map((approval) => handleProofApproval(approval, true)),
+                                    );
+                                }}
+                                onRejectAll={() => {
+                                    void Promise.all(
+                                        proofApprovals.map((approval) => handleProofApproval(approval, false)),
+                                    );
+                                }}
+                            />
+
+                            <ProofTaskChecklist
+                                steps={proofSteps}
+                                onApproveStep={(stepId) => {
+                                    void handleProofStep(stepId, true);
+                                }}
+                                onRejectStep={(stepId) => {
+                                    void handleProofStep(stepId, false);
+                                }}
+                            />
+                        </div>
+                    </section>
+
+                    <section className="app-card">
+                        <div className="app-card-header">
+                            <h3>Lease Queue</h3>
+                            <p>Live lease approvals from the daemon-backed host path.</p>
+                        </div>
+                        <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            {proofLeases.map((lease) => (
+                                <LeaseApprovalCard
+                                    key={lease.pingId ?? lease.id}
+                                    {...lease}
+                                    onApprove={() => {
+                                        void handleProofLease(lease.pingId, true);
+                                    }}
+                                    onDeny={() => {
+                                        void handleProofLease(lease.pingId, false);
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    );
 
     // Render interaction based on ping type
     const renderInteraction = () => {
@@ -430,6 +781,12 @@ export default function App() {
                         >
                             Studio
                         </button>
+                        <button
+                            className={`nav-btn ${view === 'proof' ? 'active' : ''}`}
+                            onClick={() => setView('proof')}
+                        >
+                            Proof
+                        </button>
                     </nav>
                 </div>
                 <div className="header-right">
@@ -456,6 +813,8 @@ export default function App() {
                     <div style={{ height: 'calc(100vh - 57px)' }}>
                         <PrimitivesGallery initialSection={initialGallerySection} />
                     </div>
+                ) : view === 'proof' ? (
+                    renderProofSurface()
                 ) : view === 'studio' ? (
                     <div className="app-canvas studio-view" style={{ height: 'calc(100vh - 57px)', padding: '32px' }}>
                         {canvasPings.length === 0 ? (
