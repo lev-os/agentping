@@ -84,6 +84,7 @@ export function createWebSocketServer(config: WebSocketConfig) {
           startedAt: status.startedAt?.toISOString(),
           restartAttempts: status.restartAttempts,
           healthy: status.healthy,
+          lastHealthCheck: status.lastHealthCheck?.toISOString(),
         });
       }
     });
@@ -125,6 +126,8 @@ export function createWebSocketServer(config: WebSocketConfig) {
       status: 'online',
       port: data.port,
       pid: data.pid,
+      healthy: true,
+      restartAttempts: 0,
       timestamp: new Date().toISOString(),
     });
   });
@@ -138,6 +141,7 @@ export function createWebSocketServer(config: WebSocketConfig) {
     io.to(`dashboard:${data.dashboardId}`).emit('dashboard:status', {
       dashboardId: data.dashboardId,
       status: 'failed',
+      healthy: false,
       reason: data.reason,
       exitCode: data.exitCode,
       timestamp: new Date().toISOString(),
@@ -153,6 +157,7 @@ export function createWebSocketServer(config: WebSocketConfig) {
     io.to(`dashboard:${data.dashboardId}`).emit('dashboard:status', {
       dashboardId: data.dashboardId,
       status: 'online',
+      healthy: true,
       restartAttempts: data.attempts,
       timestamp: new Date().toISOString(),
     });
@@ -167,6 +172,7 @@ export function createWebSocketServer(config: WebSocketConfig) {
     io.to(`dashboard:${data.dashboardId}`).emit('dashboard:status', {
       dashboardId: data.dashboardId,
       status: 'failed',
+      healthy: false,
       restartAttempts: data.attempts,
       timestamp: new Date().toISOString(),
     });
@@ -195,6 +201,7 @@ export function createWebSocketServer(config: WebSocketConfig) {
       dashboardId: data.dashboardId,
       oldPort: data.oldPort,
       newPort: data.newPort,
+      reason: 'port_reassigned',
       timestamp: new Date().toISOString(),
     });
   });

@@ -43,6 +43,28 @@ export interface DashboardRoutesConfig {
   runner: DashboardRunner;
 }
 
+function serializeDashboardStatus(status: {
+  status: string
+  port?: number
+  pid?: number
+  startedAt?: Date
+  restartAttempts: number
+  healthy?: boolean
+  lastHealthCheck?: Date
+  crashes?: number
+}) {
+  return {
+    status: status.status,
+    port: status.port,
+    pid: status.pid,
+    startedAt: status.startedAt?.toISOString(),
+    restartAttempts: status.restartAttempts,
+    healthy: status.healthy,
+    lastHealthCheck: status.lastHealthCheck?.toISOString(),
+    crashes: status.crashes ?? 0,
+  }
+}
+
 export function createDashboardRoutes(config: DashboardRoutesConfig) {
   const { runner } = config;
   const app = new Hono();
@@ -66,15 +88,7 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
       const dashboards = Object.values(allStatus).map((status) => ({
         id: status.id,
         config: configMap.get(status.id),
-        status: {
-          status: status.status,
-          port: status.port,
-          pid: status.pid,
-          startedAt: status.startedAt?.toISOString(),
-          restartAttempts: status.restartAttempts,
-          healthy: status.healthy,
-          lastHealthCheck: status.lastHealthCheck?.toISOString(),
-        },
+        status: serializeDashboardStatus(status),
       }));
 
       return c.json(dashboards);
@@ -103,15 +117,7 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
       return c.json({
         id: status.id,
         config,
-        status: {
-          status: status.status,
-          port: status.port,
-          pid: status.pid,
-          startedAt: status.startedAt?.toISOString(),
-          restartAttempts: status.restartAttempts,
-          healthy: status.healthy,
-          lastHealthCheck: status.lastHealthCheck?.toISOString(),
-        },
+        status: serializeDashboardStatus(status),
       });
     } catch (error) {
       console.error('Error getting dashboard:', error);

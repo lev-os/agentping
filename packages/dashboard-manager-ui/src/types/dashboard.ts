@@ -19,6 +19,8 @@ export interface DashboardStatus {
   restartAttempts: number
   healthy: boolean
   lastHealthCheck?: string
+  reason?: string
+  timestamp?: string
 }
 
 export interface Dashboard {
@@ -42,10 +44,26 @@ export interface DashboardLogLine {
   line: string
 }
 
+export interface DashboardStatusEvent extends Partial<DashboardStatus> {
+  dashboardId: string
+}
+
+export interface DashboardHealthFailedEvent {
+  dashboardId: string
+  reason: string
+  timestamp: string
+}
+
+export interface DashboardPortChangedEvent {
+  dashboardId: string
+  oldPort: number
+  newPort: number
+  reason?: string
+  timestamp: string
+}
+
 export interface CreateDashboardRequest {
   config: DashboardConfig
 }
 
-export interface DashboardsListResponse {
-  dashboards: Dashboard[]
-}
+export type DashboardsListResponse = Dashboard[]

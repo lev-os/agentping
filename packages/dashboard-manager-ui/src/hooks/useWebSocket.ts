@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
-import type { DashboardStatus, DashboardLogLine } from '../types/dashboard'
+import type {
+  DashboardHealthFailedEvent,
+  DashboardLogLine,
+  DashboardPortChangedEvent,
+  DashboardStatusEvent,
+} from '../types/dashboard'
 
 interface WebSocketEvents {
-  'dashboard:status': (data: { dashboardId: string } & DashboardStatus) => void
+  'dashboard:status': (data: DashboardStatusEvent) => void
   'dashboard:log-line': (data: DashboardLogLine) => void
-  'dashboard:health-failed': (data: { dashboardId: string; reason: string; timestamp: string }) => void
-  'dashboard:port-changed': (data: { dashboardId: string; oldPort: number; newPort: number; reason: string }) => void
+  'dashboard:health-failed': (data: DashboardHealthFailedEvent) => void
+  'dashboard:port-changed': (data: DashboardPortChangedEvent) => void
 }
 
 export function useWebSocket() {
@@ -52,6 +57,9 @@ export function useWebSocket() {
 
   const on = <K extends keyof WebSocketEvents>(event: K, handler: WebSocketEvents[K]) => {
     socketRef.current?.on(event, handler as any)
+    return () => {
+      socketRef.current?.off(event, handler as any)
+    }
   }
 
   const off = <K extends keyof WebSocketEvents>(event: K, handler: WebSocketEvents[K]) => {

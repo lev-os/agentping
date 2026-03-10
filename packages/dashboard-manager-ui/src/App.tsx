@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import { DashboardList } from './components/DashboardList'
 import { DashboardDetail } from './components/DashboardDetail'
 import './styles/theme-kingly.css'
