@@ -18,6 +18,10 @@
 @import './tokens.css';
 @import './lcars.css';
 
+/* Tailwind v4 must scan the shared @kingly/ui source to generate utility
+   classes used by migrated components rendered inside the web-ui adapter. */
+@source "../../../../ui/src";
+
 /* Legacy variable aliases for backward compatibility */
 :root {
   --accent-primary: var(--primary);

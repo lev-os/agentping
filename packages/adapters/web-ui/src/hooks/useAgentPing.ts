@@ -70,7 +70,8 @@ const STATUS_FROM_EVENT: Record<PingEvent, CanvasPing['status']> = {
 }
 
 const WS_URL =
-  import.meta.env.VITE_AGENTPING_WS_URL ?? 'ws://localhost:7890/api/v1/ws'
+  (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env?.VITE_AGENTPING_WS_URL ??
+  'ws://localhost:7890/api/v1/ws'
 const API_BASE = '/api/v1/pings'
 const INITIAL_BACKOFF_MS = 1_000
 const MAX_BACKOFF_MS = 30_000
@@ -87,7 +88,7 @@ const upsertPing = (current: CanvasPing[], ping: CanvasPing): CanvasPing[] => {
   return next.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
-export function useAgentPing() {
+export function useAgentPing(enabled = true) {
   const [pings, setPings] = useState<CanvasPing[]>([])
   const [connected, setConnected] = useState(false)
 
@@ -130,18 +131,18 @@ export function useAgentPing() {
   )
 
   const scheduleReconnect = useCallback(() => {
-    if (unmounted.current) return
+    if (!enabled || unmounted.current) return
 
     reconnectTimer.current = setTimeout(() => {
-      if (unmounted.current) return
+      if (!enabled || unmounted.current) return
       connect()
     }, backoff.current)
 
     backoff.current = Math.min(backoff.current * 2, MAX_BACKOFF_MS)
-  }, [])
+  }, [enabled])
 
   const connect = useCallback(() => {
-    if (unmounted.current) return
+    if (!enabled || unmounted.current) return
 
     const ws = new WebSocket(WS_URL)
     wsRef.current = ws
@@ -211,10 +212,21 @@ export function useAgentPing() {
         ),
       )
     }
-  }, [fetchPending, scheduleReconnect])
+  }, [enabled, fetchPending, scheduleReconnect])
 
   useEffect(() => {
     unmounted.current = false
+
+    if (!enabled) {
+      setConnected(false)
+      setPings([])
+      return () => {
+        unmounted.current = true
+        if (reconnectTimer.current) clearTimeout(reconnectTimer.current)
+        wsRef.current?.close()
+      }
+    }
+
     connect()
 
     return () => {
@@ -222,7 +234,7 @@ export function useAgentPing() {
       if (reconnectTimer.current) clearTimeout(reconnectTimer.current)
       wsRef.current?.close()
     }
-  }, [connect])
+  }, [connect, enabled])
 
   return { pings, connected, respond, fetchPending } as const
 }

@@ -8,12 +8,6 @@ import { usePings, useWebSocket, useKeyboard, usePingResponse } from './hooks';
 import { useAgentPing } from './hooks/useAgentPing';
 import { respondToPing, dismissPing, buildStepApprovalResponse, buildSelectionResponse, buildApprovalResponse, buildAnswerResponse, buildTaskWorkflowResponse, buildLeaseResponse } from './api';
 import {
-    AlertFeed,
-    ApprovalQueue,
-    LeaseApproval as LeaseApprovalCard,
-    StatsGrid,
-    TaskChecklist as ProofTaskChecklist,
-    TaskQueue,
     type Alert as ProofAlert,
     type LeaseApprovalProps,
     type PendingApproval,
@@ -145,12 +139,12 @@ function toQueueStatus(ping: Ping): Task['status'] {
 
 export default function App() {
     const { pings, loading, error, refresh } = usePings();
-    const { pings: canvasPings, respond: respondToCanvasPing } = useAgentPing();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [view, setView] = useState<AppView>(() => getInitialView());
     const [initialGallerySection] = useState<string | undefined>(() => getInitialGallerySection());
     const [expanded, setExpanded] = useState(false);
     const [sidebarManuallyCollapsed, setSidebarManuallyCollapsed] = useState(false);
+    const { pings: canvasPings, respond: respondToCanvasPing } = useAgentPing(view === 'studio');
 
     const selectedPing = pings[selectedIndex] || null;
     const responseState = usePingResponse(selectedPing);
@@ -470,7 +464,48 @@ export default function App() {
                         <p>{usingProofFallback ? 'Seeded fallback dataset because the live queue is empty.' : `Derived from ${pendingPings.length} live pending ping(s).`}</p>
                     </div>
                     <div className="app-card-body">
-                        <StatsGrid stats={proofStats} columns={4} />
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                                gap: 12,
+                            }}
+                        >
+                            {proofStats.map((stat) => (
+                                <div
+                                    key={stat.label}
+                                    style={{
+                                        border: '1px solid rgba(0, 229, 255, 0.16)',
+                                        background: 'rgba(0, 0, 0, 0.35)',
+                                        borderRadius: '10px',
+                                        padding: '14px 16px',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '11px',
+                                            color: 'var(--text-secondary)',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.08em',
+                                        }}
+                                    >
+                                        {stat.label}
+                                    </div>
+                                    <div
+                                        style={{
+                                            marginTop: 6,
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '24px',
+                                            color: 'var(--accent-primary)',
+                                            textShadow: '0 0 8px rgba(0, 229, 255, 0.24)',
+                                        }}
+                                    >
+                                        {stat.value}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
@@ -481,8 +516,55 @@ export default function App() {
                             <p>Standalone runtime work waiting on human confirmation.</p>
                         </div>
                         <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                            <TaskQueue tasks={proofTasks} />
-                            <AlertFeed alerts={proofAlerts} />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {proofTasks.map((task) => (
+                                    <div
+                                        key={task.id}
+                                        style={{
+                                            border: '1px solid var(--border-color)',
+                                            borderRadius: '10px',
+                                            padding: '12px 14px',
+                                            background: 'rgba(255, 255, 255, 0.03)',
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                                            <strong style={{ color: 'var(--text-primary)', fontSize: 14 }}>{task.title}</strong>
+                                            <span
+                                                style={{
+                                                    fontFamily: 'var(--font-mono)',
+                                                    fontSize: 11,
+                                                    color: task.status === 'running' ? 'var(--warning)' : task.status === 'queued' ? 'var(--text-secondary)' : 'var(--success)',
+                                                    textTransform: 'uppercase',
+                                                }}
+                                            >
+                                                {task.status}
+                                            </span>
+                                        </div>
+                                        <div style={{ marginTop: 8, color: 'var(--text-secondary)', fontSize: 13 }}>
+                                            Priority {task.priority}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {proofAlerts.map((alert) => (
+                                    <div
+                                        key={alert.id}
+                                        style={{
+                                            borderLeft: `3px solid ${alert.severity === 'critical' ? 'var(--danger)' : alert.severity === 'high' ? 'var(--warning)' : 'var(--accent-primary)'}`,
+                                            background: 'rgba(255, 255, 255, 0.03)',
+                                            borderRadius: '10px',
+                                            padding: '12px 14px',
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                                            <strong style={{ color: 'var(--text-primary)', fontSize: 13 }}>{alert.title}</strong>
+                                            <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{alert.timestamp}</span>
+                                        </div>
+                                        <div style={{ marginTop: 6, color: 'var(--text-secondary)', fontSize: 13 }}>{alert.message}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </section>
 
@@ -492,37 +574,97 @@ export default function App() {
                             <p>First rich-surface proof on the live AgentPing host path.</p>
                         </div>
                         <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                            <ApprovalQueue
-                                approvals={proofApprovals}
-                                onApprove={(id) => {
-                                    const approval = proofApprovals.find((item) => item.id === id);
-                                    if (approval) void handleProofApproval(approval, true);
-                                }}
-                                onReject={(id) => {
-                                    const approval = proofApprovals.find((item) => item.id === id);
-                                    if (approval) void handleProofApproval(approval, false);
-                                }}
-                                onApproveAll={() => {
-                                    void Promise.all(
-                                        proofApprovals.map((approval) => handleProofApproval(approval, true)),
-                                    );
-                                }}
-                                onRejectAll={() => {
-                                    void Promise.all(
-                                        proofApprovals.map((approval) => handleProofApproval(approval, false)),
-                                    );
-                                }}
-                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14 }}>
+                                    {proofApprovals.length} pending approval{proofApprovals.length === 1 ? '' : 's'}
+                                </div>
+                                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                    <button
+                                        onClick={() => { void Promise.all(proofApprovals.map((approval) => handleProofApproval(approval, true))); }}
+                                        style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(0, 255, 157, 0.16)', color: 'rgb(190, 255, 220)', border: '1px solid rgba(0, 255, 157, 0.28)' }}
+                                    >
+                                        Approve All
+                                    </button>
+                                    <button
+                                        onClick={() => { void Promise.all(proofApprovals.map((approval) => handleProofApproval(approval, false))); }}
+                                        style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255, 42, 109, 0.16)', color: 'rgb(255, 199, 215)', border: '1px solid rgba(255, 42, 109, 0.28)' }}
+                                    >
+                                        Reject All
+                                    </button>
+                                </div>
+                            </div>
+                            {proofApprovals.map((approval) => (
+                                <div
+                                    key={approval.id}
+                                    style={{
+                                        border: '1px solid rgba(255, 184, 0, 0.22)',
+                                        background: 'rgba(255, 184, 0, 0.08)',
+                                        borderRadius: 10,
+                                        padding: '14px 16px',
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'start' }}>
+                                        <div>
+                                            <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14 }}>{approval.description}</div>
+                                            <div style={{ marginTop: 6, color: 'var(--text-secondary)', fontSize: 12, fontFamily: 'var(--font-mono)' }}>{approval.toolName}</div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 8 }}>
+                                            <button
+                                                onClick={() => { void handleProofApproval(approval, true); }}
+                                                style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(0, 255, 157, 0.16)', color: 'rgb(190, 255, 220)', border: '1px solid rgba(0, 255, 157, 0.28)' }}
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                onClick={() => { void handleProofApproval(approval, false); }}
+                                                style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255, 42, 109, 0.16)', color: 'rgb(255, 199, 215)', border: '1px solid rgba(255, 42, 109, 0.28)' }}
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
 
-                            <ProofTaskChecklist
-                                steps={proofSteps}
-                                onApproveStep={(stepId) => {
-                                    void handleProofStep(stepId, true);
-                                }}
-                                onRejectStep={(stepId) => {
-                                    void handleProofStep(stepId, false);
-                                }}
-                            />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {proofSteps.map((step) => (
+                                    <div
+                                        key={step.id}
+                                        style={{
+                                            border: '1px solid var(--border-color)',
+                                            background: 'rgba(255, 255, 255, 0.03)',
+                                            borderRadius: 10,
+                                            padding: '12px 14px',
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
+                                            <div>
+                                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14 }}>{step.title}</div>
+                                                <div style={{ marginTop: 4, color: 'var(--text-secondary)', fontSize: 12 }}>{step.agent}</div>
+                                            </div>
+                                            <span style={{ color: step.status === 'complete' ? 'var(--success)' : step.status === 'waiting_approval' ? 'var(--warning)' : 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase' }}>
+                                                {step.status.replace('_', ' ')}
+                                            </span>
+                                        </div>
+                                        {step.status === 'waiting_approval' && (
+                                            <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                                                <button
+                                                    onClick={() => { void handleProofStep(step.id, true); }}
+                                                    style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(0, 255, 157, 0.16)', color: 'rgb(190, 255, 220)', border: '1px solid rgba(0, 255, 157, 0.28)' }}
+                                                >
+                                                    Approve
+                                                </button>
+                                                <button
+                                                    onClick={() => { void handleProofStep(step.id, false); }}
+                                                    style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255, 42, 109, 0.16)', color: 'rgb(255, 199, 215)', border: '1px solid rgba(255, 42, 109, 0.28)' }}
+                                                >
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </section>
 
@@ -533,16 +675,54 @@ export default function App() {
                         </div>
                         <div className="app-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                             {proofLeases.map((lease) => (
-                                <LeaseApprovalCard
+                                (() => {
+                                    const expiresLabel =
+                                        lease.expiresAt instanceof Date
+                                            ? lease.expiresAt.toLocaleString()
+                                            : lease.expiresAt ?? 'unknown';
+
+                                    return (
+                                <div
                                     key={lease.pingId ?? lease.id}
-                                    {...lease}
-                                    onApprove={() => {
-                                        void handleProofLease(lease.pingId, true);
+                                    style={{
+                                        border: '1px solid rgba(0, 229, 255, 0.18)',
+                                        background: 'rgba(255, 255, 255, 0.03)',
+                                        borderRadius: 10,
+                                        padding: '14px 16px',
                                     }}
-                                    onDeny={() => {
-                                        void handleProofLease(lease.pingId, false);
-                                    }}
-                                />
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                                        <div>
+                                            <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14 }}>{lease.agent}</div>
+                                            <div style={{ marginTop: 4, color: 'var(--text-secondary)', fontSize: 12 }}>{lease.resource}</div>
+                                        </div>
+                                        <span style={{ color: 'var(--warning)', fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase' }}>
+                                            {lease.status}
+                                        </span>
+                                    </div>
+                                    {lease.reason && (
+                                        <div style={{ marginTop: 10, color: 'var(--text-secondary)', fontSize: 13 }}>{lease.reason}</div>
+                                    )}
+                                    <div style={{ marginTop: 8, color: 'var(--text-muted)', fontSize: 12 }}>
+                                        Requested {lease.requestedAt} · Expires {expiresLabel}
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                                        <button
+                                            onClick={() => { void handleProofLease(lease.pingId, true); }}
+                                            style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(0, 255, 157, 0.16)', color: 'rgb(190, 255, 220)', border: '1px solid rgba(0, 255, 157, 0.28)' }}
+                                        >
+                                            Approve
+                                        </button>
+                                        <button
+                                            onClick={() => { void handleProofLease(lease.pingId, false); }}
+                                            style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255, 255, 255, 0.04)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
+                                        >
+                                            Deny
+                                        </button>
+                                    </div>
+                                </div>
+                                    );
+                                })()
                             ))}
                         </div>
                     </section>
