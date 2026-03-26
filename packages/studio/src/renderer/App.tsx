@@ -9,9 +9,13 @@ import { AgentStatusOverlay } from '@/renderer/components/AgentStatusOverlay';
 import { AgentDropdown } from '@/renderer/components/AgentDropdown';
 import { Dashboard } from '@/renderer/components/Dashboard';
 import { DashboardDetailView } from '@/renderer/components/DashboardDetailView';
-import { NavigatorWithDashboards } from '@/renderer/components/NavigatorWithDashboards';
+import {
+    NavigatorWithDashboards,
+    type DashboardHealthStatus,
+    type DashboardItem,
+} from '@/renderer/components/NavigatorWithDashboards';
 import { Layers } from '@/renderer/components/Layers';
-import { ComponentGallery } from '@/renderer/components/ComponentGallery';
+import { ComponentGallery, type ComponentPrimitive } from '@/renderer/components/ComponentGallery';
 import { FileViewer } from '@/renderer/components/FileViewer';
 import { Preview } from '@/renderer/components/Preview';
 import { LayoutDashboard, Palette, Layers as LayersIcon, Eye } from 'lucide-react';
@@ -19,6 +23,20 @@ import { serializeDocument, parseDocument } from '@/shared/ApenFormat';
 import '@/renderer/styles/App.css';
 
 export default function App() {
+    type DashboardStatusRecord = {
+        id: string;
+        config?: {
+            name?: string;
+            port?: number;
+        };
+        status: {
+            status: string;
+            port?: number;
+            healthy?: boolean;
+            restartAttempts?: number;
+        };
+    };
+
     // Detect route from URL path
     const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards' => {
         const path = window.location.pathname;
@@ -53,6 +71,9 @@ export default function App() {
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [canvasLayers, setCanvasLayers] = useState<Array<{ id: string; name: string; type: string; visible: boolean; locked: boolean }>>([]);
     const [previewUrl, setPreviewUrl] = useState<string>('http://localhost:5173');
+    const [dashboards, setDashboards] = useState<DashboardItem[]>([]);
+    const [dashboardsLoading, setDashboardsLoading] = useState(false);
+    const [dashboardsError, setDashboardsError] = useState<string | null>(null);
     const canvasRef = useRef<CanvasRef>(null);
     const chatPanelRef = useRef<ChatPanelRef>(null);
     const handledCanvasPingIds = useRef<Set<string>>(new Set());
@@ -116,6 +137,89 @@ export default function App() {
             return () => clearInterval(timer);
         }
     }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const normalizeStatus = (status: DashboardStatusRecord['status']): DashboardHealthStatus => {
+            switch (status.status) {
+                case 'online':
+                    return status.healthy === false ? 'failed' : 'online';
+                case 'starting':
+                    return 'checking';
+                case 'restarting':
+                    return 'restarting';
+                case 'failed':
+                    return 'failed';
+                default:
+                    return 'offline';
+            }
+        };
+
+        const normalizeDashboards = (items: DashboardStatusRecord[]): DashboardItem[] =>
+            items.map((item) => ({
+                id: item.id,
+                name: item.config?.name || item.id,
+                url: `http://localhost:${item.status.port ?? item.config?.port ?? 0}`,
+                port: item.status.port ?? item.config?.port ?? 0,
+                status: normalizeStatus(item.status),
+                description: item.status.healthy === false
+                    ? 'Health check failed'
+                    : 'Runner-managed dashboard surface',
+                restartAttempts: item.status.restartAttempts ?? 0,
+            }));
+
+        const loadDashboards = async () => {
+            setDashboardsLoading(true);
+            setDashboardsError(null);
+
+            try {
+                if (window.dashboardManager) {
+                    const result = await window.dashboardManager.getStatus();
+                    if (!result || typeof result !== 'object' || Array.isArray(result)) {
+                        throw new Error('Dashboard manager returned an unexpected status payload.');
+                    }
+
+                    const items = Object.values(result as Record<string, DashboardStatusRecord>);
+                    if (!cancelled) {
+                        setDashboards(normalizeDashboards(items));
+                    }
+                    return;
+                }
+
+                const response = await fetch('http://localhost:3030/api/dashboards');
+                if (!response.ok) {
+                    throw new Error(`Dashboard manager returned ${response.status}.`);
+                }
+
+                const payload = await response.json() as DashboardStatusRecord[];
+                if (!cancelled) {
+                    setDashboards(normalizeDashboards(payload));
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setDashboards([]);
+                    setDashboardsError(
+                        error instanceof Error
+                            ? `Dashboard control plane unavailable. ${error.message}`
+                            : 'Dashboard control plane unavailable.',
+                    );
+                }
+            } finally {
+                if (!cancelled) {
+                    setDashboardsLoading(false);
+                }
+            }
+        };
+
+        if (layoutMode === 'dashboards') {
+            void loadDashboards();
+        }
+
+        return () => {
+            cancelled = true;
+        };
+    }, [layoutMode]);
 
     // Session Tracking
     useEffect(() => {
@@ -463,7 +567,15 @@ export default function App() {
         }
     };
 
-    const handleAddComponent = (type: string, name: string) => {
+    const handleAddComponent = (
+        componentOrType: ComponentPrimitive | string,
+        legacyName?: string,
+    ) => {
+        const type = typeof componentOrType === 'string' ? componentOrType : componentOrType.id;
+        const name = typeof componentOrType === 'string'
+            ? legacyName || componentOrType
+            : componentOrType.name;
+
         if (canvasRef.current) {
             canvasRef.current.addComponent(type, name);
             setHasUnsavedChanges(true);
@@ -587,6 +699,7 @@ export default function App() {
                         <ChatPanel
                             ref={chatPanelRef}
                             isBridgeReady={isBridgeReady}
+                            isDaemonConnected={isDaemonConnected}
                             workspacePath={workspacePath}
                             onGetCanvasState={() => canvasRef.current?.toJSON()}
                             onWorkspaceChange={(path) => {
@@ -656,16 +769,27 @@ export default function App() {
                         )
                     ) : layoutMode === 'dashboards' ? (
                         <NavigatorWithDashboards
+                            dashboards={dashboards}
+                            loading={dashboardsLoading}
+                            error={dashboardsError}
                             onSelectDashboard={(dashboardId) => {
                                 setSelectedDashboardId(dashboardId);
                                 setLayoutMode('dashboard');
+                            }}
+                            onOpenDashboard={(url) => {
+                                setPreviewUrl(url);
+                                setLayoutMode('preview');
                             }}
                         />
                     ) : layoutMode === 'preview' ? (
                         <Preview
                             onElementSelected={handlePreviewElementSelected}
-                            selectedElement={selectedPreviewElement}
                             initialUrl={previewUrl}
+                            url={previewUrl}
+                            onNavigate={setPreviewUrl}
+                            onOpenExternal={(url) => {
+                                window.open(url, '_blank', 'noopener,noreferrer');
+                            }}
                         />
                     ) : layoutMode === 'code' ? (
                         <FileViewer

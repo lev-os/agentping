@@ -10,7 +10,7 @@
  * @category root
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -73,8 +73,46 @@ export function Preview({
 }: PreviewProps) {
   const [urlInput, setUrlInput] = useState(controlledUrl ?? initialUrl);
   const [activeDevice, setActiveDevice] = useState("desktop");
+  const [reachability, setReachability] = useState<"checking" | "reachable" | "unreachable">("checking");
   const currentUrl = controlledUrl ?? urlInput;
   const device = DEVICES.find((d) => d.id === activeDevice) ?? DEVICES[0];
+
+  useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
+
+    const checkTarget = async () => {
+      if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) {
+        setReachability("unreachable");
+        return;
+      }
+
+      setReachability("checking");
+
+      try {
+        await fetch(currentUrl, {
+          method: "GET",
+          mode: "no-cors",
+          signal: controller.signal,
+        });
+
+        if (!cancelled) {
+          setReachability("reachable");
+        }
+      } catch {
+        if (!cancelled) {
+          setReachability("unreachable");
+        }
+      }
+    };
+
+    void checkTarget();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [currentUrl]);
 
   const handleNavigate = () => {
     onNavigate?.(urlInput);
@@ -92,7 +130,10 @@ export function Preview({
           <button className="p-1 text-zinc-500 hover:text-zinc-300 transition-colors">
             <ArrowRight size={14} />
           </button>
-          <button className="p-1 text-zinc-500 hover:text-zinc-300 transition-colors">
+          <button
+            onClick={handleNavigate}
+            className="p-1 text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
             <RefreshCw size={14} />
           </button>
         </div>
@@ -160,6 +201,22 @@ export function Preview({
               <Monitor size={32} className="mx-auto mb-2 text-zinc-300" />
               <p className="font-medium text-zinc-500">Preview</p>
               <p className="text-xs text-zinc-400 mt-1">{currentUrl}</p>
+              <p
+                className={cn(
+                  "text-[10px] mt-2",
+                  reachability === "reachable"
+                    ? "text-emerald-500"
+                    : reachability === "checking"
+                      ? "text-amber-500"
+                      : "text-red-500",
+                )}
+              >
+                {reachability === "reachable"
+                  ? "Target reachable. Browser-shell embed is still placeholder-only."
+                  : reachability === "checking"
+                    ? "Checking target availability..."
+                    : "Target unreachable. Start the app for this URL or change the preview target."}
+              </p>
               <p className="text-[10px] text-zinc-300 mt-2">
                 {device.label} ({device.width} x {device.height})
               </p>
