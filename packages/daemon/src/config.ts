@@ -264,7 +264,7 @@ export function initConfig(
     },
     lease: {
       defaultTtlMinutes: 5,
-      maxTtlMinutes: 60,
+      maxTtlMinutes: 10080,
       requireReason: true,
     },
     logging: {

@@ -197,17 +197,114 @@ export class LeaseManager {
 
   /**
    * Check if a method is allowed under the current lease scopes.
+   *
+   * Scope types:
+   * - "*"                         — wildcard, allows everything
+   * - "Network"                   — CDP domain scope, allows "Network.*"
+   * - "Network.getCookies"        — exact CDP method match
+   * - "cookies:read"              — read cookies for any domain
+   * - "cookies:read:*.example.com"— read cookies only for matching domains
+   * - "browser:navigate"          — allow Page.navigate
+   * - "browser:interact"          — allow Input.* and Runtime.evaluate
+   * - "storage:read"              — allow DOMStorage.* reads
    */
-  isAllowed(method: string): boolean {
+  isAllowed(method: string, params?: Record<string, unknown>): boolean {
     const lease = this.getActiveLease();
     if (!lease) return false;
 
     // Wildcard scope
     if (lease.scopes.includes('*')) return true;
 
-    // Domain-level scope matching: "Page" allows "Page.navigate", "Page.reload", etc.
+    // CDP domain-level scope matching: "Page" allows "Page.navigate", "Page.reload", etc.
     const domain = method.split('.')[0];
-    return lease.scopes.includes(method) || lease.scopes.includes(domain);
+    if (lease.scopes.includes(method) || lease.scopes.includes(domain)) {
+      return true;
+    }
+
+    // Granular scope matching
+    for (const scope of lease.scopes) {
+      if (this.matchesGranularScope(scope, method, params)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Match a granular scope against a CDP method and optional params.
+   */
+  private matchesGranularScope(
+    scope: string,
+    method: string,
+    params?: Record<string, unknown>,
+  ): boolean {
+    // cookies:read — allows Network.getCookies, Network.getAllCookies
+    // cookies:read:*.example.com — same but only for matching URL domains
+    if (scope === 'cookies:read') {
+      return method === 'Network.getCookies' || method === 'Network.getAllCookies';
+    }
+
+    if (scope.startsWith('cookies:read:')) {
+      if (method !== 'Network.getCookies' && method !== 'Network.getAllCookies') {
+        return false;
+      }
+      const domainPattern = scope.slice('cookies:read:'.length);
+      return this.matchesDomainFilter(domainPattern, params);
+    }
+
+    // browser:navigate — allows Page.navigate
+    if (scope === 'browser:navigate') {
+      return method === 'Page.navigate';
+    }
+
+    // browser:interact — allows Input.dispatchMouseEvent, Input.dispatchKeyEvent,
+    //   Input.insertText, Input.dispatchTouchEvent, Runtime.evaluate (for click/type/fill)
+    if (scope === 'browser:interact') {
+      if (domain(method) === 'Input') return true;
+      if (method === 'Runtime.evaluate') return true;
+      return false;
+    }
+
+    // storage:read — allows DOMStorage.getDOMStorageItems, DOMStorage.enable
+    if (scope === 'storage:read') {
+      return domain(method) === 'DOMStorage';
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if a domain pattern (e.g., "*.chatgpt.com") matches the URLs
+   * in a CDP command's params. Patterns support leading wildcard "*."
+   * to match any subdomain.
+   */
+  private matchesDomainFilter(
+    pattern: string,
+    params?: Record<string, unknown>,
+  ): boolean {
+    if (!params) return false;
+
+    // Extract URLs from params (Network.getCookies uses "urls" array)
+    const urls: string[] = [];
+    if (Array.isArray(params.urls)) {
+      urls.push(...(params.urls as string[]));
+    }
+    if (typeof params.url === 'string') {
+      urls.push(params.url);
+    }
+
+    // If no URLs specified, the command reads all cookies — deny scoped access
+    if (urls.length === 0) return false;
+
+    return urls.every((urlStr) => {
+      try {
+        const hostname = new URL(urlStr).hostname;
+        return matchHostname(pattern, hostname);
+      } catch {
+        return false;
+      }
+    });
   }
 
   /**
@@ -276,4 +373,29 @@ export class LeaseManager {
       return false;
     }
   }
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+/** Extract CDP domain from a dotted method string (e.g., "Network" from "Network.getCookies"). */
+function domain(method: string): string {
+  return method.split('.')[0];
+}
+
+/**
+ * Match a hostname against a pattern. Supports:
+ * - Exact match: "chatgpt.com" matches "chatgpt.com"
+ * - Wildcard subdomain: "*.chatgpt.com" matches "auth.chatgpt.com", "www.chatgpt.com"
+ */
+function matchHostname(pattern: string, hostname: string): boolean {
+  if (pattern === hostname) return true;
+
+  if (pattern.startsWith('*.')) {
+    const suffix = pattern.slice(1); // ".chatgpt.com"
+    return hostname.endsWith(suffix) && hostname.length > suffix.length;
+  }
+
+  return false;
 }

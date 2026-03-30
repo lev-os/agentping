@@ -82,8 +82,8 @@ export const AgentPingConfigSchema = z.object({
 
   // Lease Settings
   lease: z.object({
-    defaultTtlMinutes: z.number().int().min(1).max(1440).default(5),
-    maxTtlMinutes: z.number().int().min(1).max(1440).default(60),
+    defaultTtlMinutes: z.number().int().min(1).max(10080).default(5),
+    maxTtlMinutes: z.number().int().min(1).max(10080).default(10080),
     requireReason: z.boolean().default(true),
   }).default({}),
 
