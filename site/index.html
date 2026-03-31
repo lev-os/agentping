@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leviathan — The Universal Agent Runtime</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface-hover: #181818;
+      --border: #1e1e1e;
+      --border-hover: #333333;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --text-muted: #555555;
+      --accent: #ffffff;
+      --accent-dim: rgba(255, 255, 255, 0.06);
+      --radius: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Fade-in animation --- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.8s ease-out both;
+    }
+
+    .fade-up-delay-1 { animation-delay: 0.1s; }
+    .fade-up-delay-2 { animation-delay: 0.2s; }
+    .fade-up-delay-3 { animation-delay: 0.3s; }
+    .fade-up-delay-4 { animation-delay: 0.4s; }
+    .fade-up-delay-5 { animation-delay: 0.5s; }
+    .fade-up-delay-6 { animation-delay: 0.6s; }
+
+    /* --- Layout --- */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    /* --- Header / Nav --- */
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeIn 0.6s ease-out both;
+    }
+
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .logo span {
+      color: var(--text-primary);
+    }
+
+    .header-badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      padding: 120px 0 80px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .hero .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--border-hover);
+      margin: 40px auto 0;
+    }
+
+    /* --- Grid --- */
+    .grid-section {
+      padding: 0 0 120px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* --- Card --- */
+    .card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .card:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .card:hover .card-label {
+      color: var(--text-secondary);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .card-arrow {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: color var(--transition), transform var(--transition);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .card:hover .card-arrow {
+      color: var(--text-secondary);
+      transform: translateX(4px);
+    }
+
+    /* --- Disabled card (coming soon) --- */
+    .card.disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .card.disabled .card-title,
+    .card.disabled .card-desc {
+      color: var(--text-muted);
+    }
+
+    .card.disabled .card-label {
+      color: #333;
+    }
+
+    .card.disabled .card-arrow {
+      display: none;
+    }
+
+    .card.disabled .coming-soon-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #444;
+      padding: 3px 8px;
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      margin-top: auto;
+      width: fit-content;
+    }
+
+    /* Active card subtle glow for live items */
+    .card.active .card-label {
+      color: #4ade80;
+    }
+
+    .card.active .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: subtlePulse 2.5s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    /* --- Footer --- */
+    footer {
+      margin-top: auto;
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      animation: fadeIn 1s ease-out both;
+      animation-delay: 0.8s;
+    }
+
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: -0.01em;
+    }
+
+    .footer-text a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-text a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-right {
+      font-size: 0.75rem;
+      color: #333;
+      letter-spacing: 0.04em;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 80px 0 56px;
+      }
+
+      .grid-section {
+        padding: 0 0 80px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 64px 0 48px;
+      }
+
+      .hero h1 {
+        letter-spacing: -0.02em;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      footer .container {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <div class="logo"><span>lev</span>.here.now</div>
+      <div class="header-badge">v0</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero fade-up">
+      <div class="container">
+        <h1>Leviathan</h1>
+        <p class="subtitle">The Universal Agent Runtime</p>
+        <div class="divider"></div>
+      </div>
+    </section>
+
+    <section class="grid-section">
+      <div class="container">
+        <div class="grid">
+
+          <a href="/genuievolve/" class="card active fade-up fade-up-delay-1">
+            <span class="card-label"><span class="status-dot"></span>Live</span>
+            <span class="card-title">Heartbeat Dashboard</span>
+            <span class="card-desc">Live system status and runtime telemetry at a glance.</span>
+            <span class="card-arrow">&rarr;</span>
+          </a>
+
+          <a href="/webmcp-agentping/" class="card active fade-up fade-up-delay-2">
+            <span class="card-label"><span class="status-dot"></span>Live</span>
+            <span class="card-title">WebMCP Vision</span>
+            <span class="card-desc">Browser as a structured tool API for autonomous agents.</span>
+            <span class="card-arrow">&rarr;</span>
+          </a>
+
+          <div class="card disabled fade-up fade-up-delay-3">
+            <span class="card-label">AgentPing</span>
+            <span class="card-title">AgentPing</span>
+            <span class="card-desc">Human-in-the-loop interaction protocol for AI agents.</span>
+            <span class="coming-soon-badge">Coming soon</span>
+          </div>
+
+          <div class="card disabled fade-up fade-up-delay-4">
+            <span class="card-label">Runtime</span>
+            <span class="card-title">Runtime</span>
+            <span class="card-desc">Poly surface architecture powering every execution path.</span>
+            <span class="coming-soon-badge">Coming soon</span>
+          </div>
+
+          <div class="card disabled fade-up fade-up-delay-5">
+            <span class="card-label">Showcase</span>
+            <span class="card-title">Showcase</span>
+            <span class="card-desc">Live demos of agents, flows, and runtime capabilities.</span>
+            <span class="coming-soon-badge">Coming soon</span>
+          </div>
+
+          <div class="card disabled fade-up fade-up-delay-6">
+            <span class="card-label">Plugins</span>
+            <span class="card-title">Plugins</span>
+            <span class="card-desc">Extension ecosystem for composable agent capabilities.</span>
+            <span class="coming-soon-badge">Coming soon</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span class="footer-text">Built by <a href="https://github.com/lev-os" target="_blank" rel="noopener">Kingly</a></span>
+      <span class="footer-right">&copy; 2026</span>
+    </div>
+  </footer>
+
+</body>
+</html>

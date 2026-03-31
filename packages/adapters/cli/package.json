@@ -5,7 +5,8 @@
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "agentping": "./dist/index.js"
+        "agentping": "./dist/index.js",
+        "ap": "./dist/index.js"
     },
     "scripts": {
         "build": "tsc",

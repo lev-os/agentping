@@ -726,6 +726,7 @@ import { writeFileSync, readFileSync, existsSync, unlinkSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import { registerConfigCommands } from './commands/config.js';
+import { registerBrowseCommands } from './commands/browse.js';
 
 const PID_FILE = join(homedir(), '.agentping', 'daemon.pid');
 const LOG_FILE = join(homedir(), '.agentping', 'daemon.log');
@@ -917,6 +918,7 @@ program
 // ============================================================================
 
 registerConfigCommands(program);
+registerBrowseCommands(program);
 
 // ============================================================================
 // Run

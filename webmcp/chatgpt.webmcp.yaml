@@ -1,0 +1,100 @@
+# chatgpt.webmcp.yaml
+name: chatgpt
+version: "1.0.0"
+match:
+  - "https://chatgpt.com/*"
+  - "https://chat.openai.com/*"
+author: lev-community
+verified: true
+description: Control ChatGPT conversations — send messages, switch models, manage chats
+
+tools:
+  - name: send_message
+    description: Send a message in the active ChatGPT conversation
+    parameters:
+      message:
+        type: string
+        required: true
+        description: The message text to send
+    actions:
+      - type: focus
+        selector: "#prompt-textarea"
+      - type: type
+        selector: "#prompt-textarea"
+        value: "{{message}}"
+      - type: click
+        selector: "[data-testid='send-button']"
+    result:
+      type: wait
+      selector: "[data-message-author-role='assistant']"
+      extract: textContent
+      timeout: 60000
+
+  - name: new_chat
+    description: Start a new ChatGPT conversation
+    parameters: {}
+    actions:
+      - type: click
+        selector: "nav a[href='/']"
+    result:
+      type: wait
+      selector: "#prompt-textarea"
+      timeout: 5000
+
+  - name: switch_model
+    description: Switch the active ChatGPT model
+    parameters:
+      model:
+        type: string
+        enum: ["gpt-4o", "gpt-4o-mini", "o1", "o3-mini", "o4-mini"]
+        required: true
+        description: The model to switch to
+    actions:
+      - type: click
+        selector: "[data-testid='model-selector']"
+      - type: wait
+        selector: "[data-testid='model-{{model}}']"
+        timeout: 3000
+      - type: click
+        selector: "[data-testid='model-{{model}}']"
+    result:
+      type: wait
+      timeout: 2000
+
+  - name: get_response
+    description: Get the most recent assistant response from the conversation
+    parameters: {}
+    actions:
+      - type: evaluate
+        script: |
+          (() => {
+            const msgs = document.querySelectorAll('[data-message-author-role="assistant"]');
+            if (msgs.length === 0) return null;
+            const last = msgs[msgs.length - 1];
+            return last.textContent?.trim() || null;
+          })()
+    result:
+      type: immediate
+
+  - name: stop_generation
+    description: Stop the current response generation
+    parameters: {}
+    actions:
+      - type: click
+        selector: "[data-testid='stop-button']"
+    result:
+      type: none
+
+  - name: get_conversation_history
+    description: Get all messages in the current conversation
+    parameters: {}
+    actions:
+      - type: evaluate
+        script: |
+          Array.from(document.querySelectorAll('[data-message-author-role]'))
+            .map(el => ({
+              role: el.dataset.messageAuthorRole,
+              content: el.textContent?.trim()
+            }))
+    result:
+      type: immediate
