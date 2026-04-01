@@ -18,6 +18,7 @@ import { createWebSocketManager } from '@agentping/http-api/websocket';
 import { loadConfig, type DaemonConfig } from './config.js';
 import { createBrowserCDPAdapter } from './browser-cdp-adapter.js';
 import { LeaseManager } from './lease-manager.js';
+import { CDPProxy } from './cdp-proxy.js';
 
 // ============================================================================
 // Main Entry Point
@@ -137,20 +138,31 @@ async function main() {
         }
     });
 
-    // 9. Start the server
+    // 9. Start CDP Proxy (raw CDP WebSocket for Playwright/agent-browser)
+    const cdpProxyPort = parseInt(process.env.AGENTPING_CDP_PROXY_PORT || '7891', 10);
+    const cdpProxy = new CDPProxy({
+        port: cdpProxyPort,
+        browserCDPAdapter: browserCDPAdapter,
+        leaseManager,
+    });
+    await cdpProxy.start();
+
+    // 10. Start the server
     httpServer.listen(config.port, () => {
         console.log(`\n🚀 AgentPing daemon running on http://localhost:${config.port}`);
         console.log(`   API: http://localhost:${config.port}/api/v1`);
         console.log(`   WS:  ws://localhost:${config.port}/api/v1/ws`);
         console.log(`   CDP: ws://localhost:${config.port}/browser-cdp`);
+        console.log(`   CDP Proxy: agent-browser --cdp ${cdpProxyPort} open <url>`);
         console.log(`\n   Press Ctrl+C to stop\n`);
     });
 
-    // 10. Graceful shutdown
+    // 11. Graceful shutdown
     const shutdown = async () => {
         console.log('\n⏳ Shutting down...');
         httpServer.close();
         wsManager.close();
+        cdpProxy.close();
         browserCDPAdapter.close();
         await store.close();
         console.log('✓ Goodbye!\n');
