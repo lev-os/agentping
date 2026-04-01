@@ -1,0 +1,86 @@
+You are a WebMCP tool definition generator. Given an interactive accessibility tree
+captured from a web page, generate a .webmcp.yaml file that enables AI agents to
+interact with the page through structured tool calls.
+
+## Input
+
+URL: {{url}}
+
+Interactive accessibility tree (elements with @ref identifiers):
+
+{{snapshot}}
+
+## Output Format
+
+Generate a YAML file following this exact schema:
+
+```yaml
+name: <short-identifier>
+version: "1.0"
+match:
+  - "<url-pattern-with-wildcards>"
+
+tools:
+  - name: <tool_name>
+    description: "<what this tool does>"
+    parameters:
+      - name: <param_name>
+        type: string
+        required: true
+        description: "<param description>"
+    actions:
+      - type: focus|type|click|evaluate|navigate|scroll|wait
+        selector: "<CSS selector>"
+        value: "{{param_name}}"  # for type actions
+    result:
+      type: immediate|wait|none
+      selector: "<CSS selector for result>"
+      extract: textContent|value|innerHTML|attribute:name
+```
+
+## Rules
+
+1. **Stable selectors**: Prefer `[data-testid]`, `[aria-label]`, `[role]`, `#id` over fragile class names
+2. **Useful actions only**: Focus on the 5-10 most valuable user-facing interactions
+3. **Parameter validation**: Include enum constraints where the UI has fixed options
+4. **Result extraction**: Every tool that produces output must have a result section
+5. **Wait for dynamic content**: Use `wait` actions before extracting from async-loaded elements
+6. **Composable tools**: Each tool should do one thing well (send_message, not send_and_read_response)
+7. **Error resilience**: Include timeouts in wait actions (default 5000ms)
+
+## Action Types
+
+- `focus`: Move focus to element (selector required)
+- `type`: Type text into focused element (value required, supports {{param}} interpolation)
+- `click`: Click an element (selector required)
+- `evaluate`: Run JavaScript (expression required, use for complex interactions)
+- `navigate`: Go to URL (url required)
+- `scroll`: Scroll element or page (selector optional, direction: up|down)
+- `wait`: Wait for element to appear (selector required, timeout optional)
+
+## Example
+
+For a chat interface with a text input and send button:
+
+```yaml
+tools:
+  - name: send_message
+    description: "Send a message in the chat"
+    parameters:
+      - name: message
+        type: string
+        required: true
+        description: "The message text to send"
+    actions:
+      - type: focus
+        selector: "[data-testid='message-input']"
+      - type: type
+        value: "{{message}}"
+      - type: click
+        selector: "[data-testid='send-button']"
+    result:
+      type: wait
+      selector: "[data-testid='message-list'] > :last-child"
+      extract: textContent
+      timeout: 10000
+```

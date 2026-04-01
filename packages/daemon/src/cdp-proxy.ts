@@ -109,6 +109,11 @@ export class CDPProxy {
       });
 
       this.server.listen(this.port, () => {
+        // Update port in case OS assigned one (port 0)
+        const addr = this.server!.address();
+        if (typeof addr === 'object' && addr) {
+          this.port = addr.port;
+        }
         console.log(`✓ CDP Proxy listening on http://localhost:${this.port}`);
         console.log(`  agent-browser --cdp ${this.port} open <url>`);
         resolve();
@@ -191,16 +196,22 @@ export class CDPProxy {
   private async handleCDPMessage(ws: WebSocket, msg: CDPMessage): Promise<void> {
     const { id, method, params } = msg;
 
-    // Auto-lease on first real command
-    if (!this.leaseAcquired && !this.leaseAcquiring) {
-      await this.acquireLease();
-    }
-
-    // Some methods Playwright calls during setup that we need to handle locally
+    // Handle Playwright setup calls locally — no lease needed
     if (this.isLocalMethod(method)) {
       const result = this.handleLocalMethod(method, params);
       this.send(ws, { id, result });
       return;
+    }
+
+    // Auto-lease on first real command (after local methods pass through)
+    if (!this.leaseAcquired && !this.leaseAcquiring) {
+      try {
+        await this.acquireLease();
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        this.send(ws, { id, error: { code: -32003, message: `Lease failed: ${message}` } });
+        return;
+      }
     }
 
     // Forward to extension via BrowserCDPAdapter
