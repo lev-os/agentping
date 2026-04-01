@@ -111,9 +111,9 @@ program
             if (options.json) {
                 console.log(JSON.stringify(response, null, 2));
             } else if (options.quiet) {
-                console.log(response.data.value || '');
+                console.log((response.data as any).value || '');
             } else {
-                console.log(`\nAnswer: ${response.data.value}`);
+                console.log(`\nAnswer: ${(response.data as any).value}`);
                 if (response.enrichment?.notes) {
                     console.log(`Notes: ${response.enrichment.notes}`);
                 }
