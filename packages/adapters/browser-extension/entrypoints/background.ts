@@ -417,6 +417,36 @@ export default defineBackground(() => {
       sendResponse({ ok: true });
       return true;
     }
+
+    // WebMCP: CDP execution from content script bridge
+    if (msg.type === 'webmcp:execute-cdp') {
+      (async () => {
+        try {
+          const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          const tabId = activeTab?.id;
+          if (!tabId) {
+            sendResponse({ error: 'No active tab for CDP execution' });
+            return;
+          }
+
+          if (!attachedTabs.has(tabId)) {
+            await chrome.debugger.attach({ tabId }, '1.3');
+            attachedTabs.add(tabId);
+          }
+
+          const result = await chrome.debugger.sendCommand(
+            { tabId },
+            msg.method as string,
+            (msg.params as Record<string, unknown>) ?? {},
+          );
+          sendResponse({ result });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          sendResponse({ error: message });
+        }
+      })();
+      return true; // async sendResponse
+    }
   });
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
