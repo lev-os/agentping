@@ -196,6 +196,16 @@ export class BrowserCDPAdapter {
         console.log('[BrowserCDP] Lease denied:', requestId);
         break;
       }
+
+      case 'cdp:event': {
+        // Forward CDP events to any registered listeners (e.g., CDP proxy)
+        this.eventBus.emit('cdp:event' as any, {
+          method: msg.method as string,
+          params: msg.params,
+          tabId: msg.tabId,
+        });
+        break;
+      }
     }
   }
 
@@ -211,6 +221,10 @@ export class BrowserCDPAdapter {
     const activeLease = this.leaseManager.getActiveLease();
     if (!activeLease) {
       throw new Error('No active lease');
+    }
+
+    if (!this.leaseManager.isAllowed(method, params)) {
+      throw new Error(`Lease scope does not permit: ${method}`);
     }
 
     const id = crypto.randomUUID();

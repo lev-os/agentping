@@ -307,6 +307,16 @@ export default defineBackground(() => {
     if (source.tabId) attachedTabs.delete(source.tabId);
   });
 
+  // Forward CDP events back to daemon for Playwright compatibility
+  chrome.debugger.onEvent.addListener((source, method, params) => {
+    send({
+      type: 'cdp:event',
+      method,
+      params,
+      tabId: source.tabId,
+    });
+  });
+
   // Extension action click - toggle drawer
   chrome.action.onClicked.addListener(async (tab) => {
     if (tab.id && !tab.url?.startsWith('chrome://')) {

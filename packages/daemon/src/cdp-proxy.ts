@@ -27,6 +27,8 @@ export interface CDPProxyConfig {
   port: number;
   browserCDPAdapter: BrowserCDPAdapter;
   leaseManager: LeaseManager;
+  /** Event bus for receiving CDP events from the extension */
+  eventBus?: any;
   /** Agent name for auto-lease requests */
   agentName?: string;
   /** Default scopes for auto-lease */
@@ -73,6 +75,19 @@ export class CDPProxy {
       'Target',
       'Input',
     ];
+
+    // Forward CDP events from extension to connected Playwright client
+    if (config.eventBus) {
+      config.eventBus.on('cdp:event', (event: { method: string; params: unknown; tabId?: number }) => {
+        if (this.client && this.client.readyState === WebSocket.OPEN) {
+          // Forward as raw CDP event (no id field = it's an event, not a response)
+          this.send(this.client, {
+            method: event.method,
+            params: event.params,
+          });
+        }
+      });
+    }
   }
 
   /**

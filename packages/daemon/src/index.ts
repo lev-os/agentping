@@ -144,6 +144,7 @@ async function main() {
         port: cdpProxyPort,
         browserCDPAdapter: browserCDPAdapter,
         leaseManager,
+        eventBus,
     });
     await cdpProxy.start();
 
