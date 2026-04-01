@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Seal That Only Tightens — Constraint Engineering in Leviathan</title>
+<meta name="description" content="How two axioms and a ratchet model make agent chaos impossible. A deep dive into Leviathan's constraint engineering philosophy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME: MIDNIGHT EDITORIAL ============ */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #0a0e1a;
+  --bg2: #0f1729;
+  --surface: #141a2e;
+  --surface2: #1a2240;
+  --surface-elevated: #1e2850;
+  --border: rgba(212, 167, 58, 0.12);
+  --border-bright: rgba(212, 167, 58, 0.25);
+  --text: #e8e4dc;
+  --text-dim: #8a8e9e;
+  --text-bright: #ffffff;
+
+  --gold: #d4a73a;
+  --gold-dim: rgba(212, 167, 58, 0.12);
+  --gold-bright: #f0c95c;
+
+  --emerald: #34d399;
+  --emerald-dim: rgba(52, 211, 153, 0.12);
+  --rose: #fb7185;
+  --rose-dim: rgba(251, 113, 133, 0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56, 189, 248, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45, 212, 191, 0.12);
+  --coral: #f97316;
+  --coral-dim: rgba(249, 115, 22, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #faf8f4;
+  --bg2: #f5f2eb;
+  --surface: #ffffff;
+  --surface2: #f0ebe3;
+  --surface-elevated: #fff9f0;
+  --border: rgba(30, 58, 95, 0.1);
+  --border-bright: rgba(30, 58, 95, 0.2);
+  --text: #1e3a5f;
+  --text-dim: #6b7a8e;
+  --text-bright: #0a1628;
+  --gold: #b8860b;
+  --gold-dim: rgba(184, 134, 11, 0.08);
+  --gold-bright: #d4a73a;
+  --emerald: #059669;
+  --emerald-dim: rgba(5, 150, 105, 0.08);
+  --rose: #e11d48;
+  --rose-dim: rgba(225, 29, 72, 0.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2, 132, 199, 0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.08);
+  --teal: #0d9488;
+  --teal-dim: rgba(13, 148, 136, 0.08);
+  --coral: #ea580c;
+  --coral-dim: rgba(234, 88, 12, 0.08);
+}
+
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 167, 58, 0.3); }
+  50% { box-shadow: 0 0 24px 4px rgba(212, 167, 58, 0.15); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ STAGGERED REVEAL ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+.reveal-delay-7 { transition-delay: 0.7s; }
+
+/* ============ LAYOUT ============ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.narrow {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ============ NAVIGATION DOT RAIL ============ */
+.nav-rail {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  opacity: 0.3;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-dot:hover,
+.nav-dot.active {
+  opacity: 1;
+  background: var(--gold);
+  transform: scale(1.4);
+}
+
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  background: var(--surface);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.nav-dot:hover::after {
+  opacity: 1;
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+h1 { font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -0.025em; }
+h2 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); margin-bottom: 1rem; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.section-sub {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.8;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.8;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease 0.2s both;
+}
+
+.hero-eyebrow span {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  background: var(--gold-dim);
+}
+
+.hero h1 {
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  color: var(--gold);
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+.hero-pitch {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--text-dim);
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2.5s ease-in-out infinite, fadeIn 1s ease 1.4s both;
+  z-index: 1;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+
+/* ============ CARDS ============ */
+.ve-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ve-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.ve-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.ve-card:hover::before {
+  opacity: 1;
+}
+
+.ve-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.ve-card-icon.rose { background: var(--rose-dim); color: var(--rose); }
+.ve-card-icon.amber { background: var(--amber-dim); color: var(--amber); }
+.ve-card-icon.sky { background: var(--sky-dim); color: var(--sky); }
+.ve-card-icon.emerald { background: var(--emerald-dim); color: var(--emerald); }
+.ve-card-icon.gold { background: var(--gold-dim); color: var(--gold); }
+.ve-card-icon.teal { background: var(--teal-dim); color: var(--teal); }
+.ve-card-icon.coral { background: var(--coral-dim); color: var(--coral); }
+
+.ve-card h3 {
+  color: var(--text-bright);
+  margin-bottom: 0.75rem;
+}
+
+.ve-card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ============ PROBLEM CARDS ============ */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.problem-card {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.problem-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 3px;
+}
+
+.problem-card:nth-child(1)::before { background: var(--rose); }
+.problem-card:nth-child(2)::before { background: var(--amber); }
+.problem-card:nth-child(3)::before { background: var(--coral); }
+
+.problem-card .problem-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.problem-card:nth-child(1) .problem-label { color: var(--rose); }
+.problem-card:nth-child(2) .problem-label { color: var(--amber); }
+.problem-card:nth-child(3) .problem-label { color: var(--coral); }
+
+.problem-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.problem-card p {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* ============ PULL QUOTE ============ */
+.pull-quote {
+  margin: 3.5rem 0;
+  padding: 2rem 2.5rem;
+  border-left: 3px solid var(--gold);
+  background: var(--gold-dim);
+  border-radius: 0 12px 12px 0;
+}
+
+.pull-quote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  color: var(--text-bright);
+  line-height: 1.5;
+}
+
+/* ============ AXIOM CARDS ============ */
+.axiom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.axiom-card {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 16px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.axiom-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+}
+
+.axiom-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.axiom-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  background: var(--gold-dim);
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.axiom-card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  line-height: 1.35;
+}
+
+.axiom-implication {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.axiom-implication strong {
+  color: var(--text);
+}
+
+.axiom-violation {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15em 0.6em;
+  border-radius: 100px;
+  background: var(--rose-dim);
+  color: var(--rose);
+}
+
+/* ============ GOVERNANCE CARDS ============ */
+.governance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.governance-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: all 0.35s ease;
+}
+
+.governance-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+
+.governance-id {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2em 0.7em;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.governance-card:nth-child(1) .governance-id { background: var(--teal-dim); color: var(--teal); }
+.governance-card:nth-child(2) .governance-id { background: var(--sky-dim); color: var(--sky); }
+.governance-card:nth-child(3) .governance-id { background: var(--amber-dim); color: var(--amber); }
+
+.governance-card h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+}
+
+.governance-card p {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.governance-derivation {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
+/* ============ YAML PREVIEW ============ */
+.yaml-preview {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.yaml-preview::before {
+  content: attr(data-filename);
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+.yaml-preview pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.yaml-preview .yk { color: var(--sky); }
+.yaml-preview .ys { color: var(--emerald); }
+.yaml-preview .yc { color: var(--text-dim); }
+.yaml-preview .yn { color: var(--amber); }
+
+/* ============ CODE BLOCK ============ */
+.code-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+.code-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.code-block .kw { color: var(--rose); }
+.code-block .fn { color: var(--gold); }
+.code-block .str { color: var(--emerald); }
+.code-block .cm { color: var(--text-dim); }
+.code-block .prop { color: var(--sky); }
+.code-block .num { color: var(--amber); }
+
+/* ============ RATCHET ADMISSION BLOCK ============ */
+.admission-block {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 2.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.admission-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose), var(--gold), var(--emerald));
+}
+
+.admission-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.admission-yaml {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.admission-yaml pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+.admission-explain h3 {
+  margin-bottom: 1rem;
+}
+
+.admission-explain p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.admission-explain p strong {
+  color: var(--text);
+}
+
+/* ============ GATE TABLE ============ */
+.gate-table-wrapper {
+  overflow-x: auto;
+  margin-top: 2.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.gate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.gate-table th,
+.gate-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.gate-table thead th {
+  background: var(--surface2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.gate-table tbody tr {
+  background: var(--surface);
+  transition: background 0.2s ease;
+}
+
+.gate-table tbody tr:hover {
+  background: var(--surface2);
+}
+
+.gate-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.gate-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-bright);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.gate-table td:nth-child(2) {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge-enforced { background: var(--emerald-dim); color: var(--emerald); }
+.badge-declared { background: var(--amber-dim); color: var(--amber); }
+.badge-aspirational { background: var(--sky-dim); color: var(--sky); }
+
+/* ============ TICK CYCLE FLOW ============ */
+.tick-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 3rem auto;
+  max-width: 900px;
+}
+
+.tick-node {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  text-align: center;
+  transition: all 0.35s ease;
+  flex-shrink: 0;
+}
+
+.tick-node:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+
+.tick-node-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.tick-node:nth-child(1) .tick-node-label { color: var(--teal); }
+.tick-node:nth-child(3) .tick-node-label { color: var(--sky); }
+.tick-node:nth-child(5) .tick-node-label { color: var(--amber); }
+.tick-node:nth-child(7) .tick-node-label { color: var(--rose); }
+.tick-node:nth-child(9) .tick-node-label { color: var(--emerald); }
+.tick-node:nth-child(11) .tick-node-label { color: var(--coral); }
+.tick-node:nth-child(13) .tick-node-label { color: var(--gold); }
+
+.tick-node.gate-node {
+  border-color: var(--rose);
+  background: var(--rose-dim);
+}
+
+.tick-node.gate-node .tick-node-label {
+  color: var(--rose);
+}
+
+.tick-arrow {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding: 0 0.35rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ============ PRIMITIVES GRID ============ */
+.primitives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.primitive-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.35s ease;
+}
+
+.primitive-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+
+.primitive-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.primitive-card p {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.primitive-highlight {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.primitive-highlight .primitive-name {
+  color: var(--gold-bright);
+}
+
+.primitive-highlight p {
+  color: var(--text);
+}
+
+/* ============ CTA SECTION ============ */
+.cta-section {
+  text-align: center;
+  padding: 8rem 0;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  color: var(--text-bright);
+}
+
+.cta-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+}
+
+.cta-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.cta-btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+  border: 1px solid var(--gold);
+}
+
+.cta-btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 167, 58, 0.25);
+  text-decoration: none;
+}
+
+.cta-btn-secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--border-bright);
+}
+
+.cta-btn-secondary:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* ============ SECTION DIVIDER ============ */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 300px;
+  color: var(--text-dim);
+  opacity: 0.3;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-bright);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+footer p {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============ ARTICLE BODY ============ */
+.article-body p {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  max-width: 680px;
+}
+
+.article-body p strong {
+  color: var(--text-bright);
+}
+
+.article-body p code {
+  font-size: 0.88em;
+  background: var(--surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--gold);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  section { padding: 4rem 0; }
+
+  .hero { min-height: auto; padding: 6rem 0 4rem; }
+
+  .problem-grid,
+  .axiom-grid,
+  .governance-grid,
+  .primitives-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admission-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .tick-flow {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tick-arrow {
+    transform: rotate(90deg);
+    padding: 0.1rem 0;
+  }
+
+  .gate-table { font-size: 0.8rem; }
+  .gate-table th,
+  .gate-table td { padding: 0.75rem 0.75rem; }
+
+  .nav-rail { display: none; }
+
+  .container { padding: 0 1.25rem; }
+
+  .pull-quote {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2.2rem; }
+  .hero-subtitle { font-size: 1.15rem; }
+  .axiom-grid { gap: 1.25rem; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+    font-size: 11pt;
+  }
+
+  .theme-toggle,
+  .nav-rail,
+  .scroll-indicator { display: none; }
+
+  section { padding: 2rem 0; page-break-inside: avoid; }
+
+  .ve-card, .axiom-card, .governance-card, .primitive-card,
+  .admission-block, .problem-card, .tick-node {
+    border-color: #ccc;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .hero { min-height: auto; padding: 2rem 0; }
+
+  .gate-table th,
+  .gate-table td { border-color: #ccc; }
+
+  h1, h2, h3, h4 { color: #111; }
+  .section-label { color: #666; }
+  .lead, p, .problem-label { color: #333; }
+  .hero-subtitle, .cta-tagline { color: #8B6914; }
+
+  a { color: #8B6914; }
+  .cta-section::before, .hero::before { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span class="icon-moon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+  <span class="icon-sun">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+</button>
+
+<!-- Navigation Rail -->
+<nav class="nav-rail" aria-label="Page sections">
+  <button class="nav-dot active" data-label="Hero" onclick="scrollToSection(0)"></button>
+  <button class="nav-dot" data-label="Problem" onclick="scrollToSection(1)"></button>
+  <button class="nav-dot" data-label="Axioms" onclick="scrollToSection(2)"></button>
+  <button class="nav-dot" data-label="Ratchet" onclick="scrollToSection(3)"></button>
+  <button class="nav-dot" data-label="Gates" onclick="scrollToSection(4)"></button>
+  <button class="nav-dot" data-label="Tick Cycle" onclick="scrollToSection(5)"></button>
+  <button class="nav-dot" data-label="Primitives" onclick="scrollToSection(6)"></button>
+  <button class="nav-dot" data-label="Runtime" onclick="scrollToSection(7)"></button>
+</nav>
+
+<!-- ===================== 1. HERO ===================== -->
+<section class="hero" id="s-hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>Constraint Engineering</span></div>
+    <h1><em>The Seal That<br>Only Tightens</em></h1>
+    <p class="hero-subtitle">How two axioms and a ratchet model make agent chaos impossible</p>
+    <p class="hero-pitch">
+      Most agent frameworks let agents do whatever they want and pray for alignment.<br>
+      Leviathan starts from the opposite premise: <strong style="color: var(--text-bright);">constraint is the product</strong>.
+    </p>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== 2. THE PROBLEM ===================== -->
+<section id="s-problem">
+  <div class="container">
+    <span class="section-label reveal">The Problem</span>
+    <h2 class="reveal reveal-delay-1">Why Unconstrained Agents Are Dangerous</h2>
+    <p class="lead reveal reveal-delay-2">
+      Give an LLM a tool and watch what happens. It calls everything. It retries forever.
+      It "fixes" your config while you sleep. The zoo has no fences.
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal reveal-delay-3">
+        <span class="problem-label">Silent Mutation</span>
+        <h3>Agents change state without receipts</h3>
+        <p>
+          An agent writes to disk, mutates a database row, pushes a commit. No audit trail.
+          No proof of what changed or why. When something breaks at 3am,
+          you have no causal chain to follow. Just a diff and a prayer.
+        </p>
+      </div>
+      <div class="problem-card reveal reveal-delay-4">
+        <span class="problem-label">Ambient Authority</span>
+        <h3>Agents assume permissions they were never granted</h3>
+        <p>
+          The agent has a shell. The shell has your SSH keys. Congratulations, your
+          staging server is now the agent's playground. Most frameworks treat
+          permissions as an afterthought. The blast radius is your entire environment.
+        </p>
+      </div>
+      <div class="problem-card reveal reveal-delay-5">
+        <span class="problem-label">Infinite Loops</span>
+        <h3>No budget bounds, no termination guarantee</h3>
+        <p>
+          The agent spins. It calls itself. It burns tokens at $0.03 per thousand
+          while you're at lunch. Without explicit finitude constraints,
+          every agent is one hallucination away from an infinite bill.
+        </p>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal reveal-delay-5">
+      <p>You don't have an AI safety problem. You have a constraints problem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3. THE AXIOMS ===================== -->
+<section id="s-axioms">
+  <div class="container">
+    <span class="section-label reveal">The Foundation</span>
+    <h2 class="reveal reveal-delay-1">Two Rules. Everything Derives.</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Leviathan's entire constraint model rests on two axioms. They are not guidelines.
+      They are not best practices. They are the physics of the system.
+      Violate either one and the runtime treats it as <strong style="color: var(--rose);">FATAL</strong>.
+    </p>
+
+    <div class="axiom-grid">
+      <div class="axiom-card reveal reveal-delay-3">
+        <span class="axiom-id">C1 &mdash; Finitude</span>
+        <h3>"All resources are finite. Time, tokens, context, memory, compute, attention."</h3>
+        <div class="axiom-implication">
+          <strong>Implication:</strong> Every operation must be bounded. No infinite loops.
+          No unbounded growth. Every agent call has a token budget. Every loop has an
+          iteration cap. Every session has a wall-clock timeout. If it can grow, it has a ceiling.
+        </div>
+        <span class="axiom-violation">violation: FATAL</span>
+      </div>
+      <div class="axiom-card reveal reveal-delay-4">
+        <span class="axiom-id">C2 &mdash; Non-Commutation</span>
+        <h3>"Order matters. A then B &ne; B then A. History is irreversible."</h3>
+        <div class="axiom-implication">
+          <strong>Implication:</strong> Append-only event logs. Immutable receipts. No silent mutation.
+          Deterministic replay. If you wrote it, it's written. If you need to undo it,
+          you write a compensation event. The log never lies.
+        </div>
+        <span class="axiom-violation">violation: FATAL</span>
+      </div>
+    </div>
+
+    <div class="article-body narrow" style="margin-top: 3rem;">
+      <p class="reveal reveal-delay-3">
+        That's it. Two axioms. <strong>C1 says things end. C2 says order is permanent.</strong>
+        Everything else in the system -- the governance rules, the gate taxonomy,
+        the tick cycle, the graph primitives -- derives from these two.
+      </p>
+      <p class="reveal reveal-delay-4">
+        C1 + C2 are the irreducible root. C3 through C5 are governance rules, derived
+        from them but not yet formally proven. They carry <code>status: assumed</code>
+        and <code>violation: ERROR</code> until someone writes the proof.
+      </p>
+    </div>
+
+    <div class="governance-grid">
+      <div class="governance-card reveal reveal-delay-4">
+        <span class="governance-id">C3 &mdash; Nominalized Reality</span>
+        <h4>Only validated canonical YAML executes</h4>
+        <p>No semantic smuggling. If it didn't pass schema validation, it doesn't run.
+           The runtime interprets declarations, not intentions.</p>
+        <div class="governance-derivation">
+          Entailed by finitude (finite encoding) + non-commutation (order-dependent naming)
+        </div>
+      </div>
+      <div class="governance-card reveal reveal-delay-5">
+        <span class="governance-id">C4 &mdash; Ratchet Convergence</span>
+        <h4>State transitions converge toward attractor basins</h4>
+        <p>Rollback requires explicit compensation. Append-only by default.
+           The system moves forward or it explains why it can't.</p>
+        <div class="governance-derivation">
+          Emergent from finitude (bounded state space) + non-commutation (path-dependent selection)
+        </div>
+      </div>
+      <div class="governance-card reveal reveal-delay-6">
+        <span class="governance-id">C5 &mdash; Locality</span>
+        <h4>Every step has explicit scope</h4>
+        <p>No omniscience. No ambient authority. An agent knows only what its
+           context window contains and can only touch what its guard permits.</p>
+        <div class="governance-derivation">
+          Entailed by finitude (finite probes) + non-commutation (no state teleportation)
+        </div>
+      </div>
+    </div>
+
+    <div class="yaml-preview reveal reveal-delay-5" data-filename="dna/graph.yaml">
+<pre><span class="yc"># Root Constraints (non-negotiable)</span>
+<span class="yk">constraints</span>:
+  <span class="yk">C1_finitude</span>:
+    <span class="yk">axiom</span>: <span class="ys">"All resources are finite."</span>
+    <span class="yk">implication</span>: <span class="ys">"Every operation must be bounded."</span>
+    <span class="yk">violation</span>: <span class="yn">FATAL</span>
+
+  <span class="yk">C2_non_commutation</span>:
+    <span class="yk">axiom</span>: <span class="ys">"Order matters. A then B &ne; B then A."</span>
+    <span class="yk">implication</span>: <span class="ys">"Append-only event logs. Immutable receipts."</span>
+    <span class="yk">violation</span>: <span class="yn">FATAL</span>
+
+<span class="yc"># Governance rules derived from C1+C2</span>
+<span class="yk">governance</span>:
+  <span class="yk">C3_nominalized_reality</span>:
+    <span class="yk">rule</span>: <span class="ys">"Only validated canonical YAML executes."</span>
+    <span class="yk">status</span>: assumed
+    <span class="yk">violation</span>: <span class="yn">ERROR</span>
+
+  <span class="yk">C4_ratchet_convergence</span>:
+    <span class="yk">rule</span>: <span class="ys">"State transitions converge. Rollback = compensation."</span>
+    <span class="yk">status</span>: assumed
+
+  <span class="yk">C5_locality</span>:
+    <span class="yk">rule</span>: <span class="ys">"Every step has explicit scope. No omniscience."</span>
+    <span class="yk">status</span>: assumed</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. THE RATCHET MODEL ===================== -->
+<section id="s-ratchet">
+  <div class="container">
+    <span class="section-label reveal">The Ratchet</span>
+    <h2 class="reveal reveal-delay-1">Constraints That Only Tighten</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      A ratchet is a mechanical device that permits motion in one direction only.
+      In Leviathan, the constraint model works the same way. <strong style="color: var(--text-bright);">Permissions narrow. They never widen implicitly.</strong>
+    </p>
+
+    <div class="admission-block reveal reveal-delay-3">
+      <div class="admission-inner">
+        <div class="admission-yaml">
+<pre><span class="yk">gate</span>: admission_control
+<span class="yk">mode</span>: <span class="ys">fail_closed</span>
+
+<span class="yk">policy</span>:
+  - <span class="fn">schema_valid</span>: <span class="ys">required</span>
+  - <span class="fn">term_fence</span>: <span class="ys">enforced</span>
+  - <span class="fn">capability_check</span>: <span class="ys">deny_unknown</span>
+
+<span class="yk">on_fail</span>: <span class="ys">deny</span>
+
+<span class="yc"># no inference. no repair.</span>
+<span class="yc"># no silent failures.</span></pre>
+        </div>
+        <div class="admission-explain">
+          <h3>Fail Closed by Default</h3>
+          <p>
+            If the kernel can't evaluate a policy, the action is <strong>denied</strong>.
+            Not deferred. Not logged-and-continued. Denied.
+          </p>
+          <p>
+            <strong>Schema validation</strong> is required, not optional. If the payload doesn't match
+            the contract, the gate rejects it before any handler sees it.
+          </p>
+          <p>
+            <strong>Term fences</strong> enforce vocabulary. An agent can't invent new event types
+            or smuggle semantics through freeform strings. The vernacular is fixed.
+          </p>
+          <p>
+            <strong>Capability checks</strong> default to <code>deny_unknown</code>. If a capability
+            isn't explicitly granted, it doesn't exist. There is no "try it and see."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-body narrow reveal reveal-delay-4">
+      <p>
+        The ratchet metaphor goes deeper than access control.
+        <strong>State transitions converge toward attractor basins.</strong>
+        An entity moves from <code>ephemeral</code> to <code>captured</code> to
+        <code>crystallized</code> to <code>completed</code>. Each transition is a one-way door.
+      </p>
+      <p>
+        Rollback is not deletion. Rollback is a <strong>compensation event</strong> --
+        a new entry in the append-only log that explicitly reverses a prior decision.
+        The original record stays. The causal chain is preserved. C2 demands it.
+      </p>
+      <p>
+        This is why unconstrained agents are structurally impossible in Leviathan.
+        The system doesn't trust them. It doesn't need to. Every mutation goes through
+        a gate. Every gate enforces a contract. Every contract is a ratchet.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. VALIDATION GATES ===================== -->
+<section id="s-gates">
+  <div class="container">
+    <span class="section-label reveal">Validation Gates</span>
+    <h2 class="reveal reveal-delay-1">Invariants at Every Boundary</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Gates are evaluators. They sit between a proposal and its application.
+      The severity model tells you how hard the wall is.
+    </p>
+
+    <div class="governance-grid" style="margin-bottom: 3rem;">
+      <div class="governance-card reveal reveal-delay-3">
+        <span class="governance-id" style="background: var(--emerald-dim); color: var(--emerald);">Enforced</span>
+        <h4>Automated check exists and runs</h4>
+        <p>Violations block. The CI won't pass. The runtime won't proceed.
+           This is a wall, not a warning.</p>
+      </div>
+      <div class="governance-card reveal reveal-delay-4">
+        <span class="governance-id" style="background: var(--amber-dim); color: var(--amber);">Declared</span>
+        <h4>Manual review only</h4>
+        <p>The rule exists. The automated checker doesn't yet.
+           Humans enforce this gate during review. Promotion to enforced is planned.</p>
+      </div>
+      <div class="governance-card reveal reveal-delay-5">
+        <span class="governance-id" style="background: var(--sky-dim); color: var(--sky);">Aspirational</span>
+        <h4>Target state</h4>
+        <p>Not yet enforced or fully implemented. The system knows this
+           invariant should hold. It's queued, not forgotten.</p>
+      </div>
+    </div>
+
+    <h3 class="reveal reveal-delay-3" style="margin-top: 2rem;">Gate Taxonomy</h3>
+
+    <div class="gate-table-wrapper reveal reveal-delay-4">
+      <table class="gate-table">
+        <thead>
+          <tr>
+            <th>Gate</th>
+            <th>Rule</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>poly_compliance</td>
+            <td>Adapter pattern, independently startable subsystems, LevEvent schema</td>
+            <td><span class="badge badge-declared">declared</span></td>
+          </tr>
+          <tr>
+            <td>no_poly_handlers</td>
+            <td>Poly has zero business logic handlers. All handlers live in owning modules.</td>
+            <td><span class="badge badge-enforced">enforced</span></td>
+          </tr>
+          <tr>
+            <td>no_commands_dir</td>
+            <td>No <code>src/commands/</code> directories. Use <code>src/handlers/</code>.</td>
+            <td><span class="badge badge-aspirational">aspirational</span></td>
+          </tr>
+          <tr>
+            <td>no_export_star</td>
+            <td>No <code>export *</code> re-exporting other packages. Each package owns its API surface.</td>
+            <td><span class="badge badge-aspirational">aspirational</span></td>
+          </tr>
+          <tr>
+            <td>fractal_naming</td>
+            <td><code>handlers/</code>, <code>surfaces/</code>, <code>generated/</code>, <code>contracts/</code></td>
+            <td><span class="badge badge-aspirational">aspirational</span></td>
+          </tr>
+          <tr>
+            <td>config_lint</td>
+            <td>Every plugin must have a <code>config.yaml</code>. Filesystem IS the registry.</td>
+            <td><span class="badge badge-enforced">enforced</span></td>
+          </tr>
+          <tr>
+            <td>dna_authoring_canon</td>
+            <td><code>dna/authoring/</code> root exists, parses, each canon file carries a validation block.</td>
+            <td><span class="badge badge-enforced">enforced</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="article-body narrow reveal reveal-delay-5" style="margin-top: 2.5rem;">
+      <p>
+        Gates compose. The DNA canon (<code>dna/gates.yaml</code>) defines the root taxonomy.
+        Project-level overlays (<code>.lev/validation-gates.yaml</code>) extend them for
+        specific repositories. Runtime contracts add execution-time gates for
+        orchestration, exec, and SDLC flows.
+      </p>
+      <p>
+        <strong>Every gate evaluates five dimensions:</strong> scope (is this within boundary?),
+        safety (secrets, destructive actions?), feasibility (tools available? permissions held?),
+        standards (rules, formatting, invariants?), and progress (did the last tick measurably advance?).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. THE TICK CYCLE ===================== -->
+<section id="s-tick">
+  <div class="container">
+    <span class="section-label reveal">The Tick Cycle</span>
+    <h2 class="reveal reveal-delay-1">Universal Execution Substrate</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Every message is a Tick. Every mutation flows through the same seven-phase cycle.
+      The gate sits between PROPOSE and APPLY. <strong style="color: var(--text-bright);">No mutation without a gate.</strong>
+    </p>
+
+    <div class="tick-flow reveal reveal-delay-3">
+      <div class="tick-node">
+        <span class="tick-node-label">Ingest</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node">
+        <span class="tick-node-label">Observe</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node">
+        <span class="tick-node-label">Propose</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node gate-node">
+        <span class="tick-node-label">Gate</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node">
+        <span class="tick-node-label">Apply</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node">
+        <span class="tick-node-label">Update</span>
+      </div>
+      <span class="tick-arrow">&rarr;</span>
+      <div class="tick-node">
+        <span class="tick-node-label">Emit</span>
+      </div>
+    </div>
+
+    <div class="article-body narrow reveal reveal-delay-4" style="margin-top: 2.5rem;">
+      <p>
+        <strong>INGEST</strong> receives the input. A user prompt. An event from another system.
+        A webhook. A file change. Doesn't matter what -- the tick cycle normalizes it.
+      </p>
+      <p>
+        <strong>OBSERVE</strong> reads current graph state. What entities exist? What claims are active?
+        What's the context window? This is read-only. No side effects.
+      </p>
+      <p>
+        <strong>PROPOSE</strong> generates a candidate mutation. A proposal is like a pull request
+        against the graph. It contains a list of operations and their expected effects.
+        It is not applied. It is not committed. It is a candidate.
+      </p>
+      <p>
+        <strong>GATE</strong> is the wall. The proposal passes through every applicable gate.
+        Scope check. Safety check. Feasibility check. Standards check. Progress check.
+        If any gate rejects, the proposal is denied. <strong>No negotiation.</strong>
+      </p>
+      <p>
+        <strong>APPLY</strong> executes the accepted proposal. Graph state mutates. Side effects fire.
+        This is the only phase where state changes. Everything before is planning.
+        Everything after is observation.
+      </p>
+      <p>
+        <strong>UPDATE</strong> refreshes materialized views and projections. Dashboards update.
+        Caches invalidate. Downstream consumers get notified.
+      </p>
+      <p>
+        <strong>EMIT</strong> publishes the result as a LevEvent. Other systems can subscribe.
+        Other agents can react. The cycle is complete. The next tick begins.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. GRAPH PRIMITIVES ===================== -->
+<section id="s-primitives">
+  <div class="container">
+    <span class="section-label reveal">Graph Primitives</span>
+    <h2 class="reveal reveal-delay-1">The Vocabulary of Constraint</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Eight primitive types form the graph's ontology. Everything in the system
+      is one of these. No exceptions. No escape hatches.
+    </p>
+
+    <div class="primitives-grid">
+      <div class="primitive-card reveal reveal-delay-2">
+        <span class="primitive-name">entity</span>
+        <p>A node in the graph. Everything is an entity. Files, agents, configs, claims -- all entities.</p>
+      </div>
+      <div class="primitive-card reveal reveal-delay-3">
+        <span class="primitive-name">claim</span>
+        <p>An atomic assertion about an entity. Has a truth_state: proposed, accepted, contested, refuted, superseded.</p>
+      </div>
+      <div class="primitive-card reveal reveal-delay-3">
+        <span class="primitive-name">evidence</span>
+        <p>Proof for a claim. Append-only. Kinds: observation, log, measurement, attestation, derived.</p>
+      </div>
+      <div class="primitive-card primitive-highlight reveal reveal-delay-4">
+        <span class="primitive-name">proposal</span>
+        <p>A candidate graph mutation. Like a pull request. Operations list requiring gates. Status: pending, amended, accepted, rejected.</p>
+      </div>
+      <div class="primitive-card primitive-highlight reveal reveal-delay-4">
+        <span class="primitive-name">gate</span>
+        <p>Evaluator that allows, amends, or rejects proposals by enforcing contracts and policies. The wall between intent and action.</p>
+      </div>
+      <div class="primitive-card reveal reveal-delay-5">
+        <span class="primitive-name">view</span>
+        <p>Materialized projection over graph state. Lossy by design, scoped and time-bounded. Dashboards, reports, prompts.</p>
+      </div>
+      <div class="primitive-card reveal reveal-delay-5">
+        <span class="primitive-name">tick</span>
+        <p>One cycle: INGEST, OBSERVE, PROPOSE, GATE, APPLY, UPDATE, EMIT. The heartbeat of execution.</p>
+      </div>
+      <div class="primitive-card reveal reveal-delay-6">
+        <span class="primitive-name">intent</span>
+        <p>Cascading behavior spec. Governs child entities via governs links. Hard constraints additive, steering overridable.</p>
+      </div>
+    </div>
+
+    <div class="article-body narrow reveal reveal-delay-6" style="margin-top: 2.5rem;">
+      <p>
+        Notice the triad at the center: <strong>proposal</strong>, <strong>gate</strong>, and
+        <strong>receipt</strong>. A proposal is a candidate mutation. A gate evaluates it.
+        A receipt is the immutable proof that work was completed. This triad is the
+        enforcement mechanism for C2 -- every mutation leaves a permanent, ordered trace.
+      </p>
+      <p>
+        The receipt primitive bundles eval results, effect results, content hash, and provenance.
+        It is the <strong>finality boundary</strong>. Once a receipt exists, the work is done.
+        The record is permanent. The history is closed.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8. CTA ===================== -->
+<section class="cta-section" id="s-cta">
+  <div class="container">
+    <h2 class="reveal">One Runtime.<br>Every Agent. Every Surface.</h2>
+    <p class="cta-tagline reveal reveal-delay-1">Constraints aren't limitations. They're the product.</p>
+    <div class="cta-links reveal reveal-delay-2">
+      <a href="https://lev.here.now/" class="cta-btn cta-btn-primary">Explore Leviathan</a>
+      <a href="https://github.com/lev-os/lev" class="cta-btn cta-btn-secondary">View Source</a>
+    </div>
+    <div class="code-block reveal reveal-delay-3" data-lang="TypeScript" style="max-width: 560px; margin: 0 auto; text-align: left;">
+<pre><span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">lev</span>.<span class="fn">exec</span>({
+  <span class="prop">profile</span>: <span class="str">"sdlc.flowmind.exec"</span>,
+  <span class="prop">prompt</span>:  <span class="str">"Fix the auth middleware"</span>,
+});
+
+<span class="cm">// Every call is bounded (C1).</span>
+<span class="cm">// Every mutation is gated (C4).</span>
+<span class="cm">// Every result has a receipt (C2).</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <p><a href="https://lev.here.now/">lev.here.now</a> &middot; Constraint engineering for the agent era</p>
+  </div>
+</footer>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('lev-constraints-theme', next); } catch(e) {}
+}
+
+// Restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lev-constraints-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+
+// Intersection Observer for staggered reveals
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+// Nav rail active state
+(function() {
+  const sections = document.querySelectorAll('section');
+  const dots = document.querySelectorAll('.nav-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(sections).indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, {
+    threshold: 0.3
+  });
+
+  sections.forEach(s => observer.observe(s));
+})();
+
+function scrollToSection(idx) {
+  const sections = document.querySelectorAll('section');
+  if (sections[idx]) {
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
+
+</body>
+</html>
