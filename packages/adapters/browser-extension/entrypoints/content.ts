@@ -10,6 +10,7 @@ import {
   type NotificationStyle,
   type DrawerState,
 } from '../lib/ui/index';
+import { installBridgeRelay } from '../lib/webmcp/bridge';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -145,6 +146,12 @@ export default defineContentScript({
         manager.updateThemeConfig(changes.agentping_theme_config.newValue);
       }
     });
+
+    // ========================================================================
+    // WebMCP Bridge Relay (MAIN world <-> background)
+    // ========================================================================
+
+    installBridgeRelay();
 
     // ========================================================================
     // Cleanup on Unload
