@@ -187,11 +187,46 @@ const scraplingBackend: BackendConfig = {
   },
 
   async scrape(url: string, options: ScrapeOptions): Promise<ScraperResult> {
+    // Use Scrapling's Selector (HTML parser) with Fetcher (HTTP, no browser deps).
+    // StealthyFetcher requires curl_cffi + browser — only use if available.
     const script = `
-import json, sys
-from scrapling import StealthyFetcher
+import json, sys, urllib.request
 
-page = StealthyFetcher.fetch("${url}", headless=True, network_idle=True)
+def build_selector(el):
+    tid = el.attrib.get("data-testid", "")
+    if tid: return f'[data-testid="{tid}"]'
+    eid = el.attrib.get("id", "")
+    if eid: return f'#{eid}'
+    al = el.attrib.get("aria-label", "")
+    if al: return f'[aria-label="{al}"]'
+    nm = el.attrib.get("name", "")
+    if nm: return f'{el.tag}[name="{nm}"]'
+    return el.tag
+
+def score_selector(el):
+    if el.attrib.get("data-testid"): return 1.0
+    if el.attrib.get("id"): return 0.9
+    if el.attrib.get("aria-label"): return 0.8
+    if el.attrib.get("name"): return 0.7
+    return 0.3
+
+# Try StealthyFetcher first, fall back to Fetcher, fall back to urllib
+page = None
+try:
+    from scrapling import StealthyFetcher
+    page = StealthyFetcher.fetch("${url}", headless=True, network_idle=True)
+except ImportError:
+    try:
+        from scrapling import Fetcher
+        page = Fetcher.get("${url}")
+    except Exception:
+        pass
+
+if page is None:
+    from scrapling import Selector
+    req = urllib.request.Request("${url}", headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"})
+    html = urllib.request.urlopen(req, timeout=15).read().decode("utf-8", errors="replace")
+    page = Selector(html)
 
 elements = []
 for el in page.css('a, button, input, select, textarea, [role="button"], [data-testid], form'):
@@ -210,25 +245,12 @@ for el in page.css('a, button, input, select, textarea, [role="button"], [data-t
         "stability": score_selector(el),
     })
 
-def build_selector(el):
-    if el.attrib.get("data-testid"): return f'[data-testid="{el.attrib["data-testid"]}"]'
-    if el.attrib.get("id"): return f'#{el.attrib["id"]}'
-    if el.attrib.get("aria-label"): return f'[aria-label="{el.attrib["aria-label"]}"]'
-    if el.attrib.get("name"): return f'{el.tag}[name="{el.attrib["name"]}"]'
-    return el.tag
-
-def score_selector(el):
-    if el.attrib.get("data-testid"): return 1.0
-    if el.attrib.get("id"): return 0.9
-    if el.attrib.get("aria-label"): return 0.8
-    if el.attrib.get("name"): return 0.7
-    return 0.3
-
+title_el = page.css_first("title") if hasattr(page, 'css_first') else (page.css("title")[0] if page.css("title") else None)
 result = {
     "url": "${url}",
-    "title": page.css_first("title").text if page.css_first("title") else "",
+    "title": title_el.text if title_el else "",
     "elements": elements[:100],
-    "html_snippet": str(page.body)[:50000],
+    "html_snippet": str(page.body)[:50000] if hasattr(page, 'body') else "",
     "diagnostics": {
         "totalElements": len(page.css("*")),
         "interactiveCount": len(elements),
