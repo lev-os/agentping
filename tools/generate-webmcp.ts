@@ -298,39 +298,53 @@ const crawl4aiBackend: BackendConfig = {
 
   async scrape(url: string): Promise<ScraperResult> {
     const script = `
-import json, asyncio
-from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
+import json, asyncio, sys, os, logging
+logging.disable(logging.CRITICAL)
+os.environ["CRAWL4AI_LOG_LEVEL"] = "ERROR"
 
 async def main():
+    from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
     config = CrawlerRunConfig(
         wait_until="networkidle",
         page_timeout=20000,
+        verbose=False,
     )
-    async with AsyncWebCrawler() as crawler:
+    async with AsyncWebCrawler(verbose=False) as crawler:
         result = await crawler.arun(url="${url}", config=config)
 
-        print(json.dumps({
+        out = json.dumps({
             "url": "${url}",
             "title": result.metadata.get("title", "") if result.metadata else "",
-            "markdown": result.markdown[:30000] if result.markdown else "",
-            "html_snippet": result.html[:50000] if result.html else "",
+            "markdown": (result.markdown or "")[:30000],
+            "html_snippet": (result.html or "")[:50000],
             "links": [{"href": l.get("href",""), "text": l.get("text","")} for l in (result.links or {}).get("internal", [])[:50]],
-        }))
+        })
+        sys.stdout.write("JSON_START" + out + "JSON_END")
+        sys.stdout.flush()
 
 asyncio.run(main())
 `;
 
     const result = spawnSync('python3', ['-c', script], {
       encoding: 'utf-8',
-      timeout: 45000,
+      timeout: 60000,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     if (result.status !== 0) {
-      throw new Error(`crawl4ai failed: ${result.stderr}`);
+      throw new Error(`crawl4ai failed: ${result.stderr?.slice(0, 500)}`);
     }
 
-    const parsed = JSON.parse(result.stdout);
+    // Extract JSON between markers (crawl4ai prints log noise to stdout)
+    const stdout = result.stdout;
+    const jsonStart = stdout.indexOf('JSON_START');
+    const jsonEnd = stdout.indexOf('JSON_END');
+    if (jsonStart === -1 || jsonEnd === -1) {
+      throw new Error(`crawl4ai: no JSON output found. stdout: ${stdout.slice(0, 300)}`);
+    }
+    const jsonStr = stdout.slice(jsonStart + 'JSON_START'.length, jsonEnd);
+
+    const parsed = JSON.parse(jsonStr);
     return {
       url: parsed.url,
       title: parsed.title,
