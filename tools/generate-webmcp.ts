@@ -7,7 +7,8 @@
  *
  * Backends:
  *   - dom (default): agent-browser snapshot -i → pure DOM analysis, no deps
- *   - scrapling: Python Scrapling library (BSD-3, optional pip install)
+ *   - scrapling-cdp: CDP proxy → live DOM → Scrapling adaptive selectors (BEST)
+ *   - scrapling: Python Scrapling standalone (BSD-3, own browser)
  *   - crawl4ai: Python crawl4ai library (Apache-2.0, optional pip install)
  *   - raw: direct HTML fetch (no JS rendering, fastest, simplest)
  *
@@ -357,6 +358,167 @@ asyncio.run(main())
 };
 
 // ============================================================================
+// Backend: Scrapling + CDP Proxy (live browser → adaptive selectors)
+// ============================================================================
+
+const scraplingCdpBackend: BackendConfig = {
+  name: 'scrapling-cdp',
+
+  available() {
+    // Needs both: scrapling installed AND agent-browser available
+    const hasSc = spawnSync('python3', ['-c', 'import scrapling'], { stdio: 'pipe' }).status === 0;
+    let hasAb = false;
+    try { execSync('which agent-browser', { stdio: 'pipe' }); hasAb = true; } catch {}
+    return hasSc && hasAb;
+  },
+
+  async scrape(url: string, options: ScrapeOptions): Promise<ScraperResult> {
+    const port = options.cdpPort || 7891;
+
+    // 1. Navigate via CDP proxy (user's live browser)
+    ab(`open "${url}"`, port);
+    await sleep(3000);
+
+    // 2. Get title from live page
+    const title = ab('eval "document.title"', port).replace(/^"|"$/g, '');
+
+    // 3. Get rendered HTML from live page via CDP
+    const html = ab('eval "document.documentElement.outerHTML"', port);
+
+    // 4. Get accessibility tree if available
+    let rawSnapshot: string;
+    try {
+      rawSnapshot = ab('snapshot -i', port);
+    } catch {
+      rawSnapshot = html.slice(0, 50000);
+    }
+
+    // 5. Pipe rendered HTML to Scrapling Selector for adaptive parsing
+    //    Scrapling gives us: CSS/XPath selection, adaptive element matching,
+    //    find_similar(), find_by_text() — much richer than regex
+    const script = `
+import json, sys
+
+def build_selector(el):
+    tid = el.attrib.get("data-testid", "")
+    if tid: return f'[data-testid="{tid}"]'
+    eid = el.attrib.get("id", "")
+    if eid: return f'#{eid}'
+    al = el.attrib.get("aria-label", "")
+    if al: return f'[aria-label="{al}"]'
+    role = el.attrib.get("role", "")
+    nm = el.attrib.get("name", "")
+    if nm: return f'{el.tag}[name="{nm}"]'
+    ph = el.attrib.get("placeholder", "")
+    if ph: return f'{el.tag}[placeholder="{ph}"]'
+    if role: return f'[role="{role}"]'
+    return el.tag
+
+def score_selector(el):
+    if el.attrib.get("data-testid"): return 1.0
+    if el.attrib.get("id"): return 0.9
+    if el.attrib.get("aria-label"): return 0.8
+    if el.attrib.get("name"): return 0.7
+    if el.attrib.get("placeholder"): return 0.6
+    if el.attrib.get("role"): return 0.5
+    return 0.3
+
+html = sys.stdin.read()
+from scrapling import Selector
+page = Selector(html)
+
+# Interactive elements via CSS (Scrapling's parser, not regex)
+interactive = page.css('a, button, input, select, textarea, [role="button"], [data-testid], form, [contenteditable="true"], [onclick], [tabindex]')
+
+elements = []
+for el in interactive[:150]:
+    elements.append({
+        "tag": el.tag,
+        "type": el.attrib.get("type", ""),
+        "role": el.attrib.get("role", ""),
+        "name": el.attrib.get("name", ""),
+        "ariaLabel": el.attrib.get("aria-label", ""),
+        "placeholder": el.attrib.get("placeholder", ""),
+        "testId": el.attrib.get("data-testid", ""),
+        "id": el.attrib.get("id", ""),
+        "href": el.attrib.get("href", ""),
+        "text": (el.text or "").strip()[:80],
+        "selector": build_selector(el),
+        "stability": score_selector(el),
+    })
+
+# Also find forms and their fields (Scrapling groups these neatly)
+forms = []
+for form in page.css("form"):
+    fields = []
+    for inp in form.css("input, select, textarea"):
+        fields.append({
+            "name": inp.attrib.get("name", ""),
+            "type": inp.attrib.get("type", "text"),
+            "placeholder": inp.attrib.get("placeholder", ""),
+            "required": inp.attrib.get("required") is not None,
+            "selector": build_selector(inp),
+        })
+    if fields:
+        forms.append({
+            "action": form.attrib.get("action", ""),
+            "method": form.attrib.get("method", "GET"),
+            "selector": build_selector(form),
+            "fields": fields,
+        })
+
+sys.stdout.write("JSON_START" + json.dumps({
+    "elements": elements,
+    "forms": forms,
+    "diagnostics": {
+        "totalElements": len(page.css("*")),
+        "interactiveCount": len(interactive),
+        "formsCount": len(forms),
+        "hasDataTestIds": bool(page.css("[data-testid]")),
+        "hasAriaLabels": bool(page.css("[aria-label]")),
+    }
+}) + "JSON_END")
+`;
+
+    const result = spawnSync('python3', ['-c', script], {
+      input: html,
+      encoding: 'utf-8',
+      timeout: 30000,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      maxBuffer: 10 * 1024 * 1024, // 10MB for large DOMs
+    });
+
+    if (result.status !== 0) {
+      throw new Error(`scrapling-cdp failed: ${result.stderr?.slice(0, 500)}`);
+    }
+
+    const stdout = result.stdout;
+    const jsonStart = stdout.indexOf('JSON_START');
+    const jsonEnd = stdout.indexOf('JSON_END');
+    if (jsonStart === -1 || jsonEnd === -1) {
+      throw new Error(`scrapling-cdp: no JSON output. stderr: ${result.stderr?.slice(0, 300)}`);
+    }
+
+    const parsed = JSON.parse(stdout.slice(jsonStart + 'JSON_START'.length, jsonEnd));
+
+    return {
+      url,
+      title,
+      interactiveElements: parsed.elements || [],
+      rawSnapshot,
+      diagnostics: {
+        ...defaultDiagnostics(),
+        ...parsed.diagnostics,
+        frameworks: [], // could detect from live DOM but not critical
+        antiBot: [],
+        jsRequired: false, // we have the rendered DOM, JS already ran
+      },
+      backend: 'scrapling-cdp',
+    };
+  },
+};
+
+// ============================================================================
 // Backend Registry
 // ============================================================================
 
@@ -364,6 +526,7 @@ const BACKENDS = new Map<string, BackendConfig>([
   ['dom', domBackend],
   ['raw', rawBackend],
   ['scrapling', scraplingBackend],
+  ['scrapling-cdp', scraplingCdpBackend],
   ['crawl4ai', crawl4aiBackend],
 ]);
 
@@ -645,8 +808,12 @@ async function main() {
       console.log(`  ${avail ? '✓' : '✗'} ${name.padEnd(12)} ${avail ? 'ready' : 'not installed'}`);
     }
     console.log('\nInstall optional backends:');
-    console.log('  pip install scrapling     # BSD-3, stealth + adaptive selectors');
-    console.log('  pip install crawl4ai      # Apache-2.0, LLM-native crawler\n');
+    console.log('  pip install scrapling     # BSD-3, adaptive selectors');
+    console.log('  pip install crawl4ai      # Apache-2.0, LLM-native crawler');
+    console.log('\nRecommended for authenticated sites:');
+    console.log('  scrapling-cdp  = CDP proxy (user\'s browser) + Scrapling parsing');
+    console.log('  dom            = CDP proxy + agent-browser commands');
+    console.log('  Both require daemon running on :7890 + CDP proxy on :7891\n');
     return;
   }
 
