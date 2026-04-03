@@ -264,7 +264,73 @@ export default defineBackground(() => {
     }
   }
 
-  // CDP Execution
+  // ========================================================================
+  // Stealth Read Path — chrome.scripting (invisible to page, no debugger)
+  // ========================================================================
+
+  const READ_METHODS = new Set([
+    'Runtime.evaluate',
+    'DOM.getDocument', 'DOM.querySelector', 'DOM.querySelectorAll',
+    'DOM.getOuterHTML', 'DOM.describeNode',
+    'Page.captureScreenshot',
+    'Network.getCookies', 'Network.getAllCookies',
+    'Accessibility.getFullAXTree',
+  ]);
+
+  function isReadOnly(method: string): boolean {
+    return READ_METHODS.has(method);
+  }
+
+  async function getTabUrl(tabId: number): Promise<string> {
+    const tab = await chrome.tabs.get(tabId);
+    return tab.url || '';
+  }
+
+  async function executeViaStealth(tabId: number, req: CDPRequest): Promise<unknown | null> {
+    const { method, params } = req;
+
+    if (method === 'Runtime.evaluate') {
+      const expression = (params as Record<string, unknown>)?.expression as string;
+      if (!expression) return null;
+
+      const results = await chrome.scripting.executeScript({
+        target: { tabId },
+        world: 'MAIN',
+        func: (expr: string) => {
+          try { return (0, eval)(expr); } catch (e: any) { return { __error: e.message }; }
+        },
+        args: [expression],
+      });
+
+      const val = results[0]?.result;
+      if (val && typeof val === 'object' && '__error' in val) {
+        return { result: { type: 'object', subtype: 'error', description: val.__error } };
+      }
+      return { result: { type: typeof val, value: val } };
+    }
+
+    if (method === 'Network.getCookies' || method === 'Network.getAllCookies') {
+      const urls = (params as Record<string, unknown>)?.urls as string[] | undefined;
+      const url = urls?.[0] || await getTabUrl(tabId);
+      const cookies = await chrome.cookies.getAll({ url });
+      return { cookies };
+    }
+
+    if (method === 'Page.captureScreenshot') {
+      const tab = await chrome.tabs.get(tabId);
+      const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: 'png' });
+      const base64 = dataUrl.replace(/^data:image\/png;base64,/, '');
+      return { data: base64 };
+    }
+
+    // Unknown read method — signal fallback to debugger
+    return null;
+  }
+
+  // ========================================================================
+  // CDP Execution — stealth first, debugger fallback
+  // ========================================================================
+
   async function executeCDP(req: CDPRequest, activeLease: LeaseInfo) {
     let tabId = req.tabId ?? activeLease?.tabId;
 
@@ -279,6 +345,21 @@ export default defineBackground(() => {
       return;
     }
 
+    // STEALTH PATH: try chrome.scripting first for read-only methods
+    if (isReadOnly(req.method)) {
+      try {
+        const result = await executeViaStealth(tabId, req);
+        if (result !== null) {
+          send({ type: 'cdp:response', id: req.id, result });
+          return;
+        }
+      } catch (err) {
+        console.log('[AgentPing] Stealth path failed, falling back to debugger:', (err as Error).message);
+        // Fall through to debugger path
+      }
+    }
+
+    // DEBUGGER PATH: for writes or stealth failures
     try {
       if (!attachedTabs.has(tabId)) {
         await chrome.debugger.attach({ tabId }, '1.3');
