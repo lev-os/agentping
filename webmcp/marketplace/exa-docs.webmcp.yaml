@@ -1,0 +1,90 @@
+# Exa API Documentation — WebMCP Shim
+# Target: docs.exa.ai (Mintlify-powered docs site)
+# Generated: heuristic extraction + manual refinement
+# Selectors: data-testid, aria-label, #id — all stable
+name: exa-docs
+version: "1.0.0"
+match:
+  - "https://docs.exa.ai/*"
+
+tools:
+  - name: search_docs
+    description: Search the Exa API documentation
+    parameters:
+      query:
+        type: string
+        required: true
+        description: Search query for the docs
+    actions:
+      - type: click
+        selector: "#search-bar-entry"
+      - type: wait
+        selector: "input[placeholder]"
+        timeout: 2000
+      - type: focus
+        selector: "input[placeholder]"
+      - type: type
+        value: "{{query}}"
+    result:
+      type: wait
+      selector: "[role='listbox'], [role='option']"
+      extract: textContent
+      timeout: 3000
+
+  - name: copy_code_block
+    description: Copy the first visible code block on the current docs page
+    parameters: {}
+    actions:
+      - type: click
+        selector: "[data-testid='copy-code-button']"
+    result:
+      type: immediate
+
+  - name: ask_ai
+    description: Open the AI assistant to ask a question about the Exa API
+    parameters:
+      question:
+        type: string
+        required: true
+        description: Question to ask the AI assistant about Exa's API
+    actions:
+      - type: click
+        selector: "#assistant-entry"
+      - type: wait
+        selector: "textarea, input[type='text']"
+        timeout: 3000
+      - type: focus
+        selector: "textarea, input[type='text']"
+      - type: type
+        value: "{{question}}"
+    result:
+      type: wait
+      timeout: 10000
+
+  - name: navigate_to_section
+    description: Navigate to a docs section (search, contents, data, agentic, deep)
+    parameters:
+      section:
+        type: string
+        required: true
+        enum: ["search", "contents", "data", "agentic", "deep"]
+        description: "Docs section: search, contents, data, agentic, or deep"
+    actions:
+      - type: click
+        selector: "#eb-{{section}}"
+    result:
+      type: wait
+      timeout: 3000
+
+  - name: get_page_content
+    description: Extract the main content of the current docs page as text
+    parameters: {}
+    actions:
+      - type: evaluate
+        script: |
+          (() => {
+            const main = document.querySelector('article, main, [role="main"], .content');
+            return main ? main.textContent.trim().slice(0, 5000) : document.body.textContent.trim().slice(0, 5000);
+          })()
+    result:
+      type: immediate
