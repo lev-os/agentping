@@ -118,6 +118,38 @@ export function validateDashboardConfig(config: Partial<DashboardConfig>): Valid
     }
   }
 
+  if (config.metadata) {
+    const metadata = config.metadata;
+
+    if (!['ops', 'interaction', 'development'].includes(metadata.lane)) {
+      errors.push({
+        field: 'metadata.lane',
+        message: 'metadata.lane must be "ops", "interaction", or "development"',
+      });
+    }
+
+    if (!['embed', 'external'].includes(metadata.openMode)) {
+      errors.push({
+        field: 'metadata.openMode',
+        message: 'metadata.openMode must be "embed" or "external"',
+      });
+    }
+
+    if (!metadata.description || metadata.description.trim() === '') {
+      errors.push({
+        field: 'metadata.description',
+        message: 'metadata.description is required and must not be empty',
+      });
+    }
+
+    if (metadata.primary !== undefined && typeof metadata.primary !== 'boolean') {
+      errors.push({
+        field: 'metadata.primary',
+        message: 'metadata.primary must be a boolean when provided',
+      });
+    }
+  }
+
   return {
     valid: errors.length === 0,
     errors,

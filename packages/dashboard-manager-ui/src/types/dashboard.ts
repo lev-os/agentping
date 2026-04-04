@@ -1,14 +1,30 @@
+export interface DashboardMetadata {
+  lane: 'ops' | 'interaction' | 'development'
+  openMode: 'embed' | 'external'
+  description: string
+  primary?: boolean
+}
+
 export interface DashboardConfig {
   id: string
   name: string
+  port: number
   command: string
   cwd: string
   port_range: [number, number]
-  health_check?: {
-    type: 'http' | 'tcp'
+  health_check: {
+    type: 'http' | 'process'
     path?: string
     timeout_ms?: number
+    expected_status?: number | number[]
+    interval_ms?: number
   }
+  restart_policy: {
+    enabled: boolean
+    max_retries: number
+    backoff_ms: number[]
+  }
+  metadata?: DashboardMetadata
 }
 
 export interface DashboardStatus {

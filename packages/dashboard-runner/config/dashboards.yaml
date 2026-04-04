@@ -1,5 +1,5 @@
 dashboards:
-  - name: AgentPing Storybook
+  - name: AgentPing Studio Storybook
     id: agentping
     port: 6006
     port_range:
@@ -22,7 +22,11 @@ dashboards:
         - 4000
         - 8000
         - 16000
-  - name: Sofia Storybook
+    metadata:
+      lane: development
+      openMode: external
+      description: AgentPing Studio storybook reference surface
+  - name: Sofia UI Storybook
     id: sofia
     port: 6007
     port_range:
@@ -45,6 +49,37 @@ dashboards:
         - 4000
         - 8000
         - 16000
+    metadata:
+      lane: development
+      openMode: external
+      description: Shared UI primitive storybook
+  - name: Web UI Storybook
+    id: web-ui-storybook
+    port: 6012
+    port_range:
+      - 6012
+      - 6016
+    command: pnpm exec storybook dev --port {port}
+    cwd: ~/digital/leviathan/community/agentping/packages/adapters/web-ui
+    health_check:
+      type: http
+      path: /
+      timeout_ms: 5000
+      expected_status: 200
+      interval_ms: 10000
+    restart_policy:
+      enabled: true
+      max_retries: 5
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
+    metadata:
+      lane: development
+      openMode: external
+      description: Web UI adapter storybook
   - name: AgentPing Web UI
     id: web-ui
     port: 5173
@@ -68,6 +103,10 @@ dashboards:
         - 4000
         - 8000
         - 16000
+    metadata:
+      lane: interaction
+      openMode: external
+      description: Browser interaction shell
   - name: AgentPing Canvas
     id: canvas
     port: 5174
@@ -91,6 +130,10 @@ dashboards:
         - 4000
         - 8000
         - 16000
+    metadata:
+      lane: interaction
+      openMode: external
+      description: Canvas interaction surface
   - name: Dashboard Manager UI
     id: dashboard-manager-ui
     port: 5175
@@ -114,6 +157,10 @@ dashboards:
         - 4000
         - 8000
         - 16000
+    metadata:
+      lane: development
+      openMode: external
+      description: Host control-plane UI
   - name: AgentPing Studio
     id: studio
     port: 5180
@@ -137,3 +184,35 @@ dashboards:
         - 4000
         - 8000
         - 16000
+    metadata:
+      lane: development
+      openMode: external
+      description: Desktop-oriented studio surface
+  - name: System Dashboard
+    id: system-dashboard
+    port: 5185
+    port_range:
+      - 5185
+      - 5189
+    command: pnpm run build && pnpm exec vite preview --host 127.0.0.1 --strictPort --port {port}
+    cwd: ~/digital/leviathan/plugins/system-dashboard
+    health_check:
+      type: http
+      path: /
+      timeout_ms: 5000
+      expected_status: 200
+      interval_ms: 10000
+    restart_policy:
+      enabled: true
+      max_retries: 5
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
+    metadata:
+      lane: ops
+      openMode: embed
+      description: Primary Leviathan ops command-center surface
+      primary: true

@@ -281,6 +281,67 @@ export class DashboardRunner extends EventEmitter {
   }
 
   /**
+   * Register a new dashboard config at runtime.
+   */
+  async registerDashboard(config: DashboardConfig): Promise<void> {
+    if (this.registry.has(config.id)) {
+      throw new Error(`Dashboard already exists: ${config.id}`);
+    }
+
+    const normalizedConfig = {
+      ...config,
+      cwd:
+        config.cwd && config.cwd.startsWith('~')
+          ? config.cwd.replace(/^~/, homedir())
+          : config.cwd,
+    };
+
+    this.registry.register(normalizedConfig.id, normalizedConfig);
+    this.state.dashboards[normalizedConfig.id] = {
+      id: normalizedConfig.id,
+      status: 'stopped',
+      restartAttempts: 0,
+      crashes: 0,
+    };
+
+    if (this.running) {
+      await this.processManager.start(normalizedConfig.id, normalizedConfig);
+      this.state.dashboards[normalizedConfig.id] = {
+        ...this.state.dashboards[normalizedConfig.id],
+        status: 'online',
+      };
+      this.healthMonitor.startMonitoring(
+        normalizedConfig.id,
+        normalizedConfig.health_check.interval_ms || 10000,
+      );
+    }
+
+    this.saveState();
+  }
+
+  /**
+   * Unregister a dashboard config at runtime.
+   */
+  async unregisterDashboard(dashboardId: string): Promise<void> {
+    if (!this.registry.has(dashboardId)) {
+      throw new Error(`Dashboard not found: ${dashboardId}`);
+    }
+
+    if (this.running) {
+      this.healthMonitor.stopMonitoring(dashboardId);
+      try {
+        await this.processManager.stop(dashboardId);
+      } catch {
+        // Best-effort stop before registry removal.
+      }
+    }
+
+    this.registry.unregister(dashboardId);
+    delete this.state.dashboards[dashboardId];
+    this.saveState();
+  }
+
+  /**
    * Check if another runner is already running
    */
   private isAlreadyRunning(): boolean {

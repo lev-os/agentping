@@ -16,6 +16,7 @@ const CreateDashboardSchema = z.object({
   config: z.object({
     id: z.string(),
     name: z.string(),
+    port: z.number(),
     command: z.string(),
     cwd: z.string(),
     port_range: z.tuple([z.number(), z.number()]),
@@ -25,13 +26,19 @@ const CreateDashboardSchema = z.object({
       timeout_ms: z.number().optional(),
       expected_status: z.union([z.number(), z.array(z.number())]).optional(),
       interval_ms: z.number().optional(),
-    }).optional(),
+    }),
     restart_policy: z.object({
       enabled: z.boolean(),
       max_retries: z.number(),
       backoff_ms: z.array(z.number()),
-    }).optional(),
+    }),
     env: z.record(z.string(), z.string()).optional(),
+    metadata: z.object({
+      lane: z.enum(['ops', 'interaction', 'development']),
+      openMode: z.enum(['embed', 'external']),
+      description: z.string().min(1),
+      primary: z.boolean().optional(),
+    }).optional(),
   }),
 });
 
@@ -121,6 +128,67 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
       });
     } catch (error) {
       console.error('Error getting dashboard:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
+  // =========================================================================
+  // POST /api/dashboards - Register a dashboard
+  // =========================================================================
+
+  app.post('/', async (c) => {
+    try {
+      const body = await c.req.json();
+      const parsed = CreateDashboardSchema.safeParse(body);
+      if (!parsed.success) {
+        return c.json({ error: parsed.error.flatten() }, 400);
+      }
+
+      const dashboardConfig = parsed.data.config;
+      if (runner.getConfig(dashboardConfig.id)) {
+        return c.json({ error: 'Dashboard already exists' }, 409);
+      }
+
+      if (!('registerDashboard' in runner) || typeof runner.registerDashboard !== 'function') {
+        return c.json({ error: 'Runner does not support dashboard registration' }, 501);
+      }
+
+      await runner.registerDashboard(dashboardConfig);
+
+      return c.json({
+        id: dashboardConfig.id,
+        config: dashboardConfig,
+        status: {
+          status: 'stopped',
+          restartAttempts: 0,
+          healthy: false,
+        },
+      }, 201);
+    } catch (error) {
+      console.error('Error creating dashboard:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
+  // =========================================================================
+  // DELETE /api/dashboards/:id - Unregister a dashboard
+  // =========================================================================
+
+  app.delete('/:id', async (c) => {
+    try {
+      const id = c.req.param('id');
+      if (!runner.getConfig(id)) {
+        return c.json({ error: 'Dashboard not found' }, 404);
+      }
+
+      if (!('unregisterDashboard' in runner) || typeof runner.unregisterDashboard !== 'function') {
+        return c.json({ error: 'Runner does not support dashboard removal' }, 501);
+      }
+
+      await runner.unregisterDashboard(id);
+      return c.body(null, 204);
+    } catch (error) {
+      console.error('Error deleting dashboard:', error);
       return c.json({ error: 'Internal server error' }, 500);
     }
   });
