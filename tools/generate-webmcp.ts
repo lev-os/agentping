@@ -375,23 +375,29 @@ const scraplingCdpBackend: BackendConfig = {
   async scrape(url: string, options: ScrapeOptions): Promise<ScraperResult> {
     const port = options.cdpPort || 7891;
 
+    // Use raw WebSocket CDP — agent-browser's Playwright connectOverCDP
+    // hangs on setup calls we can't fully emulate. Direct WS works.
+
     // 1. Navigate via CDP proxy (user's live browser)
-    ab(`open "${url}"`, port);
+    await cdpWS(port, 'Page.navigate', { url });
     await sleep(3000);
 
     // 2. Get title from live page
-    const title = ab('eval "document.title"', port).replace(/^"|"$/g, '');
+    const titleResult = await cdpWS(port, 'Runtime.evaluate', {
+      expression: 'document.title',
+      returnByValue: true,
+    }) as any;
+    const title = titleResult?.result?.value || '';
 
     // 3. Get rendered HTML from live page via CDP
-    const html = ab('eval "document.documentElement.outerHTML"', port);
+    const htmlResult = await cdpWS(port, 'Runtime.evaluate', {
+      expression: 'document.documentElement.outerHTML',
+      returnByValue: true,
+    }) as any;
+    const html = htmlResult?.result?.value || '';
 
-    // 4. Get accessibility tree if available
-    let rawSnapshot: string;
-    try {
-      rawSnapshot = ab('snapshot -i', port);
-    } catch {
-      rawSnapshot = html.slice(0, 50000);
-    }
+    // 4. Get accessibility tree summary
+    const rawSnapshot = html.slice(0, 50000);
 
     // 5. Pipe rendered HTML to Scrapling Selector for adaptive parsing
     //    Scrapling gives us: CSS/XPath selection, adaptive element matching,
@@ -742,6 +748,30 @@ Use the stable selectors provided. Output ONLY the YAML, no explanation.`;
 // ============================================================================
 // Helpers
 // ============================================================================
+
+/** Direct WebSocket CDP command — bypasses agent-browser/Playwright entirely */
+async function cdpWS(port: number, method: string, params?: Record<string, unknown>): Promise<unknown> {
+  const WebSocket = (await import('ws')).default;
+  return new Promise((resolve, reject) => {
+    const ws = new WebSocket(`ws://localhost:${port}/devtools/browser`);
+    const id = Math.floor(Math.random() * 1_000_000);
+    const timeout = setTimeout(() => { ws.close(); reject(new Error(`CDP ${method} timed out`)); }, 15000);
+
+    ws.on('open', () => {
+      ws.send(JSON.stringify({ id, method, params }));
+    });
+    ws.on('message', (data: Buffer) => {
+      const msg = JSON.parse(data.toString());
+      if (msg.id === id) {
+        clearTimeout(timeout);
+        ws.close();
+        if (msg.error) reject(new Error(msg.error.message));
+        else resolve(msg.result);
+      }
+    });
+    ws.on('error', (err: Error) => { clearTimeout(timeout); reject(err); });
+  });
+}
 
 function ab(command: string, cdpPort: number): string {
   const result = execSync(`agent-browser --cdp ${cdpPort} ${command}`, {

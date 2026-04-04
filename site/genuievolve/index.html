@@ -1,0 +1,2934 @@
+<!DOCTYPE html>
+<html lang="en" data-build="117" data-built-at="2026-03-28T19:25:01.195Z">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="300">
+  <title>Leviathan Heartbeat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", monospace;
+  --bg: #0c141c;
+  --surface: rgba(18, 31, 43, 0.84);
+  --surface-alt: rgba(13, 22, 31, 0.88);
+  --surface-soft: rgba(33, 50, 66, 0.5);
+  --text: #ecf5fa;
+  --text-dim: #8ea4b4;
+  --accent: #58c5e6;
+  --accent-dim: rgba(88, 197, 230, 0.12);
+  --teal: #47d4bb;
+  --amber: #f0b35d;
+  --rose: #f08fa4;
+  --border: rgba(190, 214, 231, 0.12);
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body {
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 16% 12%, var(--accent-dim), transparent 26%),
+    radial-gradient(circle at 84% 4%, rgba(71, 212, 187, 0.09), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.02), transparent 16%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  animation: page-fade-in 0.8s ease-out;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(88,197,230,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,197,230,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dashboard {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 28px 60px;
+}
+
+/* ── Header ─────────────────────────────── */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.header__left { display: flex; align-items: center; gap: 14px; }
+
+.header__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent) 50%, var(--teal) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-shimmer 8s ease-in-out infinite;
+}
+
+@keyframes title-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(71, 212, 187, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(71, 212, 187, 0); }
+}
+
+.header__meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.meta-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.meta-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 11px;
+  white-space: nowrap;
+}
+
+.meta-chip strong { color: var(--accent); }
+.meta-chip--cdo {
+  border-color: rgba(240, 179, 93, 0.25);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.meta-chip--cdo:hover { background: rgba(240, 179, 93, 0.08); }
+
+/* ── Pulse Cards ────────────────────────── */
+
+.pulse-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.pulse-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+
+.pulse-card__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.pulse-card__value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.pulse-card__note {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+.pulse-card__spark {
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+/* ── Completion Bar ─────────────────────── */
+
+.completion-bar {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.completion-bar__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.completion-bar__pct {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--teal);
+  font-size: 14px;
+}
+
+.completion-bar__track {
+  height: 6px;
+  background: var(--surface-alt);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.completion-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.6s ease;
+}
+
+.completion-bar__fill--stalled {
+  background: linear-gradient(90deg, var(--amber), rgba(240, 179, 93, 0.6));
+}
+
+.completion-bar__detail {
+  margin-top: 6px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: rgba(142, 164, 180, 0.5);
+}
+
+.completion-bar__velocity {
+  margin-top: 8px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+
+.velocity-rate {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.velocity-sep {
+  margin: 0 6px;
+  opacity: 0.3;
+}
+
+.velocity-eta {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Scroll Progress ────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  z-index: 9999;
+  transition: width 0.15s linear;
+  opacity: 0.8;
+}
+
+/* ── Stall Alert ─────────────────────────── */
+
+@keyframes stall-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.stall-alert {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(240, 179, 93, 0.08);
+  border: 1px solid rgba(240, 179, 93, 0.25);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--amber);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: stall-pulse 3s ease-in-out infinite;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.stall-alert:hover {
+  background: rgba(240, 179, 93, 0.15);
+}
+
+.stall-alert__icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.stall-alert__text strong {
+  color: var(--text);
+}
+
+/* ── Two-Column Layout ──────────────────── */
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+
+.section--full {
+  margin-bottom: 20px;
+}
+
+.active-section {
+  border-left: 2px solid var(--accent);
+  box-shadow: var(--shadow), -4px 0 16px rgba(88, 197, 230, 0.08);
+  transition: border-left 0.4s ease, box-shadow 0.4s ease;
+}
+
+.section__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.section__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+/* ── Breakthrough Cards ─────────────────── */
+
+.bt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.bt-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.bt-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bt-card__id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+}
+
+.bt-card__title {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.bt-card__body {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── Work Queue ─────────────────────────── */
+
+.work-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.work-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.work-table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+  color: var(--text-dim);
+  vertical-align: middle;
+}
+
+.priority-dot {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.bead-id {
+  font-family: var(--font-mono);
+  color: var(--accent) !important;
+  font-size: 11px !important;
+}
+
+.work-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Primitives ─────────────────────────── */
+
+.prim-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.prim-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.prim-card__icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+
+.prim-card__name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.prim-card__status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.prim-card__note {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── Timeline ───────────────────────────── */
+
+.tl-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.tl-list::-webkit-scrollbar { width: 4px; }
+.tl-list::-webkit-scrollbar-track { background: transparent; }
+.tl-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.tl-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.tl-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.tl-item__meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tl-item__tick {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tl-item__time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.tl-item__summary {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── Sidebar Panels ─────────────────────── */
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.commit-item, .handoff-item {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.commit-hash {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 11px;
+  margin-right: 8px;
+}
+
+.commit-msg { font-size: 12px; }
+
+.cdo-badge {
+  display: inline-block;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin: 4px 4px 4px 0;
+}
+
+/* ── Git Changed Files ────────────────── */
+
+.git-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.git-file:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.git-file__status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.git-file__path {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Evolution Meta-Timeline ─────────── */
+
+.evo-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.evo-list::-webkit-scrollbar { width: 3px; }
+.evo-list::-webkit-scrollbar-track { background: transparent; }
+.evo-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.evo-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s ease;
+  border-radius: 6px;
+}
+
+.evo-item:hover {
+  background: rgba(88, 197, 230, 0.04);
+}
+
+.evo-item__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.evo-item__meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.evo-item__type {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.evo-item__tick {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.evo-item__time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.evo-item__change {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* ── Journal ───────────────────────────── */
+
+.journal-item {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s ease;
+  border-radius: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.journal-item:hover {
+  background: rgba(71, 212, 187, 0.04);
+}
+
+.journal-item__date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 72px;
+}
+
+.journal-item__title {
+  font-size: 13px;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+/* ── Empty States ───────────────────────── */
+
+.empty {
+  color: var(--text-dim);
+  font-size: 13px;
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* ── Footer ─────────────────────────────── */
+
+.footer {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.footer__refresh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.refresh-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.freshness {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(71, 212, 187, 0.08);
+  color: var(--teal);
+  transition: color 0.5s ease, background 0.5s ease;
+}
+.freshness--stale {
+  color: var(--amber);
+  background: rgba(240, 179, 93, 0.08);
+}
+
+/* ── Open Questions ─────────────────────── */
+
+.oq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.oq-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-left: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.25s ease, border-left-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.oq-card:hover {
+  border-color: rgba(88, 197, 230, 0.2);
+  border-left-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.oq-card--wild {
+  border-color: rgba(240, 143, 164, 0.2);
+  background: rgba(240, 143, 164, 0.04);
+}
+
+.oq-card--wild:hover {
+  border-color: rgba(240, 143, 164, 0.35);
+}
+
+.oq-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.oq-card--wild .oq-num {
+  background: rgba(240, 143, 164, 0.15);
+  color: var(--rose);
+}
+
+.oq-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.oq-text strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .oq-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Staggered Card Entrance ────────────── */
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.visible .bt-card,
+.visible .prim-card,
+.visible .pulse-card,
+.visible .oq-card {
+  animation: card-enter 0.4s ease forwards;
+}
+
+.bt-card, .prim-card, .pulse-card, .oq-card {
+  opacity: 0;
+}
+
+.visible .bt-card:nth-child(1), .visible .prim-card:nth-child(1), .visible .pulse-card:nth-child(1), .visible .oq-card:nth-child(1) { animation-delay: 0ms; }
+.visible .bt-card:nth-child(2), .visible .prim-card:nth-child(2), .visible .pulse-card:nth-child(2), .visible .oq-card:nth-child(2) { animation-delay: 80ms; }
+.visible .bt-card:nth-child(3), .visible .prim-card:nth-child(3), .visible .pulse-card:nth-child(3), .visible .oq-card:nth-child(3) { animation-delay: 160ms; }
+.visible .bt-card:nth-child(4), .visible .prim-card:nth-child(4), .visible .pulse-card:nth-child(4), .visible .oq-card:nth-child(4) { animation-delay: 240ms; }
+.visible .bt-card:nth-child(5), .visible .prim-card:nth-child(5), .visible .oq-card:nth-child(5) { animation-delay: 320ms; }
+.visible .bt-card:nth-child(6), .visible .prim-card:nth-child(6), .visible .oq-card:nth-child(6) { animation-delay: 400ms; }
+.visible .oq-card:nth-child(7) { animation-delay: 480ms; }
+.visible .oq-card:nth-child(8) { animation-delay: 560ms; }
+.visible .oq-card:nth-child(9) { animation-delay: 640ms; }
+.visible .oq-card:nth-child(10) { animation-delay: 720ms; }
+
+/* ── Hover States ──────────────────────── */
+
+.pulse-card,
+.bt-card,
+.prim-card,
+.thesis-step {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pulse-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(88, 197, 230, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(88, 197, 230, 0.1);
+}
+
+.bt-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(240, 179, 93, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.prim-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(71, 212, 187, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.thesis-step:hover {
+  border-color: rgba(88, 197, 230, 0.3);
+  background: rgba(88, 197, 230, 0.06);
+}
+
+.tl-item {
+  transition: background 0.2s ease;
+  border-radius: 8px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.tl-item:hover {
+  background: rgba(88, 197, 230, 0.04);
+}
+
+.work-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.work-table tbody tr:hover {
+  background: rgba(88, 197, 230, 0.04);
+}
+
+/* ── DNA Thesis ─────────────────────────── */
+
+.thesis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.thesis-quote blockquote {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 16px;
+  margin: 0;
+}
+
+.thesis-attribution {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 10px;
+  padding-left: 19px;
+}
+
+.thesis-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.thesis-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+
+.thesis-step__num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.thesis-footer {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--teal);
+  font-style: italic;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .thesis-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Streaming / Ambient ──────────────────── */
+
+html { scroll-behavior: smooth; }
+
+/* Ambient breathing glow */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(88, 197, 230, 0.06), transparent),
+    radial-gradient(ellipse 500px 350px at 80% 70%, rgba(71, 212, 187, 0.05), transparent),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(240, 179, 93, 0.03), transparent);
+  animation: ambient-breathe 20s ease-in-out infinite;
+}
+
+@keyframes ambient-breathe {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1) translate(0, 0);
+  }
+  25% {
+    opacity: 0.7;
+    transform: scale(1.05) translate(2%, -1%);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.98) translate(-1%, 2%);
+  }
+  75% {
+    opacity: 0.8;
+    transform: scale(1.03) translate(-2%, -1%);
+  }
+}
+
+.dashboard { position: relative; z-index: 1; }
+
+.stream-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.stream-indicator__bar {
+  width: 40px;
+  height: 3px;
+  background: var(--surface-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stream-indicator__fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 3px;
+  animation: stream-progress 12s linear infinite;
+}
+
+@keyframes stream-progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.stream-paused .stream-indicator__fill {
+  animation-play-state: paused;
+  background: var(--amber);
+}
+
+.stream-paused .stream-indicator { color: var(--amber); }
+
+/* Section entrance animations */
+.section, .section--full, .pulse-grid {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section.visible, .section--full.visible, .pulse-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Toast notification for new events */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(71, 212, 187, 0.15);
+  border: 1px solid var(--teal);
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  z-index: 100;
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.show { transform: translateX(0); }
+
+/* Scroll progress bar */
+.scroll-track {
+  position: fixed;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 50;
+}
+
+.scroll-track__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-track__dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(88, 197, 230, 0.4);
+  transform: scale(1.4);
+}
+
+/* ── Detail Drawer (SPA) ────────────────── */
+
+.detail-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  max-width: 85vw;
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.detail-drawer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--teal), var(--amber));
+  opacity: 0;
+  transition: opacity 0.4s ease 0.15s;
+}
+
+.detail-drawer.open { transform: translateX(0); }
+.detail-drawer.open::before { opacity: 1; }
+
+@keyframes drawer-content-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detail-drawer.open #detail-content {
+  animation: drawer-content-in 0.35s ease 0.12s both;
+}
+
+.detail-drawer__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.detail-drawer__close:hover { background: var(--border); color: var(--text); }
+
+.detail-drawer__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.detail-drawer__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.detail-drawer__body {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.detail-drawer__meta {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.detail-drawer__hint {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(142, 164, 180, 0.5);
+  text-align: center;
+}
+
+.detail-drawer__hint kbd {
+  display: inline-block;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.detail-overlay.open { opacity: 1; pointer-events: auto; }
+
+/* Clickable elements */
+.bead-id, .bt-card, .tl-item, .journal-item, .handoff-item, .evo-item, .git-file { cursor: pointer; }
+
+.handoff-item:hover {
+  background: rgba(240, 143, 164, 0.06);
+  padding-left: 10px;
+  transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.tl-item:hover {
+  background: rgba(88, 197, 230, 0.04);
+}
+
+.bead-id:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+[data-detail-type] {
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+[data-detail-type]:active {
+  transform: scale(0.97);
+  border-color: var(--accent);
+}
+
+/* ── Floating Section Label ────────────── */
+
+.section-label {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  background: rgba(12, 20, 28, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  backdrop-filter: blur(12px);
+  z-index: 60;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.section-label.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.stream-status {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.stream-status__bar {
+  width: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  animation: eq-bounce 1.2s ease-in-out infinite;
+}
+.stream-status__bar:nth-child(1) { height: 4px; animation-delay: 0s; }
+.stream-status__bar:nth-child(2) { height: 8px; animation-delay: 0.2s; }
+.stream-status__bar:nth-child(3) { height: 5px; animation-delay: 0.4s; }
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+.stream-paused .stream-status__bar { animation: none; transform: scaleY(0.3); background: var(--amber); }
+.stream-paused .section-label { color: var(--amber); }
+
+/* ── Responsive ─────────────────────────── */
+
+@media (max-width: 1100px) {
+  .pulse-grid { grid-template-columns: repeat(2, 1fr); }
+  .prim-grid { grid-template-columns: repeat(3, 1fr); }
+  .three-col { grid-template-columns: 1fr; }
+  .header__meta { flex-wrap: wrap; gap: 8px; }
+  .bt-grid { max-height: 420px; overflow-y: auto; }
+  .bt-grid::-webkit-scrollbar { width: 3px; }
+  .bt-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .tl-list { max-height: 320px; }
+}
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+  .bt-grid { grid-template-columns: 1fr; max-height: 320px; }
+  .tl-list { max-height: 240px; }
+  .prim-grid { grid-template-columns: repeat(2, 1fr); }
+  .pulse-grid { grid-template-columns: repeat(2, 1fr); }
+  .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .header__meta { gap: 6px; }
+  .dashboard { padding: 12px 16px 40px; }
+  .scroll-track { display: none; }
+  .pulse-card__spark { display: none; }
+}
+
+  </style>
+</head>
+<body>
+<a href="/" class="back-link" style="position:fixed;top:1.5rem;left:1.5rem;z-index:1000;background:var(--surface, #141a2e);border:1px solid rgba(212,167,58,0.25);color:#d4a73a;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);text-decoration:none;" onmouseover="this.style.background='var(--surface-elevated, #1e2850)';this.style.borderColor='#d4a73a'" onmouseout="this.style.background='var(--surface, #141a2e)';this.style.borderColor='rgba(212,167,58,0.25)'">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+</a>
+  <canvas id="particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.4"></canvas>
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <div class="dashboard">
+
+    <!-- Header -->
+    
+    <header class="header">
+      <div class="header__left">
+        <div class="pulse-dot"></div>
+        <h1 class="header__title">Leviathan Heartbeat</h1>
+      </div>
+      <div class="header__meta">
+        <div class="stream-indicator">
+          <span>streaming</span>
+          <div class="stream-indicator__bar"><div class="stream-indicator__fill"></div></div>
+        </div>
+        <div class="meta-sep"></div>
+        <span class="meta-chip"><strong>tick 117</strong></span>
+        <span class="meta-chip">Sat, Mar 28 <span id="live-clock">02:25 PM</span></span>
+        <span class="meta-chip">uptime <strong>585m</strong></span>
+        <span class="meta-chip meta-chip--cdo" data-detail-type="cdo-status" data-detail-title="CDO Deliberation" data-detail-body="cdo-r1, cdo-r2, cdo-r3, cdo-r4" data-detail-value="4"><span style="color:var(--amber)">CDO</span> R4</span>
+      </div>
+    </header>
+
+    <!-- Pulse Stats -->
+    <div class="pulse-grid" data-label="System Pulse">
+    <div class="pulse-card" data-detail-type="pulse" data-detail-title="Ready Work" data-detail-body="of 126 open" data-detail-value="112">
+      <div class="pulse-card__label">Ready Work</div>
+      <div class="pulse-card__value" style="color:var(--teal)" data-count="112">0</div>
+      <div class="pulse-card__note">of 126 open</div>
+      <div class="pulse-card__spark"><svg width="120" height="28" viewBox="0 0 120 28" style="display:block">
+      <polyline points="0.0,26.0 5.2,17.3 10.4,17.3 15.7,4.2 20.9,4.2 26.1,4.2 31.3,4.2 36.5,4.2 41.7,4.2 47.0,4.2 52.2,4.2 57.4,4.2 62.6,4.2 67.8,2.0 73.0,2.0 78.3,4.2 83.5,4.2 88.7,4.2 93.9,8.5 99.1,8.5 104.3,8.5 109.6,8.5 114.8,8.5 120.0,8.5" fill="none" stroke="#47d4bb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+      <circle cx="120.0" cy="8.5" r="2.5" fill="#47d4bb"/>
+    </svg></div>
+    </div>
+    <div class="pulse-card" data-detail-type="pulse" data-detail-title="In Progress" data-detail-body="14 blocked" data-detail-value="2">
+      <div class="pulse-card__label">In Progress</div>
+      <div class="pulse-card__value" style="color:var(--amber)" data-count="2">0</div>
+      <div class="pulse-card__note">14 blocked</div>
+      
+    </div>
+    <div class="pulse-card" data-detail-type="pulse" data-detail-title="Closed" data-detail-body="of 393 total" data-detail-value="265">
+      <div class="pulse-card__label">Closed</div>
+      <div class="pulse-card__value" style="color:var(--accent)" data-count="265">0</div>
+      <div class="pulse-card__note">of 393 total</div>
+      <div class="pulse-card__spark"><svg width="120" height="28" viewBox="0 0 120 28" style="display:block">
+      <polyline points="0.0,26.0 5.2,26.0 10.4,26.0 15.7,8.0 20.9,8.0 26.1,8.0 31.3,8.0 36.5,8.0 41.7,8.0 47.0,8.0 52.2,8.0 57.4,8.0 62.6,8.0 67.8,6.0 73.0,6.0 78.3,5.0 83.5,5.0 88.7,5.0 93.9,2.0 99.1,2.0 104.3,2.0 109.6,2.0 114.8,2.0 120.0,2.0" fill="none" stroke="#58c5e6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+      <circle cx="120.0" cy="2.0" r="2.5" fill="#58c5e6"/>
+    </svg></div>
+    </div>
+    <div class="pulse-card" data-detail-type="pulse" data-detail-title="Git Changes" data-detail-body="files modified" data-detail-value="86">
+      <div class="pulse-card__label">Git Changes</div>
+      <div class="pulse-card__value" style="color:var(--rose)" data-count="86">0</div>
+      <div class="pulse-card__note">files modified</div>
+      <div class="pulse-card__spark"><svg width="120" height="28" viewBox="0 0 120 28" style="display:block">
+      <polyline points="0.0,26.0 5.2,22.7 10.4,22.1 15.7,23.3 20.9,22.1 26.1,22.1 31.3,22.1 36.5,22.1 41.7,22.1 47.0,21.7 52.2,21.7 57.4,21.7 62.6,21.7 67.8,18.1 73.0,17.5 78.3,11.7 83.5,11.7 88.7,11.7 93.9,4.7 99.1,3.5 104.3,3.5 109.6,3.5 114.8,3.5 120.0,2.0" fill="none" stroke="#f08fa4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+      <circle cx="120.0" cy="2.0" r="2.5" fill="#f08fa4"/>
+    </svg></div>
+    </div></div>
+
+    <!-- Project Completion -->
+    
+    <div class="completion-bar">
+      <div class="completion-bar__label">
+        <span>Project Completion</span>
+        <span class="completion-bar__pct">67%</span>
+      </div>
+      <div class="completion-bar__track">
+        <div class="completion-bar__fill" data-target-width="67" style="width:0%"></div>
+      </div>
+      <div class="completion-bar__detail">265 closed of 393 total beads</div>
+      
+        <div class="completion-bar__velocity">
+          <span class="velocity-rate">0.4</span> beads/hr
+          <span class="velocity-sep">|</span>
+          <span class="velocity-eta">324h</span> to complete
+        </div>
+      
+    </div>
+
+    <!-- Breakthroughs + Work Queue -->
+    <div class="two-col" data-label="Breakthroughs & Work">
+      <div class="section">
+        <div class="section__eyebrow">CDO Intelligence</div>
+        <div class="section__title">Breakthroughs</div>
+        <div class="bt-grid">
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B1" data-detail-title="Gates = Loss Function" data-detail-body="Gate design IS reward signal design. Whoever controls gates controls what the graph learns." data-detail-score="9" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B1</span>
+        <span style="background:var(--teal)20;color:var(--teal);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">9/10</span>
+      </div>
+      <div class="bt-card__title">Gates = Loss Function</div>
+      <div class="bt-card__body">Gate design IS reward signal design. Whoever controls gates controls what the graph learns.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B2" data-detail-title="Graph = Policy" data-detail-body="Every accepted patch is a policy gradient step. The policy IS the environment." data-detail-score="8" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B2</span>
+        <span style="background:var(--amber)20;color:var(--amber);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">8/10</span>
+      </div>
+      <div class="bt-card__title">Graph = Policy</div>
+      <div class="bt-card__body">Every accepted patch is a policy gradient step. The policy IS the environment.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B3" data-detail-title="Bounded Speculation = GPI" data-detail-body="All three codebases implement Generalized Policy Iteration without naming it." data-detail-score="8" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B3</span>
+        <span style="background:var(--amber)20;color:var(--amber);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">8/10</span>
+      </div>
+      <div class="bt-card__title">Bounded Speculation = GPI</div>
+      <div class="bt-card__body">All three codebases implement Generalized Policy Iteration without naming it.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B4" data-detail-title="Edge Under-Specified" data-detail-body="Carries 5 conflated concerns. Will fracture the shared algebra if not resolved." data-detail-score="8" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B4</span>
+        <span style="background:var(--amber)20;color:var(--amber);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">8/10</span>
+      </div>
+      <div class="bt-card__title">Edge Under-Specified</div>
+      <div class="bt-card__body">Carries 5 conflated concerns. Will fracture the shared algebra if not resolved.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B5" data-detail-title="Three Clocks Drift" data-detail-body="Tick/wall/graph time that drift in production. Graph-time is a DAG, not a line." data-detail-score="8" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B5</span>
+        <span style="background:var(--amber)20;color:var(--amber);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">8/10</span>
+      </div>
+      <div class="bt-card__title">Three Clocks Drift</div>
+      <div class="bt-card__body">Tick/wall/graph time that drift in production. Graph-time is a DAG, not a line.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="B6" data-detail-title="Intent Validated" data-detail-body="Validated by every formalism's governance gap. May conflate governance + constraint + scope." data-detail-score="8" data-detail-round="1">
+      <div class="bt-card__header">
+        <span class="bt-card__id">B6</span>
+        <span style="background:var(--amber)20;color:var(--amber);padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--font-mono)">8/10</span>
+      </div>
+      <div class="bt-card__title">Intent Validated</div>
+      <div class="bt-card__body">Validated by every formalism's governance gap. May conflate governance + constraint + scope.</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R2" data-detail-title="CDO R2: a1-edge-schema" data-detail-body="Agent artifact from round 2" data-detail-score="" data-detail-round="2">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R2</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R2: a1-edge-schema</div>
+      <div class="bt-card__body">Agent artifact from round 2</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R2" data-detail-title="CDO R2: a3-stress-test" data-detail-body="Agent artifact from round 2" data-detail-score="" data-detail-round="2">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R2</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R2: a3-stress-test</div>
+      <div class="bt-card__body">Agent artifact from round 2</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R2" data-detail-title="CDO R2: a4-gate-loss" data-detail-body="Agent artifact from round 2" data-detail-score="" data-detail-round="2">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R2</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R2: a4-gate-loss</div>
+      <div class="bt-card__body">Agent artifact from round 2</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R2" data-detail-title="CDO R2: a5-resolution" data-detail-body="Agent artifact from round 2" data-detail-score="" data-detail-round="2">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R2</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R2: a5-resolution</div>
+      <div class="bt-card__body">Agent artifact from round 2</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R2" data-detail-title="CDO R2: synthesis" data-detail-body="Agent artifact from round 2" data-detail-score="" data-detail-round="2">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R2</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R2: synthesis</div>
+      <div class="bt-card__body">Agent artifact from round 2</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R3" data-detail-title="CDO R3: question" data-detail-body="Agent artifact from round 3" data-detail-score="" data-detail-round="3">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R3</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R3: question</div>
+      <div class="bt-card__body">Agent artifact from round 3</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R3" data-detail-title="CDO R3: synthesis" data-detail-body="Agent artifact from round 3" data-detail-score="" data-detail-round="3">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R3</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R3: synthesis</div>
+      <div class="bt-card__body">Agent artifact from round 3</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R4" data-detail-title="CDO R4: question" data-detail-body="Agent artifact from round 4" data-detail-score="" data-detail-round="4">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R4</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R4: question</div>
+      <div class="bt-card__body">Agent artifact from round 4</div>
+    </div>
+    <div class="bt-card" data-detail-type="breakthrough" data-detail-id="R4" data-detail-title="CDO R4: synthesis" data-detail-body="Agent artifact from round 4" data-detail-score="" data-detail-round="4">
+      <div class="bt-card__header">
+        <span class="bt-card__id">R4</span>
+        
+      </div>
+      <div class="bt-card__title">CDO R4: synthesis</div>
+      <div class="bt-card__body">Agent artifact from round 4</div>
+    </div></div>
+      </div>
+      <div class="section">
+        <div class="section__eyebrow">Bead Queue</div>
+        <div class="section__title">Work</div>
+        <div class="work-sub">In Progress</div>
+        <table class="work-table">
+          <thead><tr><th>P</th><th>ID</th><th>Title</th></tr></thead>
+          <tbody>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-mksn</td>
+      <td>Extract persistent browser worker patterns into browser-cascade</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--teal)">P2</span></td>
+      <td class="bead-id">lev-2gyd</td>
+      <td>Promote autodev targeting into structured workstream projections</td>
+    </tr></tbody>
+        </table>
+        <div class="work-sub">Ready</div>
+        <table class="work-table">
+          <thead><tr><th>P</th><th>ID</th><th>Title</th></tr></thead>
+          <tbody>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--rose)">P0</span></td>
+      <td class="bead-id">lev-fy0o</td>
+      <td>[epic] CDO Phase 2: Sun v. Virgin OSINT Discovery</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--rose)">P0</span></td>
+      <td class="bead-id">lev-jp00</td>
+      <td>[epic] OSINT Notice Intelligence: Sun v. Virgin Voyages</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--rose)">P0</span></td>
+      <td class="bead-id">lev-6a6</td>
+      <td>[STANDING] Dogfood lev at every step — use lev primitives, fix what breaks</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-msqo</td>
+      <td>Add deterministic exec-backed prompt-stack run fixtures</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-sw5x</td>
+      <td>Promote scheduling base case into sentinel PR-drift consumer</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-b5q2</td>
+      <td>GitAgent parity + examples/ eval bench — framework parasitism</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-jrzq</td>
+      <td>50-agent CDO: master plan to land constraint engineering in Leviathan</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-pop5.8</td>
+      <td>Reframe knobs language to SDK options and execution profiles ← Runtime taxonomy, harness docs, and env-runner migration</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-pop5.6</td>
+      <td>Organize core-harness structure for later runtime extraction ← Runtime taxonomy, harness docs, and env-runner migration</td>
+    </tr>
+    <tr>
+      <td><span class="priority-dot" style="background:var(--amber)">P1</span></td>
+      <td class="bead-id">lev-pop5.7</td>
+      <td>Inventory FlowMind schema ownership and config surfaces ← Runtime taxonomy, harness docs, and env-runner migration</td>
+    </tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Primitives -->
+    <div class="section section--full" data-label="Primitives">
+      <div class="section__eyebrow">Six Primitives</div>
+      <div class="section__title">Convergence State</div>
+      <div class="prim-grid">
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="◉ Node" data-detail-body="4 competing interfaces. GraphNode (FlowMind) is richest." data-detail-meta="fragmented" data-detail-tone="amber">
+      <div class="prim-card__icon" style="color:var(--amber)">◉</div>
+      <div class="prim-card__name">Node</div>
+      <div class="prim-card__status" style="color:var(--amber)">fragmented</div>
+      <div class="prim-card__note">4 competing interfaces. GraphNode (FlowMind) is richest.</div>
+    </div>
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="⟶ Edge" data-detail-body="Carries 5 conflated concerns. B4 breakthrough flagged this." data-detail-meta="under-specified" data-detail-tone="rose">
+      <div class="prim-card__icon" style="color:var(--rose)">⟶</div>
+      <div class="prim-card__name">Edge</div>
+      <div class="prim-card__status" style="color:var(--rose)">under-specified</div>
+      <div class="prim-card__note">Carries 5 conflated concerns. B4 breakthrough flagged this.</div>
+    </div>
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="↻ Loop" data-detail-body="heartbeat.ts + until.ts in core/orchestration. 3 topologies." data-detail-meta="most mature" data-detail-tone="teal">
+      <div class="prim-card__icon" style="color:var(--teal)">↻</div>
+      <div class="prim-card__name">Loop</div>
+      <div class="prim-card__status" style="color:var(--teal)">most mature</div>
+      <div class="prim-card__note">heartbeat.ts + until.ts in core/orchestration. 3 topologies.</div>
+    </div>
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="⊘ Eval" data-detail-body="6 systems → converging on core-autoresearch as THE engine." data-detail-meta="converging" data-detail-tone="amber">
+      <div class="prim-card__icon" style="color:var(--amber)">⊘</div>
+      <div class="prim-card__name">Eval</div>
+      <div class="prim-card__status" style="color:var(--amber)">converging</div>
+      <div class="prim-card__note">6 systems → converging on core-autoresearch as THE engine.</div>
+    </div>
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="◧ Session" data-detail-body="process-harness, flowmind, session-writer. Need merge." data-detail-meta="3 types" data-detail-tone="amber">
+      <div class="prim-card__icon" style="color:var(--amber)">◧</div>
+      <div class="prim-card__name">Session</div>
+      <div class="prim-card__status" style="color:var(--amber)">3 types</div>
+      <div class="prim-card__note">process-harness, flowmind, session-writer. Need merge.</div>
+    </div>
+    <div class="prim-card" data-detail-type="primitive" data-detail-title="⚡ Effect" data-detail-body="No first-class type. Implicit in adapters. Needs extraction." data-detail-meta="missing" data-detail-tone="rose">
+      <div class="prim-card__icon" style="color:var(--rose)">⚡</div>
+      <div class="prim-card__name">Effect</div>
+      <div class="prim-card__status" style="color:var(--rose)">missing</div>
+      <div class="prim-card__note">No first-class type. Implicit in adapters. Needs extraction.</div>
+    </div></div>
+    </div>
+
+    <!-- DNA Thesis -->
+    
+    <div class="section section--full" data-label="DNA Thesis">
+      <div class="section__eyebrow">System DNA</div>
+      <div class="section__title">The Thesis</div>
+      <div class="thesis-grid">
+        <div class="thesis-quote">
+          <blockquote>"Agents are dead. Sessions are dead. Swarms are meaningless."</blockquote>
+          <div class="thesis-attribution">— JP, 2026-03-25</div>
+        </div>
+        <div class="thesis-steps">
+          <div class="thesis-step"><span class="thesis-step__num">1</span> Update a graph node</div>
+          <div class="thesis-step"><span class="thesis-step__num">2</span> Make a proposal</div>
+          <div class="thesis-step"><span class="thesis-step__num">3</span> System accepts the proposal</div>
+          <div class="thesis-step"><span class="thesis-step__num">4</span> Graph patches itself</div>
+          <div class="thesis-step"><span class="thesis-step__num">5</span> Ralph loop manifests the update</div>
+          <div class="thesis-step"><span class="thesis-step__num">6</span> Connected nodes trickle-update</div>
+          <div class="thesis-step"><span class="thesis-step__num">7</span> Loop continues until change is real</div>
+        </div>
+      </div>
+      <div class="thesis-footer">The reactive graph IS the AI. FlowMinds listen. Loops manifest. Evals validate.</div>
+    </div>
+
+    <!-- Open Questions -->
+    
+    <div class="section section--full" data-label="Open Questions">
+      <div class="section__eyebrow">Unresolved</div>
+      <div class="section__title">Open Questions</div>
+      <div class="oq-grid">
+        <div class="oq-card" data-detail-type="question" data-detail-title="Effect primitive" data-detail-body="What does the type look like? Options: git commit, file write, API call, model update, graph mutation. No first-class Effect type exists yet — implicit in adapters. Needs extraction from existing code." data-detail-num="1"><span class="oq-num">1</span><div class="oq-text"><strong>Effect primitive</strong> — What does the type look like? (git commit, file write, API call, model update, graph mutation)</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="Session merging" data-detail-body="Which of the 3 Session types wins? Or do they compose? Current types: process-harness, flowmind, session-writer. Need merge strategy." data-detail-num="2"><span class="oq-num">2</span><div class="oq-text"><strong>Session merging</strong> — Which of the 3 Session types wins? Or do they compose?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="Node unification" data-detail-body="GraphNode is richest, but is it the right abstraction for os/ Go code? 4 competing interfaces. Cross-language alignment needed." data-detail-num="3"><span class="oq-num">3</span><div class="oq-text"><strong>Node unification</strong> — GraphNode is richest, but is it the right abstraction for os/ Go code?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="Cross-language" data-detail-body="os/ is Go, Sofia is Python, Lev is TypeScript. Schema codegen? Proto? Need a shared type strategy across all three runtimes." data-detail-num="4"><span class="oq-num">4</span><div class="oq-text"><strong>Cross-language</strong> — os/ is Go, Sofia is Python, Lev is TypeScript. Schema codegen? Proto?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="Workstream vs Session" data-detail-body="Vernacular decision. Same thing at different timescales? Need to resolve whether these are distinct concepts or one concept at different zoom levels." data-detail-num="5"><span class="oq-num">5</span><div class="oq-text"><strong>Workstream vs Session</strong> — Vernacular decision. Same thing at different timescales?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="Graph-native editing" data-detail-body="How does 'update button.yaml → auto-manifest' work at protocol level? The reactive graph should propagate changes automatically." data-detail-num="6"><span class="oq-num">6</span><div class="oq-text"><strong>Graph-native editing</strong> — How does "update button.yaml → auto-manifest" work at protocol level?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="The blog node" data-detail-body="How does a FlowMind 'listen' for updates and auto-research/publish? Reactive flow → content pipeline → publication surface." data-detail-num="7"><span class="oq-num">7</span><div class="oq-text"><strong>The blog node</strong> — How does a FlowMind "listen" for updates and auto-research/publish?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="CDO as cognition" data-detail-body="If CDO IS thinking, what's the training signal? How does it improve? Parliament protocol with dissent management. Synthesis directive drives next turn." data-detail-num="8"><span class="oq-num">8</span><div class="oq-text"><strong>CDO as cognition</strong> — If CDO IS thinking, what's the training signal? How does it improve?</div></div>
+        <div class="oq-card" data-detail-type="question" data-detail-title="The Substack" data-detail-body="Constraint engineering? Autoresearch timeline? Graph-native AI? JP's next post thesis: what does agentifying a codebase REALLY mean?" data-detail-num="9"><span class="oq-num">9</span><div class="oq-text"><strong>The Substack</strong> — Constraint engineering? Autoresearch timeline? Graph-native AI?</div></div>
+        <div class="oq-card oq-card--wild" data-detail-type="question" data-detail-title="What are we missing?" data-detail-body="What primitive is #7? The algebra has 6 (Node, Edge, Loop, Eval, Session, Effect). Is there a 7th? Intent was proposed but may be sugar over Node." data-detail-num="?"><span class="oq-num">?</span><div class="oq-text"><strong>What are we missing?</strong> — What primitive is #7?</div></div>
+      </div>
+    </div>
+
+    <!-- Evolution Meta-Timeline -->
+    <div class="section section--full" data-label="Evolution">
+      <div class="section__eyebrow">Self-Evolution</div>
+      <div class="section__title">Dashboard Changes</div>
+      <div class="evo-list">
+        
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 59 — stream_ux" data-detail-body="Added freshness counter in footer — shows time since last data generation (5s ago, 2m ago). Teal when fresh (&lt;2m), transitions to amber when stale (&gt;2m). Updates every 5s. Ambient awareness of data staleness without manual checking." data-detail-time="09:06 PM">
+        <div class="evo-item__dot" style="background:var(--teal)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--teal)">stream_ux</span>
+            <span class="evo-item__tick">tick 59</span>
+            <span class="evo-item__time">09:06 PM</span>
+          </div>
+          <div class="evo-item__change">Added freshness counter in footer — shows time since last data generation (5s ago, 2m ago). Teal when fresh (&lt;2m), tr...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 58 — hygiene" data-detail-body="Regression check: 18/18 widgets, 79 click attrs, 115KB HTML. timeline 105 entries, evolution-log 58 entries, 0 parse errors. CDO badge renders in header. Zero regressions across 58 ticks." data-detail-time="09:00 PM">
+        <div class="evo-item__dot" style="background:var(--rose)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--rose)">hygiene</span>
+            <span class="evo-item__tick">tick 58</span>
+            <span class="evo-item__time">09:00 PM</span>
+          </div>
+          <div class="evo-item__change">Regression check: 18/18 widgets, 79 click attrs, 115KB HTML. timeline 105 entries, evolution-log 58 entries, 0 parse ...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 57 — polish" data-detail-body="Polished header meta layout — added vertical separator between streaming indicator and data chips, tightened gap (16px→10px), added flex-wrap and white-space:nowrap on chips for clean tablet wrapping. Reduced chip padding slightly for density." data-detail-time="08:56 PM">
+        <div class="evo-item__dot" style="background:var(--amber)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--amber)">polish</span>
+            <span class="evo-item__tick">tick 57</span>
+            <span class="evo-item__time">08:56 PM</span>
+          </div>
+          <div class="evo-item__change">Polished header meta layout — added vertical separator between streaming indicator and data chips, tightened gap (16p...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 56 — add_widget" data-detail-body="Added CDO round badge to header — amber-bordered chip showing current round (R4). Clickable: opens drawer listing all CDO rounds. Surfaces CDO deliberation state at the top level instead of buried in the breakthroughs section." data-detail-time="08:51 PM">
+        <div class="evo-item__dot" style="background:var(--accent)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--accent)">add_widget</span>
+            <span class="evo-item__tick">tick 56</span>
+            <span class="evo-item__time">08:51 PM</span>
+          </div>
+          <div class="evo-item__change">Added CDO round badge to header — amber-bordered chip showing current round (R4). Clickable: opens drawer listing all...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 55 — assess" data-detail-body="55-tick assess: 2766 LOC, 113KB HTML, 102 data ticks. Distribution near-perfect (stream:12, add:13, polish:12, assess:9+1, hygiene:9). 100% drawer coverage achieved. Ambient particles + equalizer heartbeat live. Remaining: CDO round rendering, theme toggle, auto-refresh, HTML weight." data-detail-time="08:45 PM">
+        <div class="evo-item__dot" style="background:var(--text-dim)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--text-dim)">assess</span>
+            <span class="evo-item__tick">tick 55</span>
+            <span class="evo-item__time">08:45 PM</span>
+          </div>
+          <div class="evo-item__change">55-tick assess: 2766 LOC, 113KB HTML, 102 data ticks. Distribution near-perfect (stream:12, add:13, polish:12, assess...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 54 — stream_ux" data-detail-body="Added stream status equalizer to floating section label — 3 animated bars bounce when auto-scrolling, flatten to amber when paused. Visual heartbeat shows the stream is alive. CSS-only animation respects reduced-motion via parent .stream-paused class." data-detail-time="08:41 PM">
+        <div class="evo-item__dot" style="background:var(--teal)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--teal)">stream_ux</span>
+            <span class="evo-item__tick">tick 54</span>
+            <span class="evo-item__time">08:41 PM</span>
+          </div>
+          <div class="evo-item__change">Added stream status equalizer to floating section label — 3 animated bars bounce when auto-scrolling, flatten to ambe...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 53 — hygiene" data-detail-body="Data tick 100 milestone. 18/18 widgets render, 77 click attrs, 113KB HTML. timeline.jsonl 101 entries 0 errors, evolution-log.jsonl 53 entries 0 errors. Zero regressions across 53 evolution ticks." data-detail-time="08:35 PM">
+        <div class="evo-item__dot" style="background:var(--rose)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--rose)">hygiene</span>
+            <span class="evo-item__tick">tick 53</span>
+            <span class="evo-item__time">08:35 PM</span>
+          </div>
+          <div class="evo-item__change">Data tick 100 milestone. 18/18 widgets render, 77 click attrs, 113KB HTML. timeline.jsonl 101 entries 0 errors, evolu...</div>
+        </div>
+      </div>
+      <div class="evo-item" data-detail-type="evolution" data-detail-title="tick 52 — polish" data-detail-body="Added universal active/pressed state — all [data-detail-type] elements scale to 97% with accent border on click. Gives tactile feedback across all 128+ interactive elements. Single CSS rule covers every clickable card, item, and alert." data-detail-time="08:30 PM">
+        <div class="evo-item__dot" style="background:var(--amber)"></div>
+        <div class="evo-item__content">
+          <div class="evo-item__meta">
+            <span class="evo-item__type" style="color:var(--amber)">polish</span>
+            <span class="evo-item__tick">tick 52</span>
+            <span class="evo-item__time">08:30 PM</span>
+          </div>
+          <div class="evo-item__change">Added universal active/pressed state — all [data-detail-type] elements scale to 97% with accent border on click. Give...</div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Timeline + Recent Activity -->
+    <div class="two-col" data-label="Timeline & Activity">
+      <div class="section">
+        <div class="section__eyebrow">Append-Only</div>
+        <div class="section__title">Timeline</div>
+        <div class="tl-list">
+          
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 116</span>
+            <span class="tl-item__time">02:25 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 86 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 115</span>
+            <span class="tl-item__time">02:24 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 81 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 114</span>
+            <span class="tl-item__time">01:56 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 81 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 113</span>
+            <span class="tl-item__time">01:56 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 81 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 112</span>
+            <span class="tl-item__time">01:55 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 81 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 111</span>
+            <span class="tl-item__time">01:54 PM</span>
+          </div>
+          <div class="tl-item__summary">112 ready, 2 in progress, 265/393 closed | 77 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 110</span>
+            <span class="tl-item__time">03:47 AM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 3 in progress, 262/393 closed | 54 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 109</span>
+            <span class="tl-item__time">03:47 AM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 3 in progress, 262/393 closed | 54 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 108</span>
+            <span class="tl-item__time">03:46 AM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 3 in progress, 262/393 closed | 54 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 107</span>
+            <span class="tl-item__time">11:38 PM</span>
+          </div>
+          <div class="tl-item__summary">115 ready, 2 in progress, 261/392 closed | 35 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 106</span>
+            <span class="tl-item__time">11:38 PM</span>
+          </div>
+          <div class="tl-item__summary">115 ready, 2 in progress, 261/392 closed | 33 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 105</span>
+            <span class="tl-item__time">09:06 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 21 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 104</span>
+            <span class="tl-item__time">09:00 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 21 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 103</span>
+            <span class="tl-item__time">08:55 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 21 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 102</span>
+            <span class="tl-item__time">08:51 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 21 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 101</span>
+            <span class="tl-item__time">08:41 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 100</span>
+            <span class="tl-item__time">08:35 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 99</span>
+            <span class="tl-item__time">08:30 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 98</span>
+            <span class="tl-item__time">08:26 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 97</span>
+            <span class="tl-item__time">08:17 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 96</span>
+            <span class="tl-item__time">08:15 PM</span>
+          </div>
+          <div class="tl-item__summary">114 ready, 2 in progress, 259/390 closed | 16 git changes | CDO: cdo-r1, cdo-r2, cdo-r3, cdo-r4</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 95</span>
+            <span class="tl-item__time">12:51 PM</span>
+          </div>
+          <div class="tl-item__summary">108 ready, 2 in progress, 241/360 closed | 20 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 94</span>
+            <span class="tl-item__time">12:51 PM</span>
+          </div>
+          <div class="tl-item__summary">108 ready, 2 in progress, 241/360 closed | 18 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 93</span>
+            <span class="tl-item__time">09:11 AM</span>
+          </div>
+          <div class="tl-item__summary">104 ready, 6 in progress, 241/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 92</span>
+            <span class="tl-item__time">09:11 AM</span>
+          </div>
+          <div class="tl-item__summary">104 ready, 6 in progress, 241/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 91</span>
+            <span class="tl-item__time">09:06 AM</span>
+          </div>
+          <div class="tl-item__summary">104 ready, 6 in progress, 240/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 90</span>
+            <span class="tl-item__time">09:05 AM</span>
+          </div>
+          <div class="tl-item__summary">104 ready, 6 in progress, 240/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2, cdo-r3</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 89</span>
+            <span class="tl-item__time">09:00 AM</span>
+          </div>
+          <div class="tl-item__summary">104 ready, 6 in progress, 240/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 88</span>
+            <span class="tl-item__time">08:56 AM</span>
+          </div>
+          <div class="tl-item__summary">105 ready, 6 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 87</span>
+            <span class="tl-item__time">08:55 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 86</span>
+            <span class="tl-item__time">08:51 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 85</span>
+            <span class="tl-item__time">08:51 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 8 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 84</span>
+            <span class="tl-item__time">08:46 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 10 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 83</span>
+            <span class="tl-item__time">08:45 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 10 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 82</span>
+            <span class="tl-item__time">08:41 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 9 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 81</span>
+            <span class="tl-item__time">08:41 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 9 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 80</span>
+            <span class="tl-item__time">08:36 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 79</span>
+            <span class="tl-item__time">08:35 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 78</span>
+            <span class="tl-item__time">08:31 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 77</span>
+            <span class="tl-item__time">08:28 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 76</span>
+            <span class="tl-item__time">08:28 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 75</span>
+            <span class="tl-item__time">08:25 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 74</span>
+            <span class="tl-item__time">08:21 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 73</span>
+            <span class="tl-item__time">08:20 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 72</span>
+            <span class="tl-item__time">08:20 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 71</span>
+            <span class="tl-item__time">08:15 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 70</span>
+            <span class="tl-item__time">08:15 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 69</span>
+            <span class="tl-item__time">08:11 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 68</span>
+            <span class="tl-item__time">08:10 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-item__dot"></div>
+        <div class="tl-item__content">
+          <div class="tl-item__meta">
+            <span class="tl-item__tick">tick 67</span>
+            <span class="tl-item__time">08:10 AM</span>
+          </div>
+          <div class="tl-item__summary">106 ready, 5 in progress, 239/360 closed | 7 git changes | CDO: cdo-r1, cdo-r2</div>
+        </div>
+      </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section__eyebrow">Activity</div>
+        <div class="section__title">Recent</div>
+
+        <div class="work-sub">Commits</div>
+        
+    <div class="commit-item">
+      <span class="commit-hash">84f5e0b</span>
+      <span class="commit-msg">Merge branch 'main' of github.com:lev-os/leviathan</span>
+    </div>
+    <div class="commit-item">
+      <span class="commit-hash">30a3a1a</span>
+      <span class="commit-msg">feat(system-dashboard): CSS extraction, widget imports, MANIFEST, smoke tests</span>
+    </div>
+    <div class="commit-item">
+      <span class="commit-hash">92caf42</span>
+      <span class="commit-msg">Merge branch 'main' of github.com:lev-os/leviathan</span>
+    </div>
+    <div class="commit-item">
+      <span class="commit-hash">5e07806</span>
+      <span class="commit-msg">docs: FINAL.md v2 — merged CDO + ChatGPT Deep Research negotiate phase</span>
+    </div>
+    <div class="commit-item">
+      <span class="commit-hash">4b98a9b</span>
+      <span class="commit-msg">docs(handoff): FlowMind arch review + Poly Protocol convergence findings</span>
+    </div>
+    <div class="commit-item">
+      <span class="commit-hash">6210caf</span>
+      <span class="commit-msg">Merge remote-tracking branch 'origin/main'</span>
+    </div>
+
+        <div class="work-sub" style="margin-top:16px">Handoffs</div>
+        
+    <div class="handoff-item" data-detail-type="handoff" data-detail-title="tt-research-6-persist" data-detail-file="tt-research-6-persist.md">tt-research-6-persist</div>
+    <div class="handoff-item" data-detail-type="handoff" data-detail-title="tt-research-5-report" data-detail-file="tt-research-5-report.md">tt-research-5-report</div>
+    <div class="handoff-item" data-detail-type="handoff" data-detail-title="tt-research-4-synthesize" data-detail-file="tt-research-4-synthesize.md">tt-research-4-synthesize</div>
+    <div class="handoff-item" data-detail-type="handoff" data-detail-title="tt-research-3-execute" data-detail-file="tt-research-3-execute.md">tt-research-3-execute</div>
+
+        <div class="work-sub" style="margin-top:16px">CDO Rounds</div>
+        <span class="cdo-badge">cdo-r1</span><span class="cdo-badge">cdo-r2</span><span class="cdo-badge">cdo-r3</span><span class="cdo-badge">cdo-r4</span>
+
+        <div class="work-sub" style="margin-top:16px">Changed Files</div>
+        
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="lev/events.jsonl" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">lev/events.jsonl</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title=".lev/gen-ui/sessions/heartbeat-live/index.html" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">.lev/gen-ui/sessions/heartbeat-live/index.html</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title=".lev/gen-ui/sessions/heartbeat-live/timeline.jsonl" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">.lev/gen-ui/sessions/heartbeat-live/timeline.jsonl</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title=".lev/pm/handoffs/20260320-8weeks-ops-lev-focal-point-session-1.md" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">.lev/pm/handoffs/20260320-8weeks-ops-lev-focal-point-session-1.md</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title=".lev/pm/handoffs/20260322-agentic-ux-tribunal-thinking-session-1.md" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">.lev/pm/handoffs/20260322-agentic-ux-tribunal-thinking-session-1.md</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title=".lev/pm/handoffs/20260326-agentic-ux-tribunal-session-3.md" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">.lev/pm/handoffs/20260326-agentic-ux-tribunal-session-3.md</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="apps/nanoclaw" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">apps/nanoclaw</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="apps/shift-app" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">apps/shift-app</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="community/agentguard" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">community/agentguard</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="community/agentping" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">community/agentping</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="community/clawcast" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">community/clawcast</span>
+      </div>
+      <div class="git-file" data-detail-type="gitfile" data-detail-title="community/clawmeet" data-detail-body="modified">
+        <span class="git-file__status" style="color:var(--amber)">M</span>
+        <span class="git-file__path">community/clawmeet</span>
+      </div>
+
+        <div class="work-sub" style="margin-top:16px">Journal</div>
+        
+      <div class="journal-item" data-detail-type="journal" data-detail-title="20260325 tick 9" data-detail-body="" data-detail-file="20260325-tick-9.md">
+        <div class="journal-item__date"></div>
+        <div class="journal-item__title">20260325 tick 9</div>
+      </div>
+      <div class="journal-item" data-detail-type="journal" data-detail-title="20260325 tick 77 autolearn" data-detail-body="" data-detail-file="20260325-tick-77-autolearn.md">
+        <div class="journal-item__date"></div>
+        <div class="journal-item__title">20260325 tick 77 autolearn</div>
+      </div>
+      <div class="journal-item" data-detail-type="journal" data-detail-title="20260325 tick 7 8" data-detail-body="" data-detail-file="20260325-tick-7-8.md">
+        <div class="journal-item__date"></div>
+        <div class="journal-item__title">20260325 tick 7 8</div>
+      </div>
+      <div class="journal-item" data-detail-type="journal" data-detail-title="20260325 tick 67 2hr synthesis" data-detail-body="" data-detail-file="20260325-tick-67-2hr-synthesis.md">
+        <div class="journal-item__date"></div>
+        <div class="journal-item__title">20260325 tick 67 2hr synthesis</div>
+      </div>
+      <div class="journal-item" data-detail-type="journal" data-detail-title="20260325 tick 5 6" data-detail-body="" data-detail-file="20260325-tick-5-6.md">
+        <div class="journal-item__date"></div>
+        <div class="journal-item__title">20260325 tick 5 6</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>Generated 2026-03-28T19:25:01.185Z from .lev/gen-ui/sessions/heartbeat-live</div>
+      <div class="footer__refresh">
+        <div class="refresh-dot"></div>
+        auto-refresh 5m
+        <span class="freshness" id="freshness" data-generated="2026-03-28T19:25:01.198Z"></span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scroll track dots -->
+  <nav class="scroll-track" id="scroll-track"></nav>
+
+  <!-- Toast container -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Floating section label -->
+  <div class="section-label" id="section-label"><span class="stream-status"><span class="stream-status__bar"></span><span class="stream-status__bar"></span><span class="stream-status__bar"></span></span><span id="section-label-text"></span></div>
+
+  <!-- Detail drawer (SPA) -->
+  <div class="detail-overlay" id="detail-overlay"></div>
+  <div class="detail-drawer" id="detail-drawer">
+    <button class="detail-drawer__close" id="detail-close">&times;</button>
+    <div id="detail-content"></div>
+  </div>
+
+  <script>
+
+  (function() {
+    // ── Ambient Auto-Scroll ──────────────────────────────────────────────
+    const sections = document.querySelectorAll('.header, .pulse-grid, .two-col, .section--full');
+    const track = document.getElementById('scroll-track');
+    const toast = document.getElementById('toast');
+    let current = 0;
+    let paused = false;
+    const DWELL = 12000;       // 12s per section
+    const PAUSE_MS = 30000;    // 30s pause after interaction
+    const STORAGE_KEY = 'lev-heartbeat-scroll-idx';
+
+    // Restore position from previous page load
+    const saved = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0');
+    if (saved > 0 && saved < sections.length) current = saved;
+
+    // Build scroll track dots
+    sections.forEach(function(_, i) {
+      const dot = document.createElement('div');
+      dot.className = 'scroll-track__dot' + (i === current ? ' active' : '');
+      dot.addEventListener('click', function() {
+        current = i;
+        scrollToCurrent();
+        pauseTemporarily();
+      });
+      track.appendChild(dot);
+    });
+
+    function updateTrack() {
+      track.querySelectorAll('.scroll-track__dot').forEach(function(d, i) {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    function scrollToCurrent() {
+      if (sections[current]) {
+        sections.forEach(function(s) { s.classList.remove('active-section'); });
+        sections[current].classList.add('active-section');
+        sections[current].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        sessionStorage.setItem(STORAGE_KEY, String(current));
+        updateTrack();
+      }
+    }
+
+    function scrollNext() {
+      if (paused) return;
+      current = (current + 1) % sections.length;
+      scrollToCurrent();
+    }
+
+    let timer = setInterval(scrollNext, DWELL);
+
+    // ── Pause on interaction ─────────────────────────────────────────────
+    let pauseTimer;
+    function pauseTemporarily() {
+      paused = true;
+      document.body.classList.add('stream-paused');
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(function() {
+        paused = false;
+        document.body.classList.remove('stream-paused');
+      }, PAUSE_MS);
+    }
+
+    ['mousedown', 'touchstart', 'wheel', 'keydown'].forEach(function(evt) {
+      document.addEventListener(evt, pauseTemporarily, { passive: true });
+    });
+
+    // ── IntersectionObserver for section entrance ─────────────────────────
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section, .section--full, .pulse-grid').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // ── Toast for new timeline events ────────────────────────────────────
+    var lastTick = 117;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 4000);
+    }
+
+    // On page load, show tick toast
+    if (lastTick > 0) {
+      setTimeout(function() { showToast('tick ' + lastTick + ' — dashboard updated'); }, 1500);
+    }
+
+    // ── Animated count-up on pulse cards ──────────────────────────────────
+    document.querySelectorAll('.pulse-card__value[data-count]').forEach(function(el) {
+      var target = parseInt(el.dataset.count) || 0;
+      var duration = 1200;
+      var start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        el.textContent = Math.round(target * ease);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      setTimeout(function() { requestAnimationFrame(step); }, 400);
+    });
+
+    // ── Completion bar fill animation ──────────────────────────────────────
+    document.querySelectorAll('.completion-bar__fill[data-target-width]').forEach(function(el) {
+      var target = parseInt(el.dataset.targetWidth) || 0;
+      setTimeout(function() {
+        el.style.width = target + '%';
+      }, 500);
+    });
+
+    // ── Floating section label ────────────────────────────────────────────
+    var sectionLabel = document.getElementById('section-label');
+    var labelTimer;
+    var labelObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.target.dataset.label) {
+          var labelText = document.getElementById('section-label-text');
+          if (labelText) labelText.textContent = entry.target.dataset.label;
+          sectionLabel.classList.add('visible');
+          clearTimeout(labelTimer);
+          labelTimer = setTimeout(function() {
+            sectionLabel.classList.remove('visible');
+          }, 3000);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('[data-label]').forEach(function(el) {
+      labelObserver.observe(el);
+    });
+
+    // ── Live clock ────────────────────────────────────────────────────────
+    var clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+      setInterval(function() {
+        var now = new Date();
+        clockEl.textContent = now.toLocaleTimeString('en-US', {
+          hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+        });
+      }, 1000);
+    }
+
+    // ── Detail drawer (SPA interaction) ─────────────────────────────────
+    var drawer = document.getElementById('detail-drawer');
+    var overlay = document.getElementById('detail-overlay');
+    var detailContent = document.getElementById('detail-content');
+    var detailClose = document.getElementById('detail-close');
+
+    function openDrawer(html) {
+      detailContent.innerHTML = html + '<div class="detail-drawer__hint"><kbd>Esc</kbd> to close</div>';
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      pauseTemporarily();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+
+    overlay.addEventListener('click', closeDrawer);
+    detailClose.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Click on breakthrough cards
+    document.querySelectorAll('.bt-card[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Breakthrough ' + d.detailId + (d.detailScore ? ' — ' + d.detailScore + '/10' : '') + '</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body">' + d.detailBody + '</div>' +
+          '<div class="detail-drawer__meta">Round ' + d.detailRound + '</div>'
+        );
+      });
+    });
+
+    // Click on bead IDs
+    document.querySelectorAll('.bead-id').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var row = el.closest('tr');
+        var title = row ? row.querySelector('td:last-child').textContent : '';
+        var priority = row ? row.querySelector('.priority-dot').textContent : '';
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Bead</div>' +
+          '<div class="detail-drawer__title">' + el.textContent + '</div>' +
+          '<div class="detail-drawer__body">' + title + '</div>' +
+          '<div class="detail-drawer__meta">Priority: ' + priority + '</div>'
+        );
+      });
+    });
+
+    // Click on git file items
+    document.querySelectorAll('.git-file[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Changed File</div>' +
+          '<div class="detail-drawer__title" style="font-family:var(--font-mono);font-size:14px">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body">Status: ' + d.detailBody + '</div>'
+        );
+      });
+    });
+
+    // Click on timeline items
+    document.querySelectorAll('.tl-item').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var tick = el.querySelector('.tl-item__tick');
+        var time = el.querySelector('.tl-item__time');
+        var summary = el.querySelector('.tl-item__summary');
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Timeline Event</div>' +
+          '<div class="detail-drawer__title">' + (tick ? tick.textContent : '') + '</div>' +
+          '<div class="detail-drawer__body">' + (summary ? summary.textContent : '') + '</div>' +
+          '<div class="detail-drawer__meta">' + (time ? time.textContent : '') + '</div>'
+        );
+      });
+    });
+
+    // Click on journal items
+    document.querySelectorAll('.journal-item[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Journal Entry</div>' +
+          '<div class="detail-drawer__title" style="text-transform:capitalize">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body">Date: ' + d.detailBody + '</div>' +
+          '<div class="detail-drawer__meta" style="font-family:var(--font-mono);font-size:10px;opacity:0.6">' + d.detailFile + '</div>'
+        );
+      });
+    });
+
+    // Click on handoff items
+    document.querySelectorAll('.handoff-item[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Handoff</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__meta" style="font-family:var(--font-mono);font-size:10px;opacity:0.6">' + d.detailFile + '</div>'
+        );
+      });
+    });
+
+    // Click on evolution items
+    document.querySelectorAll('.evo-item[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Evolution</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body" style="white-space:pre-wrap">' + d.detailBody + '</div>' +
+          '<div class="detail-drawer__meta">' + d.detailTime + '</div>'
+        );
+      });
+    });
+
+    // Click on stall alert — show top ready beads
+    document.querySelectorAll('.stall-alert[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        var beadLines = (d.detailBody || '').split('\\n').filter(Boolean).map(function(line) {
+          return '<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' + line + '</div>';
+        }).join('');
+        openDrawer(
+          '<div class="detail-drawer__eyebrow" style="color:var(--amber)">Stall Alert</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body">' +
+            '<div style="margin-bottom:8px;opacity:0.7">' + (d.detailMeta || '') + '</div>' +
+            '<div style="font-family:var(--font-mono);font-size:11px">' + (beadLines || '<em>No ready beads</em>') + '</div>' +
+          '</div>'
+        );
+      });
+    });
+
+    // Click on primitive cards — show convergence details
+    document.querySelectorAll('.prim-card[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        var toneColors = { teal: 'var(--teal)', amber: 'var(--amber)', rose: 'var(--rose)' };
+        var color = toneColors[d.detailTone] || 'var(--accent)';
+        openDrawer(
+          '<div class="detail-drawer__eyebrow" style="color:' + color + '">Primitive</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.06);color:' + color + ';margin-bottom:12px">' + (d.detailMeta || '') + '</div>' +
+          '<div class="detail-drawer__body" style="white-space:pre-wrap">' + d.detailBody + '</div>'
+        );
+      });
+    });
+
+    // Click on open question cards
+    document.querySelectorAll('.oq-card[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        var isWild = el.classList.contains('oq-card--wild');
+        var numColor = isWild ? 'var(--rose)' : 'var(--accent)';
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">Open Question</div>' +
+          '<div style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(88,197,230,0.1);color:' + numColor + ';font-weight:700;font-size:14px;margin-bottom:10px">' + (d.detailNum || '?') + '</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div class="detail-drawer__body" style="white-space:pre-wrap">' + d.detailBody + '</div>'
+        );
+      });
+    });
+
+    // Click on CDO status badge
+    document.querySelectorAll('.meta-chip--cdo[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        var rounds = (d.detailBody || '').split(', ').map(function(r) {
+          return '<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' + r + '</div>';
+        }).join('');
+        openDrawer(
+          '<div class="detail-drawer__eyebrow" style="color:var(--amber)">CDO Deliberation</div>' +
+          '<div class="detail-drawer__title">Round ' + d.detailValue + '</div>' +
+          '<div class="detail-drawer__body">' + rounds + '</div>'
+        );
+      });
+    });
+
+    // Click on pulse metric cards
+    document.querySelectorAll('.pulse-card[data-detail-type]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var d = el.dataset;
+        var sparkSvg = el.querySelector('.pulse-card__spark svg');
+        var sparkHtml = sparkSvg ? '<div style="margin-top:12px;text-align:center">' + sparkSvg.outerHTML + '</div>' : '';
+        openDrawer(
+          '<div class="detail-drawer__eyebrow">System Pulse</div>' +
+          '<div class="detail-drawer__title">' + d.detailTitle + '</div>' +
+          '<div style="font-family:var(--font-mono);font-size:32px;font-weight:600;margin:8px 0">' + d.detailValue + '</div>' +
+          '<div class="detail-drawer__body">' + d.detailBody + '</div>' +
+          sparkHtml
+        );
+      });
+    });
+
+    // ── Keyboard navigation ──────────────────────────────────────────────
+    document.addEventListener('keydown', function(e) {
+      // Don't nav when drawer is open or typing in an input
+      if (drawer.classList.contains('open')) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      var handled = false;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        current = (current + 1) % sections.length;
+        handled = true;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        current = (current - 1 + sections.length) % sections.length;
+        handled = true;
+      } else if (e.key >= '1' && e.key <= '9') {
+        var idx = parseInt(e.key) - 1;
+        if (idx < sections.length) { current = idx; handled = true; }
+      }
+
+      if (handled) {
+        e.preventDefault();
+        scrollToCurrent();
+        pauseTemporarily();
+      }
+    });
+
+    // ── Freshness counter ──────────────────────────────────────────────
+    var freshnessEl = document.getElementById('freshness');
+    if (freshnessEl && freshnessEl.dataset.generated) {
+      var genTime = new Date(freshnessEl.dataset.generated).getTime();
+      setInterval(function() {
+        var ago = Math.floor((Date.now() - genTime) / 1000);
+        var label = ago < 60 ? ago + 's ago' : Math.floor(ago / 60) + 'm ago';
+        freshnessEl.textContent = label;
+        if (ago > 120) freshnessEl.classList.add('freshness--stale');
+        else freshnessEl.classList.remove('freshness--stale');
+      }, 5000);
+    }
+
+    // ── Scroll progress bar ─────────────────────────────────────────────
+    var progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }, { passive: true });
+
+    // Initial scroll to saved position
+    if (current > 0) {
+      setTimeout(function() { scrollToCurrent(); }, 300);
+    }
+  })();
+
+  // ── Ambient particle field ────────────────────────────────────────────
+  (function() {
+    var c = document.getElementById('particles');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var dots = [];
+    var COUNT = 40;
+
+    function resize() {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (var i = 0; i < COUNT; i++) {
+      dots.push({
+        x: Math.random() * c.width,
+        y: Math.random() * c.height,
+        r: Math.random() * 1.5 + 0.5,
+        vy: -(Math.random() * 0.3 + 0.1),
+        vx: (Math.random() - 0.5) * 0.15,
+        a: Math.random() * 0.4 + 0.1
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, c.width, c.height);
+      for (var i = 0; i < dots.length; i++) {
+        var d = dots[i];
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.y < -10) { d.y = c.height + 10; d.x = Math.random() * c.width; }
+        if (d.x < -10) d.x = c.width + 10;
+        if (d.x > c.width + 10) d.x = -10;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(88, 197, 230, ' + d.a + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      draw();
+    }
+  })();
+
+  </script>
+</body>
+</html>

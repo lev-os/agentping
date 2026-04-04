@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leviathan — The Universal Agent Runtime</title>
-<meta name="description" content="Leviathan — one runtime for 65 coding agents. SDK-first, profile-driven, surface-agnostic. 48 plugins, 9 graph layers, 5 poly surfaces.">
+<meta name="description" content="Leviathan is a universal agent runtime. SDK-first, profile-driven, surface-agnostic. One handler, every surface.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -207,6 +207,15 @@ code, .mono {
   font-family: var(--font-mono);
 }
 
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 /* ============ THEME TOGGLE ============ */
 .theme-toggle {
   position: fixed;
@@ -282,25 +291,6 @@ code, .mono {
   max-width: 900px;
 }
 
-.hero-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  color: var(--gold);
-  margin-bottom: 24px;
-  animation: fadeIn 1s ease 0.2s both;
-}
-
-.hero-eyebrow span {
-  display: inline-block;
-  padding: 0.3em 1em;
-  border: 1px solid var(--border-bright);
-  border-radius: 100px;
-  background: var(--gold-dim);
-}
-
 .hero h1 {
   font-family: var(--font-display);
   font-size: clamp(48px, 8vw, 96px);
@@ -325,43 +315,11 @@ code, .mono {
   font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(18px, 2.5vw, 28px);
-  color: var(--text-dim);
+  color: var(--gold);
   max-width: 700px;
   margin: 0 auto 60px;
   line-height: 1.4;
   animation: fadeInUp 0.8s ease 0.6s both;
-}
-
-/* ============ KPI ROW ============ */
-.kpi-row {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 40px;
-  animation: fadeInUp 0.8s ease 0.8s both;
-}
-
-.kpi {
-  text-align: center;
-  min-width: 100px;
-}
-
-.kpi-value {
-  font-family: var(--font-mono);
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--gold);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.kpi-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-dim);
 }
 
 .scroll-indicator {
@@ -380,196 +338,293 @@ code, .mono {
   opacity: 0.5;
 }
 
-/* ============ PROBLEM SECTION ============ */
-.problem-grid {
+/* ============ LIVE NOW / EXPLORE SECTION ============ */
+.live-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 48px;
 }
 
-.problem-card {
+.live-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 32px;
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   overflow: hidden;
-  transition: all 0.35s ease;
 }
 
-.problem-card:hover {
-  border-color: var(--border-bright);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.problem-card::before {
+.live-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--rose);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
-.problem-number {
+.live-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+.live-card:hover::before {
+  opacity: 1;
+}
+
+.live-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.live-card .status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-mono);
-  font-size: 64px;
-  font-weight: 700;
-  color: var(--rose-dim);
-  position: absolute;
-  top: 16px; right: 24px;
-  line-height: 1;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.problem-card h3 {
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.live {
+  background: var(--emerald);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+.status-dot.soon {
+  background: var(--text-dim);
+  opacity: 0.5;
+}
+
+.status-indicator.live { color: var(--emerald); }
+.status-indicator.soon { color: var(--text-dim); }
+
+.live-card h3 {
   font-family: var(--font-display);
   font-size: 22px;
   color: var(--text-bright);
-  margin-bottom: 12px;
 }
 
-.problem-card p {
+.live-card p {
   font-size: 15px;
   color: var(--text-dim);
   line-height: 1.5;
 }
 
-.problem-quote {
-  text-align: center;
-  padding: 40px;
-  background: var(--rose-dim);
-  border-radius: 16px;
-  border: 1px solid rgba(251, 113, 133, 0.15);
+.live-card .card-path {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  margin-top: auto;
 }
 
-.problem-quote blockquote {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 3vw, 32px);
-  font-style: italic;
-  color: var(--rose);
-  line-height: 1.3;
+.live-card.disabled {
+  opacity: 0.6;
 }
 
-/* ============ SDK / ANSWER SECTION ============ */
-.sdk-hero {
-  background: var(--surface);
-  border: 1px solid var(--border-bright);
-  border-radius: 20px;
-  padding: 48px;
-  margin-bottom: 48px;
+.live-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+.live-card .card-arrow {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.live-card:hover .card-arrow {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+/* ============ FLOWMIND SECTION ============ */
+.code-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
   position: relative;
   overflow: hidden;
 }
 
-.sdk-hero::before {
-  content: '';
+.code-block::before {
+  content: attr(data-lang);
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--gold), var(--emerald), var(--sky));
-}
-
-.sdk-code {
+  top: 0.75rem;
+  right: 1rem;
   font-family: var(--font-mono);
-  font-size: clamp(14px, 1.8vw, 20px);
-  color: var(--gold-bright);
-  margin-bottom: 24px;
-  padding: 24px;
-  background: var(--bg);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  overflow-x: auto;
-  line-height: 1.7;
-}
-
-.sdk-code .kw { color: var(--sky); }
-.sdk-code .fn { color: var(--gold-bright); }
-.sdk-code .str { color: var(--emerald); }
-.sdk-code .comment { color: var(--text-dim); font-style: italic; }
-
-.poly-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 32px;
-}
-
-.poly-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  transition: all 0.3s;
-}
-
-.poly-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-
-.poly-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-}
-
-.poly-card h4 {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-bright);
-  margin-bottom: 4px;
-}
-
-.poly-card p {
-  font-size: 12px;
+  font-size: 0.65rem;
   color: var(--text-dim);
-  font-family: var(--font-mono);
+  opacity: 0.6;
 }
 
-/* ============ TRIFECTA ============ */
-.trifecta {
+.code-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.code-block .kw { color: var(--rose); }
+.code-block .fn { color: var(--gold); }
+.code-block .str { color: var(--emerald); }
+.code-block .cm { color: var(--text-dim); }
+.code-block .prop { color: var(--sky); }
+.code-block .num { color: var(--amber); }
+.code-block .yk { color: var(--sky); }
+.code-block .ys { color: var(--emerald); }
+.code-block .ys.highlight, .code-block .highlight { color: var(--gold); font-weight: 700; }
+.code-block .yc { color: var(--text-dim); }
+
+/* Flow Comparison */
+.flow-compare {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-top: 48px;
 }
 
-.tri-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 32px;
-  transition: all 0.3s;
+.flow-card {
+  position: relative;
 }
 
-.tri-card:hover {
-  border-color: var(--gold);
-  box-shadow: 0 8px 32px rgba(212, 167, 58, 0.08);
-}
-
-.tri-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
+.flow-card-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  margin-bottom: 16px;
+  gap: 8px;
 }
 
-.tri-card h3 {
+.flow-card-label .flow-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.flow-card:nth-child(1) .flow-card-label { color: var(--emerald); }
+.flow-card:nth-child(1) .flow-badge { background: var(--emerald-dim); color: var(--emerald); }
+.flow-card:nth-child(2) .flow-card-label { color: var(--gold); }
+.flow-card:nth-child(2) .flow-badge { background: var(--gold-dim); color: var(--gold); }
+
+.flow-card .code-block { margin-top: 0; }
+
+.flow-diff {
+  margin-top: 32px;
+  text-align: center;
+  padding: 24px;
+  background: var(--gold-dim);
+  border-radius: 12px;
+  border: 1px solid var(--border-bright);
+}
+
+.flow-diff p {
   font-family: var(--font-display);
-  font-size: 20px;
-  color: var(--text-bright);
-  margin-bottom: 8px;
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 22px);
+  color: var(--gold);
+  line-height: 1.4;
 }
 
-.tri-card p {
-  font-size: 14px;
+.flow-topology {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.flow-node {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.flow-node.highlight {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.flow-arrow {
   color: var(--text-dim);
-  line-height: 1.5;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .flow-compare { grid-template-columns: 1fr; }
+}
+
+/* Tick Cycle Animation */
+.tick-cycle-anim {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 48px;
+  padding: 32px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 16px;
+}
+
+.tick-anim-step {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: var(--gold-dim);
+  color: var(--gold);
+  opacity: 0.25;
+  transition: opacity 0.5s ease, background 0.5s ease;
+}
+
+.tick-anim-step.active {
+  opacity: 1;
+  background: rgba(212, 167, 58, 0.25);
+}
+
+.tick-anim-arrow {
+  color: var(--text-dim);
+  font-size: 14px;
+  opacity: 0.3;
 }
 
 /* ============ CORE PRIMITIVES SECTION ============ */
@@ -665,6 +720,64 @@ code, .mono {
   font-size: 14px;
 }
 
+/* ============ SURFACE TABS (NEW) ============ */
+.surface-tabs-wrap {
+  margin-top: 48px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.surface-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 0;
+}
+
+.surface-tab {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.surface-tab:hover {
+  color: var(--gold);
+}
+
+.surface-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.surface-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem 2rem;
+  min-height: 140px;
+  position: relative;
+}
+
+.surface-panel pre {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
 /* ============ FEATURED PLUGINS SECTION ============ */
 .plugins-grid {
   display: grid;
@@ -697,6 +810,7 @@ code, .mono {
   border-color: var(--border-bright);
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
 }
 
 .plugin-card[data-accent="sky"]::before { background: var(--sky); }
@@ -898,418 +1012,93 @@ code, .mono {
 /* ============ CTA SECTION ============ */
 .cta-section {
   text-align: center;
-  padding: 6rem 0;
+  padding: 8rem 0;
+  position: relative;
 }
 
-.install-widget {
-  display: inline-block;
-  margin: 32px 0;
-  text-align: center;
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.05) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.install-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 0;
+.cta-section h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  color: var(--text-bright);
 }
 
-.install-tab {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: lowercase;
-  letter-spacing: 0.5px;
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-bottom: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.install-tab:first-child { border-radius: 8px 0 0 0; }
-.install-tab:last-child { border-radius: 0 8px 0 0; }
-
-.install-tab:hover {
+.cta-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
   color: var(--gold);
-  background: var(--gold-dim);
+  margin-bottom: 2.5rem;
 }
 
-.install-tab.active {
-  color: var(--gold);
-  background: var(--surface);
-  border-color: var(--border-bright);
-}
-
-.install-code {
-  background: var(--surface);
-  border: 1px solid var(--border-bright);
-  border-radius: 0 0 12px 12px;
-  padding: 16px 32px;
-  font-family: var(--font-mono);
-  font-size: 16px;
-  color: var(--gold-bright);
-  text-align: left;
-  min-width: 420px;
-}
-
-.install-code .dollar {
-  color: var(--text-dim);
-}
-
-.surface-code {
-  text-align: left;
-  min-height: 120px;
-}
-
-.surface-pre {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.7;
-  white-space: pre;
-  color: var(--gold-bright);
-}
-
-.cta-buttons {
+.cta-links {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
   justify-content: center;
-  margin-top: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
 }
 
 .cta-btn {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
   border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
   text-decoration: none;
   transition: all 0.3s ease;
+  letter-spacing: 0.03em;
 }
 
 .cta-btn-primary {
   background: var(--gold);
   color: var(--bg);
+  border: 1px solid var(--gold);
 }
 
 .cta-btn-primary:hover {
   background: var(--gold-bright);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 167, 58, 0.25);
+  text-decoration: none;
 }
 
 .cta-btn-secondary {
-  background: var(--surface);
+  background: transparent;
+  color: var(--gold);
   border: 1px solid var(--border-bright);
-  color: var(--text);
 }
 
 .cta-btn-secondary:hover {
+  background: var(--gold-dim);
   border-color: var(--gold);
-  color: var(--gold);
-}
-
-/* ============ WEBMCP + AGENTPING SECTION ============ */
-.webmcp-intro {
-  max-width: 700px;
-  margin-bottom: 48px;
-}
-
-.webmcp-intro p {
-  font-size: 17px;
-  color: var(--text-dim);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.webmcp-intro a {
-  color: var(--gold);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border-bright);
-  transition: border-color 0.3s;
-}
-
-.webmcp-intro a:hover {
-  border-color: var(--gold);
-}
-
-/* Token economics table */
-.token-table-wrap {
-  overflow-x: auto;
-  margin-bottom: 48px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-}
-
-.token-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.token-table th,
-.token-table td {
-  padding: 1rem 1.25rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-
-.token-table thead th {
-  background: var(--surface2);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-dim);
-  font-weight: 600;
-}
-
-.token-table thead th:nth-child(2) { color: var(--rose); }
-.token-table thead th:nth-child(3) { color: var(--emerald); }
-
-.token-table tbody tr {
-  background: var(--surface);
-  transition: background 0.2s ease;
-}
-
-.token-table tbody tr:hover { background: var(--surface2); }
-.token-table tbody tr:last-child td { border-bottom: none; }
-
-.token-table td:first-child {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.val-bad { color: var(--rose); }
-.val-good { color: var(--emerald); font-weight: 500; }
-
-.badge {
-  display: inline-block;
-  padding: 0.15em 0.6em;
-  border-radius: 100px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-
-.badge-green { background: var(--emerald-dim); color: var(--emerald); }
-.badge-red { background: var(--rose-dim); color: var(--rose); }
-
-/* Directions grid (Read / Write / Control) */
-.directions-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.direction-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem 1.75rem;
-  text-align: center;
-  transition: all 0.35s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.direction-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 3px 3px 0 0;
-}
-
-.direction-card:nth-child(1)::before { background: var(--sky); }
-.direction-card:nth-child(2)::before { background: var(--gold); }
-.direction-card:nth-child(3)::before { background: var(--coral); }
-
-.direction-card:hover {
-  border-color: var(--border-bright);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.direction-label {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  display: inline-block;
-  padding: 0.2em 0.7em;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.direction-card:nth-child(1) .direction-label { background: var(--sky-dim); color: var(--sky); }
-.direction-card:nth-child(2) .direction-label { background: var(--gold-dim); color: var(--gold); }
-.direction-card:nth-child(3) .direction-label { background: var(--coral-dim); color: var(--coral); }
-
-.direction-card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-}
-
-.direction-proto {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.direction-card:nth-child(1) .direction-proto { color: var(--sky); }
-.direction-card:nth-child(2) .direction-proto { color: var(--gold); }
-.direction-card:nth-child(3) .direction-proto { color: var(--coral); }
-
-.direction-card p {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.direction-code {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.6rem 0.8rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--emerald);
-  margin-bottom: 0.75rem;
-}
-
-.direction-tokens {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  font-weight: 600;
-}
-
-/* ============ LIVE NOW SECTION ============ */
-.live-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 48px;
-}
-
-.live-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.live-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.live-card:hover {
-  border-color: var(--border-bright);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
 }
 
-.live-card:hover::before {
-  opacity: 1;
-}
-
-.live-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.live-card .status-indicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.cta-install {
+  margin-top: 2rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.status-dot.live {
-  background: var(--emerald);
-  animation: pulse-dot 2.5s ease-in-out infinite;
-}
-
-.status-dot.soon {
-  background: var(--text-dim);
-  opacity: 0.5;
-}
-
-.status-indicator.live { color: var(--emerald); }
-.status-indicator.soon { color: var(--text-dim); }
-
-.live-card h3 {
-  font-family: var(--font-display);
-  font-size: 22px;
-  color: var(--text-bright);
-}
-
-.live-card p {
-  font-size: 15px;
-  color: var(--text-dim);
-  line-height: 1.5;
-}
-
-.live-card .card-path {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--gold);
-  margin-top: auto;
-}
-
-.live-card.disabled {
-  opacity: 0.6;
-}
-
-.live-card.disabled:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: var(--border);
-}
-
-.live-card .card-arrow {
   font-size: 0.85rem;
   color: var(--text-dim);
-  transition: color 0.3s, transform 0.3s;
 }
 
-.live-card:hover .card-arrow {
-  color: var(--gold);
-  transform: translateX(4px);
+.cta-install span {
+  color: var(--gold-bright);
 }
 
 /* ============ FOOTER ============ */
@@ -1345,15 +1134,8 @@ footer a:hover {
 @media (max-width: 768px) {
   section { padding: 4rem 0; }
   .hero { min-height: auto; padding: 6rem 24px 4rem; }
-  .kpi-row { gap: 20px; }
-  .kpi-value { font-size: 28px; }
-  .problem-grid { grid-template-columns: 1fr; }
-  .poly-grid { grid-template-columns: repeat(2, 1fr); }
-  .trifecta { grid-template-columns: 1fr; }
-  .directions-grid { grid-template-columns: 1fr; }
   .live-grid { grid-template-columns: 1fr; }
   .container { padding: 0 1.25rem; }
-  .sdk-hero { padding: 28px; }
   .primitives-grid { grid-template-columns: repeat(2, 1fr); }
   .plugins-grid { grid-template-columns: 1fr; }
   .usecases-grid { grid-template-columns: 1fr; }
@@ -1361,11 +1143,15 @@ footer a:hover {
   .arch-diagram { padding: 24px; }
   .tick-steps { gap: 4px; }
   .tick-step { font-size: 9px; padding: 4px 8px; }
-  .cta-buttons { flex-direction: column; align-items: center; }
-  .install-tabs { flex-wrap: wrap; }
-  .install-tab { font-size: 11px; padding: 6px 10px; }
-  .install-code { min-width: auto; font-size: 13px; padding: 12px 16px; }
+  .cta-links { flex-direction: column; align-items: center; }
   footer .container { flex-direction: column; gap: 8px; text-align: center; }
+  .surface-tabs { flex-wrap: wrap; }
+  .surface-tab { font-size: 11px; padding: 8px 12px; }
+  .surface-panel { min-height: 120px; padding: 1rem 1.25rem; }
+  .surface-panel pre { font-size: 0.72rem; }
+  .tick-cycle-anim { gap: 4px; padding: 20px 12px; }
+  .tick-anim-step { font-size: 9px; padding: 5px 8px; }
+  .tick-anim-arrow { font-size: 10px; }
 }
 
 @media (max-width: 480px) {
@@ -1382,6 +1168,7 @@ footer a:hover {
   .hero::before, .hero::after { display: none; }
   h1, h2, h3, h4 { color: #111; }
   .section-label { color: #666; }
+  .cta-section::before { display: none; }
 }
 </style>
 </head>
@@ -1401,37 +1188,12 @@ footer a:hover {
   </span>
 </button>
 
-<!-- ========== HERO ========== -->
+<!-- ===================== 1. HERO ===================== -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-eyebrow"><span>One Runtime, Many Agents</span></div>
     <h1><em>Leviathan</em></h1>
-    <p class="hero-subtitle">One runtime for 65 coding agents. SDK-first, profile-driven, surface-agnostic.</p>
-
-    <div class="kpi-row">
-      <div class="kpi">
-        <div class="kpi-value">1.24M</div>
-        <div class="kpi-label">Lines of Code</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">48</div>
-        <div class="kpi-label">Plugins</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">65</div>
-        <div class="kpi-label">Agent Platforms</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">9</div>
-        <div class="kpi-label">Graph Layers</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">6</div>
-        <div class="kpi-label">SDK Tiers</div>
-      </div>
-    </div>
+    <p class="hero-subtitle">The fun-time runtime.</p>
   </div>
-
   <div class="scroll-indicator">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
@@ -1439,101 +1201,218 @@ footer a:hover {
   </div>
 </section>
 
-<!-- ========== SECTION 1: THE PROBLEM ========== -->
+<!-- ===================== 2. EXPLORE ===================== -->
 <section>
   <div class="container">
-    <span class="section-label reveal">The Problem</span>
-    <h2 class="section-title reveal reveal-delay-1">Agent Sprawl Is Killing You</h2>
-    <p class="section-sub reveal reveal-delay-2">65 coding agents. Each with their own config format, invocation flags, and mental model. You're not building software anymore &mdash; you're writing glue code.</p>
+    <span class="section-label reveal">Explore</span>
+    <h2 class="section-title reveal reveal-delay-1">Running code, not a pitch deck.</h2>
 
-    <div class="problem-grid">
-      <div class="problem-card reveal reveal-delay-2">
-        <div class="problem-number">4</div>
-        <h3>Runner Registries</h3>
-        <p>ntm has one. lev harness has another. Poly has a third. ClawTeam built a fourth. None of them talk to each other. Four sources of truth equals zero sources of truth.</p>
-      </div>
-      <div class="problem-card reveal reveal-delay-3">
-        <div class="problem-number">3</div>
-        <h3>ExecOptions Interfaces</h3>
-        <p>core/harness has 30+ fields. core/exec has semaphore + eventLogPath. core/domain has timeout + cwd + env. The SDK-first design has profile + prompt + model. None of them match.</p>
-      </div>
-      <div class="problem-card reveal reveal-delay-4">
-        <div class="problem-number">3</div>
-        <h3>Invisible Tiers</h3>
-        <p>The DNA contract says use <code>src/handlers/</code>. The CLI discovery only scans <code>src/commands/</code>. Three entire tiers of your own SDK &mdash; Research, Graph, Swarm &mdash; are unreachable from the CLI.</p>
-      </div>
-    </div>
+    <div class="live-grid">
+      <a href="/webmcp-agentping/" class="live-card reveal reveal-delay-2">
+        <div class="live-card-header">
+          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <h3>WebMCP Vision</h3>
+        <p>Browser as a structured tool API for autonomous agents. The full architecture and protocol stack.</p>
+        <span class="card-path">/webmcp-agentping/</span>
+      </a>
 
-    <div class="problem-quote reveal reveal-delay-5">
-      <blockquote>"You don't have a tools problem. You have four runner registries that don't share a type."</blockquote>
+      <a href="/genuievolve/" class="live-card reveal reveal-delay-2">
+        <div class="live-card-header">
+          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <h3>Heartbeat Dashboard</h3>
+        <p>Live system status and runtime telemetry. CPU, memory, event throughput per subsystem.</p>
+        <span class="card-path">/genuievolve/</span>
+      </a>
+
+      <a href="/constraints/" class="live-card reveal reveal-delay-3">
+        <div class="live-card-header">
+          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <h3>Constraint Engineering</h3>
+        <p>The seal that only tightens. Ratchet constraints, validation gates, and graph axioms that bound agent behavior.</p>
+        <span class="card-path">/constraints/</span>
+      </a>
+
+      <a href="/timetravel/" class="live-card reveal reveal-delay-3">
+        <div class="live-card-header">
+          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <h3>Time Travel</h3>
+        <p>Debug the mind. 11 search adapters, recursive deep research, and the router-not-engine thesis against 40 competitors.</p>
+        <span class="card-path">/timetravel/</span>
+      </a>
+
+      <div class="live-card disabled reveal reveal-delay-4">
+        <div class="live-card-header">
+          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
+        </div>
+        <h3>AgentPing</h3>
+        <p>Human-in-the-loop interaction protocol for AI agents. Approvals, selections, and async feedback.</p>
+        <span class="card-path">/agentping/</span>
+      </div>
+
+      <div class="live-card disabled reveal reveal-delay-4">
+        <div class="live-card-header">
+          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
+        </div>
+        <h3>Runtime</h3>
+        <p>Poly surface architecture powering every execution path. CLI, MCP, gRPC, REST from one handler.</p>
+        <span class="card-path">/runtime/</span>
+      </div>
+
+      <div class="live-card disabled reveal reveal-delay-4">
+        <div class="live-card-header">
+          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
+        </div>
+        <h3>Showcase</h3>
+        <p>Live demos of agents, flows, and runtime capabilities.</p>
+        <span class="card-path">/showcase/</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ========== SECTION 2: THE ANSWER ========== -->
+<!-- ===================== 3. FLOWMIND ===================== -->
 <section>
   <div class="container">
-    <span class="section-label reveal">The Answer</span>
-    <h2 class="section-title reveal reveal-delay-1">One Method. 65 Runners.</h2>
-    <p class="section-sub reveal reveal-delay-2">Leviathan is an SDK that produces surfaces &mdash; not a CLI that happens to have an API.</p>
+    <span class="section-label reveal">The Substrate</span>
+    <h2 class="section-title reveal reveal-delay-1">FlowMind is the CSS for agents.</h2>
+    <p class="section-sub reveal reveal-delay-2">Declare the topology in YAML. The runtime handles execution, context, and backpressure. Adding a review layer is adding one node.</p>
 
-    <div class="sdk-hero reveal reveal-delay-3">
-      <div class="sdk-code">
-<span class="comment">// This is the entire execution model</span>
-<span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">lev.exec</span>({
-  profile: <span class="str">"sdlc.flowmind.exec"</span>,
-  prompt:  <span class="str">"Fix the auth middleware"</span>,
+    <!-- Side-by-side: ralph vs lev-ralph -->
+    <div class="flow-compare">
+      <div class="flow-card reveal reveal-delay-3">
+        <div class="flow-card-label">
+          ralph.flow.yaml
+          <span class="flow-badge">simple loop</span>
+        </div>
+        <div class="code-block" data-lang="YAML">
+<pre><span class="yc"># One agent, fresh context, tests as backpressure</span>
+<span class="yk">name</span>: <span class="ys">ralph</span>
+<span class="yk">entry</span>: <span class="ys">work</span>
+
+<span class="yk">nodes</span>:
+  <span class="yk">work</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.exec</span>
+    <span class="yk">next</span>: <span class="ys">gate</span>
+
+  <span class="yk">gate</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.validate</span>
+    <span class="yk">branches</span>:
+      <span class="yk">pass</span>: <span class="ys">done</span>
+      <span class="yk">fail</span>: <span class="ys">work</span>
+
+  <span class="yk">done</span>:
+    <span class="yk">terminal</span>: <span class="ys">true</span></pre>
+        </div>
+        <div class="flow-topology" style="margin-top:16px;">
+          <span class="flow-node">work</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-node">gate</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-node">done</span>
+        </div>
+      </div>
+
+      <div class="flow-card reveal reveal-delay-3">
+        <div class="flow-card-label">
+          lev-ralph.flow.yaml
+          <span class="flow-badge">+ review node</span>
+        </div>
+        <div class="code-block" data-lang="YAML">
+<pre><span class="yc"># Sonnet works, Opus reviews AND fixes</span>
+<span class="yk">name</span>: <span class="ys">lev-ralph</span>
+<span class="yk">entry</span>: <span class="ys">work</span>
+
+<span class="yk">nodes</span>:
+  <span class="yk">work</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.exec</span>
+    <span class="yk">model</span>: <span class="ys">sonnet</span>
+    <span class="yk">next</span>: <span class="ys">gate</span>
+
+  <span class="yk">gate</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.validate</span>
+    <span class="yk">branches</span>:
+      <span class="yk">pass</span>: <span class="ys highlight">review</span>
+      <span class="yk">fail</span>: <span class="ys">work</span>
+
+  <span class="ys highlight"><span class="yk">review</span></span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.exec</span>
+    <span class="yk">model</span>: <span class="ys">opus</span>
+    <span class="yk">branches</span>:
+      <span class="yk">green</span>: <span class="ys">done</span>
+      <span class="yk">fixed</span>: <span class="ys">gate</span>
+
+  <span class="yk">done</span>:
+    <span class="yk">terminal</span>: <span class="ys">true</span></pre>
+        </div>
+        <div class="flow-topology" style="margin-top:16px;">
+          <span class="flow-node">work</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-node">gate</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-node highlight">review</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-node">done</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-diff reveal reveal-delay-4">
+      <p>Adding an Opus code review to your agent loop is one YAML node. Not a new orchestration framework. Not a rewrite. One node.</p>
+    </div>
+
+    <!-- SDK alternative -->
+    <div style="margin-top: 48px;">
+      <p class="reveal reveal-delay-4" style="font-family: var(--font-display); font-style: italic; font-size: clamp(18px, 2.5vw, 24px); color: var(--text-dim); margin-bottom: 24px;">Don't like YAML?</p>
+      <div class="code-block reveal reveal-delay-5" data-lang="TypeScript" style="max-width: 680px;">
+<pre><span class="kw">import</span> { runFromDNA, runFromPrompt } <span class="kw">from</span> <span class="str">'@lev-os/flowmind'</span>;
+
+<span class="cm">// Option 1: Run a YAML flow directly</span>
+<span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">runFromDNA</span>(<span class="str">'flows/lev-ralph.flow.yaml'</span>, {
+  adapter: { model: <span class="str">'sonnet'</span> },
+  initialVars: { task: <span class="str">'Fix the auth middleware'</span> },
 });
 
-<span class="comment">// Profile resolves runner, model, context, middleware</span>
-<span class="comment">// Poly projects this onto every surface automatically:</span>
-      </div>
-
-      <div class="poly-grid">
-        <div class="poly-card">
-          <div class="poly-icon">&gt;_</div>
-          <h4>CLI</h4>
-          <p>lev exec --profile=...</p>
-        </div>
-        <div class="poly-card">
-          <div class="poly-icon">&lt;/&gt;</div>
-          <h4>MCP</h4>
-          <p>mcp__lev__exec()</p>
-        </div>
-        <div class="poly-card">
-          <div class="poly-icon">&harr;</div>
-          <h4>gRPC</h4>
-          <p>lev.Exec(request)</p>
-        </div>
-        <div class="poly-card">
-          <div class="poly-icon">{&nbsp;}</div>
-          <h4>REST</h4>
-          <p>POST /api/exec</p>
-        </div>
+<span class="cm">// Option 2: Skip YAML entirely — natural language in, execution out</span>
+<span class="kw">const</span> result2 = <span class="kw">await</span> <span class="fn">runFromPrompt</span>(<span class="str">'Fix the auth middleware'</span>, {
+  adapter: { model: <span class="str">'sonnet'</span> },
+});
+<span class="cm">// NL → compileIntent() → seedToGraphDocument() → executeWithContract()</span></pre>
       </div>
     </div>
 
-    <div class="trifecta">
-      <div class="tri-card reveal reveal-delay-4">
-        <div class="tri-icon" style="background: var(--gold-dim); color: var(--gold);">&#9881;</div>
-        <h3>Fractal Config</h3>
-        <p>Inline key, domain file, or domain folder glob. <code>config.yaml &gt; {domain}.yaml &gt; {domain}/*.yaml</code>. Your config scales with your complexity &mdash; not against it.</p>
-      </div>
-      <div class="tri-card reveal reveal-delay-4">
-        <div class="tri-icon" style="background: var(--emerald-dim); color: var(--emerald);">&#8635;</div>
-        <h3>Plan-Act-Verify</h3>
-        <p>Every flow reduces to the same substrate: INGEST &rarr; OBSERVE &rarr; PROPOSE &rarr; GATE &rarr; APPLY &rarr; UPDATE &rarr; EMIT. Universal tick cycle. Universal composability.</p>
-      </div>
-      <div class="tri-card reveal reveal-delay-4">
-        <div class="tri-icon" style="background: var(--sky-dim); color: var(--sky);">&#9733;</div>
-        <h3>Profile System</h3>
-        <p>Named bundles: runner + model + context + middleware. Dotted namespaces: <code>sdlc.flowmind.exec</code>. Profiles replace 12 flags with a dotted name.</p>
-      </div>
+    <!-- Tick cycle -->
+    <div class="tick-cycle-anim reveal reveal-delay-5" id="tick-anim">
+      <span class="tick-anim-step" data-idx="0">Ingest</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="1">Observe</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="2">Propose</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="3">Gate</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="4">Apply</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="5">Update</span>
+      <span class="tick-anim-arrow">&rarr;</span>
+      <span class="tick-anim-step" data-idx="6">Emit</span>
     </div>
   </div>
 </section>
 
-<!-- ========== SECTION 2.5: CORE PRIMITIVES ========== -->
+<!-- ===================== 4. GRAPH PRIMITIVES ===================== -->
 <section>
   <div class="container">
     <span class="section-label reveal">The Vocabulary</span>
@@ -1628,95 +1507,34 @@ footer a:hover {
   </div>
 </section>
 
-<!-- ========== SECTION 3: WEBMCP + AGENTPING ========== -->
+<!-- ===================== 5. POLY SURFACES ===================== -->
 <section>
   <div class="container">
-    <span class="section-label reveal">WebMCP + AgentPing</span>
-    <h2 class="section-title reveal reveal-delay-1">Every Website, Agent-Ready</h2>
+    <span class="section-label reveal">Surfaces</span>
+    <h2 class="section-title reveal reveal-delay-1">One handler. Every surface.</h2>
+    <p class="section-sub reveal reveal-delay-2">Write it once. Poly projects it onto CLI, MCP, gRPC, HTTP, and the protocol that hasn't been invented yet.</p>
 
-    <div class="webmcp-intro reveal reveal-delay-2">
-      <p>The WebMCP Shim turns any website into a structured tool API your AI agent can call. No scraping. No screenshots. No browser restart. Community-contributed <code>.webmcp.yaml</code> definitions map semantic actions to DOM operations &mdash; like Greasemonkey scripts, but for the AI age.</p>
-      <p><a href="/webmcp-agentping/">Read the full WebMCP vision &rarr;</a></p>
-    </div>
-
-    <!-- Token Economics Table -->
-    <div class="token-table-wrap reveal reveal-delay-3">
-      <table class="token-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Screenshot Scraping</th>
-            <th>WebMCP Shim</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Token cost</td>
-            <td class="val-bad">~2,000 / step</td>
-            <td class="val-good">~50 / step <span class="badge badge-green">40x</span></td>
-          </tr>
-          <tr>
-            <td>Speed</td>
-            <td class="val-bad">3&ndash;5 seconds</td>
-            <td class="val-good">&lt;100ms</td>
-          </tr>
-          <tr>
-            <td>Cloudflare</td>
-            <td><span class="badge badge-red">Blocked</span></td>
-            <td><span class="badge badge-green">Passes</span></td>
-          </tr>
-          <tr>
-            <td>Auth</td>
-            <td class="val-bad">Cookie extraction ceremony</td>
-            <td class="val-good">Inherits browser session</td>
-          </tr>
-          <tr>
-            <td>AI required?</td>
-            <td class="val-bad">Yes (vision model)</td>
-            <td class="val-good">No (structured tool calls)</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Read / Write / Control -->
-    <div class="directions-grid">
-      <div class="direction-card reveal reveal-delay-3">
-        <span class="direction-label">Read</span>
-        <h3>WebMCP</h3>
-        <span class="direction-proto">WebMCP Shim</span>
-        <p>Agent reads structured data from any website through semantic tool calls.</p>
-        <div class="direction-code">callTool(<span style="color:var(--sky)">"get_messages"</span>)</div>
-        <span class="direction-tokens">~50 tokens / call</span>
+    <div class="surface-tabs-wrap reveal reveal-delay-3">
+      <div class="surface-tabs" role="tablist">
+        <button class="surface-tab active" data-surface="cli" role="tab" aria-selected="true">CLI</button>
+        <button class="surface-tab" data-surface="sdk" role="tab">SDK</button>
+        <button class="surface-tab" data-surface="mcp" role="tab">MCP</button>
+        <button class="surface-tab" data-surface="http" role="tab">HTTP</button>
+        <button class="surface-tab" data-surface="poly" role="tab">poly://</button>
       </div>
-
-      <div class="direction-card reveal reveal-delay-4">
-        <span class="direction-label">Write</span>
-        <h3>GenUI</h3>
-        <span class="direction-proto">Generative UI</span>
-        <p>Agent generates and injects UI components directly into the page.</p>
-        <div class="direction-code">renderComponent(<span style="color:var(--gold)">"chart"</span>, data)</div>
-        <span class="direction-tokens">~100 tokens / component</span>
-      </div>
-
-      <div class="direction-card reveal reveal-delay-5">
-        <span class="direction-label">Control</span>
-        <h3>CDP</h3>
-        <span class="direction-proto">Chrome DevTools Protocol</span>
-        <p>Agent manipulates the DOM directly through the browser's native debug interface.</p>
-        <div class="direction-code">click(<span style="color:var(--coral)">@e3</span>)</div>
-        <span class="direction-tokens">~50 tokens / action</span>
+      <div class="surface-panel" role="tabpanel">
+        <pre id="surface-code-content"><span style="color:var(--text-dim)">$ </span>lev exec <span style="color:var(--emerald)">"Fix the auth middleware"</span> \
+  <span style="color:var(--text-dim)">--profile=</span><span style="color:var(--sky)">sdlc.flowmind.exec</span></pre>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== SECTION 3.5: FEATURED PLUGINS ========== -->
+<!-- ===================== 6. FEATURED PLUGINS ===================== -->
 <section>
   <div class="container">
-    <span class="section-label reveal">Plugin Ecosystem</span>
-    <h2 class="section-title reveal reveal-delay-1">Featured Plugins</h2>
-    <p class="section-sub reveal reveal-delay-2">48 plugins. Six worth looking at first.</p>
+    <span class="section-label reveal">Ships With Lev</span>
+    <h2 class="section-title reveal reveal-delay-1">What you get.</h2>
 
     <div class="plugins-grid">
       <a href="/timetravel/" class="plugin-card reveal reveal-delay-2" data-accent="sky" style="text-decoration:none;color:inherit;">
@@ -1726,7 +1544,7 @@ footer a:hover {
           </div>
           <h3>Time Travel</h3>
         </div>
-        <p>Debug the mind. Replay any agent session, step through decisions, fork alternative paths. 12 search adapters, recursive deep research, temporal context across sessions.</p>
+        <p>Replay any agent session, step through decisions, fork alternative paths. 12 search adapters, recursive deep research, temporal context across sessions.</p>
         <div class="plugin-meta">
           <span class="plugin-ns">@lev-os/core-timetravel</span>
           <span class="badge-core">core</span>
@@ -1740,7 +1558,7 @@ footer a:hover {
           </div>
           <h3>Autoresearch</h3>
         </div>
-        <p>Autonomous experimentation engine. Define a hypothesis, set metrics, let agents run campaigns. Multi-agent swarms with cost governors and budget controls.</p>
+        <p>Autonomous experimentation engine. Define a hypothesis, set metrics, let agents run campaigns with cost governors and budget controls.</p>
         <div class="plugin-meta">
           <span class="plugin-ns">@lev-os/core-autoresearch</span>
           <span class="badge-core">core</span>
@@ -1767,7 +1585,7 @@ footer a:hover {
           </div>
           <h3>Browser Cascade</h3>
         </div>
-        <p>FlowMind-driven browser operations. Self-healing selectors, trajectory recording, cascade engine routing with fallback semantics. Runs in-page, no restart.</p>
+        <p>FlowMind-driven browser operations. Self-healing selectors, trajectory recording, cascade engine routing with fallback semantics.</p>
         <div class="plugin-meta">
           <span class="plugin-ns">@lev-os/browser-ops</span>
         </div>
@@ -1780,7 +1598,7 @@ footer a:hover {
           </div>
           <h3>SDLC</h3>
         </div>
-        <p>14 FlowMind programs governing the full development lifecycle. Spec, plan, execute, validate, ship. Git events, board events, autodev heartbeat, eng review.</p>
+        <p>14 FlowMind programs governing the full development lifecycle. Spec, plan, execute, validate, ship. Git events, board events, autodev heartbeat.</p>
         <div class="plugin-meta">
           <span class="plugin-ns">@lev-os/core-sdlc</span>
           <span class="badge-core">core</span>
@@ -1794,7 +1612,7 @@ footer a:hover {
           </div>
           <h3>Evolve Memory</h3>
         </div>
-        <p>Biomimetic memory with surprisal-gated storage. Spreading activation retrieval, sleep-cycle consolidation, GEPA-inspired skill evolution. Prunes 90% of context by surprisal score.</p>
+        <p>Biomimetic memory with surprisal-gated storage. Spreading activation retrieval, sleep-cycle consolidation. Prunes 90% of context by surprisal score.</p>
         <div class="plugin-meta">
           <span class="plugin-ns">@lev-os/evolve-memory</span>
         </div>
@@ -1803,12 +1621,11 @@ footer a:hover {
   </div>
 </section>
 
-<!-- ========== SECTION 4: USE CASES ========== -->
+<!-- ===================== 7. USE CASES ===================== -->
 <section>
   <div class="container">
     <span class="section-label reveal">Use Cases</span>
-    <h2 class="section-title reveal reveal-delay-1">Built For Real Workflows</h2>
-    <p class="section-sub reveal reveal-delay-2">10 patterns shipping in production.</p>
+    <h2 class="section-title reveal reveal-delay-1">10 patterns shipping in production.</h2>
 
     <div class="usecases-grid">
       <div class="usecase-card reveal reveal-delay-2">
@@ -1864,7 +1681,7 @@ footer a:hover {
         <span class="usecase-num">08</span>
         <div>
           <h3>Constitutional Governance</h3>
-          <p>Safety-first deployment with Ratchet constraints. Behavioral boundaries that only tighten.</p>
+          <p>Ratchet constraints enforce behavioral boundaries that converge, never diverge.</p>
         </div>
       </div>
       <div class="usecase-card reveal reveal-delay-4">
@@ -1885,7 +1702,7 @@ footer a:hover {
   </div>
 </section>
 
-<!-- ========== SECTION 5: ARCHITECTURE ========== -->
+<!-- ===================== 8. ARCHITECTURE ===================== -->
 <section>
   <div class="container">
     <span class="section-label reveal">Architecture</span>
@@ -1926,7 +1743,7 @@ footer a:hover {
       </div>
       <div class="arch-feat">
         <h4>Contracts</h4>
-        <p>Typed interfaces at every boundary. No magic. No implicit coupling. Break the contract, fail the gate.</p>
+        <p>Typed interfaces at every boundary. No implicit coupling. Break the contract, fail the gate.</p>
       </div>
       <div class="arch-feat">
         <h4>Events</h4>
@@ -1936,135 +1753,32 @@ footer a:hover {
   </div>
 </section>
 
-<!-- ========== SECTION 6: CTA ========== -->
+<!-- ===================== 9. CTA ===================== -->
 <section class="cta-section">
   <div class="container">
-    <!-- TIER 1: Install -->
-    <span class="section-label reveal">Get Started</span>
-    <h2 class="section-title reveal reveal-delay-1" style="text-align: center;">&gt; ready_to_deploy</h2>
-    <p class="section-sub reveal reveal-delay-2" style="text-align: center; margin: 0 auto 16px;">// one_install_away</p>
-    <div class="reveal reveal-delay-3" style="text-align: center;">
-      <div class="install-widget">
-        <div class="install-tabs" role="tablist">
-          <button class="install-tab active" data-cmd="npm i -g @lev-os/leviathan" role="tab" aria-selected="true">npm</button>
-          <button class="install-tab" data-cmd="pnpm add -g @lev-os/leviathan" role="tab">pnpm</button>
-          <button class="install-tab" data-cmd="brew install lev-os/tap/leviathan" role="tab">brew</button>
-          <button class="install-tab" data-cmd="bun add -g @lev-os/leviathan" role="tab">bun</button>
-          <button class="install-tab" data-cmd="npx @lev-os/leviathan" role="tab">npx</button>
-          <button class="install-tab" data-cmd="curl -fsSL https://lev.dev/install.sh | bash" role="tab">curl</button>
-        </div>
-        <div class="install-code" role="tabpanel">
-          <span class="dollar">$ </span><span class="install-cmd">npm i -g @lev-os/leviathan</span>
-        </div>
-      </div>
+    <h2 class="reveal">One Runtime.<br>Every Agent. Every Surface.</h2>
+    <p class="cta-tagline reveal reveal-delay-1">Constraints aren't limitations. They're the product.</p>
+    <div class="cta-links reveal reveal-delay-2">
+      <a href="https://lev.here.now/" class="cta-btn cta-btn-primary">Explore Leviathan</a>
+      <a href="https://github.com/lev-os/lev" class="cta-btn cta-btn-secondary">View Source</a>
     </div>
+    <div class="code-block reveal reveal-delay-3" data-lang="TypeScript" style="max-width: 560px; margin: 0 auto; text-align: left;">
+<pre><span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">lev</span>.<span class="fn">exec</span>({
+  <span class="prop">profile</span>: <span class="str">"sdlc.flowmind.exec"</span>,
+  <span class="prop">prompt</span>:  <span class="str">"Fix the auth middleware"</span>,
+});
 
-    <!-- TIER 2: Surface Tabs -->
-    <div style="margin-top: 64px;">
-      <p class="reveal reveal-delay-3" style="text-align: center; font-family: var(--font-display); font-style: italic; font-size: clamp(18px, 2.5vw, 24px); color: var(--text-dim); margin-bottom: 24px;">One handler. Every surface.</p>
-      <div class="reveal reveal-delay-4" style="text-align: center;">
-        <div class="install-widget" id="surface-widget">
-          <div class="install-tabs" role="tablist">
-            <button class="install-tab active" data-surface="cli" role="tab" aria-selected="true">CLI</button>
-            <button class="install-tab" data-surface="sdk" role="tab">SDK</button>
-            <button class="install-tab" data-surface="mcp" role="tab">MCP</button>
-            <button class="install-tab" data-surface="http" role="tab">HTTP</button>
-            <button class="install-tab" data-surface="poly" role="tab">poly://</button>
-          </div>
-          <div class="install-code surface-code" role="tabpanel" style="min-width: 520px; line-height: 1.8;">
-            <pre class="surface-pre" id="surface-content"><span class="dollar">$ </span>lev exec <span style="color:var(--emerald)">"Fix the auth middleware"</span> \
-  <span style="color:var(--text-dim)">--profile=</span><span style="color:var(--sky)">sdlc.flowmind.exec</span></pre>
-          </div>
-        </div>
-      </div>
+<span class="cm">// Every call is bounded (C1).</span>
+<span class="cm">// Every mutation is gated (C4).</span>
+<span class="cm">// Every result has a receipt (C2).</span></pre>
     </div>
-
-    <div class="cta-buttons reveal reveal-delay-5">
-      <a href="https://github.com/lev-os" class="cta-btn cta-btn-primary" target="_blank" rel="noopener">GitHub</a>
-      <a href="/constraints/" class="cta-btn cta-btn-secondary">Constraint Engineering</a>
-    </div>
+    <p class="cta-install reveal reveal-delay-4">
+      <span style="color: var(--text-dim)">$ </span><span>npm i -g @lev-os/leviathan</span>
+    </p>
   </div>
 </section>
 
-<!-- ========== SECTION 7: LIVE NOW ========== -->
-<section>
-  <div class="container">
-    <span class="section-label reveal">Explore</span>
-    <h2 class="section-title reveal reveal-delay-1">Live Now</h2>
-    <p class="section-sub reveal reveal-delay-2">Running code, not a pitch deck. Explore the system.</p>
-
-    <div class="live-grid">
-      <a href="/webmcp-agentping/" class="live-card reveal reveal-delay-2">
-        <div class="live-card-header">
-          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
-          <span class="card-arrow">&rarr;</span>
-        </div>
-        <h3>WebMCP Vision</h3>
-        <p>Browser as a structured tool API for autonomous agents. The full architecture and protocol stack.</p>
-        <span class="card-path">/webmcp-agentping/</span>
-      </a>
-
-      <a href="/genuievolve/" class="live-card reveal reveal-delay-3">
-        <div class="live-card-header">
-          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
-          <span class="card-arrow">&rarr;</span>
-        </div>
-        <h3>Heartbeat Dashboard</h3>
-        <p>Live system status and runtime telemetry. CPU, memory, event throughput per subsystem.</p>
-        <span class="card-path">/genuievolve/</span>
-      </a>
-
-      <a href="/constraints/" class="live-card reveal reveal-delay-3">
-        <div class="live-card-header">
-          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
-          <span class="card-arrow">&rarr;</span>
-        </div>
-        <h3>Constraint Engineering</h3>
-        <p>The seal that only tightens. Ratchet constraints, validation gates, and graph axioms that bound agent behavior.</p>
-        <span class="card-path">/constraints/</span>
-      </a>
-
-      <a href="/timetravel/" class="live-card reveal reveal-delay-3">
-        <div class="live-card-header">
-          <span class="status-indicator live"><span class="status-dot live"></span>Live</span>
-          <span class="card-arrow">&rarr;</span>
-        </div>
-        <h3>Time Travel</h3>
-        <p>Debug the mind. 11 search adapters, recursive deep research, and the router-not-engine thesis against 40 competitors.</p>
-        <span class="card-path">/timetravel/</span>
-      </a>
-
-      <div class="live-card disabled reveal reveal-delay-4">
-        <div class="live-card-header">
-          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
-        </div>
-        <h3>AgentPing</h3>
-        <p>Human-in-the-loop interaction protocol for AI agents. Approvals, selections, and async feedback.</p>
-        <span class="card-path">/agentping/</span>
-      </div>
-
-      <div class="live-card disabled reveal reveal-delay-4">
-        <div class="live-card-header">
-          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
-        </div>
-        <h3>Runtime</h3>
-        <p>Poly surface architecture powering every execution path. CLI, MCP, gRPC, REST from one handler.</p>
-        <span class="card-path">/runtime/</span>
-      </div>
-
-      <div class="live-card disabled reveal reveal-delay-4">
-        <div class="live-card-header">
-          <span class="status-indicator soon"><span class="status-dot soon"></span>Coming Soon</span>
-        </div>
-        <h3>Showcase</h3>
-        <p>Live demos of agents, flows, and runtime capabilities.</p>
-        <span class="card-path">/showcase/</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== FOOTER ========== -->
+<!-- ===================== 10. FOOTER ===================== -->
 <footer>
   <div class="container">
     <span>Built by <a href="https://github.com/lev-os" target="_blank" rel="noopener">Kingly</a></span>
@@ -2072,7 +1786,7 @@ footer a:hover {
   </div>
 </footer>
 
-<!-- ========== SCRIPTS ========== -->
+<!-- ===================== SCRIPTS ===================== -->
 <script>
 // Theme toggle with localStorage persistence
 function toggleTheme() {
@@ -2107,41 +1821,42 @@ function toggleTheme() {
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 
-// Install tabs
-document.querySelectorAll('.install-tab[data-cmd]').forEach(tab => {
-  tab.addEventListener('click', () => {
-    const widget = tab.closest('.install-widget');
-    widget.querySelectorAll('.install-tab').forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    tab.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-    widget.querySelector('.install-cmd').textContent = tab.dataset.cmd;
-  });
-});
-
-// Surface tabs
+// Surface tabs (new clean implementation)
 const surfaceSnippets = {
-  cli: '<span class="dollar">$ </span>lev exec <span style="color:var(--emerald)">"Fix the auth middleware"</span> \\\n  <span style="color:var(--text-dim)">--profile=</span><span style="color:var(--sky)">sdlc.flowmind.exec</span>',
-  sdk: '<span style="color:var(--sky)">const</span> result = <span style="color:var(--sky)">await</span> <span style="color:var(--gold-bright)">lev.exec</span>({\n  profile: <span style="color:var(--emerald)">"sdlc.flowmind.exec"</span>,\n  prompt:  <span style="color:var(--emerald)">"Fix the auth middleware"</span>,\n});\n\n<span style="color:var(--text-dim)">// Every call is bounded (C1).\n// Every mutation is gated (C4).\n// Every result has a receipt (C2).</span>',
-  mcp: '<span style="color:var(--gold-bright)">mcp__lev__exec</span>({\n  profile: <span style="color:var(--emerald)">"sdlc.flowmind.exec"</span>,\n  prompt:  <span style="color:var(--emerald)">"Fix the auth middleware"</span>,\n})',
+  cli: '<span style="color:var(--text-dim)">$ </span>lev exec <span style="color:var(--emerald)">"Fix the auth middleware"</span> \\\n  <span style="color:var(--text-dim)">--profile=</span><span style="color:var(--sky)">sdlc.flowmind.exec</span>',
+  sdk: '<span style="color:var(--sky)">const</span> result = <span style="color:var(--sky)">await</span> <span style="color:var(--gold-bright)">lev</span>.<span style="color:var(--gold-bright)">exec</span>({\n  <span style="color:var(--sky)">profile</span>: <span style="color:var(--emerald)">"sdlc.flowmind.exec"</span>,\n  <span style="color:var(--sky)">prompt</span>:  <span style="color:var(--emerald)">"Fix the auth middleware"</span>,\n});\n\n<span style="color:var(--text-dim)">// Every call is bounded (C1).</span>\n<span style="color:var(--text-dim)">// Every mutation is gated (C4).</span>\n<span style="color:var(--text-dim)">// Every result has a receipt (C2).</span>',
+  mcp: '<span style="color:var(--gold-bright)">mcp__lev__exec</span>({\n  <span style="color:var(--sky)">profile</span>: <span style="color:var(--emerald)">"sdlc.flowmind.exec"</span>,\n  <span style="color:var(--sky)">prompt</span>:  <span style="color:var(--emerald)">"Fix the auth middleware"</span>,\n})',
   http: '<span style="color:var(--sky)">POST</span> /api/exec\n<span style="color:var(--text-dim)">Content-Type: application/json</span>\n\n{\n  <span style="color:var(--gold-bright)">"profile"</span>: <span style="color:var(--emerald)">"sdlc.flowmind.exec"</span>,\n  <span style="color:var(--gold-bright)">"prompt"</span>:  <span style="color:var(--emerald)">"Fix the auth middleware"</span>\n}',
   poly: '<span style="color:var(--violet)">poly://</span><span style="color:var(--gold-bright)">exec</span>?profile=<span style="color:var(--sky)">sdlc.flowmind.exec</span>\n  &amp;prompt=<span style="color:var(--emerald)">Fix+the+auth+middleware</span>'
 };
 
-document.querySelectorAll('.install-tab[data-surface]').forEach(tab => {
+document.querySelectorAll('.surface-tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    const widget = tab.closest('.install-widget');
-    widget.querySelectorAll('.install-tab').forEach(t => {
+    document.querySelectorAll('.surface-tab').forEach(t => {
       t.classList.remove('active');
       t.setAttribute('aria-selected', 'false');
     });
     tab.classList.add('active');
     tab.setAttribute('aria-selected', 'true');
-    document.getElementById('surface-content').innerHTML = surfaceSnippets[tab.dataset.surface];
+    document.getElementById('surface-code-content').innerHTML = surfaceSnippets[tab.dataset.surface];
   });
 });
+
+// Tick cycle animation — lights up steps one by one on a timer
+(function() {
+  const steps = document.querySelectorAll('.tick-anim-step');
+  if (!steps.length) return;
+  let current = 0;
+
+  function advance() {
+    steps.forEach(s => s.classList.remove('active'));
+    steps[current].classList.add('active');
+    current = (current + 1) % steps.length;
+  }
+
+  advance();
+  setInterval(advance, 900);
+})();
 </script>
 
 </body>

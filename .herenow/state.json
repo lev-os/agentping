@@ -1,0 +1,22 @@
+{
+  "publishes": {
+    "keen-virtue-rveb": {
+      "siteUrl": "https://keen-virtue-rveb.here.now/"
+    },
+    "poppy-quinoa-k6eg": {
+      "siteUrl": "https://poppy-quinoa-k6eg.here.now/"
+    },
+    "pure-acorn-xxpy": {
+      "siteUrl": "https://pure-acorn-xxpy.here.now/"
+    },
+    "quick-truffle-qs7j": {
+      "siteUrl": "https://quick-truffle-qs7j.here.now/"
+    },
+    "mantra-breeze-fgmc": {
+      "siteUrl": "https://mantra-breeze-fgmc.here.now/"
+    },
+    "tidal-hearth-h3s4": {
+      "siteUrl": "https://tidal-hearth-h3s4.here.now/"
+    }
+  }
+}

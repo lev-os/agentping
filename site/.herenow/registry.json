@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "last_audit": "2026-03-31",
+  "slugs": {
+    "witty-steeple-hbrv": {
+      "url": "https://witty-steeple-hbrv.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "deleted",
+      "description": "DELETED 2026-04-02: 72-Hour Sprint Status — exposed internal cost data + architecture decisions"
+    },
+    "tropic-rosette-hjmw": {
+      "url": "https://tropic-rosette-hjmw.here.now",
+      "handle_path": "/",
+      "source_file": "community/agentping/site/index.html",
+      "classification": "public",
+      "description": "Current Lev homepage (Midnight Editorial)"
+    },
+    "sonic-heron-8ysa": {
+      "url": "https://sonic-heron-8ysa.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan — The Universal Agent Runtime (old homepage publish)"
+    },
+    "velvet-cliff-ah73": {
+      "url": "https://velvet-cliff-ah73.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan — The Universal Agent Runtime (old homepage publish)"
+    },
+    "dusty-laurel-dam9": {
+      "url": "https://dusty-laurel-dam9.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan — The Universal Agent Runtime (old homepage publish)"
+    },
+    "alpine-arbor-sa82": {
+      "url": "https://alpine-arbor-sa82.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Constraint Engineering article"
+    },
+    "keen-virtue-rveb": {
+      "url": "https://keen-virtue-rveb.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "WebMCP Shim — Every Website, Agent-Ready"
+    },
+    "poppy-quinoa-k6eg": {
+      "url": "https://poppy-quinoa-k6eg.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "WebMCP Shim — Every Website, Agent-Ready"
+    },
+    "pure-acorn-xxpy": {
+      "url": "https://pure-acorn-xxpy.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan Heartbeat"
+    },
+    "quick-truffle-qs7j": {
+      "url": "https://quick-truffle-qs7j.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "WebMCP Shim — Every Website, Agent-Ready"
+    },
+    "mantra-breeze-fgmc": {
+      "url": "https://mantra-breeze-fgmc.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan — The Universal Agent Runtime"
+    },
+    "tidal-hearth-h3s4": {
+      "url": "https://tidal-hearth-h3s4.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Leviathan — The Universal Agent Runtime"
+    },
+    "soulful-citrus-cbvg": {
+      "url": "https://soulful-citrus-cbvg.here.now",
+      "handle_path": "/genuievolve/",
+      "source_file": "plugins/system-dashboard/index.html",
+      "classification": "public",
+      "description": "Leviathan Heartbeat Dashboard"
+    },
+    "deep-knoll-94xt": {
+      "url": "https://deep-knoll-94xt.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Dashboard layout (fire)"
+    },
+    "lucid-geyser-ef2b": {
+      "url": "https://lucid-geyser-ef2b.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "copi-deleted",
+      "description": "DELETED 2026-04-01: Was directory listing with 3 live COPI files (contract-truth-table, fmea-risk-dashboard, runtime-architecture) — drone ATC system details"
+    },
+    "pastel-dune-hm8b": {
+      "url": "https://pastel-dune-hm8b.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "needs-review",
+      "description": "Unknown content (handoff mention)"
+    },
+    "unfold-tablet-4ndn": {
+      "url": "https://unfold-tablet-4ndn.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "needs-review",
+      "description": "User-friendly features explainer"
+    },
+    "mossy-lichen-33bp": {
+      "url": "https://mossy-lichen-33bp.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "needs-review",
+      "description": "Unknown content (handoff mention)"
+    },
+    "verdant-spirit-r7ar": {
+      "url": "https://verdant-spirit-r7ar.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "DNA/Constraint Engineering Thesis"
+    },
+    "shiny-lemon-3nn2": {
+      "url": "https://shiny-lemon-3nn2.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Ultimate Convergence Visual"
+    },
+    "stellar-echo-gcjr": {
+      "url": "https://stellar-echo-gcjr.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Weekly branch consolidation catalogue"
+    },
+    "civic-epoch-vf96": {
+      "url": "https://civic-epoch-vf96.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "System dashboard article"
+    },
+    "mossy-breath-9han": {
+      "url": "https://mossy-breath-9han.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "needs-review",
+      "description": "HyperspaceAI topology diagram"
+    },
+    "dusky-sparrow-v2ge": {
+      "url": "https://dusky-sparrow-v2ge.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "needs-review",
+      "description": "LeWorldModel Integration Atlas"
+    },
+    "patient-banner-2rj9": {
+      "url": "https://patient-banner-2rj9.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Lev hype page / CDO case study"
+    },
+    "zingy-rosette-4tc9": {
+      "url": "https://zingy-rosette-4tc9.here.now",
+      "handle_path": null,
+      "source_file": null,
+      "classification": "public",
+      "description": "Previous homepage (permanent slug)"
+    }
+  },
+  "handle_paths": {
+    "/": "tropic-rosette-hjmw",
+    "/genuievolve/": "soulful-citrus-cbvg",
+    "/webmcp-agentping/": null,
+    "/constraints/": null,
+    "/graph-stuff-march/": null
+  },
+  "copi_takedown_candidates": [
+    "ulta-dxl-google-shopping-cart-architecture.html",
+    "ulta-sdk-refactor-command-bridge.html",
+    "ulta-turbo-spec-explainer.html",
+    "ulta-web-modern-roadmap.html",
+    "copi-oshkosh-readiness.html",
+    "copi-progress-report.html"
+  ]
+}

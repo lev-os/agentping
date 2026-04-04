@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poly Protocol — The OCI Layer for AI Agents</title>
+<meta name="description" content="Poly Protocol — one invocation spec, every agent runtime, any infrastructure surface. 13 primitives unified into one protocol call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME: MIDNIGHT EDITORIAL ============ */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #0a0e1a;
+  --bg2: #0f1729;
+  --surface: #141a2e;
+  --surface2: #1a2240;
+  --surface-elevated: #1e2850;
+  --border: rgba(212, 167, 58, 0.12);
+  --border-bright: rgba(212, 167, 58, 0.25);
+  --text: #e8e4dc;
+  --text-dim: #8a8e9e;
+  --text-bright: #ffffff;
+
+  --gold: #d4a73a;
+  --gold-dim: rgba(212, 167, 58, 0.12);
+  --gold-bright: #f0c95c;
+
+  --emerald: #34d399;
+  --emerald-dim: rgba(52, 211, 153, 0.12);
+  --rose: #fb7185;
+  --rose-dim: rgba(251, 113, 133, 0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56, 189, 248, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45, 212, 191, 0.12);
+  --coral: #f97316;
+  --coral-dim: rgba(249, 115, 22, 0.12);
+  --violet: #a78bfa;
+  --violet-dim: rgba(167, 139, 250, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #faf8f4;
+  --bg2: #f5f2eb;
+  --surface: #ffffff;
+  --surface2: #f0ebe3;
+  --surface-elevated: #fff9f0;
+  --border: rgba(30, 58, 95, 0.1);
+  --border-bright: rgba(30, 58, 95, 0.2);
+  --text: #1e3a5f;
+  --text-dim: #6b7a8e;
+  --text-bright: #0a1628;
+  --gold: #b8860b;
+  --gold-dim: rgba(184, 134, 11, 0.08);
+  --gold-bright: #d4a73a;
+  --emerald: #059669;
+  --emerald-dim: rgba(5, 150, 105, 0.08);
+  --rose: #e11d48;
+  --rose-dim: rgba(225, 29, 72, 0.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2, 132, 199, 0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.08);
+  --teal: #0d9488;
+  --teal-dim: rgba(13, 148, 136, 0.08);
+  --coral: #ea580c;
+  --coral-dim: rgba(234, 88, 12, 0.08);
+  --violet: #7c3aed;
+  --violet-dim: rgba(124, 58, 237, 0.08);
+}
+
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 30% -10%, rgba(212, 167, 58, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(56, 189, 248, 0.04) 0%, transparent 40%);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes hero-glow {
+  0%, 100% { text-shadow: 0 0 60px rgba(212, 167, 58, 0.15), 0 0 120px rgba(212, 167, 58, 0.05); }
+  50% { text-shadow: 0 0 80px rgba(212, 167, 58, 0.25), 0 0 160px rgba(212, 167, 58, 0.1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ STAGGERED REVEAL ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+
+/* ============ LAYOUT ============ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-sub {
+  font-size: 18px;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 24px;
+  animation: fadeIn 1s ease 0.2s both;
+}
+
+.hero-eyebrow span {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  background: var(--gold-dim);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 10vw, 120px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -3px;
+  animation: fadeInUp 0.8s ease 0.4s both, hero-glow 4s ease-in-out infinite;
+}
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(20px, 3vw, 32px);
+  color: var(--text-dim);
+  max-width: 700px;
+  margin: 0 auto 20px;
+  line-height: 1.4;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+.hero-oneliner {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.5vw, 16px);
+  color: var(--emerald);
+  max-width: 700px;
+  margin: 0 auto 60px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2.5s ease-in-out infinite, fadeIn 1s ease 1.2s both;
+  z-index: 1;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+
+/* ============ PROBLEM SECTION ============ */
+.problem-statement {
+  font-size: 19px;
+  color: var(--text);
+  line-height: 1.7;
+  max-width: 720px;
+  margin-bottom: 40px;
+}
+
+.problem-statement strong {
+  color: var(--text-bright);
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.surface-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.surface-badge:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+/* ============ PROTOCOL CARDS ============ */
+.protocol-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.protocol-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.protocol-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.protocol-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.protocol-card.arm::before {
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+}
+
+.protocol-card.envelope::before {
+  background: linear-gradient(90deg, var(--emerald), var(--teal));
+}
+
+.protocol-card-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.protocol-card.arm .protocol-card-label {
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+.protocol-card.envelope .protocol-card-label {
+  background: var(--emerald-dim);
+  color: var(--emerald);
+}
+
+.protocol-card h3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.protocol-card > p {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ============ YAML CODE BLOCKS ============ */
+.yaml-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre;
+}
+
+.yaml-block .y-key { color: var(--sky); }
+.yaml-block .y-str { color: var(--emerald); }
+.yaml-block .y-comment { color: var(--text-dim); font-style: italic; }
+.yaml-block .y-num { color: var(--coral); }
+.yaml-block .y-list { color: var(--gold); }
+.yaml-block .y-val { color: var(--gold-bright); }
+
+/* ============ STACK SECTION ============ */
+.stack-layers {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.stack-layer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.stack-layer:first-child {
+  border-radius: 16px 16px 0 0;
+}
+
+.stack-layer:last-child {
+  border-radius: 0 0 16px 16px;
+}
+
+.stack-layer + .stack-layer {
+  border-top: none;
+}
+
+.stack-layer:hover {
+  background: var(--surface2);
+  z-index: 1;
+}
+
+.stack-layer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+}
+
+.stack-layer[data-color="gold"]::before { background: var(--gold); }
+.stack-layer[data-color="emerald"]::before { background: var(--emerald); }
+.stack-layer[data-color="sky"]::before { background: var(--sky); }
+.stack-layer[data-color="violet"]::before { background: var(--violet); }
+.stack-layer[data-color="coral"]::before { background: var(--coral); }
+
+.stack-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stack-layer[data-color="gold"] .stack-num { background: var(--gold-dim); color: var(--gold); }
+.stack-layer[data-color="emerald"] .stack-num { background: var(--emerald-dim); color: var(--emerald); }
+.stack-layer[data-color="sky"] .stack-num { background: var(--sky-dim); color: var(--sky); }
+.stack-layer[data-color="violet"] .stack-num { background: var(--violet-dim); color: var(--violet); }
+.stack-layer[data-color="coral"] .stack-num { background: var(--coral-dim); color: var(--coral); }
+
+.stack-info {
+  flex: 1;
+}
+
+.stack-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.stack-desc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.stack-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.stack-layer[data-color="gold"] .stack-link { color: var(--gold); background: var(--gold-dim); }
+.stack-layer[data-color="emerald"] .stack-link { color: var(--emerald); background: var(--emerald-dim); }
+.stack-layer[data-color="sky"] .stack-link { color: var(--sky); background: var(--sky-dim); }
+.stack-layer[data-color="violet"] .stack-link { color: var(--violet); background: var(--violet-dim); }
+.stack-layer[data-color="coral"] .stack-link { color: var(--coral); background: var(--coral-dim); }
+
+.stack-link:hover {
+  transform: translateX(4px);
+}
+
+.stack-connector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.stack-connector::before {
+  content: '';
+  width: 1px;
+  height: 12px;
+  background: var(--border-bright);
+  position: absolute;
+  top: -6px;
+}
+
+/* ============ SURFACES GRID ============ */
+.surfaces-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.surface-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.surface-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.surface-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.surface-card[data-accent="gold"]::before { background: var(--gold); }
+.surface-card[data-accent="emerald"]::before { background: var(--emerald); }
+.surface-card[data-accent="sky"]::before { background: var(--sky); }
+.surface-card[data-accent="violet"]::before { background: var(--violet); }
+.surface-card[data-accent="coral"]::before { background: var(--coral); }
+.surface-card[data-accent="teal"]::before { background: var(--teal); }
+.surface-card[data-accent="rose"]::before { background: var(--rose); }
+.surface-card[data-accent="amber"]::before { background: var(--amber); }
+
+.surface-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.surface-card h3 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.surface-card[data-accent="gold"] h3 { color: var(--gold); }
+.surface-card[data-accent="emerald"] h3 { color: var(--emerald); }
+.surface-card[data-accent="sky"] h3 { color: var(--sky); }
+.surface-card[data-accent="violet"] h3 { color: var(--violet); }
+.surface-card[data-accent="coral"] h3 { color: var(--coral); }
+.surface-card[data-accent="teal"] h3 { color: var(--teal); }
+.surface-card[data-accent="rose"] h3 { color: var(--rose); }
+.surface-card[data-accent="amber"] h3 { color: var(--amber); }
+
+.surface-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.surface-powered {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+.surface-powered strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ============ PARTNER CTA SECTION ============ */
+.partner-section {
+  text-align: center;
+  padding: 6rem 0;
+}
+
+.partner-text {
+  font-size: 18px;
+  color: var(--text-dim);
+  max-width: 640px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+
+.partner-text strong {
+  color: var(--text-bright);
+}
+
+.partner-highlight {
+  font-size: 17px;
+  color: var(--text);
+  max-width: 640px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+  padding: 24px 32px;
+  background: var(--emerald-dim);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 12px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.cta-btn {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.cta-btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.cta-btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(212, 167, 58, 0.2);
+}
+
+.cta-btn-secondary {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+}
+
+.cta-btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.footer-links a, .footer-links span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--gold);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+.footer-theme-toggle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.footer-theme-toggle:hover {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.footer-theme-toggle .icon-sun { display: none; }
+.footer-theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .footer-theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .footer-theme-toggle .icon-moon { display: none; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  section { padding: 4rem 0; }
+  .hero { min-height: auto; padding: 6rem 24px 4rem; }
+  .hero h1 { font-size: 3.5rem; letter-spacing: -2px; }
+  .container { padding: 0 1.25rem; }
+  .protocol-grid { grid-template-columns: 1fr; }
+  .surfaces-grid { grid-template-columns: repeat(2, 1fr); }
+  .stack-layer { flex-direction: column; align-items: flex-start; gap: 12px; padding: 20px 24px; }
+  .stack-link { align-self: flex-start; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+  .footer-right { flex-direction: column; gap: 12px; }
+  .partner-highlight { padding: 20px 24px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.8rem; letter-spacing: -1px; }
+  .hero-tagline { font-size: 1.1rem; }
+  .surfaces-grid { grid-template-columns: 1fr; }
+  .badge-row { gap: 6px; }
+  .surface-badge { font-size: 11px; padding: 4px 10px; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: #fff; color: #111; }
+  .theme-toggle, .scroll-indicator, .footer-theme-toggle { display: none; }
+  section { padding: 2rem 0; page-break-inside: avoid; }
+  .hero { min-height: auto; padding: 2rem 0; }
+  .hero::before, .hero::after { display: none; }
+  h1, h2, h3, h4 { color: #111; }
+  .section-label { color: #666; }
+}
+</style>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span class="icon-moon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+  <span class="icon-sun">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+</button>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>Agent Infrastructure Protocol</span></div>
+    <h1><em>Poly Protocol</em></h1>
+    <p class="hero-tagline">The OCI layer for AI agents.</p>
+    <p class="hero-oneliner">One invocation spec. Every agent runtime. Any infrastructure surface.</p>
+  </div>
+
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== SECTION 1: THE PROBLEM ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Problem</span>
+    <h2 class="section-title reveal reveal-delay-1">13 primitives. 13 SDKs. 13 auth flows.</h2>
+
+    <p class="problem-statement reveal reveal-delay-2">
+      AI agents need <strong>13 infrastructure primitives</strong> to operate in the real world. Today each is a separate SDK, a separate auth flow, a separate billing relationship. Your agent spends more time negotiating APIs than doing work. <strong>Poly unifies them into one protocol call.</strong>
+    </p>
+
+    <div class="badge-row reveal reveal-delay-3">
+      <span class="surface-badge">Email</span>
+      <span class="surface-badge">Phone</span>
+      <span class="surface-badge">Messaging</span>
+      <span class="surface-badge">Compute</span>
+      <span class="surface-badge">Browser</span>
+      <span class="surface-badge">Crawling</span>
+      <span class="surface-badge">Memory</span>
+      <span class="surface-badge">Payments</span>
+      <span class="surface-badge">SaaS Integration</span>
+      <span class="surface-badge">API Access</span>
+      <span class="surface-badge">Voice</span>
+      <span class="surface-badge">People Search</span>
+      <span class="surface-badge">Web Search</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 2: THE PROTOCOL ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Protocol</span>
+    <h2 class="section-title reveal reveal-delay-1">Two primitives. Infinite composition.</h2>
+    <p class="section-sub reveal reveal-delay-2">ARM describes capabilities. InvokeEnvelope executes them. That's the entire protocol.</p>
+
+    <div class="protocol-grid">
+      <div class="protocol-card arm reveal reveal-delay-3">
+        <span class="protocol-card-label">ARM</span>
+        <h3>Agent Runtime Manifest</h3>
+        <p>Describes what an agent can do. Like a Docker image manifest, but for AI agents.</p>
+        <div class="yaml-block">
+<span class="y-key">name</span>: <span class="y-str">lev-agent</span>
+<span class="y-key">version</span>: <span class="y-str">0.1.0</span>
+<span class="y-key">surfaces</span>:
+  <span class="y-list">-</span> <span class="y-val">email</span>    <span class="y-comment"># via AgentMail</span>
+  <span class="y-list">-</span> <span class="y-val">compute</span>  <span class="y-comment"># via Daytona, E2B</span>
+  <span class="y-list">-</span> <span class="y-val">browser</span>  <span class="y-comment"># via Browserbase</span>
+  <span class="y-list">-</span> <span class="y-val">search</span>   <span class="y-comment"># via Exa</span>
+<span class="y-key">capabilities</span>:
+  <span class="y-list">-</span> <span class="y-val">code_execution</span>
+  <span class="y-list">-</span> <span class="y-val">web_browsing</span>
+  <span class="y-list">-</span> <span class="y-val">communication</span>
+        </div>
+      </div>
+
+      <div class="protocol-card envelope reveal reveal-delay-4">
+        <span class="protocol-card-label">InvokeEnvelope</span>
+        <h3>The Runtime Request</h3>
+        <p>The runtime request. Like a container run command, but for agent infrastructure.</p>
+        <div class="yaml-block">
+<span class="y-key">target</span>: <span class="y-val">email</span>
+<span class="y-key">action</span>: <span class="y-val">send</span>
+<span class="y-key">params</span>:
+  <span class="y-key">to</span>: <span class="y-str">"partner@company.com"</span>
+  <span class="y-key">subject</span>: <span class="y-str">"An agent sent this"</span>
+  <span class="y-key">body</span>: <span class="y-str">"..."</span>
+<span class="y-key">budget</span>:
+  <span class="y-key">max_tokens</span>: <span class="y-num">1000</span>
+  <span class="y-key">timeout_ms</span>: <span class="y-num">30000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 3: THE STACK ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Stack</span>
+    <h2 class="section-title reveal reveal-delay-1">Five layers. One ecosystem.</h2>
+    <p class="section-sub reveal reveal-delay-2">From runtime to marketplace. Every layer is open, every boundary is typed.</p>
+
+    <div class="stack-layers reveal reveal-delay-3">
+      <div class="stack-layer" data-color="gold">
+        <span class="stack-num">1</span>
+        <div class="stack-info">
+          <div class="stack-name">Lev</div>
+          <div class="stack-desc">Universal agent runtime. Routes work to any agent through adapters.</div>
+        </div>
+      </div>
+
+      <div class="stack-layer" data-color="emerald">
+        <span class="stack-num">2</span>
+        <div class="stack-info">
+          <div class="stack-name">Poly Protocol</div>
+          <div class="stack-desc">Agent invocation spec. ARM manifests + InvokeEnvelope.</div>
+        </div>
+      </div>
+
+      <div class="stack-layer" data-color="sky">
+        <span class="stack-num">3</span>
+        <div class="stack-info">
+          <div class="stack-name">Faba</div>
+          <div class="stack-desc">For Agents, By Agents. The agent-native marketplace.</div>
+        </div>
+        <a href="https://faba.gg" class="stack-link" target="_blank" rel="noopener">faba.gg &rarr;</a>
+      </div>
+
+      <div class="stack-layer" data-color="violet">
+        <span class="stack-num">4</span>
+        <div class="stack-info">
+          <div class="stack-name">AgentPing</div>
+          <div class="stack-desc">Human-in-the-loop protocol. Approvals, selections, async feedback.</div>
+        </div>
+      </div>
+
+      <div class="stack-layer" data-color="coral">
+        <span class="stack-num">5</span>
+        <div class="stack-info">
+          <div class="stack-name">ClawBuddy</div>
+          <div class="stack-desc">OpenClaw opinionated wrapper. Elite marketplace, concierge UX.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 4: 13 SURFACES ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">13 Surfaces</span>
+    <h2 class="section-title reveal reveal-delay-1">Every primitive an agent needs.</h2>
+    <p class="section-sub reveal reveal-delay-2">One protocol call per surface. One auth flow. One billing relationship. Thirteen categories that cover the agent infrastructure landscape.</p>
+
+    <div class="surfaces-grid">
+      <div class="surface-card reveal reveal-delay-2" data-accent="gold">
+        <span class="surface-icon">&#9993;</span>
+        <h3>Email</h3>
+        <p>Send, receive, and manage email programmatically. Full inbox access for autonomous agents.</p>
+        <span class="surface-powered">Powered by <strong>AgentMail</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-2" data-accent="emerald">
+        <span class="surface-icon">&#9742;</span>
+        <h3>Phone</h3>
+        <p>Place and receive phone calls. Telephony infrastructure for agent communication.</p>
+        <span class="surface-powered">Powered by <strong>AgentPhone</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-2" data-accent="sky">
+        <span class="surface-icon">&#128172;</span>
+        <h3>Messaging</h3>
+        <p>Cross-platform messaging. Slack, Teams, Discord, SMS &mdash; one interface.</p>
+        <span class="surface-powered">Powered by <strong>Kapso</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-3" data-accent="violet">
+        <span class="surface-icon">&#9881;</span>
+        <h3>Compute</h3>
+        <p>Sandboxed code execution environments. Spin up, run, tear down. No cold starts.</p>
+        <span class="surface-powered">Powered by <strong>Daytona</strong>, <strong>E2B</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-3" data-accent="coral">
+        <span class="surface-icon">&#127760;</span>
+        <h3>Browser</h3>
+        <p>Headless and headed browser automation. Navigate, extract, interact at scale.</p>
+        <span class="surface-powered">Powered by <strong>Browserbase</strong>, <strong>Browser Use</strong>, <strong>Hyperbrowser</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-3" data-accent="teal">
+        <span class="surface-icon">&#128375;</span>
+        <h3>Crawling</h3>
+        <p>Structured web scraping. Convert any page into clean, structured data for agents.</p>
+        <span class="surface-powered">Powered by <strong>Firecrawl</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-3" data-accent="rose">
+        <span class="surface-icon">&#129504;</span>
+        <h3>Memory</h3>
+        <p>Persistent agent memory. Store, retrieve, and reason over past interactions.</p>
+        <span class="surface-powered">Powered by <strong>Mem0</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-4" data-accent="amber">
+        <span class="surface-icon">&#128179;</span>
+        <h3>Payments</h3>
+        <p>Agent-native payments. Charge, transfer, and manage financial operations autonomously.</p>
+        <span class="surface-powered">Powered by <strong>Kite</strong>, <strong>Sponge</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-4" data-accent="gold">
+        <span class="surface-icon">&#128268;</span>
+        <h3>SaaS Integration</h3>
+        <p>Connect to any SaaS tool. Pre-built adapters for the apps agents use most.</p>
+        <span class="surface-powered">Powered by <strong>Composio</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-4" data-accent="sky">
+        <span class="surface-icon">&#128273;</span>
+        <h3>API Access</h3>
+        <p>Universal API gateway. Authenticate once, call any API through a unified interface.</p>
+        <span class="surface-powered">Powered by <strong>Orthogonal</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-4" data-accent="violet">
+        <span class="surface-icon">&#127908;</span>
+        <h3>Voice</h3>
+        <p>Text-to-speech and speech-to-text. Give your agents a voice. Real-time conversation.</p>
+        <span class="surface-powered">Powered by <strong>ElevenLabs</strong>, <strong>Vapi</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-5" data-accent="emerald">
+        <span class="surface-icon">&#128101;</span>
+        <h3>People Search</h3>
+        <p>Find and enrich contact information. Build relationship graphs programmatically.</p>
+        <span class="surface-powered">Powered by <strong>Sixtyfour</strong></span>
+      </div>
+
+      <div class="surface-card reveal reveal-delay-5" data-accent="coral">
+        <span class="surface-icon">&#128270;</span>
+        <h3>Web Search</h3>
+        <p>AI-native web search. Semantic queries that return structured, ready-to-use results.</p>
+        <span class="surface-powered">Powered by <strong>Exa</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 5: BUILD WITH US ========== -->
+<section class="partner-section">
+  <div class="container">
+    <span class="section-label reveal">Build With Us</span>
+    <h2 class="section-title reveal reveal-delay-1" style="text-align: center;">Your API becomes a surface.</h2>
+
+    <p class="partner-text reveal reveal-delay-2">
+      Every agent on the protocol can access your infrastructure natively. <strong>You get distribution.</strong> The ecosystem gets interoperability.
+    </p>
+
+    <div class="partner-highlight reveal reveal-delay-3">
+      We're reaching out to 18 companies building agent infrastructure primitives. This is a collaboration play &mdash; the agent economy wins when the plumbing is open.
+    </div>
+
+    <div class="cta-buttons reveal reveal-delay-4">
+      <a href="mailto:jp@kinglystudio.ai" class="cta-btn cta-btn-primary">Let's build together</a>
+      <a href="https://github.com/lev-os/lev" class="cta-btn cta-btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-links">
+      <a href="https://kinglystudio.ai" target="_blank" rel="noopener">Kingly</a>
+      <span style="opacity: 0.3;">/</span>
+      <a href="https://faba.gg" target="_blank" rel="noopener">faba.gg</a>
+      <span style="opacity: 0.3;">/</span>
+      <a href="https://github.com/lev-os" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="footer-right">
+      <span class="footer-tagline">Built by agents, for agents.</span>
+      <button class="footer-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="icon-moon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </span>
+        <span class="icon-sun">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script>
+// Theme toggle with localStorage persistence
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('lev-theme', next); } catch(e) {}
+}
+
+// Restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lev-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+
+// Intersection Observer for staggered scroll reveals
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Travel — Debug the Mind | Leviathan</title>
+<meta name="description" content="12 search adapters, one research router. Lev's core-timetravel plugin treats search backends like interchangeable parts and lets the best tool win each sub-task.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME: MIDNIGHT EDITORIAL ============ */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #0a0e1a;
+  --bg2: #0f1729;
+  --surface: #141a2e;
+  --surface2: #1a2240;
+  --surface-elevated: #1e2850;
+  --border: rgba(212, 167, 58, 0.12);
+  --border-bright: rgba(212, 167, 58, 0.25);
+  --text: #e8e4dc;
+  --text-dim: #8a8e9e;
+  --text-bright: #ffffff;
+
+  --gold: #d4a73a;
+  --gold-dim: rgba(212, 167, 58, 0.12);
+  --gold-bright: #f0c95c;
+
+  --emerald: #34d399;
+  --emerald-dim: rgba(52, 211, 153, 0.12);
+  --rose: #fb7185;
+  --rose-dim: rgba(251, 113, 133, 0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56, 189, 248, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45, 212, 191, 0.12);
+  --coral: #f97316;
+  --coral-dim: rgba(249, 115, 22, 0.12);
+  --violet: #a78bfa;
+  --violet-dim: rgba(167, 139, 250, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #faf8f4;
+  --bg2: #f5f2eb;
+  --surface: #ffffff;
+  --surface2: #f0ebe3;
+  --surface-elevated: #fff9f0;
+  --border: rgba(30, 58, 95, 0.1);
+  --border-bright: rgba(30, 58, 95, 0.2);
+  --text: #1e3a5f;
+  --text-dim: #6b7a8e;
+  --text-bright: #0a1628;
+  --gold: #b8860b;
+  --gold-dim: rgba(184, 134, 11, 0.08);
+  --gold-bright: #d4a73a;
+  --emerald: #059669;
+  --emerald-dim: rgba(5, 150, 105, 0.08);
+  --rose: #e11d48;
+  --rose-dim: rgba(225, 29, 72, 0.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2, 132, 199, 0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.08);
+  --teal: #0d9488;
+  --teal-dim: rgba(13, 148, 136, 0.08);
+  --coral: #ea580c;
+  --coral-dim: rgba(234, 88, 12, 0.08);
+  --violet: #7c3aed;
+  --violet-dim: rgba(124, 58, 237, 0.08);
+}
+
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 30% -10%, rgba(212, 167, 58, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(56, 189, 248, 0.04) 0%, transparent 40%);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ STAGGERED REVEAL ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ============ LAYOUT ============ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-sub {
+  font-size: 18px;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ============ BACK LINK ============ */
+.back-link {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  letter-spacing: 0.5px;
+}
+
+.back-link:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: translateX(-2px);
+}
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 24px;
+  animation: fadeIn 1s ease 0.2s both;
+}
+
+.hero-eyebrow span {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  background: var(--gold-dim);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -2px;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 28px);
+  color: var(--text-dim);
+  max-width: 700px;
+  margin: 0 auto 60px;
+  line-height: 1.4;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+/* ============ KPI ROW ============ */
+.kpi-row {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+
+.kpi {
+  text-align: center;
+  min-width: 100px;
+}
+
+.kpi-value {
+  font-family: var(--font-mono);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.kpi-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2.5s ease-in-out infinite, fadeIn 1s ease 1.2s both;
+  z-index: 1;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+
+/* ============ PROBLEM SECTION ============ */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.problem-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.problem-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.problem-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--rose);
+}
+
+.problem-number {
+  font-family: var(--font-mono);
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--rose-dim);
+  position: absolute;
+  top: 16px; right: 24px;
+  line-height: 1;
+}
+
+.problem-card h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+}
+
+.problem-card p {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ============ CODE BLOCK ============ */
+.code-block {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.5vw, 16px);
+  color: var(--gold-bright);
+  padding: 24px;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.code-block .kw { color: var(--sky); }
+.code-block .fn { color: var(--gold-bright); }
+.code-block .str { color: var(--emerald); }
+.code-block .comment { color: var(--text-dim); font-style: italic; }
+.code-block .num { color: var(--coral); }
+.code-block .prop { color: var(--violet); }
+
+/* ============ ROUTER HERO ============ */
+.router-hero {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 20px;
+  padding: 48px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.router-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--emerald), var(--sky));
+}
+
+.router-hero p {
+  font-size: 17px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  max-width: 700px;
+}
+
+.router-hero p:last-child {
+  margin-bottom: 0;
+}
+
+.router-hero strong {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+
+/* ============ ADAPTER GRID ============ */
+.adapter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.adapter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.adapter-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.adapter-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin: 0 auto 12px;
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+.adapter-card h3 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.adapter-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.adapter-card .adapter-tags {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.adapter-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--emerald-dim);
+  color: var(--emerald);
+  text-transform: lowercase;
+}
+
+.adapter-tag.synth {
+  background: var(--violet-dim);
+  color: var(--violet);
+}
+
+.adapter-tag.extract {
+  background: var(--sky-dim);
+  color: var(--sky);
+}
+
+.adapter-tag.social {
+  background: var(--coral-dim);
+  color: var(--coral);
+}
+
+.adapter-tag.academic {
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+
+/* ============ STRATEGY TABLE ============ */
+.strategy-table-wrap {
+  overflow-x: auto;
+  margin-top: 48px;
+  margin-bottom: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.strategy-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.strategy-table th,
+.strategy-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.strategy-table thead th {
+  background: var(--surface2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.strategy-table tbody tr {
+  background: var(--surface);
+  transition: background 0.2s ease;
+}
+
+.strategy-table tbody tr:hover { background: var(--surface2); }
+.strategy-table tbody tr:last-child td { border-bottom: none; }
+
+.strategy-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.strategy-table td:nth-child(2) {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.strategy-table td:nth-child(3) {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--sky);
+}
+
+.strategy-table td:nth-child(4) {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--violet);
+}
+
+/* ============ FLOWMIND SECTION ============ */
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 48px;
+}
+
+.flow-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flow-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+}
+
+.flow-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.flow-card:nth-child(1)::before { background: var(--sky); }
+.flow-card:nth-child(2)::before { background: var(--emerald); }
+.flow-card:nth-child(3)::before { background: var(--violet); }
+.flow-card:nth-child(4)::before { background: var(--coral); }
+.flow-card:nth-child(5)::before { background: var(--gold); }
+
+.flow-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text-bright);
+}
+
+.flow-card p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.flow-card .flow-trigger {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-top: auto;
+}
+
+/* ============ BENCHMARK TABLE ============ */
+.benchmark-table-wrap {
+  overflow-x: auto;
+  margin-top: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.benchmark-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.benchmark-table th,
+.benchmark-table td {
+  padding: 0.85rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.benchmark-table thead th {
+  background: var(--surface2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.benchmark-table tbody tr {
+  background: var(--surface);
+  transition: background 0.2s ease;
+}
+
+.benchmark-table tbody tr:hover { background: var(--surface2); }
+.benchmark-table tbody tr:last-child td { border-bottom: none; }
+
+.benchmark-table td:first-child {
+  font-weight: 600;
+  color: var(--text-bright);
+  white-space: nowrap;
+}
+
+.benchmark-table td:nth-child(2) {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.benchmark-table td:nth-child(3) {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--gold);
+}
+
+/* ============ INSIGHT CARDS ============ */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.insight-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s;
+}
+
+.insight-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 8px 32px rgba(212, 167, 58, 0.08);
+}
+
+.insight-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.insight-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.insight-card p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ============ BLOCKQUOTE ============ */
+.pull-quote {
+  text-align: center;
+  padding: 40px;
+  background: var(--gold-dim);
+  border-radius: 16px;
+  border: 1px solid rgba(212, 167, 58, 0.15);
+  margin: 48px 0;
+}
+
+.pull-quote blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  font-style: italic;
+  color: var(--gold);
+  line-height: 1.3;
+}
+
+.pull-quote cite {
+  display: block;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: normal;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ============ CTA SECTION ============ */
+.cta-section {
+  text-align: center;
+  padding: 6rem 0;
+}
+
+.cta-install {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  padding: 16px 32px;
+  display: inline-block;
+  margin: 32px 0;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--gold-bright);
+}
+
+.cta-install .dollar {
+  color: var(--text-dim);
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.cta-btn {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.cta-btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.cta-btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+}
+
+.cta-btn-secondary {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+}
+
+.cta-btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+footer p, footer span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  section { padding: 4rem 0; }
+  .hero { min-height: auto; padding: 6rem 24px 4rem; }
+  .kpi-row { gap: 20px; }
+  .kpi-value { font-size: 28px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .adapter-grid { grid-template-columns: repeat(2, 1fr); }
+  .insight-grid { grid-template-columns: 1fr; }
+  .flow-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 1.25rem; }
+  .router-hero { padding: 28px; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  footer .container { flex-direction: column; gap: 8px; text-align: center; }
+  .back-link { top: 1rem; left: 1rem; height: 36px; font-size: 11px; padding: 0 12px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.8rem; letter-spacing: -1px; }
+  .hero-subtitle { font-size: 1.1rem; }
+  .adapter-grid { grid-template-columns: 1fr; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: #fff; color: #111; }
+  .theme-toggle, .scroll-indicator, .back-link { display: none; }
+  section { padding: 2rem 0; page-break-inside: avoid; }
+  .hero { min-height: auto; padding: 2rem 0; }
+  .hero::before, .hero::after { display: none; }
+  h1, h2, h3, h4 { color: #111; }
+  .section-label { color: #666; }
+}
+</style>
+</head>
+<body>
+
+<!-- Back Link -->
+<a href="/" class="back-link">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+  Leviathan
+</a>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span class="icon-moon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+  <span class="icon-sun">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+</button>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>core-timetravel</span></div>
+    <h1><em>Debug the Mind</em></h1>
+    <p class="hero-subtitle">12 search adapters. One research router. The best tool wins every sub-task.</p>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">11</div>
+        <div class="kpi-label">Adapters</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">6</div>
+        <div class="kpi-label">Strategies</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">5</div>
+        <div class="kpi-label">FlowMind Programs</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">&lt;$1</div>
+        <div class="kpi-label">Per Deep Query</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== SECTION 1: THE PROBLEM ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Problem</span>
+    <h2 class="section-title reveal reveal-delay-1">Agents Are Black Boxes</h2>
+    <p class="section-sub reveal reveal-delay-2">You can't replay an agent's reasoning. You can't fork its research path. You can't understand why it chose one source over another. The entire deep research space is opaque by design.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal reveal-delay-2">
+        <div class="problem-number">?</div>
+        <h3>No Replay</h3>
+        <p>When an agent produces a research report, you get the output. You never see which backends it hit, which sources it discarded, or why it synthesized one thread over another.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-3">
+        <div class="problem-number">!</div>
+        <h3>No Forking</h3>
+        <p>Want to re-run the same query with a different strategy? Start over. Want to swap one search backend for another? Rebuild from scratch. There's no composable research primitive.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-4">
+        <div class="problem-number">&amp;</div>
+        <h3>Vendor Lock-in</h3>
+        <p>Every research agent is a monolith. Perplexity can't use Valyu's proprietary data. Grok can't search arXiv. You're stuck with whatever one company decided to build.</p>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal reveal-delay-3">
+      <blockquote>No single backend wins every query. Valyu crushes academic research but can't search Twitter. Grok has real-time X data but can't search PubMed. A router will always outperform a monolith.</blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 2: ROUTER, NOT ENGINE ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Approach</span>
+    <h2 class="section-title reveal reveal-delay-1">Router, Not Engine</h2>
+    <p class="section-sub reveal reveal-delay-2">Lev didn't build another search engine or research agent. It built a research router that treats search backends like interchangeable parts.</p>
+
+    <div class="router-hero reveal reveal-delay-3">
+      <p><strong>core-timetravel</strong> is a plugin with 11 adapters: Brave, Firecrawl, Valyu, Perplexity, Exa, Tavily, Grok, arXiv, HackerNews, ScrapECreators, and an Oracle synthesizer. Each adapter is a thin HTTP client. The router picks a strategy&mdash;quick, full, deep, max, social, or academic&mdash;fans out to the right backends in parallel, and merges the results.</p>
+      <p>When a new backend launches that beats Exa on structured extraction, we add one adapter file and it's available to every strategy. When Valyu adds a new data source, every deep research query automatically gets it. <strong>The router doesn't care about benchmark wars&mdash;it uses the best tool for each job.</strong></p>
+    </div>
+
+    <div class="code-block reveal reveal-delay-4">
+<span class="comment">// One command. Three paid APIs in parallel. Under 30 seconds.</span>
+<span class="kw">$</span> timetravel search <span class="str">"deep research agents"</span> -s deep
+
+<span class="comment">// 185KB of structured JSON. Deduplicated sources. Confidence scores.</span>
+<span class="comment">// Total cost: less than a dollar.</span>
+    </div>
+
+    <div class="code-block reveal reveal-delay-5">
+<span class="kw">const</span> STRATEGIES = {
+  <span class="prop">quick</span>:    { adapters: [<span class="str">'brave'</span>, <span class="str">'tavily'</span>], mode: <span class="str">'first-success'</span> },
+  <span class="prop">full</span>:     { adapters: [<span class="str">'brave'</span>, <span class="str">'firecrawl'</span>, <span class="str">'perplexity'</span>], mode: <span class="str">'parallel'</span> },
+  <span class="prop">deep</span>:     { adapters: [<span class="str">'valyu'</span>, <span class="str">'perplexity'</span>, <span class="str">'exa'</span>], mode: <span class="str">'parallel'</span>, synthesizer: <span class="str">'oracle'</span> },
+  <span class="prop">max</span>:      { adapters: [<span class="str">'brave'</span>, <span class="str">'firecrawl'</span>, <span class="str">'perplexity'</span>, <span class="str">'exa'</span>, <span class="str">'valyu'</span>], mode: <span class="str">'parallel'</span>, synthesizer: <span class="str">'oracle'</span> },
+  <span class="prop">academic</span>: { adapters: [<span class="str">'arxiv'</span>, <span class="str">'exa'</span>, <span class="str">'perplexity'</span>], mode: <span class="str">'parallel'</span> },
+  <span class="prop">social</span>:   { adapters: [<span class="str">'grok'</span>, <span class="str">'hackernews'</span>, <span class="str">'scrapecreators'</span>], mode: <span class="str">'parallel'</span>, synthesizer: <span class="str">'grok'</span> },
+};
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 3: ADAPTER GRID ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Adapters</span>
+    <h2 class="section-title reveal reveal-delay-1">11 Backends, One Interface</h2>
+    <p class="section-sub reveal reveal-delay-2">Each adapter is a thin HTTP client implementing a single interface. Add one file, gain one backend. Every strategy can use it immediately.</p>
+
+    <div class="adapter-grid">
+      <div class="adapter-card reveal reveal-delay-1">
+        <div class="adapter-icon" style="background: var(--sky-dim); color: var(--sky);">B</div>
+        <h3>brave</h3>
+        <p>Fast, free-tier web search. First-success fallback for quick queries.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-2">
+        <div class="adapter-icon" style="background: var(--coral-dim); color: var(--coral);">F</div>
+        <h3>firecrawl</h3>
+        <p>Structured web extraction and crawling. Turns pages into clean data.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span><span class="adapter-tag extract">extract</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-3">
+        <div class="adapter-icon" style="background: var(--emerald-dim); color: var(--emerald);">V</div>
+        <h3>valyu</h3>
+        <p>50+ proprietary sources. SEC filings, PubMed, bioRxiv, patents. The only real data moat.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span><span class="adapter-tag extract">deepsearch</span><span class="adapter-tag extract">context</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-4">
+        <div class="adapter-icon" style="background: var(--violet-dim); color: var(--violet);">P</div>
+        <h3>perplexity</h3>
+        <p>Web search with built-in synthesis. Strong at generating structured answers.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span><span class="adapter-tag synth">synthesize</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-1">
+        <div class="adapter-icon" style="background: var(--gold-dim); color: var(--gold);">O</div>
+        <h3>oracle</h3>
+        <p>Internal synthesizer. Merges results from multiple adapters into a single coherent output.</p>
+        <div class="adapter-tags"><span class="adapter-tag synth">synthesize</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-2">
+        <div class="adapter-icon" style="background: var(--teal-dim); color: var(--teal);">T</div>
+        <h3>tavily</h3>
+        <p>Agent-native search API. Optimized for programmatic access. Quick-strategy backbone.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-3">
+        <div class="adapter-icon" style="background: var(--amber-dim); color: var(--amber);">E</div>
+        <h3>exa</h3>
+        <p>Neural search with semantic understanding. Finds related content by meaning, not keywords.</p>
+        <div class="adapter-tags"><span class="adapter-tag">search</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-4">
+        <div class="adapter-icon" style="background: var(--rose-dim); color: var(--rose);">G</div>
+        <h3>grok</h3>
+        <p>Real-time X/Twitter data synthesis. Social pulse and trend analysis no other backend has.</p>
+        <div class="adapter-tags"><span class="adapter-tag synth">synthesize</span><span class="adapter-tag social">social</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-1">
+        <div class="adapter-icon" style="background: var(--amber-dim); color: var(--amber);">a</div>
+        <h3>arxiv</h3>
+        <p>Academic preprint search. Direct access to the largest open-access research archive.</p>
+        <div class="adapter-tags"><span class="adapter-tag academic">academic</span><span class="adapter-tag">search</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-2">
+        <div class="adapter-icon" style="background: var(--coral-dim); color: var(--coral);">H</div>
+        <h3>hackernews</h3>
+        <p>Technical community search. What engineers are actually discussing and building right now.</p>
+        <div class="adapter-tags"><span class="adapter-tag social">social</span><span class="adapter-tag">search</span></div>
+      </div>
+      <div class="adapter-card reveal reveal-delay-3">
+        <div class="adapter-icon" style="background: var(--violet-dim); color: var(--violet);">S</div>
+        <h3>scrapecreators</h3>
+        <p>Multi-platform social aggregation. 27+ platforms via a single API key.</p>
+        <div class="adapter-tags"><span class="adapter-tag social">social</span><span class="adapter-tag">search</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 4: HOW IT WORKS ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">How It Works</span>
+    <h2 class="section-title reveal reveal-delay-1">FlowMind Programs</h2>
+    <p class="section-sub reveal reveal-delay-2">Deterministic, SDK-first workflows. Each program is a YAML flow definition with explicit triggers, not a prompt chain.</p>
+
+    <div class="strategy-table-wrap reveal reveal-delay-3">
+      <table class="strategy-table">
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Adapters</th>
+            <th>Mode</th>
+            <th>Synthesizer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>quick</td><td>brave, tavily</td><td>first-success</td><td>&mdash;</td></tr>
+          <tr><td>full</td><td>brave, firecrawl, perplexity</td><td>parallel</td><td>&mdash;</td></tr>
+          <tr><td>deep</td><td>valyu, perplexity, exa</td><td>parallel</td><td>oracle</td></tr>
+          <tr><td>max</td><td>brave, firecrawl, perplexity, exa, valyu</td><td>parallel</td><td>oracle</td></tr>
+          <tr><td>academic</td><td>arxiv, exa, perplexity</td><td>parallel</td><td>&mdash;</td></tr>
+          <tr><td>social</td><td>grok, hackernews, scrapecreators</td><td>parallel</td><td>grok</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flow-grid">
+      <div class="flow-card reveal reveal-delay-2">
+        <h3>Research Deep</h3>
+        <p>Multi-adapter parallel search with Oracle synthesis. The standard deep research workflow.</p>
+        <span class="flow-trigger">timetravel:workflow.deep</span>
+      </div>
+      <div class="flow-card reveal reveal-delay-3">
+        <h3>Research Deep Recursive</h3>
+        <p>Iterative deepening. First pass identifies knowledge gaps, subsequent passes fill them. Up to 15 turns.</p>
+        <span class="flow-trigger">timetravel:workflow.deep_recursive</span>
+      </div>
+      <div class="flow-card reveal reveal-delay-2">
+        <h3>Social Cross-Platform</h3>
+        <p>Grok + HackerNews + ScrapECreators in parallel. Sentiment, trends, and real-time discussion analysis.</p>
+        <span class="flow-trigger">timetravel:social.search</span>
+      </div>
+      <div class="flow-card reveal reveal-delay-3">
+        <h3>Bookmark Refresh</h3>
+        <p>Re-crawl saved sources on a schedule. Detect changes, surface new developments, keep research current.</p>
+        <span class="flow-trigger">timetravel:bookmarks.refresh</span>
+      </div>
+      <div class="flow-card reveal reveal-delay-2">
+        <h3>Smaug Process</h3>
+        <p>Twitter/X deep extraction pipeline via authenticated browser bridge. Thread analysis at scale.</p>
+        <span class="flow-trigger">timetravel:smaug.run</span>
+      </div>
+    </div>
+
+    <div class="code-block reveal reveal-delay-4" style="margin-top: 32px;">
+<span class="comment"># MCP tools exposed to any agent</span>
+<span class="kw">poly:</span>
+  <span class="kw">mcp:</span>
+    <span class="prop">mode:</span> <span class="str">standalone</span>
+    <span class="prop">tools:</span>
+      - <span class="str">timetravel:search</span>
+      - <span class="str">timetravel:status</span>
+      - <span class="str">timetravel:adapters</span>
+      - <span class="str">timetravel:extract</span>
+      - <span class="str">timetravel:strategies</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 5: THE 40-COMPANY LANDSCAPE ========== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Landscape</span>
+    <h2 class="section-title reveal reveal-delay-1">40 Companies, 10 Benchmarks, 10 Winners</h2>
+    <p class="section-sub reveal reveal-delay-2">Every company claims #1. They're all telling the truth&mdash;on the benchmark they chose. This is the state of deep research in 2026.</p>
+
+    <div class="benchmark-table-wrap reveal reveal-delay-3">
+      <table class="benchmark-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>"We're #1 on..."</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>MiroThinker</td><td>BrowseComp</td><td>88.2%</td></tr>
+          <tr><td>CellCog Max</td><td>DeepResearch Bench</td><td>56.13</td></tr>
+          <tr><td>Linkup</td><td>SimpleQA</td><td>91.0% F1</td></tr>
+          <tr><td>Tongyi</td><td>Humanity's Last Exam</td><td>32.9%</td></tr>
+          <tr><td>Valyu</td><td>ScholarQA</td><td>74.5%</td></tr>
+          <tr><td>Writer</td><td>GAIA Level 3</td><td>61%</td></tr>
+          <tr><td>Perplexity</td><td>DRACO</td><td>67.15%</td></tr>
+          <tr><td>You.com</td><td>DeepSearchQA</td><td>83.67%</td></tr>
+          <tr><td>Brave</td><td>AIMultiple Agent Score</td><td>14.89</td></tr>
+          <tr><td>Parallel</td><td>DeepResearch Bench (own)</td><td>82% win</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card reveal reveal-delay-2">
+        <div class="insight-icon" style="background: var(--sky-dim); color: var(--sky);">1</div>
+        <h3>Search Infrastructure</h3>
+        <p>The pipes. Brave, Exa, Tavily, Linkup, Serper. They return raw results. You bring your own brain. Google is suing people in this layer.</p>
+      </div>
+      <div class="insight-card reveal reveal-delay-3">
+        <div class="insight-icon" style="background: var(--gold-dim); color: var(--gold);">2</div>
+        <h3>Research Agents</h3>
+        <p>The brains. Perplexity, Manus, Tongyi, Genspark, MiroThinker. They search, read, think, synthesize. This is where $24B valuations live.</p>
+      </div>
+      <div class="insight-card reveal reveal-delay-4">
+        <div class="insight-icon" style="background: var(--emerald-dim); color: var(--emerald);">3</div>
+        <h3>Agent Search APIs</h3>
+        <p>The middleware. Valyu, Parallel, Firecrawl, You.com. APIs for other AI agents. Tavily got acquired for $275-400M after raising $25M.</p>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal reveal-delay-3">
+      <blockquote>The winning architecture for AI research isn't one model doing everything. It's a router that treats search backends like interchangeable parts and lets the best tool win each sub-task.</blockquote>
+      <cite>The bet</cite>
+    </div>
+
+    <div class="insight-grid" style="margin-top: 48px;">
+      <div class="insight-card reveal reveal-delay-2">
+        <div class="insight-icon" style="background: var(--rose-dim); color: var(--rose);">$</div>
+        <h3>China Speed Run</h3>
+        <p>Tongyi is Apache 2.0 and beats o3. Kimi K2.5 runs 100 sub-agents at $0.60/M tokens. DeepSeek projects $0.10/M. 50x cheaper than GPT-5.2.</p>
+      </div>
+      <div class="insight-card reveal reveal-delay-3">
+        <div class="insight-icon" style="background: var(--amber-dim); color: var(--amber);">M</div>
+        <h3>The Only Real Moat</h3>
+        <p>Proprietary data access. Valyu has licensed access to 50+ sources&mdash;SEC, PubMed, bioRxiv, patents. Open source can't replicate data partnerships.</p>
+      </div>
+      <div class="insight-card reveal reveal-delay-4">
+        <div class="insight-icon" style="background: var(--violet-dim); color: var(--violet);">A</div>
+        <h3>Acquisitions Coming</h3>
+        <p>Meta bought Manus for ~$2B. Nebius bought Tavily. Elastic bought Jina AI. When you can't out-ship, you buy. Linkup and Exa are next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section">
+  <div class="container">
+    <span class="section-label reveal">Get Started</span>
+    <h2 class="section-title reveal reveal-delay-1" style="margin-left: auto; margin-right: auto; text-align: center;">Stop Picking Winners.<br>Route to All of Them.</h2>
+    <p class="section-sub reveal reveal-delay-2" style="margin-left: auto; margin-right: auto; text-align: center;">core-timetravel ships with Leviathan. 11 adapters, 6 strategies, 5 FlowMind programs. One install.</p>
+
+    <div class="cta-install reveal reveal-delay-3">
+      <span class="dollar">$ </span>lev install
+    </div>
+
+    <div class="cta-buttons reveal reveal-delay-4">
+      <a href="https://github.com/lev-os/lev" class="cta-btn cta-btn-primary">GitHub</a>
+      <a href="/" class="cta-btn cta-btn-secondary">Back to Leviathan</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <p>Leviathan &mdash; The Universal Agent Runtime</p>
+    <span>Built by <a href="https://github.com/lev-os">lev-os</a></span>
+  </div>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script>
+// Theme toggle with localStorage persistence
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('lev-theme', next); } catch(e) {}
+}
+
+// Restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lev-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+
+// Intersection Observer for staggered scroll reveals
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>

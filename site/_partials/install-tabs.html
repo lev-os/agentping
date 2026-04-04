@@ -1,0 +1,100 @@
+<!-- PARTIAL: Tabbed Install Widget
+     Drop into any CTA section. Pure CSS + vanilla JS, no dependencies.
+     Package: @lev-os/leviathan -->
+
+<div class="install-widget">
+  <div class="install-tabs" role="tablist">
+    <button class="install-tab active" data-cmd="npm i -g @lev-os/leviathan" role="tab" aria-selected="true">npm</button>
+    <button class="install-tab" data-cmd="pnpm add -g @lev-os/leviathan" role="tab">pnpm</button>
+    <button class="install-tab" data-cmd="brew install lev-os/tap/leviathan" role="tab">brew</button>
+    <button class="install-tab" data-cmd="bun add -g @lev-os/leviathan" role="tab">bun</button>
+    <button class="install-tab" data-cmd="npx @lev-os/leviathan" role="tab">npx</button>
+    <button class="install-tab" data-cmd="curl -fsSL https://lev.dev/install.sh | bash" role="tab">curl</button>
+  </div>
+  <div class="install-code" role="tabpanel">
+    <span class="dollar">$ </span><span class="install-cmd">npm i -g @lev-os/leviathan</span>
+  </div>
+</div>
+
+<!-- CSS:
+
+.install-widget {
+  display: inline-block;
+  margin: 32px 0;
+  text-align: center;
+}
+
+.install-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0;
+}
+
+.install-tab {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.install-tab:first-child { border-radius: 8px 0 0 0; }
+.install-tab:last-child { border-radius: 0 8px 0 0; }
+
+.install-tab:hover {
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.install-tab.active {
+  color: var(--gold);
+  background: var(--surface);
+  border-color: var(--border-bright);
+}
+
+.install-code {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 0 0 12px 12px;
+  padding: 16px 32px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--gold-bright);
+  text-align: left;
+  min-width: 420px;
+}
+
+.install-code .dollar {
+  color: var(--text-dim);
+}
+
+@media (max-width: 768px) {
+  .install-tabs { flex-wrap: wrap; }
+  .install-tab { font-size: 11px; padding: 6px 10px; }
+  .install-code { min-width: auto; font-size: 13px; padding: 12px 16px; }
+}
+-->
+
+<!-- JS (add to your <script> block):
+
+document.querySelectorAll('.install-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const widget = tab.closest('.install-widget');
+    widget.querySelectorAll('.install-tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    widget.querySelector('.install-cmd').textContent = tab.dataset.cmd;
+  });
+});
+-->

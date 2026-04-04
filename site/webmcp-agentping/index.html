@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebMCP Shim — Every Website, Agent-Ready</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME: MIDNIGHT EDITORIAL ============ */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #0a0e1a;
+  --bg2: #0f1729;
+  --surface: #141a2e;
+  --surface2: #1a2240;
+  --surface-elevated: #1e2850;
+  --border: rgba(212, 167, 58, 0.12);
+  --border-bright: rgba(212, 167, 58, 0.25);
+  --text: #e8e4dc;
+  --text-dim: #8a8e9e;
+  --text-bright: #ffffff;
+
+  --gold: #d4a73a;
+  --gold-dim: rgba(212, 167, 58, 0.12);
+  --gold-bright: #f0c95c;
+
+  --emerald: #34d399;
+  --emerald-dim: rgba(52, 211, 153, 0.12);
+  --rose: #fb7185;
+  --rose-dim: rgba(251, 113, 133, 0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56, 189, 248, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45, 212, 191, 0.12);
+  --coral: #f97316;
+  --coral-dim: rgba(249, 115, 22, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #faf8f4;
+  --bg2: #f5f2eb;
+  --surface: #ffffff;
+  --surface2: #f0ebe3;
+  --surface-elevated: #fff9f0;
+  --border: rgba(30, 58, 95, 0.1);
+  --border-bright: rgba(30, 58, 95, 0.2);
+  --text: #1e3a5f;
+  --text-dim: #6b7a8e;
+  --text-bright: #0a1628;
+  --gold: #b8860b;
+  --gold-dim: rgba(184, 134, 11, 0.08);
+  --gold-bright: #d4a73a;
+  --emerald: #059669;
+  --emerald-dim: rgba(5, 150, 105, 0.08);
+  --rose: #e11d48;
+  --rose-dim: rgba(225, 29, 72, 0.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2, 132, 199, 0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.08);
+  --teal: #0d9488;
+  --teal-dim: rgba(13, 148, 136, 0.08);
+  --coral: #ea580c;
+  --coral-dim: rgba(234, 88, 12, 0.08);
+}
+
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 167, 58, 0.3); }
+  50% { box-shadow: 0 0 24px 4px rgba(212, 167, 58, 0.15); }
+}
+
+@keyframes draw-line {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ STAGGERED REVEAL ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ============ LAYOUT ============ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ============ NAVIGATION DOT RAIL ============ */
+.nav-rail {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  opacity: 0.3;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-dot:hover,
+.nav-dot.active {
+  opacity: 1;
+  background: var(--gold);
+  transform: scale(1.4);
+}
+
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  background: var(--surface);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.nav-dot:hover::after {
+  opacity: 1;
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+h1 { font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -0.025em; }
+h2 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); margin-bottom: 1rem; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.8;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease 0.2s both;
+}
+
+.hero-eyebrow span {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  background: var(--gold-dim);
+}
+
+.hero h1 {
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  color: var(--gold);
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+.hero-pitch {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--text-dim);
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 1s both;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--gold);
+  display: block;
+  line-height: 1.2;
+}
+
+.hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2.5s ease-in-out infinite, fadeIn 1s ease 1.4s both;
+  z-index: 1;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+
+/* ============ CARDS (.ve-card) ============ */
+.ve-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ve-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.ve-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.ve-card:hover::before {
+  opacity: 1;
+}
+
+.ve-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.ve-card-icon.rose { background: var(--rose-dim); color: var(--rose); }
+.ve-card-icon.amber { background: var(--amber-dim); color: var(--amber); }
+.ve-card-icon.sky { background: var(--sky-dim); color: var(--sky); }
+.ve-card-icon.emerald { background: var(--emerald-dim); color: var(--emerald); }
+.ve-card-icon.gold { background: var(--gold-dim); color: var(--gold); }
+.ve-card-icon.teal { background: var(--teal-dim); color: var(--teal); }
+.ve-card-icon.coral { background: var(--coral-dim); color: var(--coral); }
+
+.ve-card h3 {
+  color: var(--text-bright);
+  margin-bottom: 0.75rem;
+}
+
+.ve-card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ============ PAIN CARDS (Section 2) ============ */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.pain-card {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.pain-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 3px;
+}
+
+.pain-card:nth-child(1)::before { background: var(--rose); }
+.pain-card:nth-child(2)::before { background: var(--amber); }
+.pain-card:nth-child(3)::before { background: var(--coral); }
+
+.pain-card .pain-stat {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.pain-card:nth-child(1) .pain-stat { color: var(--rose); }
+.pain-card:nth-child(2) .pain-stat { color: var(--amber); }
+.pain-card:nth-child(3) .pain-stat { color: var(--coral); }
+
+/* ============ ARCHITECTURE DIAGRAM (Section 3) ============ */
+.arch-diagram {
+  margin: 3rem auto;
+  max-width: 740px;
+}
+
+.arch-layer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  margin-bottom: 0;
+  transition: all 0.35s ease;
+}
+
+.arch-layer:hover {
+  border-color: var(--border-bright);
+  background: var(--surface2);
+}
+
+.arch-connector {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.arch-connector svg {
+  width: 24px;
+  height: 40px;
+}
+
+.arch-connector svg line {
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+.arch-connector svg polygon {
+  fill: var(--gold);
+}
+
+.arch-layer-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--bg);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arch-layer:nth-child(1) .arch-layer-num { background: var(--teal); }
+.arch-layer:nth-child(3) .arch-layer-num { background: var(--gold); }
+.arch-layer:nth-child(5) .arch-layer-num { background: var(--sky); }
+
+.arch-layer-content h4 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.25rem;
+}
+
+.arch-layer-content p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ============ HOW IT WORKS (Section 4) ============ */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.step {
+  text-align: center;
+  position: relative;
+}
+
+.step-num {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--gold);
+  opacity: 0.15;
+  line-height: 1;
+  margin-bottom: -0.5rem;
+}
+
+.step h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.step p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.step-code {
+  margin-top: 1rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--emerald);
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.step-code .comment { color: var(--text-dim); }
+.step-code .fn { color: var(--gold); }
+.step-code .str { color: var(--sky); }
+.step-code .kw { color: var(--rose); }
+.step-code .num { color: var(--amber); }
+
+/* ============ COMPARISON TABLE (Section 5) ============ */
+.comparison-wrapper {
+  overflow-x: auto;
+  margin-top: 2.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.comparison-table thead th {
+  background: var(--surface2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.comparison-table thead th:nth-child(2) {
+  color: var(--rose);
+}
+
+.comparison-table thead th:nth-child(3) {
+  color: var(--emerald);
+}
+
+.comparison-table thead th:nth-child(4) {
+  color: var(--gold);
+}
+
+.comparison-table .val-gold {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.badge-gold {
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+.comparison-table tbody tr {
+  background: var(--surface);
+  transition: background 0.2s ease;
+}
+
+.comparison-table tbody tr:hover {
+  background: var(--surface2);
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.comparison-table .val-bad {
+  color: var(--rose);
+}
+
+.comparison-table .val-good {
+  color: var(--emerald);
+  font-weight: 500;
+}
+
+.comparison-table .badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge-red {
+  background: var(--rose-dim);
+  color: var(--rose);
+}
+
+.badge-green {
+  background: var(--emerald-dim);
+  color: var(--emerald);
+}
+
+/* ============ MARKETPLACE (Section 6) ============ */
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.marketplace-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: all 0.35s ease;
+}
+
+.marketplace-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+
+.marketplace-card h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+}
+
+.marketplace-card p {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.marketplace-card .card-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2em 0.7em;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.card-tag.community { background: var(--teal-dim); color: var(--teal); }
+.card-tag.auto { background: var(--gold-dim); color: var(--gold); }
+.card-tag.native { background: var(--sky-dim); color: var(--sky); }
+.card-tag.versioned { background: var(--emerald-dim); color: var(--emerald); }
+
+/* ============ ALREADY BUILT (Section 7) ============ */
+.built-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.built-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.built-item:hover {
+  border-color: var(--border-bright);
+}
+
+.built-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 0.4rem;
+  flex-shrink: 0;
+  animation: pulse-gold 3s ease-in-out infinite;
+}
+
+.built-dot.live { background: var(--emerald); animation-name: pulse-gold; }
+
+.built-item h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  margin-bottom: 0.25rem;
+}
+
+.built-item p {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+/* ============ YAML PREVIEW ============ */
+.yaml-preview {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.yaml-preview::before {
+  content: '.webmcp.yaml';
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+.yaml-preview pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.yaml-preview .yaml-key { color: var(--sky); }
+.yaml-preview .yaml-str { color: var(--emerald); }
+.yaml-preview .yaml-comment { color: var(--text-dim); }
+.yaml-preview .yaml-num { color: var(--amber); }
+
+/* ============ PROTOCOL STACK (Section 3b) ============ */
+.proto-visual {
+  margin: 3rem auto;
+  max-width: 780px;
+}
+
+.proto-source {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.proto-source h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+}
+
+.proto-source .proto-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+
+.proto-arrows {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 0.75rem 0;
+}
+
+.proto-arrows svg {
+  width: 24px;
+  height: 36px;
+}
+
+.proto-arrows svg line {
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+.proto-arrows svg polygon {
+  fill: var(--gold);
+}
+
+.proto-surfaces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.proto-surface-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.35s ease;
+}
+
+.proto-surface-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+
+.proto-surface-card .surface-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.proto-surface-card h4 {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.25rem;
+}
+
+.proto-surface-card p {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.proto-config {
+  margin-top: 2rem;
+}
+
+.proto-extras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.proto-extra {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.35s ease;
+}
+
+.proto-extra:hover {
+  border-color: var(--border-bright);
+}
+
+.proto-extra h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  margin-bottom: 0.35rem;
+}
+
+.proto-extra p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+
+/* ============ THREE DIRECTIONS (Section 6b) ============ */
+.directions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.direction-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.direction-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+}
+
+.direction-card:nth-child(1)::before { background: var(--sky); }
+.direction-card:nth-child(2)::before { background: var(--gold); }
+.direction-card:nth-child(3)::before { background: var(--coral); }
+
+.direction-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.direction-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.direction-card:nth-child(1) .direction-label {
+  background: var(--sky-dim); color: var(--sky);
+}
+.direction-card:nth-child(2) .direction-label {
+  background: var(--gold-dim); color: var(--gold);
+}
+.direction-card:nth-child(3) .direction-label {
+  background: var(--coral-dim); color: var(--coral);
+}
+
+.direction-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.direction-proto {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.direction-card:nth-child(1) .direction-proto { color: var(--sky); }
+.direction-card:nth-child(2) .direction-proto { color: var(--gold); }
+.direction-card:nth-child(3) .direction-proto { color: var(--coral); }
+
+.direction-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.direction-code {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--emerald);
+  margin-bottom: 0.75rem;
+}
+
+.direction-tokens {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.directions-tagline {
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--gold);
+  margin-top: 2.5rem;
+}
+
+/* ============ CTA SECTION ============ */
+.cta-section {
+  text-align: center;
+  padding: 8rem 0;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  color: var(--text-bright);
+}
+
+.cta-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+}
+
+.cta-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.cta-btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+  border: 1px solid var(--gold);
+}
+
+.cta-btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 167, 58, 0.25);
+}
+
+.cta-btn-secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--border-bright);
+}
+
+.cta-btn-secondary:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* ============ DIVIDER ============ */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 300px;
+  color: var(--text-dim);
+  opacity: 0.3;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-bright);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+footer p {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  section { padding: 4rem 0; }
+
+  .hero { min-height: auto; padding: 6rem 0 4rem; }
+
+  .hero-stats { gap: 1.5rem; }
+
+  .pain-grid,
+  .steps,
+  .marketplace-grid,
+  .built-grid,
+  .directions-grid,
+  .proto-surfaces,
+  .proto-extras {
+    grid-template-columns: 1fr;
+  }
+
+  .arch-layer { flex-direction: column; text-align: center; gap: 0.75rem; }
+
+  .comparison-table { font-size: 0.8rem; }
+  .comparison-table th,
+  .comparison-table td { padding: 0.75rem 0.75rem; }
+
+  .nav-rail { display: none; }
+
+  .container { padding: 0 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2.2rem; }
+  .hero-subtitle { font-size: 1.15rem; }
+  .hero-stat-value { font-size: 2rem; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+    font-size: 11pt;
+  }
+
+  .theme-toggle,
+  .nav-rail,
+  .scroll-indicator { display: none; }
+
+  section { padding: 2rem 0; page-break-inside: avoid; }
+
+  .ve-card, .arch-layer, .built-item, .marketplace-card,
+  .direction-card, .proto-surface-card, .proto-extra {
+    border-color: #ccc;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .hero { min-height: auto; padding: 2rem 0; }
+
+  .comparison-table th,
+  .comparison-table td { border-color: #ccc; }
+
+  h1, h2, h3, h4 { color: #111; }
+  .section-label { color: #666; }
+  .lead, p, .pain-stat { color: #333; }
+  .hero-subtitle, .cta-tagline { color: #8B6914; }
+
+  a { color: #8B6914; }
+  .cta-section::before, .hero::before { display: none; }
+}
+</style>
+</head>
+<body>
+<a href="/" class="back-link" style="position:fixed;top:1.5rem;left:1.5rem;z-index:1000;background:var(--surface, #141a2e);border:1px solid rgba(212,167,58,0.25);color:#d4a73a;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);text-decoration:none;" onmouseover="this.style.background='var(--surface-elevated, #1e2850)';this.style.borderColor='#d4a73a'" onmouseout="this.style.background='var(--surface, #141a2e)';this.style.borderColor='rgba(212,167,58,0.25)'">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+</a>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span class="icon-moon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+  <span class="icon-sun">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+</button>
+
+<!-- Navigation Rail -->
+<nav class="nav-rail" aria-label="Page sections">
+  <button class="nav-dot active" data-label="Hero" onclick="scrollToSection(0)"></button>
+  <button class="nav-dot" data-label="Problem" onclick="scrollToSection(1)"></button>
+  <button class="nav-dot" data-label="Solution" onclick="scrollToSection(2)"></button>
+  <button class="nav-dot" data-label="Protocol Stack" onclick="scrollToSection(3)"></button>
+  <button class="nav-dot" data-label="How It Works" onclick="scrollToSection(4)"></button>
+  <button class="nav-dot" data-label="Comparison" onclick="scrollToSection(5)"></button>
+  <button class="nav-dot" data-label="Marketplace" onclick="scrollToSection(6)"></button>
+  <button class="nav-dot" data-label="Three Directions" onclick="scrollToSection(7)"></button>
+  <button class="nav-dot" data-label="Already Built" onclick="scrollToSection(8)"></button>
+  <button class="nav-dot" data-label="Join" onclick="scrollToSection(9)"></button>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="s-hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>AgentPing / WebMCP</span></div>
+    <h1>Every Website,<br>Agent-Ready</h1>
+    <p class="hero-subtitle">The WebMCP Shim &mdash; Greasemonkey for the AI Age</p>
+    <p class="hero-pitch">
+      Turn any website into a structured tool API your AI agent can call.<br>
+      No scraping. No screenshots. No browser restart.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value">40x</span>
+        <span class="hero-stat-label">cheaper per step</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">&lt;100ms</span>
+        <span class="hero-stat-label">tool call latency</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">0</span>
+        <span class="hero-stat-label">screenshots needed</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== THE PROBLEM ===================== -->
+<section id="s-problem">
+  <div class="container">
+    <span class="section-label reveal">The Problem</span>
+    <h2 class="reveal reveal-delay-1">AI agents are blind on the open web</h2>
+    <p class="lead reveal reveal-delay-2">
+      Every agent framework hits the same wall: the web was built for humans with eyeballs, not machines with token budgets.
+    </p>
+
+    <div class="pain-grid">
+      <div class="ve-card pain-card reveal reveal-delay-2">
+        <span class="pain-stat">2,000 tokens per screenshot</span>
+        <h3>Agents waste context on pixels</h3>
+        <p>
+          Every screenshot eats 2,000+ tokens of context window. A 5-step workflow
+          burns 10,000 tokens just <em>looking</em> at pages &mdash; before the agent
+          even reasons about them. That is money and latency set on fire.
+        </p>
+      </div>
+
+      <div class="ve-card pain-card reveal reveal-delay-3">
+        <span class="pain-stat">Cloudflare blocks headless browsers</span>
+        <h3>The cookie extraction ceremony</h3>
+        <p>
+          Headless Chrome gets blocked instantly. So you export cookies, inject them
+          into Playwright, pray the session holds, and restart when it doesn't.
+          A five-minute task becomes a thirty-minute ritual.
+        </p>
+      </div>
+
+      <div class="ve-card pain-card reveal reveal-delay-4">
+        <span class="pain-stat">DOM changes break everything</span>
+        <h3>Selectors rot overnight</h3>
+        <p>
+          CSS selectors are a bet against every deploy. One class rename, one
+          React key change, and your entire automation is dead. Agents built on
+          selectors are inherently fragile.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE SOLUTION ===================== -->
+<section id="s-solution">
+  <div class="container">
+    <span class="section-label reveal">The Solution</span>
+    <h2 class="reveal reveal-delay-1">Three layers. Zero scraping.</h2>
+    <p class="lead reveal reveal-delay-2">
+      The WebMCP Shim sits inside your real browser &mdash; past Cloudflare,
+      with your auth, speaking structured tool calls instead of pixel coordinates.
+    </p>
+
+    <div class="arch-diagram reveal reveal-delay-3">
+      <!-- Layer 2 (top) -->
+      <div class="arch-layer">
+        <div class="arch-layer-num">2</div>
+        <div class="arch-layer-content">
+          <h4>Tool Definitions</h4>
+          <p>Community-contributed <code>.webmcp.yaml</code> per site &mdash; declarative tool schemas that map semantic actions to DOM operations.</p>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg viewBox="0 0 24 40"><line x1="12" y1="0" x2="12" y2="30"/><polygon points="8,28 12,36 16,28"/></svg>
+      </div>
+
+      <!-- Layer 1 (middle) -->
+      <div class="arch-layer">
+        <div class="arch-layer-num">1</div>
+        <div class="arch-layer-content">
+          <h4>WebMCP Shim</h4>
+          <p><code>navigator.modelContext</code> polyfill injected by the extension &mdash; exposes a structured tool API on every page.</p>
+        </div>
+      </div>
+
+      <div class="arch-connector">
+        <svg viewBox="0 0 24 40"><line x1="12" y1="0" x2="12" y2="30"/><polygon points="8,28 12,36 16,28"/></svg>
+      </div>
+
+      <!-- Layer 0 (bottom) -->
+      <div class="arch-layer">
+        <div class="arch-layer-num">0</div>
+        <div class="arch-layer-content">
+          <h4>AgentPing Extension</h4>
+          <p>Runs in your real browser. Past Cloudflare. With your cookies. Human-approved, lease-gated, time-bounded.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- YAML Preview -->
+    <div class="yaml-preview reveal reveal-delay-4">
+<pre><span class="yaml-comment"># slack.webmcp.yaml</span>
+<span class="yaml-key">name:</span> <span class="yaml-str">slack</span>
+<span class="yaml-key">version:</span> <span class="yaml-num">1.0.0</span>
+<span class="yaml-key">match:</span> <span class="yaml-str">"*.slack.com/*"</span>
+
+<span class="yaml-key">tools:</span>
+  <span class="yaml-key">send_message:</span>
+    <span class="yaml-key">description:</span> <span class="yaml-str">"Send a message to the current channel"</span>
+    <span class="yaml-key">params:</span>
+      <span class="yaml-key">text:</span> { <span class="yaml-key">type:</span> <span class="yaml-str">string</span>, <span class="yaml-key">required:</span> <span class="yaml-num">true</span> }
+    <span class="yaml-key">action:</span>
+      <span class="yaml-key">selector:</span> <span class="yaml-str">"[data-qa='message_input']"</span>
+      <span class="yaml-key">steps:</span> [<span class="yaml-str">focus</span>, <span class="yaml-str">clear</span>, <span class="yaml-str">type</span>, <span class="yaml-str">submit</span>]
+
+  <span class="yaml-key">read_messages:</span>
+    <span class="yaml-key">description:</span> <span class="yaml-str">"Read recent messages from the current channel"</span>
+    <span class="yaml-key">params:</span>
+      <span class="yaml-key">limit:</span> { <span class="yaml-key">type:</span> <span class="yaml-str">number</span>, <span class="yaml-key">default:</span> <span class="yaml-num">10</span> }
+    <span class="yaml-key">returns:</span> <span class="yaml-str">Message[]</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE PROTOCOL STACK ===================== -->
+<section id="s-stack">
+  <div class="container">
+    <span class="section-label reveal">The Protocol Stack</span>
+    <h2 class="reveal reveal-delay-1">Declare once. Every surface. Every transport.</h2>
+    <p class="lead reveal reveal-delay-2">
+      Lev's Poly architecture generates every surface from a single handler declaration.
+      One function becomes a CLI command, an MCP tool, an HTTP endpoint, and a WebMCP tool definition.
+    </p>
+
+    <div class="proto-visual reveal reveal-delay-3">
+      <!-- Source: single handler -->
+      <div class="proto-source">
+        <h4>One Handler Declaration</h4>
+        <p class="proto-tagline">Poly generates every surface automatically</p>
+      </div>
+
+      <!-- Arrows down -->
+      <div class="proto-arrows">
+        <svg viewBox="0 0 24 36"><line x1="12" y1="0" x2="12" y2="26"/><polygon points="8,24 12,32 16,24"/></svg>
+        <svg viewBox="0 0 24 36"><line x1="12" y1="0" x2="12" y2="26"/><polygon points="8,24 12,32 16,24"/></svg>
+        <svg viewBox="0 0 24 36"><line x1="12" y1="0" x2="12" y2="26"/><polygon points="8,24 12,32 16,24"/></svg>
+      </div>
+
+      <!-- Three surfaces -->
+      <div class="proto-surfaces">
+        <div class="proto-surface-card">
+          <span class="surface-icon">&gt;_</span>
+          <h4>CLI Command</h4>
+          <p>lev send_message</p>
+        </div>
+        <div class="proto-surface-card">
+          <span class="surface-icon">&loz;</span>
+          <h4>MCP Tool</h4>
+          <p>callTool("send_message")</p>
+        </div>
+        <div class="proto-surface-card">
+          <span class="surface-icon">&oplus;</span>
+          <h4>WebMCP Tool</h4>
+          <p>.webmcp.yaml definition</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- config.yaml snippet -->
+    <div class="yaml-preview proto-config reveal reveal-delay-4">
+<pre><span class="yaml-comment"># config.yaml &mdash; one declaration, every surface</span>
+<span class="yaml-key">poly:</span>
+  <span class="yaml-key">surfaces:</span>
+    - <span class="yaml-key">id:</span> <span class="yaml-str">send_message</span>
+      <span class="yaml-key">resolves_to:</span> <span class="yaml-str">chatgpt/send_message</span>
+    - <span class="yaml-key">id:</span> <span class="yaml-str">switch_model</span>
+      <span class="yaml-key">resolves_to:</span> <span class="yaml-str">chatgpt/switch_model</span></pre>
+    </div>
+
+    <!-- FlowMind + Graph DNA -->
+    <div class="proto-extras reveal reveal-delay-5">
+      <div class="proto-extra">
+        <h4>FlowMind Engine</h4>
+        <p>Multi-step workflows become tool sequences. Deterministic execution with rollback at every stage.</p>
+      </div>
+      <div class="proto-extra">
+        <h4>Graph DNA</h4>
+        <p>Constraints enforce safety at compile time. Every tool surface inherits the system's invariants.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section id="s-how">
+  <div class="container">
+    <span class="section-label reveal">How It Works</span>
+    <h2 class="reveal reveal-delay-1">Three steps. Fifty tokens.</h2>
+
+    <div class="steps">
+      <div class="ve-card step reveal reveal-delay-2">
+        <div class="step-num">1</div>
+        <h3>Extension injects the polyfill</h3>
+        <p>
+          The AgentPing extension injects the WebMCP shim into every page you visit,
+          exposing <code>navigator.modelContext</code> as a structured API surface.
+        </p>
+        <div class="step-code">
+<span class="comment">// Extension content script</span>
+navigator.<span class="fn">modelContext</span> = <span class="kw">new</span> <span class="fn">WebMCPShim</span>();
+shim.<span class="fn">loadTools</span>(<span class="str">"chatgpt.webmcp.yaml"</span>);
+        </div>
+      </div>
+
+      <div class="ve-card step reveal reveal-delay-3">
+        <div class="step-num">2</div>
+        <h3>Tool definitions load from registry</h3>
+        <p>
+          Matching <code>.webmcp.yaml</code> definitions are loaded from the community
+          registry (or auto-generated on the fly via agentic crawling).
+        </p>
+        <div class="step-code">
+<span class="fn">tools</span>:
+  - <span class="fn">name</span>: <span class="str">send_message</span>
+    <span class="fn">params</span>: { <span class="fn">text</span>: <span class="str">string</span> }
+  - <span class="fn">name</span>: <span class="str">switch_model</span>
+    <span class="fn">params</span>: { <span class="fn">model</span>: <span class="str">string</span> }
+        </div>
+      </div>
+
+      <div class="ve-card step reveal reveal-delay-4">
+        <div class="step-num">3</div>
+        <h3>Agent calls structured tools</h3>
+        <p>
+          Your agent calls semantic tools directly. No vision model. No coordinate math.
+          Just clean function calls.
+        </p>
+        <div class="step-code">
+<span class="comment">// 50 tokens. Instant.</span>
+<span class="kw">await</span> agent.<span class="fn">callTool</span>(<span class="str">"send_message"</span>, {
+  <span class="fn">text</span>: <span class="str">"Deploy approved. Ship it."</span>
+});
+
+<span class="comment">// Returns structured data, not pixels</span>
+<span class="kw">const</span> msgs = <span class="kw">await</span> agent.<span class="fn">callTool</span>(<span class="str">"read_messages"</span>, {
+  <span class="fn">limit</span>: <span class="num">5</span>
+});
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMPARISON ===================== -->
+<section id="s-compare">
+  <div class="container">
+    <span class="section-label reveal">Before and After</span>
+    <h2 class="reveal reveal-delay-1">The numbers speak for themselves</h2>
+
+    <div class="comparison-wrapper reveal reveal-delay-2">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Before: Screenshot Scraping</th>
+            <th>After: WebMCP Shim (Read)</th>
+            <th>GenUI (Write)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Token cost</td>
+            <td class="val-bad">~2,000 / step</td>
+            <td class="val-good">~50 / step <span class="badge badge-green">40x</span></td>
+            <td class="val-gold">~100 / component</td>
+          </tr>
+          <tr>
+            <td>Speed</td>
+            <td class="val-bad">3&ndash;5 seconds</td>
+            <td class="val-good">&lt;100ms</td>
+            <td class="val-gold">&lt;200ms</td>
+          </tr>
+          <tr>
+            <td>What it does</td>
+            <td class="val-bad">Reads pixels from page</td>
+            <td class="val-good">Reads structured data</td>
+            <td class="val-gold">Generates UI in-page</td>
+          </tr>
+          <tr>
+            <td>Cloudflare</td>
+            <td><span class="badge badge-red">Blocked</span></td>
+            <td><span class="badge badge-green">Passes</span></td>
+            <td><span class="badge badge-gold">Passes</span></td>
+          </tr>
+          <tr>
+            <td>Auth</td>
+            <td class="val-bad">Cookie extraction ceremony</td>
+            <td class="val-good">Inherits browser session</td>
+            <td class="val-gold">Inherits browser session</td>
+          </tr>
+          <tr>
+            <td>AI required?</td>
+            <td class="val-bad">Yes (LLM interprets screenshots)</td>
+            <td class="val-good">No (structured tool calls)</td>
+            <td class="val-gold">Yes (LLM generates components)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MARKETPLACE ===================== -->
+<section id="s-marketplace">
+  <div class="container">
+    <span class="section-label reveal">The Marketplace</span>
+    <h2 class="reveal reveal-delay-1">Like Greasemonkey scripts, but for AI agents</h2>
+    <p class="lead reveal reveal-delay-2">
+      A growing registry of community-contributed tool definitions.
+      One YAML file per site. Version-controlled. Fork-friendly.
+    </p>
+
+    <div class="marketplace-grid">
+      <div class="marketplace-card reveal reveal-delay-2">
+        <div class="card-tag community">Community-Contributed</div>
+        <h4>Open contribution model</h4>
+        <p>
+          Anyone can submit a <code>.webmcp.yaml</code> for any site.
+          Review, fork, and improve &mdash; just like userscripts,
+          but with schema validation and semantic versioning.
+        </p>
+      </div>
+
+      <div class="marketplace-card reveal reveal-delay-3">
+        <div class="card-tag auto">Auto-Generated</div>
+        <h4>Agentic crawling</h4>
+        <p>
+          No YAML for a site yet? The extension can auto-generate tool
+          definitions by crawling the page structure. AI writes the
+          tool schema so you don't have to.
+        </p>
+      </div>
+
+      <div class="marketplace-card reveal reveal-delay-4">
+        <div class="card-tag versioned">Version-Controlled</div>
+        <h4>Pinned and reproducible</h4>
+        <p>
+          Lock to a specific version. Roll back when sites change.
+          CI-testable definitions ensure your agent workflows
+          stay green across deploys.
+        </p>
+      </div>
+
+      <div class="marketplace-card reveal reveal-delay-5">
+        <div class="card-tag native">Native Handoff</div>
+        <h4>Graceful deferral to native WebMCP</h4>
+        <p>
+          When browsers ship native <code>navigator.modelContext</code>,
+          the shim detects it and steps aside. Your tool definitions
+          keep working. Zero migration cost.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THREE DIRECTIONS ===================== -->
+<section id="s-directions">
+  <div class="container">
+    <span class="section-label reveal">Three Directions</span>
+    <h2 class="reveal reveal-delay-1">Read. Write. Control.</h2>
+    <p class="lead reveal reveal-delay-2">
+      The WebMCP Shim is direction one. GenUI and CDP complete the picture &mdash;
+      turning the browser into a full bidirectional agent interface.
+    </p>
+
+    <div class="directions-grid">
+      <div class="direction-card reveal reveal-delay-2">
+        <span class="direction-label">Read</span>
+        <h3>WebMCP</h3>
+        <span class="direction-proto">WebMCP Shim</span>
+        <p>Agent reads structured data from any website through semantic tool calls.</p>
+        <div class="direction-code">callTool(<span style="color:var(--sky)">"get_messages"</span>)</div>
+        <span class="direction-tokens">~50 tokens / call</span>
+      </div>
+
+      <div class="direction-card reveal reveal-delay-3">
+        <span class="direction-label">Write</span>
+        <h3>GenUI</h3>
+        <span class="direction-proto">Generative UI</span>
+        <p>Agent generates and injects UI components directly into the page.</p>
+        <div class="direction-code">renderComponent(<span style="color:var(--gold)">"chart"</span>, data)</div>
+        <span class="direction-tokens">~100 tokens / component</span>
+      </div>
+
+      <div class="direction-card reveal reveal-delay-4">
+        <span class="direction-label">Control</span>
+        <h3>CDP</h3>
+        <span class="direction-proto">Chrome DevTools Protocol</span>
+        <p>Agent manipulates the DOM directly through the browser's native debug interface.</p>
+        <div class="direction-code">click(<span style="color:var(--coral)">@e3</span>)</div>
+        <span class="direction-tokens">~50 tokens / action</span>
+      </div>
+    </div>
+
+    <p class="directions-tagline reveal reveal-delay-5">
+      The browser becomes a full bidirectional agent interface.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== ALREADY BUILT ===================== -->
+<section id="s-built">
+  <div class="container">
+    <span class="section-label reveal">Already Built</span>
+    <h2 class="reveal reveal-delay-1">This is not a pitch deck. This is running code.</h2>
+    <p class="lead reveal reveal-delay-2">
+      The foundation is live. The WebMCP Shim extends an already-operational
+      agent-browser bridge.
+    </p>
+
+    <div class="built-grid">
+      <div class="built-item reveal reveal-delay-2">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>AgentPing Browser Extension</h4>
+          <p>WXT/MV3 architecture. Chrome Web Store ready. <code>chrome.debugger</code> CDP bridge for agent-to-browser communication.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-2">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>Lease-Gated Security Model</h4>
+          <p>Human approves every agent session. Scoped access per domain. Time-bounded leases that auto-expire. No ambient authority.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-3">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>CDP Command Pipeline</h4>
+          <p>Agent &rarr; daemon &rarr; extension &rarr; browser tab. Full round-trip with structured responses. No screenshots in the loop.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-3">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>Cookie Extraction Engine</h4>
+          <p>20+ services mapped. Non-destructive extraction from your live browser session. No headless browser required.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-4">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>5-Tier Browser Cascade</h4>
+          <p>dev-browser &rarr; PinchTab &rarr; agent-browser &rarr; browser-use &rarr; Skyvern. Automatic fallback through increasingly powerful tiers.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-4">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>416 UI Components Migrated</h4>
+          <p>Full component library on @kingly/ui. Storybook green. DTS green. The interface layer is production-ready.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-5">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>Poly MCP Surface</h4>
+          <p>Every handler is an MCP tool. One declaration generates CLI, HTTP, and MCP surfaces automatically via Poly.</p>
+        </div>
+      </div>
+
+      <div class="built-item reveal reveal-delay-5">
+        <div class="built-dot live"></div>
+        <div>
+          <h4>FlowMind Engine</h4>
+          <p>Deterministic workflow execution. Multi-step tool sequences with rollback, state tracking, and session management.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta-section" id="s-cta">
+  <div class="container">
+    <h2 class="reveal">The web wasn't built for AI.<br>We're making it native.</h2>
+    <p class="cta-tagline reveal reveal-delay-1">
+      One shim. Every website. Every agent.
+    </p>
+    <div class="cta-links reveal reveal-delay-2">
+      <a href="https://github.com/lev-os/agentping" class="cta-btn cta-btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+      <a href="#s-how" class="cta-btn cta-btn-secondary">
+        See How It Works
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <p>AgentPing &middot; WebMCP Shim &middot; <a href="https://github.com/lev-os">lev-os</a> &middot; 2026</p>
+  </div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('lev-theme', next); } catch(e) {}
+}
+
+// Restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lev-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+
+// Intersection Observer for staggered reveals
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+// Nav rail active state
+(function() {
+  const sections = document.querySelectorAll('section');
+  const dots = document.querySelectorAll('.nav-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(sections).indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, {
+    threshold: 0.3
+  });
+
+  sections.forEach(s => observer.observe(s));
+})();
+
+function scrollToSection(idx) {
+  const sections = document.querySelectorAll('section');
+  if (sections[idx]) {
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
+
+</body>
+</html>
