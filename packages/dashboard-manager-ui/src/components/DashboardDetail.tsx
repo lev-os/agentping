@@ -8,6 +8,7 @@ import {
 import { dashboardAPI } from '../api/client'
 import { useWebSocket } from '../hooks/useWebSocket'
 import type { Dashboard, DashboardMetrics } from '../types/dashboard'
+import { getDashboardUrl, shouldEmbedDashboard } from '../lib/command-center'
 
 export function DashboardDetail() {
   const { id } = useParams<{ id: string }>()
@@ -115,23 +116,48 @@ export function DashboardDetail() {
   }
 
   const handleOpen: NonNullable<DmDashboardDetailProps['onOpen']> = () => {
-    if (!dashboard?.status.port) return
+    const url = getDashboardUrl(dashboard)
+    if (!url) return
 
     window.open(
-      `http://localhost:${dashboard.status.port}`,
+      url,
       '_blank',
       'noopener,noreferrer',
     )
   }
 
   return (
-    <DmDashboardDetail
-      dashboard={dashboard}
-      metrics={metrics}
-      onBack={() => navigate('/')}
-      onRestart={handleRestart}
-      onOpen={handleOpen}
-    />
+    <div className="command-center-page">
+      <div className="command-center-detail">
+      {shouldEmbedDashboard(dashboard) ? (
+        <section className="command-center-preview">
+          <div className="command-center-preview__header">
+            <div>
+              <div className="command-center-preview__label">
+                Live Preview
+              </div>
+              <div className="command-center-preview__copy">
+                Embedded ops surface from the hosted dashboard runtime.
+              </div>
+            </div>
+          </div>
+          <iframe
+            className="h-[70vh] w-full rounded-xl border border-zinc-900 bg-white"
+            src={getDashboardUrl(dashboard)!}
+            title={`${dashboard?.config.name ?? "dashboard"} preview`}
+          />
+        </section>
+      ) : null}
+
+      <DmDashboardDetail
+        dashboard={dashboard}
+        metrics={metrics}
+        onBack={() => navigate('/')}
+        onRestart={handleRestart}
+        onOpen={handleOpen}
+      />
+      </div>
+    </div>
   )
 }
 

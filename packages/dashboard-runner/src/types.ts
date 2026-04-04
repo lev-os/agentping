@@ -4,6 +4,13 @@
 
 import type { ChildProcess } from 'child_process';
 
+export interface DashboardMetadata {
+  lane: 'ops' | 'interaction' | 'development';
+  openMode: 'embed' | 'external';
+  description: string;
+  primary?: boolean;
+}
+
 export interface DashboardConfig {
   name: string;
   id: string;
@@ -14,6 +21,7 @@ export interface DashboardConfig {
   health_check: HealthCheckConfig;
   restart_policy: RestartPolicyConfig;
   env?: Record<string, string>;
+  metadata?: DashboardMetadata;
 }
 
 export interface HealthCheckConfig {

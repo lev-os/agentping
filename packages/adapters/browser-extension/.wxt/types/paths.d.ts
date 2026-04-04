@@ -16,6 +16,7 @@ declare module "wxt/browser" {
     | "/background.js"
     | "/content-scripts/content.js"
     | "/popup.html"
+    | "/webmcp-content.js"
   type HtmlPublicPath = Extract<PublicPath, `${string}.html`>
   export interface WxtRuntime {
     getURL(path: PublicPath): string;
