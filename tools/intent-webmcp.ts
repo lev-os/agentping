@@ -25,7 +25,7 @@
  *   npx tsx tools/intent-webmcp.ts https://substack.com --discover
  *
  *   # Dump per-page scrape data as JSON for the calling agent to refine:
- *   npx tsx tools/intent-webmcp.ts https://substack.com --agent-dump
+ *   npx tsx tools/intent-webmcp.ts https://substack.com --json
  */
 
 import { spawnSync } from 'child_process';
@@ -130,7 +130,7 @@ interface CLIArgs {
   url: string;
   intents: Array<{ name: string; page: string }>;
   discover: boolean;
-  agentDump: boolean;
+  json: boolean;
   output?: string;
   cdpPort: number;
   waitMs: number;
@@ -399,7 +399,7 @@ const DISCOVERY_SCRIPT = `
 // Phase 1b: Agent-dump discovery (outputs data for calling agent to refine)
 // ============================================================================
 
-function dumpDiscoveryForAgent(
+function dumpDiscoveryJSON(
   origin: string,
   homepageScrape: PageScrape,
 ): void {
@@ -417,9 +417,9 @@ function dumpDiscoveryForAgent(
     })),
     diagnostics: homepageScrape.diagnostics,
   };
-  console.log('\n=== AGENT_DUMP: DISCOVERY ===');
+  console.log('\n=== JSON_DUMP: DISCOVERY ===');
   console.log(JSON.stringify(dump, null, 2));
-  console.log('=== END AGENT_DUMP ===');
+  console.log('=== END JSON_DUMP ===');
 }
 
 // ============================================================================
@@ -616,7 +616,7 @@ function generateToolsHeuristic(intent: Intent, scrape: PageScrape): IntentTool[
 }
 
 /** Dump per-intent scrape data for the calling agent to generate tools */
-function dumpIntentForAgent(intent: Intent, scrape: PageScrape): void {
+function dumpIntentJSON(intent: Intent, scrape: PageScrape): void {
   const dump = {
     intent: intent.name,
     description: intent.description,
@@ -643,9 +643,9 @@ function dumpIntentForAgent(intent: Intent, scrape: PageScrape): void {
     })),
     diagnostics: scrape.diagnostics,
   };
-  console.log(`\n=== AGENT_DUMP: INTENT ${intent.name} ===`);
+  console.log(`\n=== JSON_DUMP: INTENT ${intent.name} ===`);
   console.log(JSON.stringify(dump, null, 2));
-  console.log(`=== END AGENT_DUMP ===`);
+  console.log(`=== END JSON_DUMP ===`);
 }
 
 // ============================================================================
@@ -821,7 +821,7 @@ function parseArgs(): CLIArgs {
     url: '',
     intents: [],
     discover: false,
-    agentDump: false,
+    json: false,
     cdpPort: 7891,
     waitMs: 3000,
   };
@@ -835,7 +835,7 @@ function parseArgs(): CLIArgs {
       continue;
     }
     if (arg === '--discover' || arg === '-d') { flags.discover = true; continue; }
-    if (arg === '--agent-dump' || arg === '--dump') { flags.agentDump = true; continue; }
+    if (arg === '--json' || arg === '--json') { flags.json = true; continue; }
     if (arg === '-o' || arg === '--output') { flags.output = args[++i]; continue; }
     if (arg === '--cdp-port') { flags.cdpPort = parseInt(args[++i], 10); continue; }
     if (arg === '--wait') { flags.waitMs = parseInt(args[++i], 10); continue; }
@@ -843,7 +843,7 @@ function parseArgs(): CLIArgs {
   }
 
   if (!flags.url) {
-    console.error(`Usage: intent-webmcp.ts <url> [--intent "name=/path"] [--discover] [--agent-dump]
+    console.error(`Usage: intent-webmcp.ts <url> [--intent "name=/path"] [--discover] [--json]
 
 Examples:
   # Auto-discover intents from nav:
@@ -858,7 +858,7 @@ Examples:
   npx tsx tools/intent-webmcp.ts https://substack.com --discover
 
   # Use Claude for richer intent mapping + tool generation:
-  npx tsx tools/intent-webmcp.ts https://substack.com --agent-dump`);
+  npx tsx tools/intent-webmcp.ts https://substack.com --json`);
     process.exit(1);
   }
 
@@ -902,8 +902,8 @@ async function main() {
     homepageScrape = discovery.scrape;
 
     intents = discovery.intents;
-    if (args.agentDump) {
-      dumpDiscoveryForAgent(origin, homepageScrape);
+    if (args.json) {
+      dumpDiscoveryJSON(origin, homepageScrape);
     }
 
     console.log(`  Discovered ${intents.length} intents:`);
@@ -976,8 +976,8 @@ async function main() {
       ),
     };
 
-    if (args.agentDump) {
-      dumpIntentForAgent(intent, filtered);
+    if (args.json) {
+      dumpIntentJSON(intent, filtered);
     }
     intent.tools = generateToolsHeuristic(intent, filtered);
 
