@@ -24,8 +24,8 @@
  *   # Discovery-only mode (just show what intents are available):
  *   npx tsx tools/intent-webmcp.ts https://substack.com --discover
  *
- *   # Use Claude for intent planning (richer output):
- *   npx tsx tools/intent-webmcp.ts https://substack.com --claude
+ *   # Dump per-page scrape data as JSON for the calling agent to refine:
+ *   npx tsx tools/intent-webmcp.ts https://substack.com --agent-dump
  */
 
 import { spawnSync } from 'child_process';
@@ -130,7 +130,7 @@ interface CLIArgs {
   url: string;
   intents: Array<{ name: string; page: string }>;
   discover: boolean;
-  useClaude: boolean;
+  agentDump: boolean;
   output?: string;
   cdpPort: number;
   waitMs: number;
@@ -396,63 +396,30 @@ const DISCOVERY_SCRIPT = `
 `;
 
 // ============================================================================
-// Phase 1b: DISCOVER via Claude (richer intent mapping)
+// Phase 1b: Agent-dump discovery (outputs data for calling agent to refine)
 // ============================================================================
 
-async function discoverIntentsWithClaude(
+function dumpDiscoveryForAgent(
   origin: string,
   homepageScrape: PageScrape,
-): Promise<Intent[]> {
-  const Anthropic = (await import('@anthropic-ai/sdk')).default;
-  const client = new Anthropic();
-
-  const navSummary = homepageScrape.navLinks
-    .map((l) => `  ${l.href} — "${l.text}"`)
-    .join('\n');
-
-  const formSummary = homepageScrape.forms
-    .map(
-      (f) =>
-        `  ${f.selector} action=${f.action} method=${f.method} fields=[${f.fields.map((fl) => fl.name || fl.type).join(', ')}]`,
-    )
-    .join('\n');
-
-  const prompt = `You are analyzing ${origin} to identify what a user can DO on this site.
-
-Navigation links found:
-${navSummary || '(none)'}
-
-Forms found:
-${formSummary || '(none)'}
-
-Page title: ${homepageScrape.title}
-Interactive elements: ${homepageScrape.diagnostics.interactiveCount}
-
-Based on these navigation links and forms, identify the 3-8 most valuable USER INTENTS — things a real user would want to automate via an AI agent. For each intent, provide:
-- name: snake_case action name (e.g., write_post, manage_inbox)
-- page: the URL path to navigate to for this intent
-- description: one-line description of what this intent does
-
-Output ONLY valid JSON array, no explanation:
-[{"name": "...", "page": "/...", "description": "..."}]`;
-
-  const response = await client.messages.create({
-    model: process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: prompt }],
-  });
-
-  const text = response.content
-    .filter((b): b is { type: 'text'; text: string } => b.type === 'text')
-    .map((b) => b.text)
-    .join('');
-
-  // Extract JSON from response
-  const jsonMatch = text.match(/\[[\s\S]*\]/);
-  if (!jsonMatch) throw new Error('Claude did not return valid JSON intent list');
-
-  const intents: Intent[] = JSON.parse(jsonMatch[0]);
-  return intents;
+): void {
+  // The calling agent (Claude Code, Cursor, etc.) IS the LLM.
+  // Dump the structured data so it can reason about intents inline.
+  const dump = {
+    origin,
+    title: homepageScrape.title,
+    navLinks: homepageScrape.navLinks,
+    forms: homepageScrape.forms.map((f) => ({
+      selector: f.selector,
+      action: f.action,
+      method: f.method,
+      fields: f.fields.map((fl) => `${fl.name}:${fl.type}`),
+    })),
+    diagnostics: homepageScrape.diagnostics,
+  };
+  console.log('\n=== AGENT_DUMP: DISCOVERY ===');
+  console.log(JSON.stringify(dump, null, 2));
+  console.log('=== END AGENT_DUMP ===');
 }
 
 // ============================================================================
@@ -648,72 +615,37 @@ function generateToolsHeuristic(intent: Intent, scrape: PageScrape): IntentTool[
   return tools;
 }
 
-async function generateToolsWithClaude(
-  intent: Intent,
-  scrape: PageScrape,
-): Promise<IntentTool[]> {
-  const Anthropic = (await import('@anthropic-ai/sdk')).default;
-  const client = new Anthropic();
-
-  const elementSummary = scrape.elements
-    .filter((e) => e.stability >= 0.5)
-    .map(
-      (e) =>
-        `  ${e.selector} — ${e.tag}${e.type ? `[${e.type}]` : ''} "${e.ariaLabel || e.placeholder || e.text || ''}"`,
-    )
-    .join('\n');
-
-  const formSummary = scrape.forms
-    .map(
-      (f) =>
-        `  ${f.selector} → ${f.fields.map((fl) => `${fl.name}:${fl.type}`).join(', ')}`,
-    )
-    .join('\n');
-
-  const prompt = `You are generating WebMCP tool definitions for the "${intent.name}" intent on ${scrape.url}.
-
-Intent: ${intent.name} — ${intent.description || 'user action'}
-Page title: ${scrape.title}
-
-Interactive elements on this page:
-${elementSummary || '(none with stable selectors)'}
-
-Forms on this page:
-${formSummary || '(none)'}
-
-Generate 2-6 tools that let an AI agent perform the "${intent.name}" intent. Each tool should:
-1. Use REAL selectors from the elements above (don't invent selectors)
-2. Have clear parameter names and descriptions
-3. Include the correct action sequence (fill, click, wait, extract)
-
-Output ONLY valid JSON array of tools:
-[{
-  "name": "tool_name",
-  "description": "What this tool does",
-  "parameters": {"param": {"type": "string", "required": true, "description": "..."}},
-  "actions": [{"type": "fill|click|wait|extract|navigate", "selector": "...", "value": "{{param}}"}],
-  "result": {"type": "text|boolean|json|list", "selector": "...", "extract": "textContent|innerHTML"}
-}]`;
-
-  const response = await client.messages.create({
-    model: process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514',
-    max_tokens: 2048,
-    messages: [{ role: 'user', content: prompt }],
-  });
-
-  const text = response.content
-    .filter((b): b is { type: 'text'; text: string } => b.type === 'text')
-    .map((b) => b.text)
-    .join('');
-
-  const jsonMatch = text.match(/\[[\s\S]*\]/);
-  if (!jsonMatch) return generateToolsHeuristic(intent, scrape);
-
-  try {
-    return JSON.parse(jsonMatch[0]);
-  } catch {
-    return generateToolsHeuristic(intent, scrape);
-  }
+/** Dump per-intent scrape data for the calling agent to generate tools */
+function dumpIntentForAgent(intent: Intent, scrape: PageScrape): void {
+  const dump = {
+    intent: intent.name,
+    description: intent.description,
+    page: intent.page,
+    url: scrape.url,
+    title: scrape.title,
+    elements: scrape.elements
+      .filter((e) => e.stability >= 0.5)
+      .map((e) => ({
+        selector: e.selector,
+        tag: e.tag,
+        type: e.type,
+        role: e.role,
+        text: e.text,
+        ariaLabel: e.ariaLabel,
+        placeholder: e.placeholder,
+        stability: e.stability,
+      })),
+    forms: scrape.forms.map((f) => ({
+      selector: f.selector,
+      action: f.action,
+      method: f.method,
+      fields: f.fields,
+    })),
+    diagnostics: scrape.diagnostics,
+  };
+  console.log(`\n=== AGENT_DUMP: INTENT ${intent.name} ===`);
+  console.log(JSON.stringify(dump, null, 2));
+  console.log(`=== END AGENT_DUMP ===`);
 }
 
 // ============================================================================
@@ -889,7 +821,7 @@ function parseArgs(): CLIArgs {
     url: '',
     intents: [],
     discover: false,
-    useClaude: false,
+    agentDump: false,
     cdpPort: 7891,
     waitMs: 3000,
   };
@@ -903,7 +835,7 @@ function parseArgs(): CLIArgs {
       continue;
     }
     if (arg === '--discover' || arg === '-d') { flags.discover = true; continue; }
-    if (arg === '--claude' || arg === '-c') { flags.useClaude = true; continue; }
+    if (arg === '--agent-dump' || arg === '--dump') { flags.agentDump = true; continue; }
     if (arg === '-o' || arg === '--output') { flags.output = args[++i]; continue; }
     if (arg === '--cdp-port') { flags.cdpPort = parseInt(args[++i], 10); continue; }
     if (arg === '--wait') { flags.waitMs = parseInt(args[++i], 10); continue; }
@@ -911,7 +843,7 @@ function parseArgs(): CLIArgs {
   }
 
   if (!flags.url) {
-    console.error(`Usage: intent-webmcp.ts <url> [--intent "name=/path"] [--discover] [--claude]
+    console.error(`Usage: intent-webmcp.ts <url> [--intent "name=/path"] [--discover] [--agent-dump]
 
 Examples:
   # Auto-discover intents from nav:
@@ -926,7 +858,7 @@ Examples:
   npx tsx tools/intent-webmcp.ts https://substack.com --discover
 
   # Use Claude for richer intent mapping + tool generation:
-  npx tsx tools/intent-webmcp.ts https://substack.com --claude`);
+  npx tsx tools/intent-webmcp.ts https://substack.com --agent-dump`);
     process.exit(1);
   }
 
@@ -969,11 +901,9 @@ async function main() {
     const discovery = await discoverIntents(origin, args.cdpPort, args.waitMs);
     homepageScrape = discovery.scrape;
 
-    if (args.useClaude && discovery.intents.length > 0) {
-      console.log(`  Heuristic found ${discovery.intents.length} intents, refining with Claude...`);
-      intents = await discoverIntentsWithClaude(origin, homepageScrape);
-    } else {
-      intents = discovery.intents;
+    intents = discovery.intents;
+    if (args.agentDump) {
+      dumpDiscoveryForAgent(origin, homepageScrape);
     }
 
     console.log(`  Discovered ${intents.length} intents:`);
@@ -1046,12 +976,10 @@ async function main() {
       ),
     };
 
-    if (args.useClaude) {
-      console.log(`  ${intent.name}: generating with Claude...`);
-      intent.tools = await generateToolsWithClaude(intent, filtered);
-    } else {
-      intent.tools = generateToolsHeuristic(intent, filtered);
+    if (args.agentDump) {
+      dumpIntentForAgent(intent, filtered);
     }
+    intent.tools = generateToolsHeuristic(intent, filtered);
 
     // Deduplicate tool names
     intent.tools = deduplicateTools(intent.tools);
