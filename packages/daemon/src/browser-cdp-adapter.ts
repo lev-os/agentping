@@ -165,7 +165,8 @@ export class BrowserCDPAdapter {
         break;
       }
 
-      case 'cdp:response': {
+      case 'cdp:response':
+      case 'tool:response': {
         const id = msg.id as string;
         const req = this.pending.get(id);
         if (req) {
@@ -236,6 +237,29 @@ export class BrowserCDPAdapter {
 
       this.pending.set(id, { resolve, reject, timer });
       this.sendToExtension({ type: 'cdp:request', id, method, params, tabId });
+    });
+  }
+
+  /**
+   * Execute a tool action via Chrome APIs — NO CDP, NO debugger.
+   * Routes through extension's tool:request handler.
+   */
+  async sendToolRequest(
+    action: string,
+    params: Record<string, unknown> = {},
+    timeoutMs = 60000,
+  ): Promise<unknown> {
+    if (!this.extension) throw new Error('No browser extension connected');
+
+    const id = crypto.randomUUID();
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`Tool action timed out: ${action}`));
+      }, timeoutMs);
+
+      this.pending.set(id, { resolve, reject, timer });
+      this.sendToExtension({ type: 'tool:request', id, action, params });
     });
   }
 

@@ -2,75 +2,43 @@
 /**
  * execute-webmcp.ts — WebMCP shim executor
  *
- * Reads a .webmcp.yaml (or inline tool definition) and executes tool actions
- * via the CDP proxy → extension → chrome.scripting path.
+ * Executes tool actions via AgentPing daemon → extension → Chrome APIs.
+ * NO CDP. NO debugger. NO WebSocket to the browser.
  *
- * This simulates what the AgentPing MCP server will do:
- * an agent calls a tool, the server executes it in the browser.
+ * Transport: HTTP POST to daemon /api/v1/tool
+ * Execution: Extension uses chrome.tabs, chrome.scripting, chrome.cookies
  *
  * Usage:
- *   # Execute a tool from a shim file:
- *   npx tsx tools/execute-webmcp.ts --shim webmcp/substack.yaml --tool extract_article --param url=https://...
- *
- *   # Execute an inline tool (for spike/testing):
- *   npx tsx tools/execute-webmcp.ts --inline <tool-json>
- *
- *   # Run a named action sequence:
- *   npx tsx tools/execute-webmcp.ts --action navigate --url https://example.com
- *   npx tsx tools/execute-webmcp.ts --action extract-markdown
- *   npx tsx tools/execute-webmcp.ts --action extract-video
- *   npx tsx tools/execute-webmcp.ts --action eval --expr "document.title"
+ *   npx tsx tools/execute-webmcp.ts navigate https://example.com
+ *   npx tsx tools/execute-webmcp.ts extract-markdown
+ *   npx tsx tools/execute-webmcp.ts extract-video
+ *   npx tsx tools/execute-webmcp.ts eval "document.title"
+ *   npx tsx tools/execute-webmcp.ts full <post-url> [output-dir]
  */
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
-import WS from 'ws';
 
-const PORT = parseInt(process.env.CDP_PORT || '7891', 10);
+const DAEMON_PORT = parseInt(process.env.AGENTPING_PORT || '7890', 10);
+const DAEMON_URL = `http://localhost:${DAEMON_PORT}`;
 
 // ============================================================================
-// CDP Transport
+// Transport — HTTP to daemon, zero CDP
 // ============================================================================
 
-let ws: WS;
-let msgId = 0;
-
-async function connect(): Promise<void> {
-  ws = new WS(`ws://localhost:${PORT}/devtools/browser`);
-  await new Promise<void>((resolve, reject) => {
-    ws.on('open', resolve);
-    ws.on('error', reject);
+async function tool(action: string, params: Record<string, unknown> = {}): Promise<any> {
+  const res = await fetch(`${DAEMON_URL}/api/v1/tool`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, params }),
   });
-}
-
-function cdp(method: string, params?: Record<string, unknown>, timeoutMs = 60000): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const myId = ++msgId;
-    const timeout = setTimeout(() => reject(new Error(`${method} timeout`)), timeoutMs);
-    const handler = (d: WS.RawData) => {
-      const msg = JSON.parse(d.toString());
-      if (msg.id === myId) {
-        clearTimeout(timeout);
-        ws.off('message', handler);
-        if (msg.error) reject(new Error(msg.error.message));
-        else resolve(msg.result);
-      }
-    };
-    ws.on('message', handler);
-    ws.send(JSON.stringify({ id: myId, method, params }));
-  });
+  const data = await res.json() as any;
+  if (data.error) throw new Error(data.error);
+  return data.result;
 }
 
 async function evalJS(expression: string): Promise<any> {
-  const result = await cdp('Runtime.evaluate', {
-    expression,
-    returnByValue: true,
-    awaitPromise: true,
-  });
-  if (result?.exceptionDetails) {
-    throw new Error(`JS error: ${result.exceptionDetails.text || JSON.stringify(result.exceptionDetails)}`);
-  }
-  return result?.result?.value;
+  return await tool('eval', { expression });
 }
 
 function sleep(ms: number) {
@@ -82,11 +50,10 @@ function sleep(ms: number) {
 // ============================================================================
 
 const actions = {
-  /** Navigate to a URL and wait for load */
-  async navigate(url: string, waitMs = 4000): Promise<string> {
-    await cdp('Page.navigate', { url });
-    await sleep(waitMs);
-    return await evalJS('location.href');
+  /** Navigate to a URL — uses chrome.tabs.update, waits for load */
+  async navigate(url: string): Promise<string> {
+    const result = await tool('navigate', { url }) as any;
+    return result?.url || url;
   },
 
   /** Extract the article body as markdown */
@@ -265,8 +232,15 @@ async function main() {
     process.exit(1);
   }
 
-  await connect();
-  console.error('[webmcp] Connected to CDP proxy');
+  // Verify daemon is reachable
+  try {
+    const health = await fetch(`${DAEMON_URL}/health`);
+    if (!health.ok) throw new Error('Daemon not healthy');
+  } catch {
+    console.error(`[webmcp] Cannot reach daemon at ${DAEMON_URL}. Is it running?`);
+    process.exit(1);
+  }
+  console.error(`[webmcp] Connected to daemon at ${DAEMON_URL} (no CDP)`);
 
   try {
     switch (action) {
@@ -337,22 +311,37 @@ videos: ${videos.length}
         writeFileSync(mdPath, frontmatter + article.markdown);
         console.error(`[webmcp]   → Saved ${mdPath}`);
 
-        // Step 5: Download videos
+        // Step 5: Get cookies via chrome.cookies (includes httpOnly)
+        console.error('[webmcp] Tool call: cookies()');
+        const cookies = await tool('cookies', { url: finalUrl }) as any[];
+        const cookieStr = (cookies || []).map((c: any) => `${c.name}=${c.value}`).join('; ');
+        console.error(`[webmcp]   → ${cookies?.length || 0} cookies (including httpOnly)`);
+
+        // Step 6: Download videos with auth cookies
         for (let i = 0; i < videos.length; i++) {
           const video = videos[i];
           console.error(`[webmcp] Tool call: download_video(${video.src.slice(0, 80)}...)`);
 
           if (video.type === 'iframe-embed' || video.type === 'cloudflare-stream') {
             console.error(`[webmcp]   → Embed URL (not directly downloadable): ${video.src}`);
-            // Save the URL for manual download
             writeFileSync(`${outputDir}/${slug}-video-${i}.url`, video.src);
             continue;
           }
 
           try {
             const videoPath = `${outputDir}/${slug}-video-${i}.mp4`;
-            execSync(`curl -sL -o "${videoPath}" "${video.src}"`, { timeout: 120000 });
-            const stat = execSync(`ls -la "${videoPath}"`, { encoding: 'utf-8' }).trim();
+            // Pass auth cookies for gated content
+            const isHLS = video.type === 'application/x-mpegURL' || video.src.includes('type=hls');
+            if (isHLS) {
+              // HLS stream — use ffmpeg with cookies
+              execSync(
+                `ffmpeg -headers "Cookie: ${cookieStr.replace(/"/g, '\\"')}" -i "${video.src}" -c copy -bsf:a aac_adtstoasc "${videoPath}" -y`,
+                { timeout: 600000, stdio: ['pipe', 'pipe', 'pipe'] },
+              );
+            } else {
+              execSync(`curl -sL -b "${cookieStr}" -o "${videoPath}" "${video.src}"`, { timeout: 120000 });
+            }
+            const stat = execSync(`ls -lh "${videoPath}"`, { encoding: 'utf-8' }).trim();
             console.error(`[webmcp]   → Downloaded: ${stat}`);
           } catch (err) {
             console.error(`[webmcp]   → Download failed: ${err instanceof Error ? err.message : err}`);
@@ -383,7 +372,7 @@ videos: ${videos.length}
         process.exit(1);
     }
   } finally {
-    ws.close();
+    // HTTP transport — nothing to close
   }
 }
 

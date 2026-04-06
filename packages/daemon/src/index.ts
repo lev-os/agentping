@@ -94,6 +94,27 @@ async function main() {
 
     // 8. Create HTTP server and attach WebSocket
     const httpServer = createServer(async (req, res) => {
+        // Tool API — Chrome APIs only, no CDP
+        if (req.url === '/api/v1/tool' && req.method === 'POST') {
+            try {
+                const body = await readBody(req);
+                const { action, params } = JSON.parse(body as string);
+                if (!action) {
+                    res.statusCode = 400;
+                    res.end(JSON.stringify({ error: 'Missing action' }));
+                    return;
+                }
+                const result = await browserCDPAdapter.sendToolRequest(action, params || {});
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ result }));
+            } catch (err) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: (err as Error).message }));
+            }
+            return;
+        }
+
         // Forward to Hono
         const url = new URL(req.url || '/', `http://${req.headers.host}`);
         const request = new Request(url.toString(), {

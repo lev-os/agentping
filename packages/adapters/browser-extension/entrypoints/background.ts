@@ -204,6 +204,38 @@ export default defineBackground(() => {
         break;
       }
 
+      // ================================================================
+      // TOOL PATH — Chrome APIs only, zero CDP, zero debugger
+      // ================================================================
+      case 'tool:request': {
+        const req = msg as unknown as {
+          type: string;
+          id: string;
+          action: string;
+          params?: Record<string, unknown>;
+        };
+
+        // Filter expired leases
+        leases = leases.filter(l => l.expiresAt > Date.now());
+        chrome.storage.local.set({ activeLeases: leases });
+
+        if (leases.length === 0) {
+          send({ type: 'tool:response', id: req.id, error: { code: -1, message: 'No active lease' } });
+          setState('connected');
+          return;
+        }
+
+        const lease = leases[0];
+        try {
+          const result = await executeTool(req.action, req.params || {}, lease);
+          send({ type: 'tool:response', id: req.id, result });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          send({ type: 'tool:response', id: req.id, error: { code: -4, message } });
+        }
+        break;
+      }
+
       case 'cdp:request': {
         const req = msg as unknown as { type: string } & CDPRequest;
 
@@ -262,6 +294,88 @@ export default defineBackground(() => {
       default:
         console.log('[AgentPing] Unknown message type:', msg.type);
     }
+  }
+
+  // ========================================================================
+  // ========================================================================
+  // Tool Execution — Chrome APIs ONLY. No CDP. No debugger. No detection.
+  // ========================================================================
+
+  async function executeTool(
+    action: string,
+    params: Record<string, unknown>,
+    lease: LeaseInfo,
+  ): Promise<unknown> {
+    const tabId = lease.tabId || (await getActiveTabId());
+    if (!tabId) throw new Error('No target tab');
+
+    switch (action) {
+      case 'navigate': {
+        const url = params.url as string;
+        if (!url) throw new Error('Missing url param');
+        await chrome.tabs.update(tabId, { url });
+        // Wait for load
+        await new Promise<void>((resolve) => {
+          const listener = (id: number, info: chrome.tabs.TabChangeInfo) => {
+            if (id === tabId && info.status === 'complete') {
+              chrome.tabs.onUpdated.removeListener(listener);
+              resolve();
+            }
+          };
+          chrome.tabs.onUpdated.addListener(listener);
+          // Timeout after 30s
+          setTimeout(() => {
+            chrome.tabs.onUpdated.removeListener(listener);
+            resolve();
+          }, 30000);
+        });
+        const tab = await chrome.tabs.get(tabId);
+        return { url: tab.url, title: tab.title };
+      }
+
+      case 'eval': {
+        const expression = params.expression as string;
+        if (!expression) throw new Error('Missing expression param');
+        const results = await chrome.scripting.executeScript({
+          target: { tabId },
+          world: 'MAIN',
+          func: (expr: string) => {
+            try { return (0, eval)(expr); } catch (e: any) { return { __error: e.message }; }
+          },
+          args: [expression],
+        });
+        const val = results[0]?.result;
+        if (val && typeof val === 'object' && '__error' in val) {
+          throw new Error(val.__error as string);
+        }
+        return val;
+      }
+
+      case 'cookies': {
+        const url = (params.url as string) || await getTabUrl(tabId);
+        const cookies = await chrome.cookies.getAll({ url });
+        return cookies;
+      }
+
+      case 'screenshot': {
+        const tab = await chrome.tabs.get(tabId);
+        const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId!, { format: 'png' });
+        return { dataUrl };
+      }
+
+      case 'tab-info': {
+        const tab = await chrome.tabs.get(tabId);
+        return { url: tab.url, title: tab.title, id: tab.id };
+      }
+
+      default:
+        throw new Error(`Unknown tool action: ${action}`);
+    }
+  }
+
+  async function getActiveTabId(): Promise<number | undefined> {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tab?.id;
   }
 
   // ========================================================================
