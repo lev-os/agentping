@@ -104,6 +104,27 @@ async function main() {
                     res.end(JSON.stringify({ error: 'Missing action' }));
                     return;
                 }
+
+                // Auto-lease: if no active lease, request one and wait
+                if (!leaseManager.getActiveLease()) {
+                    console.log('[Tool] No active lease — requesting (approve in extension)...');
+                    const requestId = await browserCDPAdapter.requestLease(
+                        'webmcp-tool',
+                        ['browser', 'tabs', 'scripting', 'cookies'],
+                        undefined,
+                        '10m',
+                        `Tool action: ${action}`,
+                    );
+                    const decision = await browserCDPAdapter.waitForLeaseDecision(requestId, 60000);
+                    if (!decision.approved) {
+                        res.statusCode = 403;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify({ error: 'Lease denied' }));
+                        return;
+                    }
+                    console.log('[Tool] Lease granted');
+                }
+
                 const result = await browserCDPAdapter.sendToolRequest(action, params || {});
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ result }));
