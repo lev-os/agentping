@@ -220,7 +220,7 @@ export function SetupPanel({ dashboardId, onClose }: SetupPanelProps) {
       className={`fixed bottom-0 left-0 right-0 z-50 transition-transform duration-200 ease-out ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
-      style={{ height: 300 }}
+      style={{ height: "min(40vh, 300px)", minHeight: 200 }}
     >
       <div
         className="h-full flex flex-col border-t border-cyan-500/20"

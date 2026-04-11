@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { DashboardList } from './components/DashboardList'
 import { DashboardDetail } from './components/DashboardDetail'
+import { ParityDetail } from './components/ParityDetail'
 import './styles/theme-kingly.css'
 import './styles/command-center.css'
 
@@ -11,6 +12,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<DashboardList />} />
         <Route path="/dashboard/:id" element={<DashboardDetail />} />
+        <Route path="/parity/:id" element={<ParityDetail />} />
       </Routes>
     </BrowserRouter>
   )
