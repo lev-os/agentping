@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0c1020"/>
+
+  <!-- Top accent line -->
+  <rect x="250" y="180" width="700" height="2" fill="#d4a73a" opacity="0.6"/>
+
+  <!-- Title -->
+  <text x="600" y="280" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="60" font-weight="700" fill="#ffffff" letter-spacing="2">Code Is an Artifact of DNA</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="345" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="400" fill="#d4a73a" letter-spacing="1">DNA-Driven Development &middot; Part 2</text>
+
+  <!-- Bottom accent line -->
+  <rect x="250" y="385" width="700" height="2" fill="#d4a73a" opacity="0.6"/>
+
+  <!-- Decorative DNA-like double helix accent -->
+  <g transform="translate(600, 440)" opacity="0.2">
+    <circle cx="-20" cy="0" r="4" fill="#d4a73a"/>
+    <circle cx="-10" cy="-6" r="3" fill="#d4a73a"/>
+    <circle cx="0" cy="0" r="4" fill="#d4a73a"/>
+    <circle cx="10" cy="6" r="3" fill="#d4a73a"/>
+    <circle cx="20" cy="0" r="4" fill="#d4a73a"/>
+    <line x1="-20" y1="0" x2="-10" y2="-6" stroke="#d4a73a" stroke-width="1"/>
+    <line x1="-10" y1="-6" x2="0" y2="0" stroke="#d4a73a" stroke-width="1"/>
+    <line x1="0" y1="0" x2="10" y2="6" stroke="#d4a73a" stroke-width="1"/>
+    <line x1="10" y1="6" x2="20" y2="0" stroke="#d4a73a" stroke-width="1"/>
+  </g>
+
+  <!-- Decorative corner accents -->
+  <rect x="60" y="60" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="60" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1100" y="60" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1138" y="60" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="568" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="530" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1100" y="568" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1138" y="530" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+
+  <!-- Domain -->
+  <text x="600" y="540" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="300" fill="#ffffff" opacity="0.5" letter-spacing="6">lev.here.now</text>
+</svg>

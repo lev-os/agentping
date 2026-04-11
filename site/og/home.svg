@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0c1020"/>
+
+  <!-- Top accent line -->
+  <rect x="400" y="180" width="400" height="2" fill="#d4a73a" opacity="0.6"/>
+
+  <!-- Title -->
+  <text x="600" y="280" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="88" font-weight="700" fill="#ffffff" letter-spacing="4">Leviathan</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="340" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#d4a73a" letter-spacing="2">The Universal Agent Runtime</text>
+
+  <!-- Bottom accent line -->
+  <rect x="400" y="380" width="400" height="2" fill="#d4a73a" opacity="0.6"/>
+
+  <!-- Decorative corner accents -->
+  <rect x="60" y="60" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="60" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1100" y="60" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1138" y="60" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="568" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="60" y="530" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1100" y="568" width="40" height="2" fill="#d4a73a" opacity="0.3"/>
+  <rect x="1138" y="530" width="2" height="40" fill="#d4a73a" opacity="0.3"/>
+
+  <!-- Domain -->
+  <text x="600" y="540" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="300" fill="#ffffff" opacity="0.5" letter-spacing="6">lev.here.now</text>
+</svg>

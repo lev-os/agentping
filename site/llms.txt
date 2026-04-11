@@ -1,0 +1,28 @@
+# Leviathan
+
+> Leviathan (lev-os/lev) is an open-source universal agent runtime that compiles YAML DNA into executable agent behavior. Built on two axioms — C1 Finitude (all resources are finite) and C2 Non-Commutation (order matters) — it replaces prompt engineering with constraint engineering. Stop prompting. Start compiling.
+
+## Docs
+
+- [Homepage](https://lev.here.now/): Leviathan: The Universal Agent Runtime — project overview, architecture, and getting started
+- [Constraints Are the Product](https://lev.here.now/constraints/): Manifesto Part 1 — constraint engineering philosophy with 95+ elements explaining why constraints, not prompts, are the product
+- [DNA-Driven Development](https://lev.here.now/dna/): Manifesto Part 2 — the DNA compilation pipeline with 53 elements showing how YAML declarations become runtime behavior
+- [Heartbeat Dashboard](https://lev.here.now/genuievolve/): Live system status dashboard for Leviathan's operational state
+- [WebMCP Vision](https://lev.here.now/webmcp-agentping/): Browser as agent tool API — the WebMCP protocol for turning any browser into an agent-accessible surface
+- [Time Travel](https://lev.here.now/timetravel/): Deep research system with 11 search adapters for evidence-based agent reasoning
+- [Now Pages](https://lev.here.now/now/): 54 rendered pages including dashboards, architecture comparisons, and system overviews
+
+## Source
+
+- [GitHub Repository](https://github.com/lev-os/lev): Open-source codebase — monorepo with core runtime, plugins, and community modules
+
+## Key Concepts
+
+- **Constraint Engineering**: Design methodology where system behavior emerges from declared constraints rather than imperative code
+- **DNA-Driven Development**: YAML files in `dna/` define the system's mental model — graph primitives, entity types, vernacular, and validation gates — which the runtime compiles into executable behavior
+- **Two Axioms**: C1 Finitude (every operation must be bounded — no infinite loops, no unbounded growth) and C2 Non-Commutation (append-only event logs, immutable receipts, deterministic replay)
+- **FlowMind**: Declaration-driven execution — agents, workflows, policies, and configs are all FlowMind declarations
+- **Poly Surfaces**: Surface-agnostic handler architecture — one handler, many transports (CLI, MCP, HTTP, gRPC, WebSocket)
+- **Eval Harness**: Fitness-function-gated validation — binary pass/fail gates before any state transition
+- **LevEvent**: Universal inter-module event schema — all communication flows through typed events
+- **Graph Primitives**: Everything is a node in a universal context graph with dynamic depth levels (L0-L3)

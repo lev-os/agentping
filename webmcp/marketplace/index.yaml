@@ -3,7 +3,7 @@
 # Each entry enables AI agents to interact with a website via structured tools
 #
 # Updated: 2026-04-10
-# Skeletons removed during browser-cascade dead-code cleanup
+# Skeletons removed during browser dead-code cleanup
 
 version: "1.1"
 updated_at: "2026-04-10"

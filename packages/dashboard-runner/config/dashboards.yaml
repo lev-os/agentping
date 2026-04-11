@@ -237,3 +237,30 @@ dashboards:
       framework: xcodegen
       packageManager: xcode
       lifecycle: detected
+  - name: Context Pack Viewer
+    id: context-pack-viewer
+    port: 0
+    port_range:
+      - 0
+      - 0
+    command: echo "external here.now page — open via URL"
+    cwd: ~/digital/leviathan
+    health_check:
+      type: process
+      timeout_ms: 5000
+      interval_ms: 60000
+    restart_policy:
+      enabled: false
+      max_retries: 1
+      backoff_ms:
+        - 5000
+    env:
+      EXTERNAL_URL: "https://trusty-maple-wvcb.here.now/context-pack-viewer/"
+    metadata:
+      lane: ops
+      openMode: embed
+      description: "A0's L1-L2 graph projection — agents, workstreams, mail, parity"
+      runtime: static
+      framework: lev-now
+      packageManager: none
+      lifecycle: ready
