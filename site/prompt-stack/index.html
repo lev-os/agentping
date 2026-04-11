@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Stack — Drive Any Coding Agent Through Structured Workflows</title>
+<meta name="description" content="Prompt Stack sits between you and any coding agent. It drives multi-step workflows, checks coverage after each round, and decides when the work is actually done.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME: MIDNIGHT EDITORIAL ============ */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #0a0e1a;
+  --bg2: #0f1729;
+  --surface: #141a2e;
+  --surface2: #1a2240;
+  --surface-elevated: #1e2850;
+  --border: rgba(212, 167, 58, 0.12);
+  --border-bright: rgba(212, 167, 58, 0.25);
+  --text: #e8e4dc;
+  --text-dim: #8a8e9e;
+  --text-bright: #ffffff;
+
+  --gold: #d4a73a;
+  --gold-dim: rgba(212, 167, 58, 0.12);
+  --gold-bright: #f0c95c;
+
+  --emerald: #34d399;
+  --emerald-dim: rgba(52, 211, 153, 0.12);
+  --rose: #fb7185;
+  --rose-dim: rgba(251, 113, 133, 0.12);
+  --sky: #38bdf8;
+  --sky-dim: rgba(56, 189, 248, 0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45, 212, 191, 0.12);
+  --coral: #f97316;
+  --coral-dim: rgba(249, 115, 22, 0.12);
+  --violet: #a78bfa;
+  --violet-dim: rgba(167, 139, 250, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #faf8f4;
+  --bg2: #f5f2eb;
+  --surface: #ffffff;
+  --surface2: #f0ebe3;
+  --surface-elevated: #fff9f0;
+  --border: rgba(30, 58, 95, 0.1);
+  --border-bright: rgba(30, 58, 95, 0.2);
+  --text: #1e3a5f;
+  --text-dim: #6b7a8e;
+  --text-bright: #0a1628;
+  --gold: #b8860b;
+  --gold-dim: rgba(184, 134, 11, 0.08);
+  --gold-bright: #d4a73a;
+  --emerald: #059669;
+  --emerald-dim: rgba(5, 150, 105, 0.08);
+  --rose: #e11d48;
+  --rose-dim: rgba(225, 29, 72, 0.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2, 132, 199, 0.08);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.08);
+  --teal: #0d9488;
+  --teal-dim: rgba(13, 148, 136, 0.08);
+  --coral: #ea580c;
+  --coral-dim: rgba(234, 88, 12, 0.08);
+  --violet: #7c3aed;
+  --violet-dim: rgba(124, 58, 237, 0.08);
+}
+
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 30% -10%, rgba(212, 167, 58, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(56, 189, 248, 0.04) 0%, transparent 40%);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ STAGGERED REVEAL ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ============ LAYOUT ============ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-sub {
+  font-size: 18px;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ============ BACK LINK ============ */
+.back-link {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1000;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  color: var(--gold);
+  border-color: var(--border-bright);
+  text-decoration: none;
+}
+
+/* ============ THEME TOGGLE ============ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-elevated);
+  border-color: var(--gold);
+  transform: scale(1.08);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.05;
+  margin-bottom: 24px;
+  letter-spacing: -2px;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 28px);
+  color: var(--gold);
+  max-width: 700px;
+  margin: 0 auto 20px;
+  line-height: 1.4;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+.hero-dim {
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: var(--text-dim);
+  animation: fadeInUp 0.8s ease 0.8s both;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2.5s ease-in-out infinite, fadeIn 1s ease 1.2s both;
+  z-index: 1;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+
+/* ============ CHAT BUBBLES ============ */
+.chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.chat-bubble {
+  padding: 18px 22px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  position: relative;
+  max-width: 85%;
+}
+
+.chat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* User bubble: left-aligned, surface bg */
+.chat-user {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 16px 4px;
+}
+
+.chat-user .chat-label {
+  color: var(--sky);
+}
+
+/* Agent bubble: right-aligned, bg2 */
+.chat-agent {
+  align-self: flex-end;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 4px 16px;
+}
+
+.chat-agent .chat-label {
+  color: var(--text-dim);
+}
+
+/* Prompt Stack bubble: left-aligned, gold accent */
+.chat-ps {
+  align-self: flex-start;
+  background: var(--gold-dim);
+  border: 1px solid rgba(212, 167, 58, 0.2);
+  border-left: 4px solid var(--gold);
+  border-radius: 4px 16px 16px 4px;
+}
+
+.chat-ps .chat-label {
+  color: var(--gold);
+}
+
+/* Agent with specific provider border */
+.chat-agent-sky {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.chat-agent-emerald {
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+/* Chat fade effect */
+.chat-fade {
+  position: relative;
+  overflow: hidden;
+  max-height: 140px;
+}
+
+.chat-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--bg2));
+  pointer-events: none;
+}
+
+.chat-fade-text {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: -4px;
+  padding: 8px 0;
+}
+
+/* Verdict line */
+.verdict {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rose);
+  padding: 16px 0;
+}
+
+/* Insight list */
+.insight-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+  margin: 24px auto 0;
+}
+
+.insight-list li {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+}
+
+.insight-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rose);
+}
+
+/* Mechanism label */
+.mechanism-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.mechanism-block {
+  margin-bottom: 56px;
+}
+
+.mechanism-block:last-child {
+  margin-bottom: 0;
+}
+
+.mechanism-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 30px);
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+/* ============ FLOW DIAGRAM ============ */
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 48px auto;
+  flex-wrap: wrap;
+}
+
+.flow-box {
+  padding: 20px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+  min-width: 140px;
+}
+
+.flow-box-center {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+  padding: 24px 36px;
+  min-width: 180px;
+}
+
+.flow-box h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.flow-box-center h3 {
+  color: var(--gold);
+  font-size: 24px;
+}
+
+.flow-box p {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.flow-arrow-bi {
+  font-size: 24px;
+  color: var(--text-dim);
+}
+
+.flow-labels {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flow-label-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.flow-label-arrow {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.flow-label-arrow.gold { color: var(--gold); }
+.flow-label-arrow.sky { color: var(--sky); }
+
+.flow-summary {
+  font-size: 17px;
+  color: var(--text);
+  max-width: 720px;
+  margin: 40px auto 0;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* ============ ROUND CARDS (Live Example) ============ */
+.round-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.round-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 32px;
+  border-left: 4px solid var(--border);
+}
+
+.round-card.sky-border { border-left-color: var(--sky); }
+.round-card.emerald-border { border-left-color: var(--emerald); }
+.round-card.rose-border { border-left-color: var(--rose); }
+.round-card.gold-border {
+  border-left-color: var(--gold);
+  background: var(--gold-dim);
+  border-color: rgba(212, 167, 58, 0.2);
+  padding: 32px 36px;
+}
+
+.round-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.round-badge.sky { background: var(--sky-dim); color: var(--sky); }
+.round-badge.emerald { background: var(--emerald-dim); color: var(--emerald); }
+.round-badge.rose { background: var(--rose-dim); color: var(--rose); }
+.round-badge.gold { background: var(--gold-dim); color: var(--gold); }
+
+.round-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.round-card p {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.round-card.gold-border p {
+  color: var(--text);
+}
+
+/* Problem box */
+.problem-box {
+  background: var(--gold-dim);
+  border: 1px solid rgba(212, 167, 58, 0.2);
+  border-radius: 12px;
+  padding: 24px 28px;
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* Highlight cards row */
+.highlight-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.highlight-card {
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.highlight-card.emerald-bg { background: var(--emerald-dim); color: var(--emerald); }
+.highlight-card.rose-bg { background: var(--rose-dim); color: var(--rose); }
+.highlight-card.gold-bg { background: var(--gold-dim); color: var(--gold); }
+
+/* ============ CATALOG GRID ============ */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.catalog-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  transition: all 0.35s ease;
+  cursor: default;
+}
+
+.catalog-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.catalog-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.catalog-card .step-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--gold-dim);
+  color: var(--gold);
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.catalog-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* ============ COMPARISON TABLE ============ */
+.compare-table-wrap {
+  margin-top: 48px;
+  overflow-x: auto;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.compare-table th {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 2px solid var(--border-bright);
+}
+
+.compare-table th:nth-child(2) { color: var(--rose); }
+.compare-table th:nth-child(3) { color: var(--emerald); }
+
+.compare-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.compare-table td:first-child {
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.compare-table .val-bad {
+  color: var(--rose);
+}
+
+.compare-table .val-good {
+  color: var(--emerald);
+}
+
+/* ============ CODE BLOCK ============ */
+.code-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+.code-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.code-block .kw { color: var(--rose); }
+.code-block .fn { color: var(--gold); }
+.code-block .str { color: var(--emerald); }
+.code-block .cm { color: var(--text-dim); }
+.code-block .prop { color: var(--sky); }
+.code-block .num { color: var(--amber); }
+.code-block .yk { color: var(--sky); }
+.code-block .ys { color: var(--emerald); }
+.code-block .ys.highlight, .code-block .highlight { color: var(--gold); font-weight: 700; }
+.code-block .yc { color: var(--text-dim); }
+
+.code-caption {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* ============ ARCH DIAGRAM (Under the Hood) ============ */
+.arch-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 32px 0;
+}
+
+.arch-node {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.arch-arrow {
+  color: var(--text-dim);
+  font-size: 18px;
+}
+
+/* Primitives grid */
+.primitives-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.primitive-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.35s ease;
+}
+
+.primitive-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.primitive-card h3 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.primitive-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* ============ CTA SECTION ============ */
+.cta-section {
+  text-align: center;
+  padding: 8rem 0;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 167, 58, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  color: var(--text-bright);
+}
+
+.cta-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+}
+
+.cta-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.cta-btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+  border: 1px solid var(--gold);
+}
+
+.cta-btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 167, 58, 0.25);
+  text-decoration: none;
+}
+
+.cta-btn-secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--border-bright);
+}
+
+.cta-btn-secondary:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.cta-install {
+  margin-top: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.cta-install span {
+  color: var(--gold-bright);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+footer p, footer span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  section { padding: 4rem 0; }
+  .hero { min-height: auto; padding: 6rem 24px 4rem; }
+  .container { padding: 0 1.25rem; }
+  .flow-diagram { flex-direction: column; gap: 12px; }
+  .flow-arrow-bi { transform: rotate(90deg); }
+  .chat-bubble { max-width: 95%; }
+  .catalog-grid { grid-template-columns: 1fr; }
+  .highlight-row { grid-template-columns: 1fr; }
+  .primitives-grid { grid-template-columns: 1fr; }
+  .cta-links { flex-direction: column; align-items: center; }
+  footer .container { flex-direction: column; gap: 8px; text-align: center; }
+  .compare-table { font-size: 13px; }
+  .compare-table th, .compare-table td { padding: 10px 12px; }
+  .back-link { position: static; display: inline-flex; margin: 1rem 0 0 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.8rem; letter-spacing: -1px; }
+  .hero-subtitle { font-size: 1.1rem; }
+  .flow-box { min-width: auto; width: 100%; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: #fff; color: #111; }
+  .theme-toggle, .scroll-indicator, .back-link { display: none; }
+  section { padding: 2rem 0; page-break-inside: avoid; }
+  .hero { min-height: auto; padding: 2rem 0; }
+  .hero::before, .hero::after { display: none; }
+  h1, h2, h3, h4 { color: #111; }
+  .section-label { color: #666; }
+  .cta-section::before { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Back Link -->
+<a href="/" class="back-link">&larr; Leviathan</a>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span class="icon-moon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </span>
+  <span class="icon-sun">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </span>
+</button>
+
+<!-- ===================== 1. HERO ===================== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1><em>Prompt Stack</em></h1>
+    <p class="hero-subtitle">Drive any coding agent through structured, multi-step workflows.</p>
+    <p class="hero-dim">It does the thinking. You get the output.</p>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== 2. HOW IT WORKS — DIAGRAM ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">How It Works</span>
+    <h2 class="section-title reveal reveal-delay-1">Prompt Stack sits between you and the agent.</h2>
+
+    <div class="flow-diagram reveal reveal-delay-2">
+      <div class="flow-box">
+        <h3>You (or CI)</h3>
+      </div>
+      <span class="flow-arrow-bi">&harr;</span>
+      <div class="flow-box flow-box-center">
+        <h3>Prompt Stack</h3>
+      </div>
+      <span class="flow-arrow-bi">&harr;</span>
+      <div class="flow-box">
+        <h3>Any Agent</h3>
+        <p>Claude, Codex, GPT, Gemini</p>
+      </div>
+    </div>
+
+    <div class="flow-labels reveal reveal-delay-3">
+      <div class="flow-label-row">
+        <span class="flow-label-arrow gold">&rarr;</span>
+        <span>Reveals one step at a time</span>
+      </div>
+      <div class="flow-label-row">
+        <span class="flow-label-arrow sky">&larr;</span>
+        <span>Agent reports what it found</span>
+      </div>
+      <div class="flow-label-row">
+        <span class="flow-label-arrow gold">&#8635;</span>
+        <span>Checks coverage. Loop or advance.</span>
+      </div>
+    </div>
+
+    <p class="flow-summary reveal reveal-delay-4">You define the workflow. Prompt Stack drives the agent through it step by step, checks the output after each round, and decides whether to keep going or move on. The agent does the work. Prompt Stack makes sure the work is thorough.</p>
+  </div>
+</section>
+
+<!-- ===================== 3. THE PROBLEM ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Problem</span>
+    <h2 class="section-title reveal reveal-delay-1">Agents finish as fast as possible.</h2>
+
+    <div class="chat-thread" style="margin-top: 48px;">
+      <div class="chat-bubble chat-user reveal reveal-delay-2">
+        <span class="chat-label">You</span>
+        Design a caching strategy for our API. Consider Redis vs Memcached, invalidation patterns, and scaling to 10M requests/day.
+      </div>
+
+      <div class="chat-bubble chat-agent chat-fade reveal reveal-delay-3">
+        <span class="chat-label">Agent</span>
+        For your API caching strategy, I recommend Redis over Memcached due to its richer data structures and built-in persistence. Here's my approach:<br><br>
+        <strong>Layer 1: Application Cache</strong> &mdash; Use Redis with a TTL-based invalidation pattern. Set TTLs based on data volatility: user profiles at 5 minutes, product listings at 1 hour, static content at 24 hours.<br><br>
+        <strong>Layer 2: CDN Edge Cache</strong> &mdash; Put Cloudflare or Fastly in front of your API for read-heavy endpoints. This handles 60-70% of traffic before it hits your servers.<br><br>
+        <strong>Scaling Strategy</strong> &mdash; At 10M requests/day (~115 RPS average), a single Redis instance handles this easily. Use Redis Cluster if you need to shard across multiple nodes for write-heavy workloads...
+      </div>
+      <div class="chat-fade-text reveal reveal-delay-3">...continues for 800 more words</div>
+    </div>
+
+    <div class="verdict reveal reveal-delay-4">30 seconds. Looks done. One approach. No pushback. No coverage check.</div>
+
+    <ul class="insight-list reveal reveal-delay-5">
+      <li>Used one approach. Never considered failure modes or team capacity.</li>
+      <li>Never challenged its own answer. Nothing pushed back.</li>
+      <li>Stopped because it ran out of things to say, not because it covered what matters.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 4. THE FIX — THREE MECHANISMS ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">The Fix</span>
+    <h2 class="section-title reveal reveal-delay-1">What happens when Prompt Stack drives the conversation.</h2>
+
+    <!-- Mechanism A -->
+    <div class="mechanism-block reveal reveal-delay-2" style="margin-top: 48px;">
+      <div class="mechanism-label">The workflow has 3 steps. The agent sees one at a time.</div>
+      <h3 class="mechanism-title">Multi-step workflows</h3>
+
+      <div class="chat-thread" style="margin-top: 24px;">
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Step 1: Analyze the architecture decision. Report what you found and what's still unexplored.
+        </div>
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          I analyzed using cost-benefit. Here's what I found: Redis wins on features, Memcached wins on simplicity. Still unexplored: failure modes, team capacity, long-term maintenance.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Step 2: You missed failure modes. Assume this fails in 6 months. What went wrong?
+        </div>
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          Three failure scenarios: cache stampede during deploys, stale data serving after partial invalidation, and Redis memory exhaustion during traffic spikes. The original recommendation doesn't account for these.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Step 3: Produce the final recommendation incorporating all findings.
+        </div>
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          Revised recommendation: Redis with circuit breakers, write-behind invalidation, and a memory budget with eviction policies. Fundamentally different from the initial "just use Redis with TTLs" answer.
+        </div>
+      </div>
+    </div>
+
+    <!-- Mechanism B -->
+    <div class="mechanism-block reveal">
+      <div class="mechanism-label">After each round, Prompt Stack checks: has enough ground been covered?</div>
+      <h3 class="mechanism-title">The system decides when you're done, not the agent</h3>
+
+      <div class="chat-thread" style="margin-top: 24px;">
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          Analysis complete. I recommend Option A.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          You've covered 3 of 10 areas. Not done. Try a different approach.
+        </div>
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          Using stress-test approach: if Option A fails, here's what happens. The cost model breaks at 2x scale, the team can't maintain it without hiring, and the vendor alternative eliminates three risk categories.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          8 of 10 areas covered. One more round.
+        </div>
+        <div class="chat-bubble chat-agent">
+          <span class="chat-label">Agent</span>
+          Final consideration: team capacity and bus factor risk. If the primary maintainer leaves, the in-house solution becomes a liability within 90 days.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Coverage met. Produce final output.
+        </div>
+      </div>
+    </div>
+
+    <!-- Mechanism C -->
+    <div class="mechanism-block reveal">
+      <div class="mechanism-label">The same workflow can drive different agents for different steps.</div>
+      <h3 class="mechanism-title">Works with any agent</h3>
+
+      <div class="chat-thread" style="margin-top: 24px;">
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Step 1 &rarr; Claude: Research the problem space.
+        </div>
+        <div class="chat-bubble chat-agent chat-agent-sky">
+          <span class="chat-label">Claude</span>
+          Here's what I found across 12 sources: three competing approaches, two with published benchmarks, one with a critical flaw nobody mentions in the docs.
+        </div>
+        <div class="chat-bubble chat-ps">
+          <span class="chat-label">Prompt Stack</span>
+          Step 2 &rarr; Codex: Implement the solution based on the research.
+        </div>
+        <div class="chat-bubble chat-agent chat-agent-emerald">
+          <span class="chat-label">Codex</span>
+          Implementation complete. 3 files changed, tests passing. Used approach #2 from the research &mdash; the one with benchmarks showing 4x throughput improvement.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. LIVE EXAMPLE ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">Watch It Work</span>
+    <h2 class="section-title reveal reveal-delay-1">Should we build or buy?</h2>
+    <p class="section-sub reveal reveal-delay-2">A real decision. Three rounds. One answer you'd actually bet on.</p>
+
+    <div class="problem-box reveal reveal-delay-3">
+      Your team needs a notification system. Build it in-house or use a vendor like Twilio? Budget: $50K/year. Team: 4 engineers.
+    </div>
+
+    <div class="round-timeline">
+      <div class="round-card sky-border reveal">
+        <span class="round-badge sky">The obvious answer</span>
+        <h3>Round 1 &mdash; First Pass</h3>
+        <p>Build in-house. Lower long-term cost, full control, custom integrations. Estimated 6 weeks to MVP.</p>
+      </div>
+
+      <div class="round-card emerald-border reveal">
+        <span class="round-badge emerald">This changes the recommendation</span>
+        <h3>Round 2 &mdash; Different Approach</h3>
+        <p>Prompt Stack pushed for total cost of ownership. 6 weeks to build + 20% of one engineer's time for maintenance + on-call burden + scaling costs at 10x growth. Vendor: $12K/year, zero maintenance. The 3-year cost comparison flips.</p>
+      </div>
+
+      <div class="round-card rose-border reveal">
+        <span class="round-badge rose">This risk was invisible in Round 1</span>
+        <h3>Round 3 &mdash; Stress Test</h3>
+        <p>Prompt Stack asked: what if the lead engineer leaves? Now you have a custom system nobody fully understands, no documentation, and a vendor migration under pressure. The risk wasn't in the cost model &mdash; it was in the bus factor.</p>
+      </div>
+
+      <div class="round-card gold-border reveal">
+        <span class="round-badge gold">The answer worth betting on</span>
+        <h3>Final Output</h3>
+        <p>Use Twilio for transactional notifications. Build a thin integration layer for custom routing. Migrate to in-house only if vendor costs exceed $40K/year AND team grows to 6+. Here's the migration path.</p>
+      </div>
+    </div>
+
+    <div class="highlight-row reveal">
+      <div class="highlight-card emerald-bg">Round 2 changed the math</div>
+      <div class="highlight-card rose-bg">Round 3 found the risk no one asked about</div>
+      <div class="highlight-card gold-bg">The final answer is fundamentally different from Round 1</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. THE CATALOG ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">Not Just One Trick</span>
+    <h2 class="section-title reveal reveal-delay-1">15 workflows. 8 families. All executable.</h2>
+    <p class="section-sub reveal reveal-delay-2">These aren't templates. Each one drives a real agent through real steps.</p>
+
+    <div class="catalog-grid">
+      <div class="catalog-card reveal">
+        <span class="step-badge">2 steps, one loops</span>
+        <h3>Architecture Interview</h3>
+        <p>Multi-turn design decisions with different analytical approaches each round.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">3 steps</span>
+        <h3>Ticket Delivery</h3>
+        <p>Break down a ticket, implement, then validate the work.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">4 steps</span>
+        <h3>Validate-Emit-Learn</h3>
+        <p>Close out work: review artifacts, validate, emit deliverables, capture what you learned.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">3 steps</span>
+        <h3>Research-Propose-Spec</h3>
+        <p>Gather evidence, synthesize a proposal, crystallize into a spec.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">4 steps</span>
+        <h3>Lev Align</h3>
+        <p>Load project goals, inspect current state, classify drift, propose corrections.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">5 steps</span>
+        <h3>Work Deepen</h3>
+        <p>Decompose topics, discover skills, parallel research, review, evidence brief.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">2 steps</span>
+        <h3>Mixed Provider Proof</h3>
+        <p>Claude does step 1, Codex does step 2. Same workflow, different agents.</p>
+      </div>
+      <div class="catalog-card reveal">
+        <span class="step-badge">5 steps</span>
+        <h3>Plan-Align-Gates</h3>
+        <p>Load governance, refresh plan, align against canon, resolve gates, emit proposal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. BEFORE / AFTER ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">Results</span>
+    <h2 class="section-title reveal reveal-delay-1">One Shot vs Prompt Stack</h2>
+
+    <div class="compare-table-wrap reveal reveal-delay-2">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>One Shot</th>
+            <th>Prompt Stack</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Approaches used</td>
+            <td class="val-bad">1</td>
+            <td class="val-good">3+ (varied per round)</td>
+          </tr>
+          <tr>
+            <td>Risks identified</td>
+            <td class="val-bad">0</td>
+            <td class="val-good">3</td>
+          </tr>
+          <tr>
+            <td>Did the answer change?</td>
+            <td class="val-bad">&mdash;</td>
+            <td class="val-good">Yes, fundamentally</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td class="val-bad">30 seconds</td>
+            <td class="val-good">17 minutes</td>
+          </tr>
+          <tr>
+            <td>Would you bet $50K on it?</td>
+            <td class="val-bad">"Maybe?"</td>
+            <td class="val-good">"Yes."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8. UNDER THE HOOD ===================== -->
+<section>
+  <div class="container">
+    <span class="section-label reveal">For Developers</span>
+    <h2 class="section-title reveal reveal-delay-1">How It Actually Works</h2>
+    <p class="section-sub reveal reveal-delay-2">Everything above is powered by YAML definitions and a loop primitive.</p>
+
+    <div class="code-block reveal reveal-delay-3" data-lang="YAML">
+<pre><span class="yk">name</span>: <span class="ys">arch-interview</span>
+<span class="yk">entry</span>: <span class="ys">ask</span>
+<span class="yk">nodes</span>:
+  <span class="yk">ask</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.exec</span>
+    <span class="yk">loop_until</span>: <span class="ys">"status == 'complete'"</span>
+    <span class="yk">loop_max</span>: <span class="num">20</span>
+    <span class="yk">next</span>: <span class="ys">emit</span>
+  <span class="yk">emit</span>:
+    <span class="yk">type</span>: <span class="ys">action</span>
+    <span class="yk">op</span>: <span class="ys">lev.exec</span>
+    <span class="yk">terminal</span>: <span class="ys">true</span></pre>
+    </div>
+    <p class="code-caption reveal reveal-delay-3">Two nodes. One loops until coverage criteria are met.</p>
+
+    <div class="arch-flow reveal reveal-delay-4">
+      <span class="arch-node" style="color: var(--sky); border-color: var(--sky-dim);">Orchestrator</span>
+      <span class="arch-arrow">&harr;</span>
+      <span class="arch-node" style="color: var(--gold); border-color: var(--gold-dim);">prompt-stack CLI</span>
+      <span class="arch-arrow">&harr;</span>
+      <span class="arch-node" style="color: var(--emerald); border-color: var(--emerald-dim);">Agent</span>
+      <span class="arch-arrow">&harr;</span>
+      <span class="arch-node" style="color: var(--violet); border-color: var(--violet-dim);">Architect (via lev exec)</span>
+    </div>
+
+    <div class="primitives-grid reveal reveal-delay-5">
+      <div class="primitive-card">
+        <h3>loop_until</h3>
+        <p>Runtime evaluates structured outputs against exit conditions.</p>
+      </div>
+      <div class="primitive-card">
+        <h3>Dimension tracking</h3>
+        <p>12 exploration dimensions, completeness gate.</p>
+      </div>
+      <div class="primitive-card">
+        <h3>Framework rotation</h3>
+        <p>19 named analytical approaches, varied per round.</p>
+      </div>
+      <div class="primitive-card">
+        <h3>Exec bridge</h3>
+        <p>Dispatches to any CLI runner.</p>
+      </div>
+      <div class="primitive-card">
+        <h3>Active-step-only</h3>
+        <p>Agent sees one step. Can't race ahead.</p>
+      </div>
+      <div class="primitive-card">
+        <h3>Filesystem state</h3>
+        <p>Each round writes to disk. Fresh context, no degradation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9. CTA ===================== -->
+<section class="cta-section">
+  <div class="container">
+    <span class="section-label reveal">Get Started</span>
+    <h2 class="reveal reveal-delay-1">Stop shipping first drafts.</h2>
+    <p class="cta-tagline reveal reveal-delay-2">Your agents can do better. They just need structure.</p>
+    <div class="cta-links reveal reveal-delay-3">
+      <a href="https://github.com/lev-os/leviathan" class="cta-btn cta-btn-primary" target="_blank" rel="noopener">GitHub</a>
+      <a href="/" class="cta-btn cta-btn-secondary">&larr; Back to Leviathan</a>
+    </div>
+    <p class="cta-install reveal reveal-delay-4"><span>$ npm i -g @lev-os/leviathan</span></p>
+  </div>
+</section>
+
+<!-- ===================== 10. FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <span><a href="https://lev.here.now" target="_blank" rel="noopener">lev.here.now</a></span>
+    <span>Better answers come from structure, not bigger models.</span>
+  </div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+// Theme toggle with localStorage persistence
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('lev-theme', next); } catch(e) {}
+}
+
+// Restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lev-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+
+// Intersection Observer for staggered scroll reveals
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>

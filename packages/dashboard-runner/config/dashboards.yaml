@@ -216,3 +216,84 @@ dashboards:
       openMode: embed
       description: Primary Leviathan ops command-center surface
       primary: true
+  - name: Frey Market
+    id: frey-market
+    port: 3100
+    port_range:
+      - 3100
+      - 3104
+    command: pnpm run dev -- --port {port}
+    cwd: ~/digital/leviathan/apps/frey-market
+    health_check:
+      type: http
+      path: /
+      timeout_ms: 10000
+      expected_status: 200
+      interval_ms: 10000
+    restart_policy:
+      enabled: true
+      max_retries: 5
+      backoff_ms:
+        - 1000
+        - 2000
+        - 4000
+        - 8000
+        - 16000
+    metadata:
+      lane: apps
+      openMode: external
+      description: Frey Market (node/nextjs)
+      runtime: node
+      framework: nextjs
+      packageManager: pnpm
+      lifecycle: detected
+  - name: Ai Devs
+    id: ai-devs
+    port: 0
+    port_range:
+      - 0
+      - 0
+    command: xcodebuild -project AIDevs.xcodeproj -scheme AIDevs -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+    cwd: ~/digital/leviathan/apps/ai-devs
+    health_check:
+      type: process
+      timeout_ms: 120000
+      interval_ms: 30000
+    restart_policy:
+      enabled: false
+      max_retries: 1
+      backoff_ms:
+        - 5000
+    metadata:
+      lane: apps
+      openMode: simulator
+      description: Ai Devs (swift/xcodegen)
+      runtime: swift
+      framework: xcodegen
+      packageManager: xcode
+      lifecycle: detected
+  - name: Claw Tok
+    id: claw-tok
+    port: 0
+    port_range:
+      - 0
+      - 0
+    command: xcodebuild -project ClawTok.xcodeproj -scheme ClawTok -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+    cwd: ~/digital/leviathan/apps/claw-tok
+    health_check:
+      type: process
+      timeout_ms: 120000
+      interval_ms: 30000
+    restart_policy:
+      enabled: false
+      max_retries: 1
+      backoff_ms:
+        - 5000
+    metadata:
+      lane: apps
+      openMode: simulator
+      description: Claw Tok (swift/xcodegen)
+      runtime: swift
+      framework: xcodegen
+      packageManager: xcode
+      lifecycle: detected

@@ -5,10 +5,14 @@
 import type { ChildProcess } from 'child_process';
 
 export interface DashboardMetadata {
-  lane: 'ops' | 'interaction' | 'development';
-  openMode: 'embed' | 'external';
+  lane: 'ops' | 'interaction' | 'development' | 'apps';
+  openMode: 'embed' | 'external' | 'simulator';
   description: string;
   primary?: boolean;
+  runtime?: string;
+  framework?: string;
+  packageManager?: string;
+  lifecycle?: 'detected' | 'ready';
 }
 
 export interface DashboardConfig {

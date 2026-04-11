@@ -34,10 +34,14 @@ const CreateDashboardSchema = z.object({
     }),
     env: z.record(z.string(), z.string()).optional(),
     metadata: z.object({
-      lane: z.enum(['ops', 'interaction', 'development']),
-      openMode: z.enum(['embed', 'external']),
+      lane: z.enum(['ops', 'interaction', 'development', 'apps']),
+      openMode: z.enum(['embed', 'external', 'simulator']),
       description: z.string().min(1),
       primary: z.boolean().optional(),
+      runtime: z.string().optional(),
+      framework: z.string().optional(),
+      packageManager: z.string().optional(),
+      lifecycle: z.enum(['detected', 'ready']).optional(),
     }).optional(),
   }),
 });

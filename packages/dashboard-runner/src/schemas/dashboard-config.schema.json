@@ -67,6 +67,32 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "lane": {
+              "type": "string",
+              "enum": ["ops", "interaction", "development", "apps"]
+            },
+            "openMode": {
+              "type": "string",
+              "enum": ["embed", "external", "simulator"]
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "primary": { "type": "boolean" },
+            "runtime": { "type": "string" },
+            "framework": { "type": "string" },
+            "packageManager": { "type": "string" },
+            "lifecycle": {
+              "type": "string",
+              "enum": ["detected", "ready"]
+            }
+          },
+          "required": ["lane", "openMode", "description"]
         }
       }
     },
