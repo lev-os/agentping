@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { DmDashboardList, type DmDashboardSummary } from "@kingly/ui/components";
 
@@ -80,6 +80,15 @@ export function DashboardList() {
   return (
     <div className="command-center-page">
       <div className="command-center-shell">
+        <section
+          className="command-center-section"
+          style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}
+        >
+          <Link to="/projects" className="command-center-button">
+            Projects →
+          </Link>
+        </section>
+
         <section className="command-center-stats">
           <div className="command-center-stat">
             <div className="command-center-stat__label">Total Dashboards</div>
