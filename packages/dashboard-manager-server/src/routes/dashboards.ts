@@ -44,6 +44,7 @@ const CreateDashboardSchema = z.object({
       framework: z.string().optional(),
       packageManager: z.string().optional(),
       lifecycle: z.enum(['detected', 'ready']).optional(),
+      runnable: z.boolean().optional(),
     }).optional(),
   }),
 });

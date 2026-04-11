@@ -90,6 +90,10 @@
             "lifecycle": {
               "type": "string",
               "enum": ["detected", "ready"]
+            },
+            "runnable": {
+              "type": "boolean",
+              "description": "Whether this project has a runnable dev server"
             }
           },
           "required": ["lane", "openMode", "description"]

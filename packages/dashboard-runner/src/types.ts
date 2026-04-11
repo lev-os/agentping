@@ -13,6 +13,7 @@ export interface DashboardMetadata {
   framework?: string;
   packageManager?: string;
   lifecycle?: 'detected' | 'ready';
+  runnable?: boolean;
 }
 
 export interface DashboardConfig {
