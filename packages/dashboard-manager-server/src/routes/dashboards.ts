@@ -5,8 +5,10 @@
  */
 
 import { Hono } from 'hono';
+import { streamSSE } from 'hono/streaming';
 import { z } from 'zod';
 import type { DashboardRunner } from '@lev-os/dashboard-runner';
+import { SpawnRunner } from '@lev-os/dashboard-runner';
 
 // ============================================================================
 // Request Schemas
@@ -291,6 +293,88 @@ export function createDashboardRoutes(config: DashboardRoutesConfig) {
     } catch (error) {
       console.error('Error getting metrics:', error);
       return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
+  // =========================================================================
+  // POST /api/dashboards/:id/setup - Run detected→ready lifecycle transition
+  // Spawns `lev exec` (or the dashboard's own command), streams output as SSE,
+  // promotes lifecycle from 'detected' to 'ready' on exit 0.
+  // =========================================================================
+
+  app.post('/:id/setup', async (c) => {
+    try {
+      const id = c.req.param('id');
+      const config = runner.getConfig(id);
+      if (!config) {
+        return c.json({ error: 'Dashboard not found' }, 404);
+      }
+
+      const meta = config.metadata;
+      if (meta?.lifecycle === 'ready') {
+        return c.json({ error: 'Dashboard is already ready' }, 409);
+      }
+
+      // Determine setup command. For node projects: install + build.
+      // For swift: just build. Fallback: run the dashboard's own command.
+      const pm = meta?.packageManager || 'npm';
+      let setupCmd: string;
+      switch (meta?.runtime) {
+        case 'node':
+          setupCmd = `${pm} install && ${pm} run build`;
+          break;
+        case 'swift':
+          setupCmd = config.command; // xcodebuild already IS the setup
+          break;
+        case 'rust':
+          setupCmd = 'cargo build';
+          break;
+        case 'python':
+          setupCmd = `${pm === 'uv' ? 'uv sync' : 'pip install -e .'}`;
+          break;
+        case 'go':
+          setupCmd = 'go build ./...';
+          break;
+        default:
+          setupCmd = config.command;
+      }
+
+      console.log(`[API] Setup started for ${id}: ${setupCmd}`);
+
+      // Resolve cwd (tilde expansion)
+      const cwd = config.cwd.replace(/^~/, process.env.HOME || '');
+
+      // Stream output as SSE
+      return streamSSE(c, async (stream) => {
+        const spawnRunner = new SpawnRunner(console as any);
+        for await (const op of spawnRunner.run(setupCmd, cwd, config.env)) {
+          await stream.writeSSE({
+            event: op.type,
+            data: JSON.stringify(op),
+          });
+
+          if (op.type === 'exit') {
+            const success = op.code === 0 && !op.signal;
+            if (success && meta) {
+              // Promote lifecycle: detected → ready
+              meta.lifecycle = 'ready';
+              console.log(`[API] Setup complete for ${id}: lifecycle promoted to ready`);
+            }
+            await stream.writeSSE({
+              event: 'lifecycle',
+              data: JSON.stringify({
+                id,
+                lifecycle: success ? 'ready' : 'detected',
+                exitCode: op.code,
+                success,
+              }),
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.error('[API] Setup error:', error);
+      return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
 

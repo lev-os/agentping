@@ -106,7 +106,28 @@ dashboards:
     metadata:
       lane: development
       openMode: external
-      description: Desktop-oriented studio surface
+      description: Studio Vite renderer (hot reload for Electron renderer dev)
+  - name: AgentPing Studio App
+    id: studio-app
+    port: 0
+    port_range:
+      - 0
+      - 0
+    command: pnpm start
+    cwd: ~/digital/leviathan/community/agentping
+    health_check:
+      type: build-and-exit
+      timeout_ms: 60000
+      interval_ms: 30000
+    restart_policy:
+      enabled: false
+      max_retries: 1
+      backoff_ms:
+        - 5000
+    metadata:
+      lane: apps
+      openMode: external
+      description: AgentPing Studio Electron app (the canonical desktop GUI)
   - name: System Dashboard
     id: system-dashboard
     port: 5185

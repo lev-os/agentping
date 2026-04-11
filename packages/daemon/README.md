@@ -25,8 +25,9 @@ Set environment variables or use a config file:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `PORT` | `3000` | HTTP server port |
-| `DATABASE_PATH` | `./data/agentping.db` | SQLite database location |
+| `PORT` | `7890` | HTTP + WebSocket server port |
+| `CDP_PROXY_PORT` | `7891` | Raw CDP proxy for Playwright/agent-browser |
+| `DATABASE_PATH` | `~/.local/share/agentping/agentping.db` | SQLite database (XDG) |
 | `LOG_LEVEL` | `info` | Logging verbosity |
 
 ## 📦 What It Does
