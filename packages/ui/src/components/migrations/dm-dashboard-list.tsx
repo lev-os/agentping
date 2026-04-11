@@ -30,8 +30,10 @@ export interface DmDashboardListProps {
   error?: string | null;
   onRowClick?: (dashboard: DmDashboardSummary) => void;
   onViewDetails?: (dashboardId: string) => void;
+  onSetup?: (id: string) => void;
   onCreateNew?: () => void;
   onRetry?: () => void;
+  setupRunningId?: string | null;
   className?: string;
 }
 
@@ -67,8 +69,10 @@ export function DmDashboardList({
   error,
   onRowClick,
   onViewDetails,
+  onSetup,
   onCreateNew,
   onRetry,
+  setupRunningId,
   className,
 }: DmDashboardListProps) {
   if (isLoading) {
@@ -171,13 +175,38 @@ export function DmDashboardList({
                       {d.status.startedAt ? formatUptime(new Date(d.status.startedAt)) : "-"}
                     </td>
                     <td className="px-3 py-2 text-white/60">{d.status.restartAttempts}</td>
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 flex items-center gap-2">
                       {onViewDetails && (
                         <button
                           onClick={(e) => { e.stopPropagation(); onViewDetails(d.id); }}
                           className="text-cyan-400 hover:text-cyan-300 transition-colors"
                           aria-label={`View details for ${d.config.name}`}>
                           View
+                        </button>
+                      )}
+                      {onSetup && d.config.metadata?.lifecycle === "detected" && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSetup(d.id);
+                          }}
+                          disabled={setupRunningId === d.id}
+                          className={cn(
+                            "px-2 py-1 text-[11px] font-mono uppercase tracking-wider border rounded transition-colors",
+                            setupRunningId === d.id
+                              ? "text-yellow-400/60 bg-yellow-500/10 border-yellow-500/20 cursor-not-allowed"
+                              : "text-yellow-400 bg-yellow-500/10 hover:bg-yellow-500/20 border-yellow-500/20",
+                          )}
+                          aria-label={`Setup ${d.config.name}`}
+                        >
+                          {setupRunningId === d.id ? (
+                            <span className="inline-flex items-center gap-1">
+                              <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+                              Running...
+                            </span>
+                          ) : (
+                            "Setup"
+                          )}
                         </button>
                       )}
                     </td>

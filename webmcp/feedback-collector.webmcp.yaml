@@ -1,0 +1,122 @@
+# feedback-collector.webmcp.yaml
+# Collect structured feedback from /now pages rendered with the lev-now feedback element.
+# localStorage keys follow the pattern: lev-now-feedback-{pageId}
+# Each value is JSON: { [itemId]: { choice?: number, other?: string, notes?: string } }
+
+name: feedback-collector
+version: "1.0.0"
+match:
+  - "file://*"
+  - "http://localhost:*"
+  - "https://*.here.now/*"
+author: lev-community
+verified: true
+description: Read, list, and clear feedback captured by lev-now feedback elements on /now pages
+
+tools:
+  - name: read_feedback
+    description: Read all feedback data for a specific /now page by its pageId
+    parameters:
+      pageId:
+        type: string
+        required: true
+        description: The pageId of the feedback element (the lev-now-feedback-{pageId} localStorage key suffix)
+    actions:
+      - type: evaluate
+        script: |
+          (() => {
+            const pageId = "{{pageId}}";
+            const key = "lev-now-feedback-" + pageId;
+            const raw = localStorage.getItem(key);
+            if (!raw) return JSON.stringify({ pageId, savedAt: null, decisions: {} });
+            try {
+              const data = JSON.parse(raw);
+              const decisions = {};
+              let decidedCount = 0;
+              const totalItems = Object.keys(data).length;
+              for (const [itemId, entry] of Object.entries(data)) {
+                const e = entry;
+                const decided = e.choice != null || !!e.other;
+                if (decided) decidedCount++;
+                decisions[itemId] = {
+                  choice: e.choice != null ? e.choice : null,
+                  other: e.other || null,
+                  notes: e.notes || null,
+                  decided: decided
+                };
+              }
+              return JSON.stringify({
+                pageId,
+                savedAt: new Date().toISOString(),
+                totalItems,
+                decidedCount,
+                decisions
+              });
+            } catch (e) {
+              return JSON.stringify({ pageId, error: "Failed to parse feedback data" });
+            }
+          })()
+    result:
+      type: immediate
+
+  - name: list_feedback_pages
+    description: Scan localStorage for all lev-now-feedback-* keys and return a summary of each page's feedback status
+    parameters: {}
+    actions:
+      - type: evaluate
+        script: |
+          (() => {
+            const prefix = "lev-now-feedback-";
+            const pages = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (!key || !key.startsWith(prefix)) continue;
+              const pageId = key.slice(prefix.length);
+              try {
+                const data = JSON.parse(localStorage.getItem(key) || "{}");
+                const items = Object.keys(data);
+                let decidedCount = 0;
+                for (const itemId of items) {
+                  const e = data[itemId];
+                  if (e.choice != null || !!e.other) decidedCount++;
+                }
+                pages.push({
+                  pageId,
+                  totalItems: items.length,
+                  decidedCount,
+                  complete: items.length > 0 && decidedCount === items.length
+                });
+              } catch (e) {
+                pages.push({ pageId, totalItems: 0, decidedCount: 0, error: "parse_failed" });
+              }
+            }
+            return JSON.stringify({ count: pages.length, pages });
+          })()
+    result:
+      type: immediate
+
+  - name: clear_feedback
+    description: Remove all saved feedback for a specific /now page by its pageId
+    parameters:
+      pageId:
+        type: string
+        required: true
+        description: The pageId whose feedback data should be cleared from localStorage
+    actions:
+      - type: evaluate
+        script: |
+          (() => {
+            const pageId = "{{pageId}}";
+            const key = "lev-now-feedback-" + pageId;
+            const existed = localStorage.getItem(key) !== null;
+            localStorage.removeItem(key);
+            return JSON.stringify({
+              pageId,
+              cleared: existed,
+              message: existed
+                ? "Feedback for '" + pageId + "' has been cleared."
+                : "No feedback found for '" + pageId + "'. Nothing to clear."
+            });
+          })()
+    result:
+      type: immediate

@@ -7,7 +7,7 @@
 
 version: "1.1"
 updated_at: "2026-04-10"
-total_entries: 3
+total_entries: 4
 
 entries:
   - name: chatgpt
@@ -36,3 +36,12 @@ entries:
     status: generated+tested
     category: publishing
     description: Write posts, manage inbox, read feed, post notes on Substack
+
+  - name: feedback-collector
+    file: ../feedback-collector.webmcp.yaml
+    match: "file://* | http://localhost:* | https://*.here.now/*"
+    tools: 3
+    backend: manual
+    status: verified
+    category: feedback
+    description: Read, list, and clear feedback captured by lev-now feedback elements on /now pages

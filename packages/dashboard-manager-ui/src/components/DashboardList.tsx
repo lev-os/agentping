@@ -10,6 +10,8 @@ import {
   getPrimaryDashboard,
   groupDashboardsByLane,
 } from "../lib/command-center";
+import { ParitySection } from "./ParitySection";
+import { SetupPanel } from "./SetupPanel";
 
 function toDashboardSummary(dashboard: Dashboard): DmDashboardSummary {
   return {
@@ -40,6 +42,7 @@ export function DashboardList() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isRestartingPrimary, setIsRestartingPrimary] = useState(false);
+  const [setupTarget, setSetupTarget] = useState<string | null>(null);
 
   async function loadDashboards() {
     setIsLoading(true);
@@ -204,10 +207,15 @@ export function DashboardList() {
                 onViewDetails={(dashboardId) => {
                   navigate(`/dashboard/${dashboardId}`);
                 }}
+                onSetup={setSetupTarget}
+                setupRunningId={setupTarget}
               />
             </div>
           </section>
         ) : null}
+
+        {/* Parity Registry */}
+        <ParitySection />
 
         <section className="command-center-section">
           <div className="command-center-section__header">
@@ -292,6 +300,14 @@ export function DashboardList() {
           </section>
         ) : null}
       </div>
+
+      <SetupPanel
+        dashboardId={setupTarget}
+        onClose={() => {
+          setSetupTarget(null);
+          void loadDashboards();
+        }}
+      />
     </div>
   );
 }
