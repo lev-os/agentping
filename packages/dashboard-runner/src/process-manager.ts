@@ -95,10 +95,24 @@ export class ProcessManager extends EventEmitter {
     // Monitor exit
     child.on('exit', (code, signal) => {
       const reason = signal ? `signal ${signal}` : `exit code ${code}`;
-      this.logger.warn(`Dashboard ${dashboardId} exited: ${reason}`, { dashboardId });
-
       this.processes.delete(dashboardId);
 
+      // build-and-exit: code 0 = success (not a crash). Used for builders/tests
+      // like xcodebuild that complete and exit by design.
+      const isBuildAndExit = config.health_check?.type === 'build-and-exit';
+      const isSuccessExit = isBuildAndExit && code === 0 && !signal;
+
+      if (isSuccessExit) {
+        this.logger.info(`Dashboard ${dashboardId} completed successfully: ${reason}`, { dashboardId });
+        this.emit('process_completed', {
+          dashboardId,
+          exitCode: code,
+        });
+        // Do NOT restart — completion is the terminal success state
+        return;
+      }
+
+      this.logger.warn(`Dashboard ${dashboardId} exited: ${reason}`, { dashboardId });
       this.emit('process_crashed', {
         dashboardId,
         reason,

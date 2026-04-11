@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LatencyHistogram } from "../../components/migrations/latency-histogram";
 
 const meta: Meta<typeof LatencyHistogram> = {

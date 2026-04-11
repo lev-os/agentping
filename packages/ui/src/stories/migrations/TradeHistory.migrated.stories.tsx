@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TradeHistory } from "../../components/migrations/trade-history";
 
 const meta = {

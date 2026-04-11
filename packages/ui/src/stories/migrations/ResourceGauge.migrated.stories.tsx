@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResourceGauge } from "../../components/migrations/resource-gauge";
 
 const meta = {

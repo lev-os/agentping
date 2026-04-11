@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { KanbanBoard } from "../../components/migrations/kanban-board";
 
 const meta: Meta<typeof KanbanBoard> = {

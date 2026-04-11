@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MarketHeatmap } from "../../components/migrations/market-heatmap";
 
 const meta = {

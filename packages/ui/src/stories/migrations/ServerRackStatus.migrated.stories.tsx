@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ServerRackStatus } from "../../components/migrations/server-rack-status";
 
 const meta = {

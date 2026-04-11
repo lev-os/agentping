@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FileAssetPicker } from "../../components/migrations/file-asset-picker";
 
 const meta: Meta<typeof FileAssetPicker> = {

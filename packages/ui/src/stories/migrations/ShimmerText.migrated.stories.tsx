@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ShimmerText } from "../../components/migrations/shimmer-text";
 
 const meta: Meta<typeof ShimmerText> = {

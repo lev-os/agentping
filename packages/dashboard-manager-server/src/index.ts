@@ -12,6 +12,7 @@ import { createServer as createHTTPServer } from 'node:http';
 import type { IncomingHttpHeaders } from 'node:http';
 import type { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createDashboardRoutes } from './routes/dashboards.js';
+import { createProjectsRoutes } from './routes/projects.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -66,6 +67,9 @@ export function createServer(config: ServerConfig) {
 
   const dashboardRoutes = createDashboardRoutes({ runner });
   app.route('/api/dashboards', dashboardRoutes);
+
+  const projectsRoutes = createProjectsRoutes();
+  app.route('/api/projects', projectsRoutes);
 
   // =========================================================================
   // Start Server with Optional WebSocket Support

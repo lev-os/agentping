@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { CandleStickChart } from "../../components/migrations/candlestick-chart";
 import { DepthChart } from "../../components/migrations/depth-chart";

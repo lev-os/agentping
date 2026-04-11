@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CollapseButton } from "../../components/migrations/collapse-button";
 
 const meta: Meta<typeof CollapseButton> = {

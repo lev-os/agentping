@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { JsonDiff } from "../../components/migrations/json-diff";
 
 const meta: Meta<typeof JsonDiff> = {

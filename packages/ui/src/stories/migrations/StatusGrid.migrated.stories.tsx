@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Activity, Cpu, Database, Globe, HardDrive, Zap } from "lucide-react";
 import { StatusGrid, type StatusCard } from "../../components/migrations/status-grid";
 

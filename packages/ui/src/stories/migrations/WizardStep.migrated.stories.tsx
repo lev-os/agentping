@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WizardStep } from "../../components/migrations/wizard-step";
 
 const meta = {

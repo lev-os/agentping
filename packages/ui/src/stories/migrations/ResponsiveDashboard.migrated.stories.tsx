@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResponsiveDashboard } from "../../components/migrations/responsive-dashboard";
 
 const meta: Meta<typeof ResponsiveDashboard> = {

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IconButton } from "../../components/ui/icon-button";
 
 const meta: Meta<typeof IconButton> = {

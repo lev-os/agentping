@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TreeExpander } from "../../components/migrations/tree-expander";
 
 const meta: Meta<typeof TreeExpander> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PromptEditor } from "../../components/migrations/prompt-editor";
 
 const meta = {

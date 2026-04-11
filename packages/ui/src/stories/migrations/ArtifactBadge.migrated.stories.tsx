@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArtifactBadge } from "../../components/migrations/artifact-badge";
 
 const meta: Meta<typeof ArtifactBadge> = {

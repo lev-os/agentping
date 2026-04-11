@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SettingsModal } from "../../components/migrations/settings-modal";
 
 const meta = {

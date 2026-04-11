@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PropertyGrid } from "../../components/migrations/property-grid";
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { JsonTreeViewer } from "../../components/migrations/json-tree-viewer";
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SchemaGraph } from "../../components/migrations/schema-graph";
 
 const meta = {

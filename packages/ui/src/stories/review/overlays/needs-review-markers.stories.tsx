@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { LandingPage } from "../../../components/migrations/landing-page";
 import { HistoryView } from "../../../components/migrations/history-view";

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { DmDashboardList } from "../../../components/migrations/dm-dashboard-list";
 import { DmDashboardDetail } from "../../../components/migrations/dm-dashboard-detail";

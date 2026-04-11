@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ContextUsage } from "../../components/migrations/context-usage";
 
 const meta: Meta<typeof ContextUsage> = {

@@ -2,14 +2,15 @@
   "name": "@agentping/canvas",
   "version": "0.1.0",
   "private": true,
+  "deprecated": "This package is deprecated. See DEPRECATED.md. Merged into @agentping/web-ui.",
   "exports": {
     ".": "./src/main.tsx",
     "./polymorph": "./src/polymorph/index.ts"
   },
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5174",
-    "build": "tsc && vite build",
+    "dev": "echo 'canvas is deprecated — see DEPRECATED.md'",
+    "build": "echo 'canvas is deprecated — see DEPRECATED.md'",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },

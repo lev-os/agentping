@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DailyAgenda } from "../../components/migrations/daily-agenda";
 
 const meta: Meta<typeof DailyAgenda> = {

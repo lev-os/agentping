@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BuildStatusLogs } from "../../components/migrations/build-status-logs";
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DockMenu } from "../../components/migrations/dock-menu";
 
 const meta: Meta<typeof DockMenu> = {

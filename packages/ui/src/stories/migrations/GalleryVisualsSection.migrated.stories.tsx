@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GalleryVisualsSection } from "../../components/migrations/gallery-visuals-section";
 
 const meta = {

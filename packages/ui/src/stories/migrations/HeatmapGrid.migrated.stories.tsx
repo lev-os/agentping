@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HeatmapGrid } from "../../components/migrations/heatmap-grid";
 
 const meta: Meta<typeof HeatmapGrid> = {

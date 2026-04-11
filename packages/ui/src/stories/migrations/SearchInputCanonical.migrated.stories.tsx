@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SearchInput } from "../../components/ui/search-input";
 
 const meta: Meta<typeof SearchInput> = {

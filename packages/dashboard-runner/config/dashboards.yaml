@@ -1,33 +1,6 @@
 dashboards:
-  - name: AgentPing Studio Storybook
-    id: agentping
-    port: 6006
-    port_range:
-      - 6006
-      - 6010
-    command: pnpm exec storybook dev --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/studio
-    health_check:
-      type: http
-      path: /
-      timeout_ms: 5000
-      expected_status: 200
-      interval_ms: 10000
-    restart_policy:
-      enabled: true
-      max_retries: 5
-      backoff_ms:
-        - 1000
-        - 2000
-        - 4000
-        - 8000
-        - 16000
-    metadata:
-      lane: development
-      openMode: external
-      description: AgentPing Studio storybook reference surface
-  - name: Sofia UI Storybook
-    id: sofia
+  - name: AgentPing Storybook
+    id: agentping-storybook
     port: 6007
     port_range:
       - 6007
@@ -52,34 +25,7 @@ dashboards:
     metadata:
       lane: development
       openMode: external
-      description: Shared UI primitive storybook
-  - name: Web UI Storybook
-    id: web-ui-storybook
-    port: 6012
-    port_range:
-      - 6012
-      - 6016
-    command: pnpm exec storybook dev --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/adapters/web-ui
-    health_check:
-      type: http
-      path: /
-      timeout_ms: 5000
-      expected_status: 200
-      interval_ms: 10000
-    restart_policy:
-      enabled: true
-      max_retries: 5
-      backoff_ms:
-        - 1000
-        - 2000
-        - 4000
-        - 8000
-        - 16000
-    metadata:
-      lane: development
-      openMode: external
-      description: Web UI adapter storybook
+      description: AgentPing storybook (packages/ui) — 376 stories, THE storybook for the project
   - name: AgentPing Web UI
     id: web-ui
     port: 5173
@@ -107,33 +53,6 @@ dashboards:
       lane: interaction
       openMode: external
       description: Browser interaction shell
-  - name: AgentPing Canvas
-    id: canvas
-    port: 5174
-    port_range:
-      - 5174
-      - 5179
-    command: pnpm exec vite --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/canvas
-    health_check:
-      type: http
-      path: /
-      timeout_ms: 5000
-      expected_status: 200
-      interval_ms: 10000
-    restart_policy:
-      enabled: true
-      max_retries: 5
-      backoff_ms:
-        - 1000
-        - 2000
-        - 4000
-        - 8000
-        - 16000
-    metadata:
-      lane: interaction
-      openMode: external
-      description: Canvas interaction surface
   - name: Dashboard Manager UI
     id: dashboard-manager-ui
     port: 5175
@@ -222,7 +141,7 @@ dashboards:
     port_range:
       - 3100
       - 3104
-    command: pnpm run dev -- --port {port}
+    command: pnpm dev --port {port}
     cwd: ~/digital/leviathan/apps/frey-market
     health_check:
       type: http
@@ -253,11 +172,11 @@ dashboards:
     port_range:
       - 0
       - 0
-    command: xcodebuild -project AIDevs.xcodeproj -scheme AIDevs -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+    command: xcodebuild -project AIDevs.xcodeproj -scheme AIDevs -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
     cwd: ~/digital/leviathan/apps/ai-devs
     health_check:
-      type: process
-      timeout_ms: 120000
+      type: build-and-exit
+      timeout_ms: 300000
       interval_ms: 30000
     restart_policy:
       enabled: false
@@ -278,11 +197,11 @@ dashboards:
     port_range:
       - 0
       - 0
-    command: xcodebuild -project ClawTok.xcodeproj -scheme ClawTok -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+    command: xcodebuild -project ClawTok.xcodeproj -scheme ClawTok -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
     cwd: ~/digital/leviathan/apps/claw-tok
     health_check:
-      type: process
-      timeout_ms: 120000
+      type: build-and-exit
+      timeout_ms: 300000
       interval_ms: 30000
     restart_policy:
       enabled: false

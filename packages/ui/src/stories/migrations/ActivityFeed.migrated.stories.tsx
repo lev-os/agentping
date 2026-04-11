@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ActivityFeed } from "../../components/migrations/activity-feed";
 
 const meta: Meta<typeof ActivityFeed> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HistoryView } from "../../components/migrations/history-view";
 
 const meta: Meta<typeof HistoryView> = {

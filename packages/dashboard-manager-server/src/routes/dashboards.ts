@@ -21,7 +21,7 @@ const CreateDashboardSchema = z.object({
     cwd: z.string(),
     port_range: z.tuple([z.number(), z.number()]),
     health_check: z.object({
-      type: z.enum(['http', 'process']),
+      type: z.enum(['http', 'process', 'build-and-exit']),
       path: z.string().optional(),
       timeout_ms: z.number().optional(),
       expected_status: z.union([z.number(), z.array(z.number())]).optional(),

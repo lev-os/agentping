@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FileMetadataCard } from "../../components/migrations/file-metadata-card";
 
 const meta: Meta<typeof FileMetadataCard> = {

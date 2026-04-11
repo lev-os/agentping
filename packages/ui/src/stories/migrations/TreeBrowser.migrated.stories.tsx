@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TreeBrowser } from "../../components/migrations/tree-browser";
 
 const meta = {

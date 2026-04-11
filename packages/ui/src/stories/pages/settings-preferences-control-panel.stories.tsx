@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { ToggleSwitch } from "../../components/migrations/toggle-switch";
 import { Slider } from "../../components/migrations/slider";

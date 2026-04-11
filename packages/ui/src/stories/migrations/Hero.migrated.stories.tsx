@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Hero } from "../../components/migrations/hero";
 
 const meta: Meta<typeof Hero> = {

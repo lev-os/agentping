@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AgentStatusOverlay } from "../../components/migrations/agent-status-overlay";
 
 const meta = {

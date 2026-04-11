@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GlowOrb } from "../../components/migrations/glow-orb";
 
 const meta: Meta<typeof GlowOrb> = {

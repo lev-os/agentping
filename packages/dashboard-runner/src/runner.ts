@@ -83,6 +83,19 @@ export class DashboardRunner extends EventEmitter {
       }
       this.emit('process_crashed', data);
     });
+    this.processManager.on('process_completed', (data: { dashboardId: string; exitCode: number }) => {
+      // Successful completion of a build-and-exit dashboard — terminal success state
+      if (this.state.dashboards[data.dashboardId]) {
+        this.state.dashboards[data.dashboardId].status = 'completed';
+        this.state.dashboards[data.dashboardId].healthy = true;
+        this.state.dashboards[data.dashboardId].lastExitCode = data.exitCode;
+        this.state.dashboards[data.dashboardId].lastCompletedAt = new Date();
+        this.state.dashboards[data.dashboardId].port = undefined;
+        this.state.dashboards[data.dashboardId].pid = undefined;
+        this.saveState();
+      }
+      this.emit('process_completed', data);
+    });
     this.processManager.on('restart_success', (data) => this.emit('restart_success', data));
     this.processManager.on('restart_failed', (data) => this.emit('restart_failed', data));
     this.processManager.on('log_line', (data) => this.emit('log_line', data));

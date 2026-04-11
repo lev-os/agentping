@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DiffStatSummary } from "../../components/migrations/diff-stat-summary";
 
 const meta: Meta<typeof DiffStatSummary> = {

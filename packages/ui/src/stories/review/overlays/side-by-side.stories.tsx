@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { ActivityFeed } from "../../../components/migrations/activity-feed";
 import { StatsGrid } from "../../../components/migrations/stats-grid";

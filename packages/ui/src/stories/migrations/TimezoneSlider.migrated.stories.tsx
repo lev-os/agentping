@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TimezoneSlider } from "../../components/migrations/timezone-slider";
 
 const meta = {

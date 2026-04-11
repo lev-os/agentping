@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CommandPalette } from "../../components/migrations/command-palette";
 
 const meta: Meta<typeof CommandPalette> = {

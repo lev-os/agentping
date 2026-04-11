@@ -1,11 +1,12 @@
 import type { Dashboard } from "../types/dashboard";
 
-export type DashboardLane = "ops" | "interaction" | "development";
+export type DashboardLane = "ops" | "interaction" | "development" | "apps";
 
 export interface GroupedDashboards {
   ops: Dashboard[];
   interaction: Dashboard[];
   development: Dashboard[];
+  apps: Dashboard[];
 }
 
 export function groupDashboardsByLane(dashboards: Dashboard[]): GroupedDashboards {
@@ -13,6 +14,7 @@ export function groupDashboardsByLane(dashboards: Dashboard[]): GroupedDashboard
     ops: [],
     interaction: [],
     development: [],
+    apps: [],
   };
 
   for (const dashboard of dashboards) {

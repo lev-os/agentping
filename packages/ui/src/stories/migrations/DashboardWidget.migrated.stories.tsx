@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DashboardWidget } from "../../components/migrations/dashboard-widget";
 
 const meta: Meta<typeof DashboardWidget> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CrudArchivePage } from "../../components/migrations/crud-archive-page";
 import { mockCrudConfig, mockCrudItems } from "../.storybook-helpers/mock-crud-decorator";
 

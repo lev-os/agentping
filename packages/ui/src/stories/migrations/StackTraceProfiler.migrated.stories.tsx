@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StackTraceProfiler } from "../../components/migrations/stack-trace-profiler";
 
 const meta = {

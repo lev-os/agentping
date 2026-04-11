@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DmAnalyticsPanel } from "../../components/migrations/dm-analytics-panel";
 
 const meta = {

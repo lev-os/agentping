@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetError } from "../../components/migrations/widget-error";
 
 const meta: Meta<typeof WidgetError> = {

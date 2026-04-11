@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetHeaderAction } from "../../components/migrations/widget-header-action";
 
 const meta: Meta<typeof WidgetHeaderAction> = {

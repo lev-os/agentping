@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ImageCompare } from "../../components/migrations/image-compare";
 
 const meta: Meta<typeof ImageCompare> = {

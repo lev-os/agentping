@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SegmentedControl } from "../../components/migrations/segmented-control";
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { StepChecklist } from "../../components/migrations/step-checklist";
 import { TaskWorkflow, type WorkflowStage } from "../../components/migrations/task-workflow";

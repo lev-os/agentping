@@ -5,7 +5,15 @@ import { cn } from "../../lib/utils";
 
 export interface DmDashboardSummary {
   id: string;
-  config: { name: string; port_range: [number, number] };
+  config: {
+    name: string;
+    port_range: [number, number];
+    metadata?: {
+      lifecycle?: "detected" | "ready";
+      runtime?: string;
+      framework?: string;
+    };
+  };
   status: {
     status: "starting" | "online" | "failed" | "stopped";
     healthy?: boolean;
@@ -112,6 +120,7 @@ export function DmDashboardList({
               <tr className="border-b border-cyan-500/10 bg-black/40 text-left text-cyan-500/40 uppercase tracking-wider">
                 <th className="px-3 py-2">Name</th>
                 <th className="px-3 py-2">Status</th>
+                <th className="px-3 py-2">Lifecycle</th>
                 <th className="px-3 py-2">Port</th>
                 <th className="px-3 py-2">PID</th>
                 <th className="px-3 py-2">Uptime</th>
@@ -134,6 +143,28 @@ export function DmDashboardList({
                       <div className="text-cyan-500/30">{d.id}</div>
                     </td>
                     <td className={cn("px-3 py-2", statusColors[displayStatus])}>{displayStatus}</td>
+                    <td className="px-3 py-2">
+                      {d.config.metadata?.lifecycle && (
+                        <span
+                          className={cn(
+                            "inline-block px-1.5 py-0.5 text-[10px] font-mono rounded uppercase tracking-wider",
+                            d.config.metadata.lifecycle === "detected"
+                              ? "text-yellow-400 bg-yellow-500/10"
+                              : "text-green-400 bg-green-500/10",
+                          )}
+                        >
+                          {d.config.metadata.lifecycle}
+                        </span>
+                      )}
+                      {d.config.metadata?.runtime && (
+                        <span className="text-zinc-500 text-[10px] ml-1">
+                          {d.config.metadata.runtime}
+                          {d.config.metadata.framework
+                            ? `/${d.config.metadata.framework}`
+                            : ""}
+                        </span>
+                      )}
+                    </td>
                     <td className="px-3 py-2 text-white/60">{d.status.port || "-"}</td>
                     <td className="px-3 py-2 text-white/60">{d.status.pid || "-"}</td>
                     <td className="px-3 py-2 text-white/60">

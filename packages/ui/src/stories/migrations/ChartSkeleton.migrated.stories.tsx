@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChartSkeleton } from "../../components/migrations/chart-skeleton";
 
 const meta: Meta<typeof ChartSkeleton> = {

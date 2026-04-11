@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { CanvasRenderer } from "../../../components/migrations/canvas-renderer";
 import { ConnectionStatus } from "../../../components/migrations/connection-status";

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StreamingIndicator } from "../../components/migrations/streaming-indicator";
 
 const meta: Meta<typeof StreamingIndicator> = {

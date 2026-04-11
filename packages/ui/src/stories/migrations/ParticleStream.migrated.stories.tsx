@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ParticleStream } from "../../components/migrations/particle-stream";
 
 const meta = {

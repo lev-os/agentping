@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AudioPlayer } from "../../components/migrations/audio-player";
 
 const meta: Meta<typeof AudioPlayer> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DmStatusBadge } from "../../components/migrations/dm-status-badge";
 
 const meta = {

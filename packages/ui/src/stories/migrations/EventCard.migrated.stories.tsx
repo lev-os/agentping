@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EventCard } from "../../components/migrations/event-card";
 
 const meta: Meta<typeof EventCard> = {

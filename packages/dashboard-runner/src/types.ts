@@ -29,7 +29,7 @@ export interface DashboardConfig {
 }
 
 export interface HealthCheckConfig {
-  type: 'http' | 'process';
+  type: 'http' | 'process' | 'build-and-exit';
   path?: string;
   timeout_ms?: number;
   expected_status?: number | number[];
@@ -52,7 +52,7 @@ export interface DashboardProcess {
 
 export interface DashboardStatus {
   id: string;
-  status: 'starting' | 'online' | 'restarting' | 'failed' | 'stopped';
+  status: 'starting' | 'online' | 'restarting' | 'failed' | 'stopped' | 'completed';
   port?: number;
   pid?: number;
   startedAt?: Date;
@@ -60,6 +60,8 @@ export interface DashboardStatus {
   lastHealthCheck?: Date;
   healthy?: boolean;
   crashes?: number;
+  lastExitCode?: number;
+  lastCompletedAt?: Date;
 }
 
 export interface RunnerConfig {
@@ -83,6 +85,7 @@ export interface HealthStatus {
 export type DashboardEvent =
   | { type: 'process_started'; dashboardId: string; port: number; pid: number }
   | { type: 'process_crashed'; dashboardId: string; reason: string; exitCode: number | null }
+  | { type: 'process_completed'; dashboardId: string; exitCode: number }
   | { type: 'restart_success'; dashboardId: string; attempts: number }
   | { type: 'restart_failed'; dashboardId: string; attempts: number }
   | { type: 'health_check_failed'; dashboardId: string; reason: string }

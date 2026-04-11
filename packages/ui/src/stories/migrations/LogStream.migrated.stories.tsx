@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LogStream } from "../../components/migrations/log-stream";
 
 const meta: Meta<typeof LogStream> = {

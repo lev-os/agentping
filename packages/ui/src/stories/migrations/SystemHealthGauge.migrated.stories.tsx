@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SystemHealthGauge } from "../../components/migrations/system-health-gauge";
 
 const meta = {

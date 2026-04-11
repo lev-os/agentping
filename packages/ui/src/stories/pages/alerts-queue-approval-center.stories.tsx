@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { TaskQueue } from "../../components/migrations/task-queue";
 import { LeaseApproval } from "../../components/migrations/lease-approval";

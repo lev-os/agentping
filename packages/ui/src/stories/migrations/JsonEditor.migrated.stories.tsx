@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { JsonEditor } from "../../components/migrations/json-editor";
 
 const meta: Meta<typeof JsonEditor> = {

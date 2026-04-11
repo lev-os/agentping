@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TaskChecklist } from "../../components/migrations/task-checklist";
 
 const meta = {

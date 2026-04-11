@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CircularProgress } from "../../components/migrations/circular-progress";
 
 const meta: Meta<typeof CircularProgress> = {

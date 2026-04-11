@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HttpInspector } from "../../components/migrations/http-inspector";
 
 const meta = {

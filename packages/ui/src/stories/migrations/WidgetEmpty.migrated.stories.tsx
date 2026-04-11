@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetEmpty } from "../../components/migrations/widget-empty";
 
 const meta: Meta<typeof WidgetEmpty> = {

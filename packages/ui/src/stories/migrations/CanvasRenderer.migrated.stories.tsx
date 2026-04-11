@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CanvasRenderer } from "../../components/migrations/canvas-renderer";
 
 const meta = {

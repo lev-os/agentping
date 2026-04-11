@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ActiveSessions } from "../../components/migrations/active-sessions";
 
 const meta: Meta<typeof ActiveSessions> = {

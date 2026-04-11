@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DepthChart } from "../../components/migrations/depth-chart";
 
 const meta = {

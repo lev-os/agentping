@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SystemNetworkGraph } from "../../components/migrations/system-network-graph";
 
 const meta = {

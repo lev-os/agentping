@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FilteredDropdown } from "../../components/migrations/filtered-dropdown";
 
 const meta: Meta<typeof FilteredDropdown> = {

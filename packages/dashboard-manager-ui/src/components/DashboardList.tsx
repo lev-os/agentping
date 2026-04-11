@@ -17,6 +17,11 @@ function toDashboardSummary(dashboard: Dashboard): DmDashboardSummary {
     config: {
       name: dashboard.config.name,
       port_range: dashboard.config.port_range,
+      metadata: dashboard.config.metadata ? {
+        lifecycle: dashboard.config.metadata.lifecycle,
+        runtime: dashboard.config.metadata.runtime,
+        framework: dashboard.config.metadata.framework,
+      } : undefined,
     },
     status: {
       status: dashboard.status.status,
@@ -171,6 +176,35 @@ export function DashboardList() {
                   {primary.status.restartAttempts}
                 </div>
               </div>
+            </div>
+          </section>
+        ) : null}
+
+        {grouped.apps.length > 0 ? (
+          <section className="command-center-section">
+            <div className="command-center-section__header">
+              <div>
+                <h2 className="command-center-section__title">Apps</h2>
+                <p className="command-center-section__meta">
+                  {grouped.apps.length} app{grouped.apps.length === 1 ? "" : "s"}
+                </p>
+              </div>
+            </div>
+            <div className="command-center-frame">
+              <DmDashboardList
+                dashboards={grouped.apps.map(toDashboardSummary)}
+                isLoading={isLoading}
+                error={error}
+                onRetry={() => {
+                  void loadDashboards();
+                }}
+                onRowClick={(dashboard) => {
+                  navigate(`/dashboard/${dashboard.id}`);
+                }}
+                onViewDetails={(dashboardId) => {
+                  navigate(`/dashboard/${dashboardId}`);
+                }}
+              />
             </div>
           </section>
         ) : null}

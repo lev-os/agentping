@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ConfidenceMeter } from "../../components/migrations/confidence-meter";
 
 const meta: Meta<typeof ConfidenceMeter> = {

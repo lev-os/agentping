@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SmartActionResult } from "../../components/migrations/smart-action-result";
 
 const meta = {

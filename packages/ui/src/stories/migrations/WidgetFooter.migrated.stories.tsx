@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetFooter } from "../../components/migrations/widget-footer";
 
 const meta: Meta<typeof WidgetFooter> = {

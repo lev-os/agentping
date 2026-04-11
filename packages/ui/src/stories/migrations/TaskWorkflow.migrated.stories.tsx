@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TaskWorkflow } from "../../components/migrations/task-workflow";
 
 const meta = {

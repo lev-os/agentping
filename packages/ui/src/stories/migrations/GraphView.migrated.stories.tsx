@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GraphView } from "../../components/migrations/graph-view";
 
 const meta: Meta<typeof GraphView> = {

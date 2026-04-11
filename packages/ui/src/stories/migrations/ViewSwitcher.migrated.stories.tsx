@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { ViewSwitcher } from "../../components/migrations/view-switcher";
 import { CrudProvider } from "../../components/migrations/crud-context";

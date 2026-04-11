@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DraggableList } from "../../components/migrations/draggable-list";
 
 const meta: Meta<typeof DraggableList> = {

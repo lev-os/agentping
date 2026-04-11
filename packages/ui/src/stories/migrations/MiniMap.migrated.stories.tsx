@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniMap } from "../../components/migrations/mini-map";
 
 const meta: Meta<typeof MiniMap> = {

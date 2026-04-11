@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PdfPreview } from "../../components/migrations/pdf-preview";
 
 const meta = {

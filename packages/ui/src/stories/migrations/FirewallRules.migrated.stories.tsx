@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FirewallRules } from "../../components/migrations/firewall-rules";
 
 const meta = {

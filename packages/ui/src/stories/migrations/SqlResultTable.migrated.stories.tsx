@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SqlResultTable } from "../../components/migrations/sql-result-table";
 
 const meta = {

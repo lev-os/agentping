@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CalendarView } from "../../components/migrations/calendar-view";
 
 const meta: Meta<typeof CalendarView> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { EditDialog } from "../../components/migrations/edit-dialog";
 import { CrudProvider } from "../../components/migrations/crud-context";

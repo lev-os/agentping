@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Zap, Terminal, Bot, RefreshCw } from "lucide-react";
 import { Dashboard } from "../../components/migrations/dashboard";
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MarkdownCard } from "../../components/migrations/markdown-card";
 
 const meta = {

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ErrorBoundary } from "../../components/migrations/error-boundary";
 
 const meta: Meta<typeof ErrorBoundary> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EventTimeline } from "../../components/migrations/event-timeline";
 
 const meta = {

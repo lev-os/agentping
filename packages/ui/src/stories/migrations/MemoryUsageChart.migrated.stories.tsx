@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryUsageChart } from "../../components/migrations/memory-usage-chart";
 
 const meta: Meta<typeof MemoryUsageChart> = {

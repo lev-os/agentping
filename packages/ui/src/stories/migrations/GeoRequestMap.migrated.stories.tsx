@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GeoRequestMap } from "../../components/migrations/geo-request-map";
 
 const meta: Meta<typeof GeoRequestMap> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LoadingProgress } from "../../components/migrations/loading-progress";
 
 const meta: Meta<typeof LoadingProgress> = {

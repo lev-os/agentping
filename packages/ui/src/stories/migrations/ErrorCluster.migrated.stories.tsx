@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ErrorCluster } from "../../components/migrations/error-cluster";
 
 const meta: Meta<typeof ErrorCluster> = {

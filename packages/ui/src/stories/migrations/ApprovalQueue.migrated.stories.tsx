@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ApprovalQueue } from "../../components/migrations/approval-queue";
 
 const meta = {

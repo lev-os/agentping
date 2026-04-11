@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetCrashFallback } from "../../components/migrations/widget-crash-fallback";
 
 const meta: Meta<typeof WidgetCrashFallback> = {

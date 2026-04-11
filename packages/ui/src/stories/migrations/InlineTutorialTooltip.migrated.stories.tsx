@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InlineTutorialTooltip } from "../../components/migrations/inline-tutorial-tooltip";
 
 const meta: Meta<typeof InlineTutorialTooltip> = {

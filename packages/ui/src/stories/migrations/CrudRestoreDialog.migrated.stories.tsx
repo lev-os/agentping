@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { RestoreDialog } from "../../components/recipes/crud/dialogs/RestoreDialog";
 import { CrudProvider } from "../../components/migrations/crud-context";

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LogSearchQuery } from "../../components/migrations/log-search-query";
 
 const meta = {

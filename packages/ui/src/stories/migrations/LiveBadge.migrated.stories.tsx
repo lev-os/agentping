@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LiveBadge } from "../../components/migrations/live-badge";
 
 const meta: Meta<typeof LiveBadge> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EditableText } from "../../components/migrations/editable-text";
 
 const meta: Meta<typeof EditableText> = {

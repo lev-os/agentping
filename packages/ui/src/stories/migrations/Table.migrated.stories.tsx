@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Table } from "../../components/migrations/table";
 
 interface DemoRow { id: string; name: string; status: string; port: number; }

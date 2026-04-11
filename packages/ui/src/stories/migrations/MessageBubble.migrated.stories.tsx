@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MessageBubble } from "../../components/migrations/message-bubble";
 
 const meta: Meta<typeof MessageBubble> = {

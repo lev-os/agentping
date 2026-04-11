@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ConfirmationModal } from "../../components/migrations/confirmation-modal";
 
 const meta: Meta<typeof ConfirmationModal> = {

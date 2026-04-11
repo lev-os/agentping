@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AuditFeed } from "../../components/migrations/audit-feed";
 
 const now = Date.now();

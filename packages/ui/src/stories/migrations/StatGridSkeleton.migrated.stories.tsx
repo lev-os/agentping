@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatGridSkeleton } from "../../components/migrations/stat-grid-skeleton";
 
 const meta: Meta<typeof StatGridSkeleton> = {

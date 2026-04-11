@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LogViewer } from "../../components/migrations/log-viewer";
 
 const meta: Meta<typeof LogViewer> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LcarsElbow } from "../../components/migrations/lcars-elbow";
 
 const meta = {

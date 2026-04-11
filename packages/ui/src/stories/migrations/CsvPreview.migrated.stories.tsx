@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CsvPreview } from "../../components/migrations/csv-preview";
 
 const meta = {

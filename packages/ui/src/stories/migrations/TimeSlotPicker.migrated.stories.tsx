@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TimeSlotPicker } from "../../components/migrations/time-slot-picker";
 
 const meta = {

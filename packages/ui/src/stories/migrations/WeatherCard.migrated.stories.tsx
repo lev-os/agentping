@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WeatherCard } from "../../components/migrations/weather-card";
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { LogStream } from "../../components/migrations/log-stream";
 import { LogHistogram } from "../../components/migrations/log-histogram";
