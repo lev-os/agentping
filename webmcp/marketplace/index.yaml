@@ -1,18 +1,13 @@
 # WebMCP Marketplace Index
-# Auto-generated catalog of available .webmcp.yaml tool definitions
+# Catalog of available .webmcp.yaml tool definitions
 # Each entry enables AI agents to interact with a website via structured tools
 #
-# Generated: 2026-04-02
-# Generator: heuristic-webmcp.ts (80% skeleton, no LLM)
-# Status: all entries need Claude refinement pass for names/descriptions
+# Updated: 2026-04-10
+# Skeletons removed during browser-cascade dead-code cleanup
 
-version: "1.0"
-generated_at: "2026-04-02"
-generator: heuristic-webmcp.ts
-total_entries: 7
-
-# Also includes the handwritten reference definition:
-# webmcp/chatgpt.webmcp.yaml (6 tools, manually authored)
+version: "1.1"
+updated_at: "2026-04-10"
+total_entries: 3
 
 entries:
   - name: chatgpt
@@ -24,70 +19,20 @@ entries:
     category: ai-chat
     description: Control ChatGPT conversations — send messages, switch models, manage chats
 
-  - name: agentmail
-    file: agentmail-to.webmcp.yaml
-    match: "https://agentmail.to/*"
-    tools: 1
-    backend: heuristic
-    status: skeleton
-    category: email
-    description: Email inbox API for AI agents
-    partnership_bead: lev-tv0w
+  - name: exa-docs
+    file: exa-docs.webmcp.yaml
+    match: "https://docs.exa.ai/*"
+    tools: 5
+    backend: heuristic+manual
+    status: verified
+    category: api-docs
+    description: Search and navigate Exa API documentation
 
-  - name: daytona
-    file: daytona-io.webmcp.yaml
-    match: "https://daytona.io/*"
-    tools: 6
-    backend: heuristic
-    status: skeleton
-    category: compute
-    description: Secure infrastructure for running AI-generated code
-    partnership_bead: lev-4tcd
-
-  - name: e2b
-    file: e2b-dev.webmcp.yaml
-    match: "https://e2b.dev/*"
-    tools: 1
-    backend: heuristic
-    status: skeleton
-    category: compute
-    description: Enterprise AI agent cloud — sandboxed code execution
-    partnership_bead: lev-4p7e
-
-  - name: exa
-    file: exa-ai.webmcp.yaml
-    match: "https://exa.ai/*"
-    tools: 1
-    backend: heuristic
-    status: skeleton
-    category: web-search
-    description: Web search API and website crawler for agents
-    partnership_bead: lev-sbtt
-
-  - name: mem0
-    file: mem0-ai.webmcp.yaml
-    match: "https://mem0.ai/*"
-    tools: 3
-    backend: heuristic
-    status: skeleton
-    category: memory
-    description: Memory layer for AI apps — persistent agent memory
-    partnership_bead: lev-920c
-
-  - name: vapi
-    file: vapi-ai.webmcp.yaml
-    match: "https://vapi.ai/*"
-    tools: 4
-    backend: heuristic
-    status: skeleton
-    category: voice
-    description: Build advanced voice AI agents
-    partnership_bead: lev-b94z
-
-# Sites diagnosed but not yet generated (need browser backend):
-# kapso.ai (JS-required), browser-use.com (minimal), hyperbrowser.ai (JS-required)
-# gokite.ai (JS-required), paysponge.com (minimal)
-#
-# Sites diagnosed, partial results (need Claude refinement):
-# browserbase.com, agentphone.to, firecrawl.dev, composio.dev
-# orthogonal.com, elevenlabs.io, sixtyfour.ai
+  - name: substack
+    file: substack-com.webmcp.yaml
+    match: "https://substack.com/*"
+    tools: 14
+    backend: intent-webmcp
+    status: generated+tested
+    category: publishing
+    description: Write posts, manage inbox, read feed, post notes on Substack
