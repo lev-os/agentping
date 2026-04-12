@@ -1,0 +1,162 @@
+# nicnames-com.webmcp.yaml
+# WebMCP shim for nicnames.com domain registrar
+# Purpose: Configure DNS for lev.now domain → Cloudflare NS
+# Auth: browser_session (user must be logged in via AgentPing extension)
+# Generated: 2026-04-12 from live site snapshot
+
+name: nicnames
+version: "0.1.0"
+match:
+  - "https://nicnames.com/*"
+  - "https://www.nicnames.com/*"
+author: lev-core
+auth: browser_session
+description: Manage domains on NicNames.com — login, DNS config, nameserver updates
+
+intents:
+  login:
+    description: "Sign into NicNames account"
+    page: "/en/login"
+    tools:
+      - name: login
+        description: "Sign into NicNames with email and password"
+        parameters:
+          email:
+            type: string
+            required: true
+            description: "Account email address"
+          password:
+            type: string
+            required: true
+            description: "Account password"
+        actions:
+          - type: navigate
+            url: "https://nicnames.com/en/login"
+          - type: focus
+            selector: "input[type='email'], input[name='email'], form input:first-of-type"
+          - type: fill
+            selector: "input[type='email'], input[name='email'], form input:first-of-type"
+            value: "{{email}}"
+          - type: focus
+            selector: "input[type='password'], input[name='password']"
+          - type: fill
+            selector: "input[type='password'], input[name='password']"
+            value: "{{password}}"
+          - type: click
+            selector: "button:has-text('Sign In')"
+        result:
+          type: wait
+          selector: "[class*='dashboard'], [class*='account'], nav [class*='user']"
+          timeout: 10000
+
+  manage_dns:
+    description: "DNS management for a specific domain"
+    page: "/en/dashboard"
+    tools:
+      - name: navigate_to_domain
+        description: "Navigate to a specific domain's management page"
+        parameters:
+          domain:
+            type: string
+            required: true
+            description: "Domain name (e.g., lev.now)"
+        actions:
+          - type: navigate
+            url: "https://nicnames.com/en/dashboard/domains"
+          - type: wait
+            selector: "a[href*='{{domain}}'], td:has-text('{{domain}}')"
+            timeout: 5000
+          - type: click
+            selector: "a[href*='{{domain}}'], td:has-text('{{domain}}') a"
+        result:
+          type: wait
+          selector: "[class*='domain-detail'], [class*='dns'], h1, h2"
+          timeout: 5000
+
+      - name: navigate_to_dns
+        description: "Go to DNS settings for a domain"
+        parameters:
+          domain:
+            type: string
+            required: true
+            description: "Domain name"
+        actions:
+          - type: navigate
+            url: "https://nicnames.com/en/dashboard/domains/{{domain}}/dns"
+        result:
+          type: wait
+          selector: "[class*='dns'], [class*='nameserver'], table, form"
+          timeout: 5000
+
+      - name: get_current_nameservers
+        description: "Extract the current nameserver configuration"
+        parameters: {}
+        actions:
+          - type: extract
+            selector: "[class*='nameserver'], [class*='dns'] table, [class*='dns'] form, main"
+        result:
+          type: text
+          selector: "[class*='nameserver'], [class*='dns'] table, [class*='dns'] form, main"
+          extract: textContent
+
+      - name: set_nameservers
+        description: "Set custom nameservers (e.g., Cloudflare NS)"
+        parameters:
+          ns1:
+            type: string
+            required: true
+            description: "Primary nameserver (e.g., aria.ns.cloudflare.com)"
+          ns2:
+            type: string
+            required: true
+            description: "Secondary nameserver (e.g., cruz.ns.cloudflare.com)"
+        actions:
+          - type: click
+            selector: "button:has-text('Custom'), button:has-text('Edit'), a:has-text('Change'), [class*='custom-ns'], [class*='edit-ns']"
+          - type: wait
+            selector: "input[name*='ns'], input[placeholder*='nameserver'], input[name*='nameserver']"
+            timeout: 3000
+          - type: fill
+            selector: "input[name*='ns1'], input[name*='nameserver']:nth-of-type(1), input[placeholder*='nameserver']:first-of-type"
+            value: "{{ns1}}"
+          - type: fill
+            selector: "input[name*='ns2'], input[name*='nameserver']:nth-of-type(2), input[placeholder*='nameserver']:nth-of-type(2)"
+            value: "{{ns2}}"
+          - type: click
+            selector: "button:has-text('Save'), button:has-text('Update'), button[type='submit']"
+        result:
+          type: wait
+          selector: "[class*='success'], [class*='confirm'], [class*='saved']"
+          timeout: 10000
+
+      - name: get_page_content
+        description: "Extract visible page content for debugging"
+        parameters: {}
+        actions:
+          - type: extract
+            selector: "main, [role='main'], .content, body"
+        result:
+          type: text
+          selector: "main, [role='main'], .content, body"
+          extract: textContent
+
+  verify:
+    description: "Verify DNS propagation"
+    page: "/en/dashboard"
+    tools:
+      - name: check_domain_status
+        description: "Check the current status of a domain"
+        parameters:
+          domain:
+            type: string
+            required: true
+            description: "Domain to check"
+        actions:
+          - type: navigate
+            url: "https://nicnames.com/en/dashboard/domains/{{domain}}"
+          - type: extract
+            selector: "main, [role='main']"
+        result:
+          type: text
+          selector: "main, [role='main']"
+          extract: textContent
