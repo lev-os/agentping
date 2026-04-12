@@ -54,7 +54,7 @@ const FILTER_OPTIONS: { label: string; value: FilterKey }[] = [
   { label: "SHELL", value: "SHELL" },
   { label: "HOLLOW", value: "HOLLOW" },
   { label: "Conflicts", value: "conflicts" },
-  { label: "Has lev-now mapping", value: "lev-now" },
+  { label: "GenUI Ready", value: "lev-now" },
 ];
 
 // ── Colour helpers ──────────────────────────────────────────
@@ -355,12 +355,16 @@ export function ComponentRegistry() {
 
 function ConflictCard({ component }: { component: ManifestComponent }) {
   return (
-    <div
+    <Link
+      to={`/registry/${component.id}`}
       className="parity-card"
       style={{
         borderColor: "rgba(251, 191, 36, 0.35)",
         background:
           "linear-gradient(180deg, rgba(251, 191, 36, 0.08), rgba(251, 191, 36, 0.03))",
+        textDecoration: "none",
+        color: "inherit",
+        cursor: "pointer",
       }}
     >
       <div className="parity-card__head">
@@ -407,7 +411,7 @@ function ConflictCard({ component }: { component: ManifestComponent }) {
         <span className="parity-card__count">{component.id}</span>
         <span className="parity-card__date">{component.domain}</span>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -417,7 +421,11 @@ function ComponentCard({ component }: { component: ManifestComponent }) {
   const clsColor = classificationColor(component.classification);
 
   return (
-    <div className="parity-card" style={{ minWidth: 0 }}>
+    <Link
+      to={`/registry/${component.id}`}
+      className="parity-card"
+      style={{ minWidth: 0, textDecoration: "none", color: "inherit", cursor: "pointer" }}
+    >
       {/* Top row: name + review status */}
       <div className="parity-card__head">
         <span className="parity-card__title" title={component.name}>
@@ -490,6 +498,6 @@ function ComponentCard({ component }: { component: ManifestComponent }) {
         </span>
         <span className="parity-card__date">{component.domain}</span>
       </div>
-    </div>
+    </Link>
   );
 }

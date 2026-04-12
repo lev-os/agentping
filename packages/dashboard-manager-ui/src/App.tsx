@@ -5,6 +5,7 @@ import { DashboardDetail } from './components/DashboardDetail'
 import { ParityDetail } from './components/ParityDetail'
 import { ProjectsView } from './components/ProjectsView'
 import { ComponentRegistry } from './components/ComponentRegistry'
+import { ComponentDetail } from './components/ComponentDetail'
 import './styles/theme-kingly.css'
 import './styles/command-center.css'
 
@@ -17,6 +18,7 @@ export function App() {
         <Route path="/parity/:id" element={<ParityDetail />} />
         <Route path="/projects" element={<ProjectsView />} />
         <Route path="/registry" element={<ComponentRegistry />} />
+        <Route path="/registry/:id" element={<ComponentDetail />} />
       </Routes>
     </BrowserRouter>
   )
