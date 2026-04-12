@@ -19,5 +19,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "winner=both",
+    "action=keep both \u2014 rename to timeline-compact (studio) + timeline-cards (webui)",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "both"
 }

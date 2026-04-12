@@ -20,5 +20,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "winner=defer",
+    "action=keep both raws, skip placeholder candidate",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "defer"
 }

@@ -20,5 +20,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "winner=studio",
+    "action=promote StudioRaw as canonical",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "studio"
 }

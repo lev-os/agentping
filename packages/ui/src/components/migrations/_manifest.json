@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-04-12T09:08:02.859Z",
+  "generated": "2026-04-12T12:08:23.047Z",
   "total": 344,
   "byClassification": {
     "REAL": 262,
@@ -1059,7 +1059,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=webui",
+        "action=promote WebUiRaw as canonical",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "webui"
     },
     {
       "id": "collapse-button",
@@ -1228,7 +1234,12 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "not-a-theme-conflict",
+        "real-component"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "connection-signal",
@@ -1299,7 +1310,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=webui",
+        "action=promote WebUiRaw as canonical",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "webui"
     },
     {
       "id": "context-usage",
@@ -2635,7 +2652,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=studio",
+        "action=promote StudioRaw as canonical",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "studio"
     },
     {
       "id": "encryption-status",
@@ -4789,7 +4812,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=defer",
+        "action=keep both raws, skip placeholder candidate",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "defer"
     },
     {
       "id": "markdown-card",
@@ -6495,7 +6524,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=both",
+        "action=keep both — rename to spinner-ring (studio) + spinner-dots (webui)",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "both"
     },
     {
       "id": "split-view",
@@ -7521,7 +7556,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "winner=both",
+        "action=keep both — rename to timeline-compact (studio) + timeline-cards (webui)",
+        "interview-tick-7"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "both"
     },
     {
       "id": "timezone-slider",

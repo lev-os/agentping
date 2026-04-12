@@ -21,5 +21,10 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "not-a-theme-conflict",
+    "real-component"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "keep"
 }

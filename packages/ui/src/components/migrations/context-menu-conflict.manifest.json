@@ -20,5 +20,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "winner=webui",
+    "action=promote WebUiRaw as canonical",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "webui"
 }
