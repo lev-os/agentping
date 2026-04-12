@@ -1,0 +1,25 @@
+{
+  "id": "graph-view",
+  "name": "GraphView",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "diagram",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/GraphView.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/GraphView"
+}

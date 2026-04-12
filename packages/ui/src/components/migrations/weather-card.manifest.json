@@ -1,0 +1,23 @@
+{
+  "id": "weather-card",
+  "name": "WeatherCard",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 61,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

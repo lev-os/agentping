@@ -1,0 +1,23 @@
+{
+  "id": "property-grid",
+  "name": "PropertyGrid",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/PropertyGrid.tsx",
+  "loc": 43,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

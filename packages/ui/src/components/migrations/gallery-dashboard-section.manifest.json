@@ -1,0 +1,24 @@
+{
+  "id": "gallery-dashboard-section",
+  "name": "GalleryDashboardSection",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "composite",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 77,
+  "imports": 9,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

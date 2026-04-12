@@ -1,0 +1,24 @@
+{
+  "id": "mini-map",
+  "name": "MiniMap",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "navigation",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/MiniMap.tsx",
+  "loc": 43,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

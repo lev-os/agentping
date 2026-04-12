@@ -1,0 +1,24 @@
+{
+  "id": "log-viewer-conflict",
+  "name": "LogViewerConflict",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 123,
+  "imports": 1,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "overlay-footer",
+  "name": "OverlayFooter",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": null,
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/ui/overlay-footer.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/overlay-footer"
+}

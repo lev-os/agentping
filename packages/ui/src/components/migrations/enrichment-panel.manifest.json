@@ -1,0 +1,24 @@
+{
+  "id": "enrichment-panel",
+  "name": "EnrichmentPanel",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 320,
+  "imports": 3,
+  "hooks": 3,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

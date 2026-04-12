@@ -1,0 +1,24 @@
+{
+  "id": "firewall-rules",
+  "name": "FirewallRules",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "system"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/system/FirewallRules.tsx",
+  "loc": 68,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

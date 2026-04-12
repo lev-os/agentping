@@ -1,0 +1,25 @@
+{
+  "id": "crud-list-view",
+  "name": "CrudListView",
+  "family": "domain/crud",
+  "domain": "domain",
+  "capabilities": [
+    "crud",
+    "display"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "data-table",
+  "origin": "unknown",
+  "migrationStatus": "alias",
+  "source": "",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../recipes/crud/views/ListView"
+}

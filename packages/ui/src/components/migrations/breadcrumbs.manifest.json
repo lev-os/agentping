@@ -1,0 +1,23 @@
+{
+  "id": "breadcrumbs",
+  "name": "Breadcrumbs",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/Breadcrumbs.tsx",
+  "loc": 41,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

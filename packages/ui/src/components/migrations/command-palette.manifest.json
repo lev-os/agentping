@@ -1,0 +1,24 @@
+{
+  "id": "command-palette",
+  "name": "CommandPalette",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "input",
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/CommandPalette.tsx",
+  "loc": 67,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

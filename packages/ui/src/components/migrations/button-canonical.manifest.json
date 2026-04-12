@@ -1,0 +1,24 @@
+{
+  "id": "button-canonical",
+  "name": "ButtonCanonical",
+  "family": "foundations/buttons",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "inline",
+  "origin": "unknown",
+  "migrationStatus": "alias",
+  "source": "",
+  "loc": 8,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/button"
+}

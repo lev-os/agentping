@@ -1,0 +1,23 @@
+{
+  "id": "code-diff-viewer-conflict",
+  "name": "CodeDiffViewerConflict",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 153,
+  "imports": 1,
+  "hooks": 1,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

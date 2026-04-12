@@ -1,0 +1,24 @@
+{
+  "id": "build-status-logs",
+  "name": "BuildStatusLogs",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "timeline",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/logs/BuildStatusLogs.tsx",
+  "loc": 59,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

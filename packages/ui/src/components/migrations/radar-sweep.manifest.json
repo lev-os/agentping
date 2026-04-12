@@ -1,0 +1,24 @@
+{
+  "id": "radar-sweep",
+  "name": "RadarSweep",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/visuals/RadarSweep.tsx",
+  "loc": 52,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

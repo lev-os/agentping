@@ -1,0 +1,25 @@
+{
+  "id": "task-checklist",
+  "name": "TaskChecklist",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "input",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/TaskChecklist.tsx",
+  "loc": 178,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

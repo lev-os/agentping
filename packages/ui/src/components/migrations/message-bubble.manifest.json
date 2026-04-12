@@ -1,0 +1,23 @@
+{
+  "id": "message-bubble",
+  "name": "MessageBubble",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/MessageBubble.tsx",
+  "loc": 34,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

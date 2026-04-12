@@ -1,0 +1,23 @@
+{
+  "id": "polymorph-playground",
+  "name": "PolymorphPlayground",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "HOLLOW",
+  "levNowElement": null,
+  "origin": "canvas",
+  "migrationStatus": "candidate",
+  "source": "packages/canvas/src/components/PolymorphPlayground.tsx",
+  "loc": 38,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

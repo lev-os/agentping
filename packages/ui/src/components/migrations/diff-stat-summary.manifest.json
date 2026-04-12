@@ -1,0 +1,23 @@
+{
+  "id": "diff-stat-summary",
+  "name": "DiffStatSummary",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/DiffStatSummary.tsx",
+  "loc": 29,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

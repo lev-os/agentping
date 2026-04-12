@@ -1,0 +1,23 @@
+{
+  "id": "memory-usage-chart",
+  "name": "MemoryUsageChart",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/MemoryUsageChart.tsx",
+  "loc": 42,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

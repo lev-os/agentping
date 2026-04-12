@@ -1,0 +1,23 @@
+{
+  "id": "copy-button",
+  "name": "CopyButton",
+  "family": "foundations/buttons",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "studio",
+  "migrationStatus": "complete",
+  "source": "packages/studio/src/renderer/components/ui/CopyButton.tsx",
+  "loc": 70,
+  "imports": 3,
+  "hooks": 2,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

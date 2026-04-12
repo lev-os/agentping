@@ -1,0 +1,25 @@
+{
+  "id": "dm-dashboard-detail",
+  "name": "DmDashboardDetail",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "composite",
+    "system"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "dashboard-manager",
+  "migrationStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/DashboardDetail.tsx",
+  "loc": 172,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

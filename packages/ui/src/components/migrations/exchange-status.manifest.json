@@ -1,0 +1,24 @@
+{
+  "id": "exchange-status",
+  "name": "ExchangeStatus",
+  "family": "domain/finance",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "system"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/finance/ExchangeStatus.tsx",
+  "loc": 48,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

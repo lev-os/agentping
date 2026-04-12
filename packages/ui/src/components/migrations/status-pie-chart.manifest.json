@@ -1,0 +1,23 @@
+{
+  "id": "status-pie-chart",
+  "name": "StatusPieChart",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/charts/StatusPieChart.tsx",
+  "loc": 114,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

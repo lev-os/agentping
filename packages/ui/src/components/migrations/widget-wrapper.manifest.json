@@ -1,0 +1,24 @@
+{
+  "id": "widget-wrapper",
+  "name": "WidgetWrapper",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "layout"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/WidgetWrapper.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/WidgetWrapper"
+}

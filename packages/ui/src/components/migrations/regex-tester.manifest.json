@@ -1,0 +1,24 @@
+{
+  "id": "regex-tester",
+  "name": "RegexTester",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/RegexTester.tsx",
+  "loc": 59,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": "radar-chart",
+  "name": "RadarChart",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/RadarChart.tsx",
+  "loc": 60,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

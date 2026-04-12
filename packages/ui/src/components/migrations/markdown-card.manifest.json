@@ -1,0 +1,23 @@
+{
+  "id": "markdown-card",
+  "name": "MarkdownCard",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "canvas",
+  "migrationStatus": "candidate",
+  "source": "packages/canvas/src/components/MarkdownCard.tsx",
+  "loc": 35,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

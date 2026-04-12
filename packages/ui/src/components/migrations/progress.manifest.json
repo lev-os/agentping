@@ -1,0 +1,24 @@
+{
+  "id": "progress",
+  "name": "Progress",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "feedback",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/ui/progress.tsx",
+  "loc": 6,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/progress"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tool-card",
+  "name": "ToolCard",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "input",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/chat/ToolCard.tsx",
+  "loc": 194,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

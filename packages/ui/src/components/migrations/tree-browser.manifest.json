@@ -1,0 +1,24 @@
+{
+  "id": "tree-browser",
+  "name": "TreeBrowser",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 63,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

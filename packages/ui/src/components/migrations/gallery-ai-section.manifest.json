@@ -1,0 +1,24 @@
+{
+  "id": "gallery-ai-section",
+  "name": "GalleryAiSection",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "composite",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 108,
+  "imports": 13,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

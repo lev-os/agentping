@@ -1,0 +1,24 @@
+{
+  "id": "typing-indicator",
+  "name": "TypingIndicator",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "feedback",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 46,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

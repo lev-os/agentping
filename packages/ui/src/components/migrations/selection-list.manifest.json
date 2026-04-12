@@ -1,0 +1,23 @@
+{
+  "id": "selection-list",
+  "name": "SelectionList",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 139,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 12,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

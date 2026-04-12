@@ -1,0 +1,23 @@
+{
+  "id": "timeline-conflict",
+  "name": "TimelineConflict",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "timeline",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 77,
+  "imports": 1,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

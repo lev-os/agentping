@@ -1,0 +1,23 @@
+{
+  "id": "editable-text",
+  "name": "EditableText",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/EditableText.tsx",
+  "loc": 60,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

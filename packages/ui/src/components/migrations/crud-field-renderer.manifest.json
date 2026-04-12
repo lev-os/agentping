@@ -1,0 +1,25 @@
+{
+  "id": "crud-field-renderer",
+  "name": "CrudFieldRenderer",
+  "family": "domain/crud",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "crud"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "inline",
+  "origin": "unknown",
+  "migrationStatus": "alias",
+  "source": "",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../recipes/crud/forms/FieldRenderer"
+}

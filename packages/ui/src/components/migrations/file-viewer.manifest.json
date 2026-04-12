@@ -1,0 +1,23 @@
+{
+  "id": "file-viewer",
+  "name": "FileViewer",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/FileViewer.tsx",
+  "loc": 115,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "gauge-skeleton",
+  "name": "GaugeSkeleton",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "feedback",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/skeletons/GaugeSkeleton.tsx",
+  "loc": 6,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/skeletons/GaugeSkeleton"
+}

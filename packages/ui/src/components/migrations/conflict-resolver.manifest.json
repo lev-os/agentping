@@ -1,0 +1,25 @@
+{
+  "id": "conflict-resolver",
+  "name": "ConflictResolver",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ConflictResolver.tsx",
+  "loc": 57,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

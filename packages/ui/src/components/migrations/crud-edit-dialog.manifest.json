@@ -1,0 +1,25 @@
+{
+  "id": "crud-edit-dialog",
+  "name": "CrudEditDialog",
+  "family": "domain/crud",
+  "domain": "domain",
+  "capabilities": [
+    "crud",
+    "input"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "feedback",
+  "origin": "unknown",
+  "migrationStatus": "alias",
+  "source": "",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../recipes/crud/dialogs/EditDialog"
+}

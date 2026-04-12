@@ -1,0 +1,25 @@
+{
+  "id": "audit-feed",
+  "name": "AuditFeed",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "streaming",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "timeline",
+  "origin": "studio",
+  "migrationStatus": "complete",
+  "source": "packages/studio/src/renderer/components/AuditFeed.tsx",
+  "loc": 229,
+  "imports": 3,
+  "hooks": 3,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

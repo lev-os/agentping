@@ -1,0 +1,25 @@
+{
+  "id": "terminal",
+  "name": "Terminal",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "system",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/Terminal.tsx",
+  "loc": 162,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 10,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

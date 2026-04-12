@@ -1,0 +1,24 @@
+{
+  "id": "resource-gauge",
+  "name": "ResourceGauge",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 101,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": "year-heatmap",
+  "name": "YearHeatmap",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "migrationStatus": "implemented",
+  "source": "packages/adapters/web-ui/src/components/YearHeatmap.tsx",
+  "loc": 126,
+  "imports": 2,
+  "hooks": 4,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

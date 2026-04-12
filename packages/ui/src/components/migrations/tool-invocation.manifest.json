@@ -1,0 +1,23 @@
+{
+  "id": "tool-invocation",
+  "name": "ToolInvocation",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 85,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

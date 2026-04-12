@@ -1,0 +1,24 @@
+{
+  "id": "wizard-step",
+  "name": "WizardStep",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 79,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 10,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

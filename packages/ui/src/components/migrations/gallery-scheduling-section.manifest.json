@@ -1,0 +1,24 @@
+{
+  "id": "gallery-scheduling-section",
+  "name": "GallerySchedulingSection",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 92,
+  "imports": 10,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

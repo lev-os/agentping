@@ -1,0 +1,25 @@
+{
+  "id": "properties-panel",
+  "name": "PropertiesPanel",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "migrationStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/PropertiesPanel.tsx",
+  "loc": 219,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 8,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

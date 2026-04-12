@@ -1,0 +1,23 @@
+{
+  "id": "input-conflict",
+  "name": "InputConflict",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 126,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

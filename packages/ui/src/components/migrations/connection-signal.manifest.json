@@ -1,0 +1,23 @@
+{
+  "id": "connection-signal",
+  "name": "ConnectionSignal",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ConnectionSignal.tsx",
+  "loc": 36,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

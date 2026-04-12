@@ -1,0 +1,24 @@
+{
+  "id": "dm-create-dashboard-modal",
+  "name": "DmCreateDashboardModal",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "crud"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "dashboard-manager",
+  "migrationStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/CreateDashboardModal.tsx",
+  "loc": 135,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

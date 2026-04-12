@@ -1,0 +1,25 @@
+{
+  "id": "widget-header-action",
+  "name": "WidgetHeaderAction",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "layout",
+    "navigation"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "section",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/WidgetHeaderAction.tsx",
+  "loc": 6,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/WidgetHeaderAction"
+}
