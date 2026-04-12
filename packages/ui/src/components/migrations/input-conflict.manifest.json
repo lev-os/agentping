@@ -19,5 +19,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": []
+  "markers": [
+    "auto-resolved",
+    "review-scaffolding",
+    "winner=../ui/input"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "keep"
 }

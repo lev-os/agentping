@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-04-12T08:41:31.184Z",
+  "generated": "2026-04-12T09:08:02.859Z",
   "total": 344,
   "byClassification": {
     "REAL": 262,
@@ -531,8 +531,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": [],
-      "canonical": "../ui/badge"
+      "markers": [
+        "auto-resolved",
+        "api-surface"
+      ],
+      "canonical": "../ui/badge",
+      "reviewStatus": "canonical",
+      "humanDecision": "keep"
     },
     {
       "id": "badge-conflict",
@@ -555,7 +560,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "auto-resolved",
+        "review-scaffolding",
+        "winner=../ui/badge"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "battery-meter",
@@ -673,8 +684,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": [],
-      "canonical": "../ui/button"
+      "markers": [
+        "auto-resolved",
+        "api-surface"
+      ],
+      "canonical": "../ui/button",
+      "reviewStatus": "canonical",
+      "humanDecision": "keep"
     },
     {
       "id": "button-conflict",
@@ -697,7 +713,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "auto-resolved",
+        "review-scaffolding",
+        "winner=../ui/button"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "calendar-view",
@@ -3906,8 +3928,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": [],
-      "canonical": "../ui/icon-button"
+      "markers": [
+        "auto-resolved",
+        "api-surface"
+      ],
+      "canonical": "../ui/icon-button",
+      "reviewStatus": "canonical",
+      "humanDecision": "keep"
     },
     {
       "id": "icon-button-conflict",
@@ -3930,7 +3957,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "auto-resolved",
+        "review-scaffolding",
+        "winner=../ui/icon-button"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "image-compare",
@@ -4121,8 +4154,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": [],
-      "canonical": "../ui/input"
+      "markers": [
+        "auto-resolved",
+        "api-surface"
+      ],
+      "canonical": "../ui/input",
+      "reviewStatus": "canonical",
+      "humanDecision": "keep"
     },
     {
       "id": "input-conflict",
@@ -4145,7 +4183,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "auto-resolved",
+        "review-scaffolding",
+        "winner=../ui/input"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "json-diff",
@@ -6016,8 +6060,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": [],
-      "canonical": "../ui/search-input"
+      "markers": [
+        "auto-resolved",
+        "api-surface"
+      ],
+      "canonical": "../ui/search-input",
+      "reviewStatus": "canonical",
+      "humanDecision": "keep"
     },
     {
       "id": "search-input-conflict",
@@ -6040,7 +6089,13 @@
         "agentping"
       ],
       "beadId": "",
-      "markers": []
+      "markers": [
+        "auto-resolved",
+        "review-scaffolding",
+        "winner=../ui/search-input"
+      ],
+      "reviewStatus": "reviewed",
+      "humanDecision": "keep"
     },
     {
       "id": "secret-input",

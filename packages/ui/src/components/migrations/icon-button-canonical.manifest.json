@@ -19,6 +19,11 @@
     "agentping"
   ],
   "beadId": "",
-  "markers": [],
-  "canonical": "../ui/icon-button"
+  "markers": [
+    "auto-resolved",
+    "api-surface"
+  ],
+  "canonical": "../ui/icon-button",
+  "reviewStatus": "canonical",
+  "humanDecision": "keep"
 }
