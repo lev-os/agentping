@@ -84,6 +84,9 @@ export function DashboardList() {
           className="command-center-section"
           style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8 }}
         >
+          <Link to="/registry" className="command-center-button">
+            Registry →
+          </Link>
           <Link to="/projects" className="command-center-button">
             Projects →
           </Link>
