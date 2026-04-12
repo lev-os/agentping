@@ -171,20 +171,17 @@ dashboards:
       expected_status: 200
       interval_ms: 10000
     restart_policy:
-      enabled: true
-      max_retries: 5
+      enabled: false
+      max_retries: 1
       backoff_ms:
-        - 1000
-        - 2000
-        - 4000
-        - 8000
-        - 16000
+        - 5000
     metadata:
       lane: apps
       openMode: external
-      description: Frey Market (node/nextjs)
+      description: Frey Market (node/nextjs) — restart disabled, port 3100 conflict
       runtime: node
       framework: nextjs
+      lifecycle: detected
       packageManager: pnpm
       lifecycle: detected
   - name: Ai Devs
