@@ -1,0 +1,24 @@
+{
+  "id": "status-card",
+  "name": "StatusCard",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/StatusCard.tsx",
+  "loc": 39,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

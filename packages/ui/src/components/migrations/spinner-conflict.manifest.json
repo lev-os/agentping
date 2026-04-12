@@ -1,0 +1,23 @@
+{
+  "id": "spinner-conflict",
+  "name": "SpinnerConflict",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 65,
+  "imports": 1,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

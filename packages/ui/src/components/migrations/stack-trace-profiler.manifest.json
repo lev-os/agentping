@@ -1,0 +1,23 @@
+{
+  "id": "stack-trace-profiler",
+  "name": "StackTraceProfiler",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "webui",
+  "migrationStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/logs/StackTraceProfiler.tsx",
+  "loc": 50,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

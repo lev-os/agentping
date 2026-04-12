@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generated": "2026-04-12T08:39:42.126Z",
-  "total": 318,
+  "generated": "2026-04-12T08:41:31.184Z",
+  "total": 344,
   "byClassification": {
-    "REAL": 242,
-    "ALIAS": 72,
-    "SHELL": 3,
+    "REAL": 262,
+    "ALIAS": 77,
+    "SHELL": 4,
     "HOLLOW": 1
   },
   "byFamily": {
-    "domain": 200,
-    "foundations": 118
+    "domain": 210,
+    "foundations": 134
   },
   "byLevNowElement": {
     "section": 38,
-    "data-table": 28,
+    "data-table": 30,
     "timeline": 9,
     "inline": 50,
-    "card": 43,
-    "feedback": 27,
+    "card": 47,
+    "feedback": 31,
     "chart": 23,
     "custom-html": 7,
-    "code-block": 17,
-    "diagram": 16,
+    "code-block": 18,
+    "diagram": 17,
     "hero": 3,
-    "text": 1
+    "text": 2
   },
   "components": [
     {
@@ -6018,6 +6018,617 @@
       "beadId": "",
       "markers": [],
       "canonical": "../ui/search-input"
+    },
+    {
+      "id": "search-input-conflict",
+      "name": "SearchInputConflict",
+      "family": "foundations/forms",
+      "domain": "foundations",
+      "capabilities": [
+        "input"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 153,
+      "imports": 2,
+      "hooks": 3,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "secret-input",
+      "name": "SecretInput",
+      "family": "foundations/forms",
+      "domain": "foundations",
+      "capabilities": [
+        "input"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 50,
+      "imports": 2,
+      "hooks": 1,
+      "propCount": 6,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "segmented-control",
+      "name": "SegmentedControl",
+      "family": "foundations/forms",
+      "domain": "foundations",
+      "capabilities": [
+        "input",
+        "navigation"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 52,
+      "imports": 2,
+      "hooks": 1,
+      "propCount": 5,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "selection-list",
+      "name": "SelectionList",
+      "family": "foundations/forms",
+      "domain": "foundations",
+      "capabilities": [
+        "input"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 139,
+      "imports": 2,
+      "hooks": 1,
+      "propCount": 12,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "server-rack-status",
+      "name": "ServerRackStatus",
+      "family": "domain/system",
+      "domain": "domain",
+      "capabilities": [
+        "display",
+        "system"
+      ],
+      "classification": "REAL",
+      "levNowElement": "card",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/system/ServerRackStatus.tsx",
+      "loc": 54,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "session-tabs",
+      "name": "SessionTabs",
+      "family": "domain/chat",
+      "domain": "domain",
+      "capabilities": [
+        "navigation"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "studio",
+      "migrationStatus": "needs-review",
+      "source": "packages/studio/src/renderer/components/chat/SessionTabs.tsx",
+      "loc": 154,
+      "imports": 3,
+      "hooks": 1,
+      "propCount": 9,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "settings-modal",
+      "name": "SettingsModal",
+      "family": "domain/system",
+      "domain": "domain",
+      "capabilities": [
+        "input",
+        "composite"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "studio",
+      "migrationStatus": "needs-review",
+      "source": "packages/studio/src/renderer/components/SettingsModal.tsx",
+      "loc": 195,
+      "imports": 3,
+      "hooks": 2,
+      "propCount": 6,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "shared-components",
+      "name": "SharedComponents",
+      "family": "foundations/layout",
+      "domain": "foundations",
+      "capabilities": [
+        "system"
+      ],
+      "classification": "SHELL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 42,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 1,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "sheet",
+      "name": "Sheet",
+      "family": "foundations/layout",
+      "domain": "foundations",
+      "capabilities": [
+        "layout"
+      ],
+      "classification": "ALIAS",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "packages/ui/src/components/ui/sheet.tsx",
+      "loc": 17,
+      "imports": 0,
+      "hooks": 0,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": [],
+      "canonical": "../ui/sheet"
+    },
+    {
+      "id": "shimmer-text",
+      "name": "ShimmerText",
+      "family": "foundations/feedback-status",
+      "domain": "foundations",
+      "capabilities": [
+        "display"
+      ],
+      "classification": "ALIAS",
+      "levNowElement": "text",
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "packages/ui/src/components/ui/shimmer-text.tsx",
+      "loc": 7,
+      "imports": 0,
+      "hooks": 0,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": [],
+      "canonical": "../ui/shimmer-text"
+    },
+    {
+      "id": "side-panel",
+      "name": "SidePanel",
+      "family": "foundations/layout",
+      "domain": "foundations",
+      "capabilities": [
+        "layout"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 58,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 7,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "signal-monitor",
+      "name": "SignalMonitor",
+      "family": "domain/system",
+      "domain": "domain",
+      "capabilities": [
+        "display",
+        "data-viz"
+      ],
+      "classification": "REAL",
+      "levNowElement": "data-table",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/system/SignalMonitor.tsx",
+      "loc": 46,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 2,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "family": "foundations/feedback-status",
+      "domain": "foundations",
+      "capabilities": [
+        "feedback"
+      ],
+      "classification": "REAL",
+      "levNowElement": "feedback",
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 57,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 5,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "family": "foundations/forms",
+      "domain": "foundations",
+      "capabilities": [
+        "input"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 70,
+      "imports": 2,
+      "hooks": 1,
+      "propCount": 8,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "smart-action-result",
+      "name": "SmartActionResult",
+      "family": "domain/chat",
+      "domain": "domain",
+      "capabilities": [
+        "display",
+        "feedback"
+      ],
+      "classification": "REAL",
+      "levNowElement": "card",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/SmartActionResult.tsx",
+      "loc": 29,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 4,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "sonar-display",
+      "name": "SonarDisplay",
+      "family": "domain/system",
+      "domain": "domain",
+      "capabilities": [
+        "data-viz",
+        "display"
+      ],
+      "classification": "REAL",
+      "levNowElement": "diagram",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/visuals/SonarDisplay.tsx",
+      "loc": 48,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "spec-panel",
+      "name": "SpecPanel",
+      "family": "domain/dashboard-mgr",
+      "domain": "domain",
+      "capabilities": [
+        "display"
+      ],
+      "classification": "ALIAS",
+      "levNowElement": null,
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "packages/ui/src/components/dashboard/SpecPanel.tsx",
+      "loc": 7,
+      "imports": 0,
+      "hooks": 0,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": [],
+      "canonical": "../dashboard/SpecPanel"
+    },
+    {
+      "id": "spinner-conflict",
+      "name": "SpinnerConflict",
+      "family": "foundations/feedback-status",
+      "domain": "foundations",
+      "capabilities": [
+        "feedback"
+      ],
+      "classification": "REAL",
+      "levNowElement": "feedback",
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "",
+      "loc": 65,
+      "imports": 1,
+      "hooks": 0,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "split-view",
+      "name": "SplitView",
+      "family": "foundations/layout",
+      "domain": "foundations",
+      "capabilities": [
+        "layout"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/SplitView.tsx",
+      "loc": 30,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 5,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "sql-result-table",
+      "name": "SqlResultTable",
+      "family": "foundations/data-display",
+      "domain": "foundations",
+      "capabilities": [
+        "display"
+      ],
+      "classification": "REAL",
+      "levNowElement": "data-table",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/data/SqlResultTable.tsx",
+      "loc": 54,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 5,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "stack-trace-profiler",
+      "name": "StackTraceProfiler",
+      "family": "domain/logs",
+      "domain": "domain",
+      "capabilities": [
+        "display"
+      ],
+      "classification": "REAL",
+      "levNowElement": "code-block",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/logs/StackTraceProfiler.tsx",
+      "loc": 50,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "star-field",
+      "name": "StarField",
+      "family": "foundations/layout",
+      "domain": "foundations",
+      "capabilities": [
+        "display"
+      ],
+      "classification": "REAL",
+      "levNowElement": null,
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/visuals/StarField.tsx",
+      "loc": 56,
+      "imports": 2,
+      "hooks": 1,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "stat-grid-skeleton",
+      "name": "StatGridSkeleton",
+      "family": "domain/dashboard-mgr",
+      "domain": "domain",
+      "capabilities": [
+        "feedback"
+      ],
+      "classification": "ALIAS",
+      "levNowElement": "feedback",
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "packages/ui/src/components/dashboard/skeletons/StatGridSkeleton.tsx",
+      "loc": 6,
+      "imports": 0,
+      "hooks": 0,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": [],
+      "canonical": "../dashboard/skeletons/StatGridSkeleton"
+    },
+    {
+      "id": "stats-grid",
+      "name": "StatsGrid",
+      "family": "foundations/data-display",
+      "domain": "foundations",
+      "capabilities": [
+        "display",
+        "data-viz"
+      ],
+      "classification": "REAL",
+      "levNowElement": "card",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/StatsGrid.tsx",
+      "loc": 41,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 3,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
+    },
+    {
+      "id": "status-bar-skeleton",
+      "name": "StatusBarSkeleton",
+      "family": "domain/dashboard-mgr",
+      "domain": "domain",
+      "capabilities": [
+        "feedback"
+      ],
+      "classification": "ALIAS",
+      "levNowElement": "feedback",
+      "origin": "unknown",
+      "migrationStatus": "unknown",
+      "source": "packages/ui/src/components/dashboard/skeletons/StatusBarSkeleton.tsx",
+      "loc": 6,
+      "imports": 0,
+      "hooks": 0,
+      "propCount": 0,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": [],
+      "canonical": "../dashboard/skeletons/StatusBarSkeleton"
+    },
+    {
+      "id": "status-card",
+      "name": "StatusCard",
+      "family": "foundations/data-display",
+      "domain": "foundations",
+      "capabilities": [
+        "display",
+        "feedback"
+      ],
+      "classification": "REAL",
+      "levNowElement": "card",
+      "origin": "webui",
+      "migrationStatus": "candidate",
+      "source": "packages/adapters/web-ui/src/components/StatusCard.tsx",
+      "loc": 39,
+      "imports": 2,
+      "hooks": 0,
+      "propCount": 5,
+      "lanes": [
+        "agentping"
+      ],
+      "beadId": "",
+      "markers": []
     },
     {
       "id": "status-dot",

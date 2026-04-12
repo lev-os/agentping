@@ -1,0 +1,23 @@
+{
+  "id": "slider",
+  "name": "Slider",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "unknown",
+  "migrationStatus": "unknown",
+  "source": "",
+  "loc": 70,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 8,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}
