@@ -1,0 +1,199 @@
+# UI Kit Ingest FlowMind
+#
+# Repeatable pipeline for swallowing any UI component library into
+# the @kingly/ui registry. Runs the same process we did manually
+# for the 344 agentping migration components.
+#
+# Usage:
+#   lev flow run ui-kit-ingest --source ./path/to/components --kit-name clawbuddy
+#
+# Each node is one levloop tick. The flow is the tick sequence.
+
+name: ui-kit-ingest
+version: 1
+description: |
+  Classify, catalog, and absorb a UI component library into the
+  @kingly/ui sidecar manifest system. Produces per-component
+  .manifest.json files, a glob-built index, conflict detection,
+  and a GenUI review surface in the AgentPing dashboard.
+
+entry: scan
+
+inputs:
+  source_dir: string       # path to component .tsx files
+  kit_name: string         # identifier (e.g. "clawbuddy", "sofia")
+  stories_dir: string?     # optional: path to .stories.tsx files
+  target_dir: string       # where sidecars go (default: packages/ui/src/components/migrations)
+
+nodes:
+  # ── Phase 1: Discovery ──────────────────────────────────────
+  scan:
+    op: lev.exec
+    description: |
+      Scan source_dir for all .tsx component files. Extract mechanical
+      metrics: LOC, imports, hooks, props, @source annotation, export name.
+      Output: /tmp/{kit_name}-metrics.json
+    inputs:
+      task: |
+        Scan {source_dir} for all .tsx files. For each, extract:
+        LOC, import count, hook count, prop count, @source path,
+        @migration-status, export function name.
+        Save as JSON array to /tmp/{kit_name}-metrics.json.
+    done_criteria:
+      - "/tmp/{kit_name}-metrics.json exists"
+      - "jq length /tmp/{kit_name}-metrics.json > 0"
+    next: classify
+
+  classify:
+    op: lev.exec
+    description: |
+      Launch N parallel haiku agents to classify components.
+      Each reads source files and determines: capabilities, family,
+      levNowElement mapping, classification (REAL/ALIAS/SHELL/HOLLOW).
+      Output: /tmp/{kit_name}-classified.json
+    inputs:
+      task: |
+        Split /tmp/{kit_name}-metrics.json into 5 batches.
+        Launch 5 haiku agents in parallel. Each reads component source
+        files and classifies: capabilities (input/display/layout/navigation/
+        data-viz/feedback/streaming/crud/media/system/composite),
+        family (foundations/* or domain/*), levNowElement mapping
+        (hero/section/card/data-table/code-block/timeline/text/inline/
+        chart/diagram/custom-html/feedback or null),
+        classification (REAL/ALIAS/SHELL/HOLLOW/UNKNOWN).
+        Merge results to /tmp/{kit_name}-classified.json.
+      model: haiku
+      parallel: 5
+    done_criteria:
+      - "/tmp/{kit_name}-classified.json exists"
+      - "all components from metrics.json are in classified.json"
+    next: create-sidecars
+
+  # ── Phase 2: Manifest Creation ──────────────────────────────
+  create-sidecars:
+    op: lev.exec
+    description: |
+      Create one .manifest.json sidecar per component in target_dir.
+      Launch N parallel haiku agents, each writing ~60-70 sidecars.
+      For ALIAS components, read source .tsx to extract canonical path.
+    inputs:
+      task: |
+        Split /tmp/{kit_name}-classified.json into 5 batches.
+        Launch 5 haiku agents. Each creates .manifest.json files
+        in {target_dir}/ with schema: id, name, family, domain,
+        capabilities, classification, levNowElement, origin, loc,
+        imports, hooks, propCount, lanes, beadId, markers.
+        ALIAS entries get a canonical field from reading the .tsx re-export.
+      model: haiku
+      parallel: 5
+    done_criteria:
+      - "count of .manifest.json files == count of .tsx files"
+      - "zero invalid manifests (build-manifest.ts --stats)"
+    next: build-index
+
+  build-index:
+    op: lev.exec
+    description: |
+      Run the glob builder to assemble _manifest.json from sidecars.
+      Refresh-on-publish pattern — this is the build step.
+    inputs:
+      task: "npx tsx build-manifest.ts --write"
+      cwd: "{target_dir}"
+    done_criteria:
+      - "_manifest.json exists"
+      - "total matches sidecar count"
+    next: detect-conflicts
+
+  # ── Phase 3: Conflict Detection ─────────────────────────────
+  detect-conflicts:
+    op: lev.exec
+    description: |
+      Identify components with conflicting implementations across
+      lanes or duplicate names. Compare *-conflict.tsx vs *-canonical.tsx
+      pairs. Diff source code to determine if conflicts are real
+      (different implementations) or aliases (same target).
+    inputs:
+      task: |
+        Read _manifest.json. Find components where:
+        1. ID contains "conflict" — theme lane conflicts
+        2. Same component name exists under different paths
+        3. Multiple files export the same function name
+        For each conflict, diff the implementations and classify:
+        auto-resolvable (canonical alias exists) vs needs-human-review
+        (genuinely different code). Output: /tmp/{kit_name}-conflicts.json
+    done_criteria:
+      - "/tmp/{kit_name}-conflicts.json exists"
+      - "each conflict has auto_resolvable: boolean"
+    branches:
+      has_conflicts: resolve-auto
+      no_conflicts: genui-map
+
+  # ── Phase 4: Resolution ─────────────────────────────────────
+  resolve-auto:
+    op: lev.exec
+    description: |
+      Auto-resolve conflicts where canonical alias exists.
+      Update manifests: canonical → reviewStatus:canonical,
+      conflict → reviewStatus:reviewed with winner pointer.
+    inputs:
+      task: |
+        For each auto-resolvable conflict in /tmp/{kit_name}-conflicts.json:
+        update the canonical manifest (reviewStatus:canonical, humanDecision:keep)
+        and the conflict manifest (reviewStatus:reviewed, markers:[winner=...]).
+        Rebuild _manifest.json.
+    next: interview-remaining
+
+  interview-remaining:
+    op: lev.interview
+    description: |
+      Present remaining conflicts (not auto-resolvable) to human.
+      For each: show the key visual/structural difference and
+      a recommendation. C4 ratchet — decisions are final.
+    inputs:
+      conflicts: "/tmp/{kit_name}-conflicts.json (filtered: auto_resolvable=false)"
+      ratchet: true
+    done_criteria:
+      - "all conflicts have humanDecision set"
+      - "/api/components/conflicts returns count=0"
+    next: genui-map
+
+  # ── Phase 5: GenUI Mapping ──────────────────────────────────
+  genui-map:
+    op: lev.exec
+    description: |
+      For each component with a levNowElement mapping, verify the
+      LevNowElement adapter handles it. Add missing adapters.
+      Update the Component Registry and refresh the dashboard.
+    inputs:
+      task: |
+        Read _manifest.json. For each component with levNowElement != null:
+        verify LevNowElement.tsx has an adapter for that element type.
+        For missing adapters, add prop translation and component import.
+        Rebuild _manifest.json. Restart dashboard to pick up changes.
+    done_criteria:
+      - "all levNowElement types have adapters in LevNowElement.tsx"
+      - "Component Registry at :5182/registry shows updated data"
+    next: done
+
+  done:
+    terminal: true
+    description: |
+      UI kit ingested. All components classified, manifests created,
+      conflicts resolved, GenUI adapters verified. The Component Registry
+      at :5182/registry shows the full catalog with detail pages.
+
+# ── Flow metadata ─────────────────────────────────────────────
+telemetry:
+  emit_per_node: true
+  metrics:
+    - components_scanned
+    - components_classified
+    - sidecars_created
+    - conflicts_detected
+    - conflicts_auto_resolved
+    - conflicts_human_resolved
+    - genui_adapters_verified
+
+circuit_breaker:
+  max_node_retries: 2
+  on_failure: escalate
