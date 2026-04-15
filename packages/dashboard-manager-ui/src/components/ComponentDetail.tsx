@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { PreviewGallery } from "./PreviewGallery";
 
 // ── Types (shared with ComponentRegistry) ──────────────────
 
@@ -873,6 +874,9 @@ export function ComponentDetail() {
             </div>
           </section>
         )}
+
+        {/* ── B2. Full LevNowElement gallery (all 12 adapters) ── */}
+        <PreviewGallery />
 
         {/* ── C. Storybook embed ── */}
         {!isConflict && (
