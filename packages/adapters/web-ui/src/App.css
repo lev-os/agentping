@@ -108,6 +108,40 @@
     font-size: 11px;
 }
 
+/* Mobile nav overflow fix (<768px): hide non-essential shortcut hints,
+   tighten spacing, and allow the primary nav to scroll horizontally if
+   still too wide for narrow viewports. Keeps logo + nav + expand button. */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 12px;
+        gap: 8px;
+    }
+    .header-left {
+        gap: 12px;
+        min-width: 0;
+        flex: 1;
+    }
+    .logo {
+        font-size: 15px;
+    }
+    .nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        flex-wrap: nowrap;
+        min-width: 0;
+    }
+    .nav::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-btn {
+        flex-shrink: 0;
+    }
+    .shortcuts-hint {
+        display: none;
+    }
+}
+
 /* Main */
 .main {
     flex: 1;
