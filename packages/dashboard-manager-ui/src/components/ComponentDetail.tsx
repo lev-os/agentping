@@ -751,13 +751,12 @@ export function ComponentDetail() {
 
               {/* Live render — single scoped LevNowElement */}
               <div
+                className="text-foreground"
                 style={{
-                  padding: 20,
-                  background:
-                    "linear-gradient(180deg, rgba(12,16,20,0.95), rgba(8,11,14,0.92))",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
+                  padding: "32px",
+                  background: "var(--color-background, hsl(220 20% 4%))",
+                  fontSize: 14,
+                  lineHeight: 1.6,
                 }}
               >
                 <LevNowElement
