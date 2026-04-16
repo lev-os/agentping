@@ -86,7 +86,7 @@ export function ComponentDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [manifestExpanded, setManifestExpanded] = useState(false);
-  const [storybookError, setStorybookError] = useState(false);
+  const [storybookError, setStorybookError] = useState(true); // default to error — storybook on :6007 is rarely running
 
   useEffect(() => {
     async function load() {
@@ -212,10 +212,10 @@ export function ComponentDetail() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "24px 20px 64px",
+          padding: "32px 24px 64px",
           display: "flex",
           flexDirection: "column",
-          gap: 24,
+          gap: 36,
         }}
       >
         {/* Back button */}
@@ -632,7 +632,11 @@ export function ComponentDetail() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 12,
+            gap: 16,
+            padding: "24px 24px",
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            borderRadius: 12,
           }}
         >
           <h2
@@ -702,7 +706,6 @@ export function ComponentDetail() {
                   padding: 20,
                   background:
                     "linear-gradient(180deg, rgba(12,16,20,0.95), rgba(8,11,14,0.92))",
-                  minHeight: 120,
                   display: "flex",
                   flexDirection: "column",
                   gap: 8,
@@ -741,7 +744,11 @@ export function ComponentDetail() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 12,
+              gap: 16,
+              padding: "24px 24px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 12,
             }}
           >
             <div
