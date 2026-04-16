@@ -57,25 +57,61 @@ function classificationColor(cls: string): string {
 
 // ── Storybook URL builder ──────────────────────────────────
 
-function buildStorybookUrl(component: ManifestComponent): string {
-  // Convert family path to storybook ID:
-  // e.g. "Migrations/WebUI/Badge" -> "migrations-webui-badge--default"
-  const storyPath = component.family
-    .split("/")
-    .map((s) => s.toLowerCase().replace(/\s+/g, "-"))
-    .join("-");
-  return `http://localhost:6007/iframe.html?id=${storyPath}--default&viewMode=story`;
+const STORYBOOK_BASE = "http://localhost:6007";
+
+/**
+ * Fetches the storybook index and finds the best story match for a component.
+ * Tries multiple needles: component name, manifest id, and stripped variants.
+ * Returns the matched story ID prefix (without --default) or null.
+ */
+async function findStorybookStoryId(
+  componentName: string,
+  manifestId: string,
+): Promise<string | null> {
+  try {
+    const res = await fetch(`/storybook-api/index.json`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const entries = data.entries ?? data.stories ?? {};
+    const defaultStories = Object.keys(entries).filter((k) =>
+      k.endsWith("--default"),
+    );
+
+    // Build search needles from most specific to least
+    const needles = [
+      // Exact manifest id match (e.g. "data-table" matches "migrations-webui-datatable")
+      manifestId.toLowerCase().replace(/[-_\s]/g, ""),
+      // Component name (e.g. "DataTable" → "datatable")
+      componentName.toLowerCase().replace(/[-_\s]/g, ""),
+      // Strip common suffixes: "Canonical", "Conflict", "Migrated"
+      componentName
+        .replace(/(Canonical|Conflict|Migrated)$/i, "")
+        .toLowerCase()
+        .replace(/[-_\s]/g, ""),
+    ];
+
+    // Deduplicate
+    const uniqueNeedles = [...new Set(needles)].filter((n) => n.length > 0);
+
+    for (const needle of uniqueNeedles) {
+      const candidates = defaultStories.filter((k) =>
+        k.replace(/[-_]/g, "").toLowerCase().includes(needle),
+      );
+      if (candidates.length > 0) {
+        // Prefer shorter IDs (more specific match)
+        candidates.sort((a, b) => a.length - b.length);
+        return candidates[0].replace("--default", "");
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
 }
 
-function buildStorybookUrlForVariant(
-  component: ManifestComponent,
-  variantSuffix: string,
-): string {
-  const storyPath = component.family
-    .split("/")
-    .map((s) => s.toLowerCase().replace(/\s+/g, "-"))
-    .join("-");
-  return `http://localhost:6007/iframe.html?id=${storyPath}--${variantSuffix}&viewMode=story`;
+function buildStorybookUrl(storyId: string): string {
+  return `${STORYBOOK_BASE}/iframe.html?id=${storyId}--default&viewMode=story`;
 }
 
 // ── Component ──────────────────────────────────────────────
@@ -86,7 +122,9 @@ export function ComponentDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [manifestExpanded, setManifestExpanded] = useState(false);
-  const [storybookError, setStorybookError] = useState(true); // default to error — storybook on :6007 is rarely running
+  const [storybookError, setStorybookError] = useState(false);
+  const [storybookStoryId, setStorybookStoryId] = useState<string | null>(null);
+  const [storybookLoading, setStorybookLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -112,6 +150,17 @@ export function ComponentDetail() {
   );
 
   const isConflict = !!(id && id.includes("conflict"));
+
+  // Look up storybook story ID by component name
+  useEffect(() => {
+    if (!component) return;
+    setStorybookLoading(true);
+    findStorybookStoryId(component.name, component.id).then((sid) => {
+      setStorybookStoryId(sid);
+      setStorybookError(sid === null);
+      setStorybookLoading(false);
+    });
+  }, [component]);
 
   // ── Loading / error / not-found states ──
 
@@ -196,7 +245,7 @@ export function ComponentDetail() {
   // ── Computed values ──
 
   const clsColor = classificationColor(component.classification);
-  const storybookUrl = buildStorybookUrl(component);
+  const storybookUrl = storybookStoryId ? buildStorybookUrl(storybookStoryId) : null;
   // Scope the GenUI preview to THIS component's lev-now element mapping.
   // `levNowElement` is a string key (e.g. "card", "hero", "inline") on the
   // manifest entry. If the key isn't present in the sample registry, we render
@@ -514,7 +563,7 @@ export function ComponentDetail() {
                   WebUI Variant
                 </div>
                 <iframe
-                  src={buildStorybookUrlForVariant(component, "web-ui-raw")}
+                  src={storybookStoryId ? `${STORYBOOK_BASE}/iframe.html?id=${storybookStoryId}--web-ui-raw&viewMode=story` : ""}
                   title={`${component.name} - WebUI variant`}
                   style={{
                     width: "100%",
@@ -551,7 +600,7 @@ export function ComponentDetail() {
                   Studio Variant
                 </div>
                 <iframe
-                  src={buildStorybookUrlForVariant(component, "studio-raw")}
+                  src={storybookStoryId ? `${STORYBOOK_BASE}/iframe.html?id=${storybookStoryId}--studio-raw&viewMode=story` : ""}
                   title={`${component.name} - Studio variant`}
                   style={{
                     width: "100%",
@@ -772,19 +821,21 @@ export function ComponentDetail() {
               >
                 Storybook Preview
               </h2>
-              <a
-                href={storybookUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: 11,
-                  fontFamily: "var(--font-mono)",
-                  color: "#3b82f6",
-                  textDecoration: "none",
-                }}
-              >
-                Open in Storybook →
-              </a>
+              {storybookUrl && (
+                <a
+                  href={storybookUrl.replace("/iframe.html?id=", "/?path=/story/")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "var(--font-mono)",
+                    color: "#3b82f6",
+                    textDecoration: "none",
+                  }}
+                >
+                  Open in Storybook →
+                </a>
+              )}
             </div>
 
             <div
@@ -795,7 +846,19 @@ export function ComponentDetail() {
                 background: "transparent",
               }}
             >
-              {storybookError ? (
+              {storybookLoading ? (
+                <div
+                  style={{
+                    padding: "40px 20px",
+                    textAlign: "center",
+                    color: "var(--kingly-text-muted)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 13,
+                  }}
+                >
+                  Loading storybook...
+                </div>
+              ) : storybookError || !storybookUrl ? (
                 <div
                   style={{
                     padding: "40px 20px",
@@ -806,15 +869,17 @@ export function ComponentDetail() {
                   }}
                 >
                   <p style={{ marginBottom: 8 }}>
-                    Storybook not available at{" "}
-                    <code style={{ color: "var(--kingly-text-secondary)" }}>
-                      localhost:6007
-                    </code>
+                    {storybookStoryId === null
+                      ? `No storybook story found for "${component.name}"`
+                      : "Storybook not available"}
                   </p>
                   <p style={{ fontSize: 11 }}>
                     Run{" "}
-                    <code style={{ color: "#22c55e" }}>pnpm storybook</code> to
-                    start it
+                    <code style={{ color: "#22c55e" }}>pnpm storybook</code>{" "}
+                    in{" "}
+                    <code style={{ color: "var(--kingly-text-secondary)" }}>
+                      packages/ui
+                    </code>
                   </p>
                 </div>
               ) : (
@@ -839,7 +904,7 @@ export function ComponentDetail() {
                 color: "var(--kingly-text-muted)",
               }}
             >
-              iframe: {storybookUrl}
+              {storybookUrl && <>iframe: {storybookUrl}</>}
             </div>
           </section>
         )}
