@@ -882,20 +882,17 @@ export function ComponentDetail() {
                   </p>
                 </div>
               ) : (
-                <div style={{ padding: "16px" }}>
-                  <iframe
-                    src={storybookUrl}
-                    title={`${component.name} - Storybook`}
-                    onError={() => setStorybookError(true)}
-                    style={{
-                      width: "100%",
-                      height: 400,
-                      border: "none",
-                      borderRadius: 6,
-                      background: "var(--color-background, hsl(220 20% 4%))",
-                    }}
-                  />
-                </div>
+                <iframe
+                  src={storybookUrl}
+                  title={`${component.name} - Storybook`}
+                  onError={() => setStorybookError(true)}
+                  style={{
+                    width: "100%",
+                    height: 400,
+                    border: "none",
+                    background: "var(--color-background, hsl(220 20% 4%))",
+                  }}
+                />
               )}
             </div>
 
