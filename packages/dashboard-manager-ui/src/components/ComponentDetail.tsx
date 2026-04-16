@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { PreviewGallery } from "./PreviewGallery";
+import { LevNowElement } from "@kingly/ui/components";
+import { LEV_NOW_SAMPLES } from "./lev-now-samples";
 
 // ── Types (shared with ComponentRegistry) ──────────────────
 
@@ -36,113 +37,6 @@ interface Manifest {
   byLevNowElement: Record<string, number>;
   components: ManifestComponent[];
 }
-
-// ── Sample props for LevNowElement demo ────────────────────
-
-const SAMPLE_LEV_NOW_PROPS: Record<
-  string,
-  { type: string; variant?: string; props: Record<string, unknown> }
-> = {
-  hero: {
-    type: "hero",
-    props: {
-      title: "Sample Hero",
-      subtitle: "GenUI bridge rendering",
-      category: "demo",
-      meta: "Rendered via LevNowElement adapter",
-    },
-  },
-  card: {
-    type: "card",
-    props: {
-      title: "Sample Card",
-      label: "GenUI Demo",
-      content: "This card is rendered through the lev-now absorption layer.",
-    },
-  },
-  "card-kpi": {
-    type: "card",
-    variant: "kpi",
-    props: {
-      value: "42",
-      label: "Components Absorbed",
-      trend: { direction: "up", value: "+7" },
-    },
-  },
-  "data-table": {
-    type: "data-table",
-    props: {
-      columns: [
-        { key: "name", label: "Name" },
-        { key: "status", label: "Status" },
-        { key: "type", label: "Type" },
-      ],
-      rows: [
-        { name: "Badge", status: "migrated", type: "REAL" },
-        { name: "StatusCard", status: "migrated", type: "REAL" },
-        { name: "Terminal", status: "migrated", type: "ALIAS" },
-      ],
-    },
-  },
-  "code-block": {
-    type: "code-block",
-    props: {
-      content: 'import { LevNowElement } from "@kingly/ui/genui";\n\n<LevNowElement type="card" props={{ title: "Hello" }} />',
-      filename: "example.tsx",
-      language: "tsx",
-    },
-  },
-  timeline: {
-    type: "timeline",
-    props: {
-      items: [
-        { date: "2026-01-15", title: "Migration started", status: "completed" },
-        { date: "2026-02-10", title: "GenUI bridge built", status: "completed" },
-        { date: "2026-03-01", title: "QA review", status: "in-progress" },
-      ],
-    },
-  },
-  text: {
-    type: "text",
-    props: {
-      content:
-        "**GenUI absorption** renders lev-now specs as _real React components_ instead of static HTML.",
-    },
-  },
-  feedback: {
-    type: "feedback",
-    props: {
-      title: "Pending Reviews",
-      items: [
-        {
-          id: "r1",
-          title: "Badge conflict resolution",
-          insight: "WebUI and Studio variants differ in padding",
-        },
-      ],
-    },
-  },
-  inline: {
-    type: "inline",
-    variant: "status-badge",
-    props: { label: "ACTIVE", variant: "match" },
-  },
-  section: {
-    type: "section",
-    props: {
-      title: "Sample Section",
-      subtitle: "Rendered via GenUI bridge",
-    },
-  },
-  chart: {
-    type: "chart",
-    props: { title: "Chart placeholder" },
-  },
-  diagram: {
-    type: "diagram",
-    props: { title: "Diagram placeholder" },
-  },
-};
 
 // ── Colour helpers ─────────────────────────────────────────
 
@@ -303,9 +197,13 @@ export function ComponentDetail() {
 
   const clsColor = classificationColor(component.classification);
   const storybookUrl = buildStorybookUrl(component);
+  // Scope the GenUI preview to THIS component's lev-now element mapping.
+  // `levNowElement` is a string key (e.g. "card", "hero", "inline") on the
+  // manifest entry. If the key isn't present in the sample registry, we render
+  // a muted "no mapping" pill instead of falling back to a generic card so the
+  // detail page reflects the component's actual GenUI adapter binding.
   const sampleLevNow = component.levNowElement
-    ? SAMPLE_LEV_NOW_PROPS[component.levNowElement] ??
-      SAMPLE_LEV_NOW_PROPS["card"]
+    ? LEV_NOW_SAMPLES[component.levNowElement] ?? null
     : null;
 
   return (
@@ -729,29 +627,31 @@ export function ComponentDetail() {
           </section>
         )}
 
-        {/* ── B. Live render panel (GenUI dogfood) ── */}
-        {sampleLevNow && (
-          <section
+        {/* ── B. GenUI Adapter Preview — scoped to THIS component's lev-now mapping ── */}
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <h2
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
+              fontFamily: "var(--font-display)",
+              fontSize: 18,
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              margin: 0,
+              color: "#22d3ee",
             }}
           >
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 18,
-                fontWeight: 600,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                margin: 0,
-                color: "#22d3ee",
-              }}
-            >
-              GenUI Live Render
-            </h2>
+            {sampleLevNow
+              ? `GenUI Adapter Preview — ${sampleLevNow.type}`
+              : "GenUI Adapter Preview"}
+          </h2>
 
+          {sampleLevNow ? (
             <div
               style={{
                 border: "1px solid rgba(34, 211, 238, 0.2)",
@@ -792,91 +692,48 @@ export function ComponentDetail() {
                     color: "var(--kingly-text-muted)",
                   }}
                 >
-                  @kingly/ui/genui
+                  @kingly/ui/components
                 </span>
               </div>
 
-              {/* Render area */}
+              {/* Live render — single scoped LevNowElement */}
               <div
                 style={{
                   padding: 20,
                   background:
                     "linear-gradient(180deg, rgba(12,16,20,0.95), rgba(8,11,14,0.92))",
                   minHeight: 120,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
                 }}
               >
-                {/*
-                  NOTE: We render a static preview of what LevNowElement would produce.
-                  In a full integration, this would be:
-                    <LevNowElement type={sampleLevNow.type} variant={sampleLevNow.variant} props={sampleLevNow.props} />
-                  For now, we show the element spec as a formatted preview to avoid
-                  cross-package import issues in the dashboard-manager-ui build.
-                */}
-                <div
-                  style={{
-                    padding: 16,
-                    border: "1px solid var(--kingly-border-default)",
-                    borderRadius: 8,
-                    background: "rgba(255,255,255,0.02)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 10,
-                      fontFamily: "var(--font-mono)",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--kingly-text-muted)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Element Spec
-                  </div>
-                  <pre
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: 12,
-                      color: "#22d3ee",
-                      whiteSpace: "pre-wrap",
-                      wordBreak: "break-word",
-                      margin: 0,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {JSON.stringify(
-                      {
-                        type: sampleLevNow.type,
-                        ...(sampleLevNow.variant
-                          ? { variant: sampleLevNow.variant }
-                          : {}),
-                        props: sampleLevNow.props,
-                      },
-                      null,
-                      2,
-                    )}
-                  </pre>
-                </div>
-              </div>
-
-              {/* Props summary */}
-              <div
-                style={{
-                  padding: "10px 16px",
-                  background: "rgba(34, 211, 238, 0.03)",
-                  borderTop: "1px solid rgba(34, 211, 238, 0.1)",
-                  fontSize: 11,
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--kingly-text-muted)",
-                }}
-              >
-                Props passed: {Object.keys(sampleLevNow.props).join(", ")}
+                <LevNowElement
+                  type={sampleLevNow.type}
+                  variant={sampleLevNow.variant}
+                  props={sampleLevNow.props}
+                />
               </div>
             </div>
-          </section>
-        )}
-
-        {/* ── B2. Full LevNowElement gallery (all 12 adapters) ── */}
-        <PreviewGallery />
+          ) : (
+            <span
+              style={{
+                alignSelf: "flex-start",
+                fontSize: 11,
+                fontFamily: "var(--font-mono)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--kingly-text-muted)",
+                padding: "6px 12px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.03)",
+              }}
+            >
+              No GenUI adapter mapping
+            </span>
+          )}
+        </section>
 
         {/* ── C. Storybook embed ── */}
         {!isConflict && (
