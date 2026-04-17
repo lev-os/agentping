@@ -1,4 +1,0 @@
-/* Scan @kingly/ui component source so Tailwind includes their utility classes.
-   No @import "tailwindcss" here — skynet.css already imports it. */
-@source "../../ui/src/components/**/*.tsx";
-@source "../../ui/src/components/**/*.ts";

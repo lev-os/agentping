@@ -25,6 +25,10 @@
       "types": "./dist/theme/index.d.ts",
       "import": "./dist/theme/index.js"
     },
+    "./styles": {
+      "import": "./src/styles.css",
+      "default": "./src/styles.css"
+    },
     "./theme/skynet.css": {
       "import": "./src/theme/skynet.css",
       "default": "./src/theme/skynet.css"

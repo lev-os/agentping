@@ -14,12 +14,18 @@
 /* All @import rules must come first per CSS spec */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
-/* Tailwind CSS v4 - Must be imported before @theme inline */
+/* Tailwind CSS v4 */
 @import "tailwindcss";
 
 /* =============================================================================
    TAILWIND CSS v4 THEME LAYER
    ============================================================================= */
+
+/* Spacing must be in a non-inline @theme block so TW4 emits CSS custom properties
+   for calc(var(--spacing) * N) to resolve in px-*, py-*, m-*, gap-* utilities. */
+@theme {
+  --spacing: 0.25rem;
+}
 
 @theme inline {
   /* SKYNET Color System - HSL Based */
