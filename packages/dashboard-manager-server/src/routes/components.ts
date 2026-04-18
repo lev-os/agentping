@@ -6,7 +6,7 @@
  */
 
 import { Hono } from 'hono';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
 
@@ -51,6 +51,20 @@ function resolveManifestPath(): string {
     'packages', 'ui', 'src', 'components', 'migrations', '_manifest.json',
   );
 }
+
+function resolveSidecarPath(componentId: string): string {
+  return path.resolve(
+    process.cwd(),
+    'packages', 'ui', 'src', 'components', 'migrations',
+    `${componentId}.manifest.json`,
+  );
+}
+
+const DECISION_TO_REVIEW_STATUS: Record<string, string> = {
+  keep: 'reviewed',
+  merge: 'absorbed',
+  deprecate: 'deprecated',
+};
 
 async function loadManifest(): Promise<Manifest> {
   const filePath = resolveManifestPath();
@@ -143,6 +157,66 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/stats] error:', error);
+      return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
+    }
+  });
+
+  // GET /api/components/queue — components awaiting human review
+  app.get('/queue', async (c) => {
+    try {
+      const manifest = await loadManifest();
+      const pending = manifest.components.filter(
+        (comp) => !comp.humanDecision && comp.reviewStatus !== 'reviewed' && comp.reviewStatus !== 'absorbed' && comp.reviewStatus !== 'deprecated',
+      );
+      return c.json({
+        total_pending: pending.length,
+        total_components: manifest.total,
+        components: pending,
+      });
+    } catch (error) {
+      console.error('[components/queue] error:', error);
+      return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
+    }
+  });
+
+  // POST /api/components/:id/decision — record human review decision
+  app.post('/:id/decision', async (c) => {
+    try {
+      const componentId = c.req.param('id');
+      const body = await c.req.json<{ decision?: string; notes?: string }>();
+      const decision = body.decision;
+
+      if (!decision || !DECISION_TO_REVIEW_STATUS[decision]) {
+        return c.json(
+          { error: `Invalid decision "${decision}". Must be one of: ${Object.keys(DECISION_TO_REVIEW_STATUS).join(', ')}` },
+          400,
+        );
+      }
+
+      const sidecarPath = resolveSidecarPath(componentId);
+      if (!existsSync(sidecarPath)) {
+        return c.json({ error: `Sidecar not found for component "${componentId}" at ${sidecarPath}` }, 404);
+      }
+
+      const sidecarRaw = await readFile(sidecarPath, 'utf-8');
+      const sidecar = JSON.parse(sidecarRaw) as Record<string, unknown>;
+
+      sidecar.humanDecision = decision;
+      sidecar.reviewStatus = DECISION_TO_REVIEW_STATUS[decision];
+      sidecar.reviewedAt = new Date().toISOString();
+      if (body.notes) sidecar.reviewNotes = body.notes;
+
+      await writeFile(sidecarPath, JSON.stringify(sidecar, null, 2) + '\n', 'utf-8');
+
+      return c.json({
+        id: componentId,
+        humanDecision: decision,
+        reviewStatus: DECISION_TO_REVIEW_STATUS[decision],
+        reviewedAt: sidecar.reviewedAt,
+        sidecarPath,
+      });
+    } catch (error) {
+      console.error('[components/:id/decision] error:', error);
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
