@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "card",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/DocCard.tsx",
   "loc": 7,

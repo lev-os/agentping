@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "section",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/WidgetWrapper.tsx",
   "loc": 7,

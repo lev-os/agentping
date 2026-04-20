@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "chart",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/skeletons/ChartSkeleton.tsx",
   "loc": 6,
