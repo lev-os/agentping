@@ -200,7 +200,7 @@ export function EnrichmentPanel({
     <div
       className={cn(
         "relative border border-cyan-500/20 bg-black/60 rounded-lg overflow-hidden transition-colors",
-        isDragging && "border-cyan-400/60 bg-cyan-500/5",
+        isDragging && "border-cyan-400/60 bg-cyan-500/5 motion-reduce:transition-none",
         className,
       )}
       onDragOver={handleDragOver}
@@ -236,6 +236,8 @@ export function EnrichmentPanel({
             return (
               <button
                 key={type}
+                aria-expanded={isActive}
+                aria-label={`${isActive ? "Submit" : "Add"} ${meta?.label ?? type} directive`}
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded border transition-colors",
                   isActive
@@ -278,6 +280,7 @@ export function EnrichmentPanel({
             >
               <span>{formatDirective(dir)}</span>
               <button
+                aria-label={`Remove ${dir.type} directive: ${dir.value}`}
                 className="text-cyan-500/50 hover:text-cyan-300 transition-colors"
                 onClick={() => onRemoveDirective?.(i)}
               >
@@ -294,6 +297,7 @@ export function EnrichmentPanel({
               <span>{att.file.name}</span>
               <span className="text-zinc-500">({(att.file.size / 1024).toFixed(1)}KB)</span>
               <button
+                aria-label={`Remove attachment: ${att.file.name}`}
                 className="text-zinc-500 hover:text-zinc-300 transition-colors"
                 onClick={() => onRemoveAttachment?.(att.id)}
               >

@@ -287,7 +287,7 @@
     resize: none;
     /* Auto-growth handled or fixed */
     transition: all 0.2s ease;
-    min-height: 24px;
+    min-height: var(--min-touch-target, 44px);
 }
 
 .notes-textarea::placeholder {

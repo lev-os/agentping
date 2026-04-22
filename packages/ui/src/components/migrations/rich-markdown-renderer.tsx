@@ -152,10 +152,9 @@ export function RichMarkdownRenderer({ content, className }: RichMarkdownRendere
               );
             case "ol":
               return (
-                <ol key={i} className="space-y-1 pl-4">
+                <ol key={i} className="space-y-1 pl-4 list-decimal">
                   {block.items?.map((item, j) => (
-                    <li key={j} className="text-xs text-gray-300 list-none">
-                      <span className="text-cyan-500/50 mr-1.5">{j + 1}.</span>
+                    <li key={j} className="text-xs text-gray-300 marker:text-cyan-500/50">
                       {renderInline(item)}
                     </li>
                   ))}

@@ -128,8 +128,8 @@ button {
   transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
   /* touch-action: manipulation prevents double-tap zoom */
   touch-action: manipulation;
-  /* Minimum 44px on mobile, 24px minimum hit target */
-  min-height: 32px;
+  /* WCAG 2.5.5: 44px minimum touch target */
+  min-height: var(--min-touch-target, 44px);
 }
 
 button:disabled {
