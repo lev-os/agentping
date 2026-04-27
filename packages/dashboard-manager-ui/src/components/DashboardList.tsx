@@ -12,6 +12,7 @@ import {
 } from "../lib/command-center";
 import { ParitySection } from "./ParitySection";
 import { SetupPanel } from "./SetupPanel";
+import { WorkflowSection } from "./WorkflowSection";
 
 function toDashboardSummary(dashboard: Dashboard): DmDashboardSummary {
   return {
@@ -225,6 +226,8 @@ export function DashboardList() {
             </div>
           </section>
         ) : null}
+
+        <WorkflowSection />
 
         {/* Parity Registry */}
         <ParitySection />
