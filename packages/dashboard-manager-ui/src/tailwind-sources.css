@@ -1,0 +1,4 @@
+/* Scan @kingly/ui component source so ALL Tailwind utility classes resolve.
+   Paths are relative to THIS file (dashboard-manager-ui/src/). */
+@source "../../ui/src/components/**/*.tsx";
+@source "../../ui/src/components/**/*.ts";

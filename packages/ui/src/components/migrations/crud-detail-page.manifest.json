@@ -10,7 +10,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "section",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/recipes/crud/layouts/CrudDetailPage.tsx",
   "loc": 6,

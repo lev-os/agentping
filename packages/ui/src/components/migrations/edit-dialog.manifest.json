@@ -9,7 +9,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "feedback",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/recipes/crud/dialogs/EditDialog.tsx",
   "loc": 6,

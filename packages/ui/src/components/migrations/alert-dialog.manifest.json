@@ -9,7 +9,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "feedback",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/ui/alert-dialog.tsx",
   "loc": 18,

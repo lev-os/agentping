@@ -1,0 +1,16 @@
+/**
+ * @kingly/ui — Single CSS entry point for consumers.
+ *
+ * Usage:  import '@kingly/ui/styles'
+ */
+
+/* Theme (includes @import "tailwindcss" + @theme tokens + all custom CSS) */
+@import "./theme/skynet.css";
+
+/* Spacing utilities shim — TW4 vite plugin doesn't generate these for
+   cross-package @source content. Remove when tailwindcss#13136 is resolved. */
+@import "./theme/utilities-shim.css";
+
+/* Scan @kingly/ui components so their Tailwind classes get generated */
+@source "./components/**/*.tsx";
+@source "./components/**/*.ts";

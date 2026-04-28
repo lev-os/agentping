@@ -9,7 +9,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": null,
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/ResponsiveDashboard.tsx",
   "loc": 7,

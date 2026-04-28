@@ -183,7 +183,6 @@ dashboards:
       framework: nextjs
       lifecycle: detected
       packageManager: pnpm
-      lifecycle: detected
   - name: Ai Devs
     id: ai-devs
     port: 0

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import {
   getParityEntries,
+  paritySlug,
   type ParityEntry,
   type ParityFeature,
 } from "../api/parity";
@@ -10,19 +11,27 @@ import {
 // ── Color helpers ──
 
 function verdictColor(verdict: string): string {
+  const normalized = verdict.toLowerCase();
+  if (
+    normalized.includes("adopt") ||
+    normalized.includes("steal") ||
+    normalized.includes("integrat") ||
+    normalized.includes("absor")
+  ) {
+    return "#22c55e";
+  }
+  if (normalized.includes("extract") || normalized.includes("build") || normalized.includes("merge")) {
+    return "#f59e0b";
+  }
+  if (normalized.includes("reference") || normalized.includes("coverage")) {
+    return "#3b82f6";
+  }
+  if (normalized.includes("reject") || normalized === "pass") {
+    return "#ef4444";
+  }
   switch (verdict) {
-    case "adopt":
-    case "steal":
-    case "integrated":
+    case "implemented":
       return "#22c55e";
-    case "extract":
-    case "build":
-      return "#f59e0b";
-    case "reference":
-    case "coverage":
-      return "#3b82f6";
-    case "reject":
-      return "#ef4444";
     default:
       return "#6b7280";
   }
@@ -68,7 +77,7 @@ export function ParityDetail() {
   const entry = useMemo(
     () =>
       entries.find(
-        (e) => e.target.toLowerCase() === (id ?? "").toLowerCase(),
+        (e) => paritySlug(e.target) === (id ?? "").toLowerCase(),
       ),
     [entries, id],
   );

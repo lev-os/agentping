@@ -47,6 +47,8 @@ export interface GraphViewProps {
   interactive?: boolean;
   /** Whether to show connection indicators */
   showConnections?: boolean;
+  /** Let the graph body grow to fit its content instead of using fixed height buckets */
+  autoHeight?: boolean;
   /** Custom graph renderer */
   children?: React.ReactNode;
   /** Additional CSS classes */
@@ -73,6 +75,7 @@ export function GraphView({
   size = "md",
   interactive = true,
   showConnections = true,
+  autoHeight = false,
   children,
   className,
   onRefresh,
@@ -157,7 +160,11 @@ export function GraphView({
         <div
           className={cn(
             "relative rounded-md border border-border/30 bg-muted/20 overflow-hidden",
-            isFullscreen ? "h-[calc(100vh-12rem)]" : sizeClasses[size].height
+            isFullscreen
+              ? "h-[calc(100vh-12rem)]"
+              : autoHeight
+                ? "h-auto min-h-[28rem]"
+                : sizeClasses[size].height
           )}
         >
           {children ? (

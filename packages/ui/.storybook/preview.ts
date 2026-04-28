@@ -44,6 +44,10 @@ const STORYBOOK_STABILIZATION_CSS = `
   padding-inline: 12px !important;
 }
 
+.sb-show-main.sb-main-fullscreen #storybook-root {
+  padding: 16px;
+}
+
 .docs-story,
 .sbdocs .docs-story > div {
   max-width: none !important;

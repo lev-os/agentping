@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "data-table",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/skeletons/TableSkeleton.tsx",
   "loc": 6,

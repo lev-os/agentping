@@ -1,0 +1,870 @@
+{
+  "generated": "2026-04-20T13:54:20.362Z",
+  "total_components": 344,
+  "total_clusters": 34,
+  "multi_member_clusters": 28,
+  "singleton_clusters": 6,
+  "clusters": [
+    {
+      "id": "c004",
+      "key": "lev-now:inline",
+      "reason": "levNowElement",
+      "levNowElement": "inline",
+      "family": null,
+      "classification": null,
+      "members": [
+        "agent-avatar",
+        "artifact-badge",
+        "badge-canonical",
+        "badge-conflict",
+        "battery-meter",
+        "breadcrumbs",
+        "button-canonical",
+        "button-conflict",
+        "checkbox",
+        "circular-progress",
+        "collapse-button",
+        "confidence-meter",
+        "connection-signal",
+        "connection-status",
+        "context-usage",
+        "copy-button",
+        "crud-field-renderer",
+        "crud-filter-bar",
+        "crud-view-switcher",
+        "date-picker",
+        "date-picker-pro",
+        "diff-stat-summary",
+        "dm-status-badge",
+        "dropdown",
+        "editable-text",
+        "field-renderer",
+        "filter-bar",
+        "filtered-dropdown",
+        "hover-card",
+        "inline-todo",
+        "kbd",
+        "label",
+        "live-badge",
+        "status-dot",
+        "status-indicator",
+        "stepper",
+        "streaming-indicator",
+        "switch",
+        "tab-bar",
+        "tag-input",
+        "text-area",
+        "textarea",
+        "theme-toggle",
+        "ticker-tape",
+        "toggle-switch",
+        "tooltip",
+        "tree-expander",
+        "typing-indicator",
+        "view-switcher",
+        "voice-visualizer"
+      ],
+      "count": 50,
+      "origins": {
+        "webui": 16,
+        "kingly": 28,
+        "canvas": 1,
+        "studio": 4,
+        "dashboard-manager": 1
+      }
+    },
+    {
+      "id": "c005",
+      "key": "lev-now:card",
+      "reason": "levNowElement",
+      "levNowElement": "card",
+      "family": null,
+      "classification": null,
+      "members": [
+        "agent-status-overlay",
+        "asset-card",
+        "calendar-view",
+        "card",
+        "chat-message",
+        "countdown-widget",
+        "crud-tile-card",
+        "dashboard-widget",
+        "data-metrics-board",
+        "dm-analytics-panel",
+        "doc-card",
+        "empty-state-conflict",
+        "error-cluster",
+        "event-card",
+        "file-metadata-card",
+        "gallery-card",
+        "holographic-card",
+        "lcars-panel",
+        "lease-approval",
+        "markdown-card",
+        "message-bubble",
+        "navigator-with-dashboards",
+        "ping-card",
+        "server-rack-status",
+        "smart-action-result",
+        "stats-grid",
+        "status-card",
+        "status-grid",
+        "step-checklist",
+        "system-health-gauge",
+        "task-checklist",
+        "task-workflow",
+        "team-roster",
+        "tile-card",
+        "tile-view",
+        "time-slot-picker",
+        "timezone-slider",
+        "todo-list",
+        "tool-card",
+        "tool-invocation",
+        "transfer-list",
+        "tree-browser",
+        "voice-console",
+        "weather-card",
+        "weekly-schedule",
+        "wizard-step",
+        "world-clock"
+      ],
+      "count": 47,
+      "origins": {
+        "studio": 6,
+        "webui": 22,
+        "kingly": 16,
+        "dashboard-manager": 1,
+        "canvas": 2
+      }
+    },
+    {
+      "id": "c001",
+      "key": "lev-now:section",
+      "reason": "levNowElement",
+      "levNowElement": "section",
+      "family": null,
+      "classification": null,
+      "members": [
+        "accordion-list",
+        "approval-queue",
+        "canvas-renderer",
+        "chat-panel",
+        "component-gallery",
+        "crud-archive-page",
+        "crud-detail-page",
+        "crud-list-page",
+        "crud-tile-view",
+        "dashboard",
+        "dashboard-detail-view",
+        "diagnostic-panel",
+        "dm-dashboard-detail",
+        "enrichment-panel",
+        "file-explorer",
+        "gallery-ai-section",
+        "gallery-content-section",
+        "gallery-dashboard-section",
+        "gallery-data-section",
+        "gallery-feedback-section",
+        "gallery-finance-section",
+        "gallery-forms-section",
+        "gallery-interaction-section",
+        "gallery-logs-section",
+        "gallery-media-section",
+        "gallery-navigation-section",
+        "gallery-scheduling-section",
+        "gallery-sofia-section",
+        "gallery-system-section",
+        "gallery-visuals-section",
+        "info-sidebar",
+        "tabs",
+        "tabs-container",
+        "terminal",
+        "toolbar",
+        "widget-footer",
+        "widget-header-action",
+        "widget-wrapper"
+      ],
+      "count": 38,
+      "origins": {
+        "webui": 2,
+        "studio": 10,
+        "canvas": 1,
+        "kingly": 24,
+        "dashboard-manager": 1
+      }
+    },
+    {
+      "id": "c006",
+      "key": "lev-now:feedback",
+      "reason": "levNowElement",
+      "levNowElement": "feedback",
+      "family": null,
+      "classification": null,
+      "members": [
+        "alert-banner",
+        "alert-dialog",
+        "archive-dialog",
+        "confirmation-modal",
+        "create-dialog",
+        "crud-archive-dialog",
+        "crud-create-dialog",
+        "crud-delete-dialog",
+        "crud-edit-dialog",
+        "crud-entity-form",
+        "crud-restore-dialog",
+        "delete-dialog",
+        "dm-create-dashboard-modal",
+        "edit-dialog",
+        "entity-form",
+        "gauge-skeleton",
+        "grid-skeleton",
+        "inline-tutorial-tooltip",
+        "loading-progress",
+        "progress",
+        "progress-bar",
+        "skeleton",
+        "spinner-conflict",
+        "stat-grid-skeleton",
+        "status-bar-skeleton",
+        "terminal-link-popup",
+        "toast",
+        "toast-manager",
+        "widget-crash-fallback",
+        "widget-empty",
+        "widget-error"
+      ],
+      "count": 31,
+      "origins": {
+        "webui": 5,
+        "kingly": 23,
+        "dashboard-manager": 1,
+        "studio": 2
+      }
+    },
+    {
+      "id": "c002",
+      "key": "lev-now:data-table",
+      "reason": "levNowElement",
+      "levNowElement": "data-table",
+      "family": null,
+      "classification": null,
+      "members": [
+        "active-sessions",
+        "advanced-data-grid",
+        "audit-log-table",
+        "audit-log-viewer",
+        "crud-list-view",
+        "crud-table-view",
+        "csv-preview",
+        "csv-viewer",
+        "data-table",
+        "dm-dashboard-list",
+        "docker-stats",
+        "encryption-status",
+        "exchange-status",
+        "firewall-rules",
+        "history-view",
+        "http-inspector",
+        "key-value-store",
+        "list-view",
+        "object-properties",
+        "order-book",
+        "packet-inspector",
+        "process-table",
+        "property-grid",
+        "signal-monitor",
+        "sql-result-table",
+        "table",
+        "table-skeleton",
+        "table-view",
+        "task-queue",
+        "trade-history"
+      ],
+      "count": 30,
+      "origins": {
+        "webui": 22,
+        "kingly": 6,
+        "dashboard-manager": 1,
+        "studio": 1
+      }
+    },
+    {
+      "id": "c009",
+      "key": "lev-now:chart",
+      "reason": "levNowElement",
+      "levNowElement": "chart",
+      "family": null,
+      "classification": null,
+      "members": [
+        "brain-activity",
+        "candlestick-chart",
+        "chart-skeleton",
+        "depth-chart",
+        "dm-restart-histogram",
+        "dm-uptime-chart",
+        "forecasting-line",
+        "heatmap-grid",
+        "latency-histogram",
+        "log-histogram",
+        "market-heatmap",
+        "memory-usage-chart",
+        "metric-chart",
+        "portfolio-pie",
+        "radar-chart",
+        "resource-gauge",
+        "resource-view",
+        "restart-histogram",
+        "status-pie-chart",
+        "storage-distribution",
+        "uptime-chart",
+        "vector-cluster",
+        "year-heatmap"
+      ],
+      "count": 23,
+      "origins": {
+        "webui": 14,
+        "kingly": 4,
+        "dashboard-manager": 2,
+        "studio": 3
+      }
+    },
+    {
+      "id": "c012",
+      "key": "lev-now:code-block",
+      "reason": "levNowElement",
+      "levNowElement": "code-block",
+      "family": null,
+      "classification": null,
+      "members": [
+        "code-diff-viewer-conflict",
+        "conflict-resolver",
+        "dm-log-viewer",
+        "file-viewer",
+        "hex-dump-view",
+        "hex-inspector",
+        "json-diff",
+        "json-editor",
+        "json-tree-viewer",
+        "live-log-stream",
+        "log-stream",
+        "log-viewer",
+        "log-viewer-conflict",
+        "markdown-editor",
+        "stack-trace-profiler",
+        "terminal-console",
+        "terminal-view",
+        "token-stream"
+      ],
+      "count": 18,
+      "origins": {
+        "kingly": 3,
+        "webui": 13,
+        "dashboard-manager": 1,
+        "studio": 1
+      }
+    },
+    {
+      "id": "c016",
+      "key": "lev-now:diagram",
+      "reason": "levNowElement",
+      "levNowElement": "diagram",
+      "family": null,
+      "classification": null,
+      "members": [
+        "data-pipeline",
+        "dependency-graph",
+        "distributed-trace",
+        "file-tree",
+        "geo-map",
+        "geo-request-map",
+        "globe-wireframe",
+        "graph-view",
+        "mind-map",
+        "network-graph",
+        "network-topology",
+        "org-chart",
+        "radar-sweep",
+        "sankey-diagram",
+        "schema-graph",
+        "sonar-display",
+        "system-network-graph"
+      ],
+      "count": 17,
+      "origins": {
+        "webui": 15,
+        "studio": 1,
+        "kingly": 1
+      }
+    },
+    {
+      "id": "c013",
+      "key": "family:foundations/forms:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/forms",
+      "classification": "REAL",
+      "members": [
+        "color-picker",
+        "input-conflict",
+        "knob",
+        "multi-select",
+        "pin-input",
+        "range-slider",
+        "rating",
+        "search-input-conflict",
+        "secret-input",
+        "segmented-control",
+        "selection-list",
+        "slider"
+      ],
+      "count": 12,
+      "origins": {
+        "webui": 6,
+        "kingly": 6
+      }
+    },
+    {
+      "id": "c003",
+      "key": "lev-now:timeline",
+      "reason": "levNowElement",
+      "levNowElement": "timeline",
+      "family": null,
+      "classification": null,
+      "members": [
+        "activity-feed",
+        "alert-feed",
+        "audit-feed",
+        "build-status-logs",
+        "daily-agenda",
+        "event-timeline",
+        "progress-timeline",
+        "step-tracker",
+        "timeline-conflict"
+      ],
+      "count": 9,
+      "origins": {
+        "webui": 6,
+        "studio": 1,
+        "kingly": 2
+      }
+    },
+    {
+      "id": "c011",
+      "key": "lev-now:custom-html",
+      "reason": "levNowElement",
+      "levNowElement": "custom-html",
+      "family": null,
+      "classification": null,
+      "members": [
+        "circuit-pattern",
+        "inline-kanban",
+        "kanban-board",
+        "layers",
+        "log-search-query",
+        "rich-markdown-renderer",
+        "video-player"
+      ],
+      "count": 7,
+      "origins": {
+        "webui": 4,
+        "kingly": 2,
+        "studio": 1
+      }
+    },
+    {
+      "id": "c018",
+      "key": "family:foundations/layout:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/layout",
+      "classification": "REAL",
+      "members": [
+        "draggable-list",
+        "footer-panel",
+        "lcars-elbow",
+        "modal",
+        "side-panel",
+        "split-view",
+        "star-field"
+      ],
+      "count": 7,
+      "origins": {
+        "webui": 4,
+        "studio": 2,
+        "kingly": 1
+      }
+    },
+    {
+      "id": "c010",
+      "key": "family:domain/chat:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/chat",
+      "classification": "REAL",
+      "members": [
+        "chat-header",
+        "chat-input",
+        "chat-search",
+        "model-selector",
+        "prompt-editor",
+        "session-tabs"
+      ],
+      "count": 6,
+      "origins": {
+        "studio": 4,
+        "webui": 2
+      }
+    },
+    {
+      "id": "c008",
+      "key": "family:domain/media:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/media",
+      "classification": "REAL",
+      "members": [
+        "audio-player",
+        "file-asset-picker",
+        "image-compare",
+        "image-diff",
+        "pdf-preview"
+      ],
+      "count": 5,
+      "origins": {
+        "webui": 5
+      }
+    },
+    {
+      "id": "c014",
+      "key": "family:foundations/navigation:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/navigation",
+      "classification": "REAL",
+      "members": [
+        "command-palette",
+        "context-menu-conflict",
+        "dock-menu",
+        "pagination",
+        "radial-nav"
+      ],
+      "count": 5,
+      "origins": {
+        "webui": 4,
+        "kingly": 1
+      }
+    },
+    {
+      "id": "c000",
+      "key": "family:domain/system:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/system",
+      "classification": "REAL",
+      "members": [
+        "access-pad",
+        "agent-dropdown",
+        "settings-modal"
+      ],
+      "count": 3,
+      "origins": {
+        "webui": 1,
+        "studio": 2
+      }
+    },
+    {
+      "id": "c007",
+      "key": "family:foundations/layout:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/layout",
+      "classification": "ALIAS",
+      "members": [
+        "animations",
+        "overlay-footer",
+        "sheet"
+      ],
+      "count": 3,
+      "origins": {
+        "kingly": 3
+      }
+    },
+    {
+      "id": "c020",
+      "key": "family:foundations/forms:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/forms",
+      "classification": "ALIAS",
+      "members": [
+        "form",
+        "input-canonical",
+        "search-input-canonical"
+      ],
+      "count": 3,
+      "origins": {
+        "kingly": 3
+      }
+    },
+    {
+      "id": "c022",
+      "key": "lev-now:hero",
+      "reason": "levNowElement",
+      "levNowElement": "hero",
+      "family": null,
+      "classification": null,
+      "members": [
+        "hero",
+        "landing-page",
+        "welcome-screen"
+      ],
+      "count": 3,
+      "origins": {
+        "kingly": 1,
+        "webui": 1,
+        "studio": 1
+      }
+    },
+    {
+      "id": "c023",
+      "key": "family:domain/canvas:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/canvas",
+      "classification": "REAL",
+      "members": [
+        "hex-grid-background",
+        "mini-map",
+        "properties-panel"
+      ],
+      "count": 3,
+      "origins": {
+        "webui": 2,
+        "studio": 1
+      }
+    },
+    {
+      "id": "c025",
+      "key": "family:foundations/buttons:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/buttons",
+      "classification": "REAL",
+      "members": [
+        "icon-button-conflict",
+        "lcars-button",
+        "quick-actions"
+      ],
+      "count": 3,
+      "origins": {
+        "kingly": 1,
+        "webui": 2
+      }
+    },
+    {
+      "id": "c027",
+      "key": "family:domain/dashboard-mgr:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/dashboard-mgr",
+      "classification": "ALIAS",
+      "members": [
+        "loading-state-provider",
+        "responsive-dashboard",
+        "spec-panel"
+      ],
+      "count": 3,
+      "origins": {
+        "kingly": 3
+      }
+    },
+    {
+      "id": "c015",
+      "key": "family:domain/crud:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/crud",
+      "classification": "ALIAS",
+      "members": [
+        "crud-context",
+        "restore-dialog"
+      ],
+      "count": 2,
+      "origins": {
+        "kingly": 2
+      }
+    },
+    {
+      "id": "c017",
+      "key": "family:foundations/feedback-status:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/feedback-status",
+      "classification": "ALIAS",
+      "members": [
+        "dialog",
+        "glow-orb"
+      ],
+      "count": 2,
+      "origins": {
+        "kingly": 2
+      }
+    },
+    {
+      "id": "c019",
+      "key": "family:foundations/feedback-status:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/feedback-status",
+      "classification": "REAL",
+      "members": [
+        "error-boundary",
+        "particle-stream"
+      ],
+      "count": 2,
+      "origins": {
+        "webui": 2
+      }
+    },
+    {
+      "id": "c021",
+      "key": "family:foundations/navigation:ALIAS",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "foundations/navigation",
+      "classification": "ALIAS",
+      "members": [
+        "header-status-dropdown",
+        "menu-list"
+      ],
+      "count": 2,
+      "origins": {
+        "kingly": 2
+      }
+    },
+    {
+      "id": "c026",
+      "key": "lev-now:text",
+      "reason": "levNowElement",
+      "levNowElement": "text",
+      "family": null,
+      "classification": null,
+      "members": [
+        "inline-markdown",
+        "shimmer-text"
+      ],
+      "count": 2,
+      "origins": {
+        "kingly": 2
+      }
+    },
+    {
+      "id": "c030",
+      "key": "family:domain/content:REAL",
+      "reason": "family+classification",
+      "levNowElement": null,
+      "family": "domain/content",
+      "classification": "REAL",
+      "members": [
+        "preview",
+        "regex-tester"
+      ],
+      "count": 2,
+      "origins": {
+        "studio": 1,
+        "webui": 1
+      }
+    },
+    {
+      "id": "c024",
+      "key": "family:foundations/buttons:ALIAS",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "icon-button-canonical"
+      ],
+      "count": 1,
+      "origins": {
+        "kingly": 1
+      }
+    },
+    {
+      "id": "c028",
+      "key": "family:domain/dashboard-mgr:SHELL",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "navigator"
+      ],
+      "count": 1,
+      "origins": {
+        "studio": 1
+      }
+    },
+    {
+      "id": "c029",
+      "key": "family:domain/canvas:HOLLOW",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "polymorph-playground"
+      ],
+      "count": 1,
+      "origins": {
+        "canvas": 1
+      }
+    },
+    {
+      "id": "c031",
+      "key": "family:domain/gallery:REAL",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "primitives-gallery"
+      ],
+      "count": 1,
+      "origins": {
+        "kingly": 1
+      }
+    },
+    {
+      "id": "c032",
+      "key": "family:domain/scheduling:REAL",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "recurring-event-editor"
+      ],
+      "count": 1,
+      "origins": {
+        "webui": 1
+      }
+    },
+    {
+      "id": "c033",
+      "key": "family:foundations/layout:SHELL",
+      "reason": "singleton",
+      "levNowElement": null,
+      "family": null,
+      "classification": null,
+      "members": [
+        "shared-components"
+      ],
+      "count": 1,
+      "origins": {
+        "kingly": 1
+      }
+    }
+  ]
+}

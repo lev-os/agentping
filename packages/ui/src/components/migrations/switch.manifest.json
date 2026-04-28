@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "inline",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/ui/switch.tsx",
   "loc": 7,

@@ -15,7 +15,7 @@ export interface ParityFeature {
 
 export interface ParityMetric {
   name: string;
-  value: number;
+  value: number | string;
   unit: string;
   source?: string;
 }
@@ -64,6 +64,7 @@ interface GeneratedTarget {
   path?: string;
   features?: GeneratedFeature[];
   metrics?: GeneratedMetric[];
+  lineage?: string[];
 }
 
 interface GeneratedScorecard {
@@ -95,7 +96,7 @@ function normalizeStatus(status?: string): ParityFeature["status"] {
 
 function normalizeFeature(feature: GeneratedFeature, index: number): ParityFeature {
   return {
-    id: feature.id || `feature-${index + 1}`,
+    id: feature.id || paritySlug(feature.name || `feature-${index + 1}`),
     name: feature.name || feature.id || `Feature ${index + 1}`,
     status: normalizeStatus(feature.status),
     lev_equivalent: feature.lev_equivalent || "N/A",
@@ -106,12 +107,10 @@ function normalizeFeature(feature: GeneratedFeature, index: number): ParityFeatu
 
 function normalizeMetric(metric: GeneratedMetric): ParityMetric | null {
   if (!metric.name || metric.value === undefined || metric.value === null) return null;
-  const numericValue =
-    typeof metric.value === "number" ? metric.value : Number.parseFloat(metric.value);
-  if (Number.isNaN(numericValue)) return null;
+
   return {
     name: metric.name,
-    value: numericValue,
+    value: metric.value,
     unit: metric.unit || "count",
     source: metric.source,
   };
@@ -128,7 +127,8 @@ function computeAdoptionHealth(
   implementedPercent: number,
   verdict: string,
 ): "green" | "yellow" | "red" {
-  if (verdict === "reject") return "red";
+  const normalized = verdict.toLowerCase();
+  if (normalized.includes("reject")) return "red";
   if (implementedPercent >= 80) return "green";
   if (implementedPercent >= 40) return "yellow";
   return "red";
@@ -138,20 +138,54 @@ function computeClassifier(
   verdict: string,
   features: ParityFeature[],
 ): "adopted" | "in-progress" | "referenced-only" {
-  if (["adopt", "steal", "integrated"].includes(verdict)) return "adopted";
+  const normalized = verdict.toLowerCase();
   if (
-    ["extract", "extract-heavy", "extract-and-merge", "build", "recreate"].includes(verdict) &&
+    normalized.includes("adopt") ||
+    normalized.includes("steal") ||
+    normalized.includes("integrat") ||
+    normalized.includes("absor") ||
+    normalized.includes("implement")
+  ) {
+    return "adopted";
+  }
+
+  if (
+    (normalized.includes("extract") || normalized.includes("build") || normalized.includes("merge")) &&
     features.some((feature) => feature.status === "partial" || feature.status === "missing")
   ) {
     return "in-progress";
   }
+
   return "referenced-only";
+}
+
+function priorityRank(priority?: string): number {
+  switch (priority) {
+    case "P0":
+      return 0;
+    case "P1":
+      return 1;
+    case "P2":
+      return 2;
+    case "P3":
+      return 3;
+    case "P4":
+      return 4;
+    default:
+      return 9;
+  }
+}
+
+export function paritySlug(target: string): string {
+  return target.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 function enrichEntry(raw: GeneratedTarget): ParityEntry {
   const features = (raw.features || []).map(normalizeFeature);
   const implementedPercent = computeImplementedPercent(features);
   const verdict = raw.verdict || "reference";
+  const lineage = raw.lineage || (raw.path ? [raw.path] : undefined);
+
   return {
     target: raw.target,
     repo: raw.path || ".lev/pm/parity",
@@ -162,7 +196,7 @@ function enrichEntry(raw: GeneratedTarget): ParityEntry {
     owner: raw.owner || undefined,
     features,
     metrics: (raw.metrics || []).map(normalizeMetric).filter((x): x is ParityMetric => x !== null),
-    lineage: raw.path ? [raw.path] : undefined,
+    lineage,
     implementedPercent,
     adoptionHealth: computeAdoptionHealth(implementedPercent, verdict),
     classifier: computeClassifier(verdict, features),
@@ -170,5 +204,11 @@ function enrichEntry(raw: GeneratedTarget): ParityEntry {
 }
 
 export function getParityEntries(): ParityEntry[] {
-  return GENERATED.targets.map(enrichEntry);
+  return GENERATED.targets.map(enrichEntry).sort((a, b) => {
+    const dateDelta = (b.measured_at || "").localeCompare(a.measured_at || "");
+    if (dateDelta !== 0) return dateDelta;
+    const priorityDelta = priorityRank(a.priority) - priorityRank(b.priority);
+    if (priorityDelta !== 0) return priorityDelta;
+    return a.target.localeCompare(b.target);
+  });
 }

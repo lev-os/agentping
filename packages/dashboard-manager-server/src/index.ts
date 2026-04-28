@@ -86,11 +86,21 @@ export function createServer(config: ServerConfig) {
 
       // Create HTTP server for Socket.io compatibility
       const httpServer = createHTTPServer(async (req, res) => {
+        // Buffer request body for non-GET/HEAD (Node IncomingMessage isn't a Web ReadableStream)
+        let bodyBuffer: Buffer | undefined;
+        if (req.method !== 'GET' && req.method !== 'HEAD') {
+          const chunks: Buffer[] = [];
+          for await (const chunk of req) {
+            chunks.push(chunk as Buffer);
+          }
+          bodyBuffer = Buffer.concat(chunks);
+        }
+
         const honoResponse = await app.fetch(
           new Request(`http://${req.headers.host}${req.url}`, {
             method: req.method,
             headers: req.headers as unknown as Record<string, string>,
-            body: req.method !== 'GET' && req.method !== 'HEAD' ? req : undefined,
+            body: bodyBuffer && bodyBuffer.length > 0 ? bodyBuffer : undefined,
           })
         );
 

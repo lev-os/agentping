@@ -9,7 +9,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "diagram",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/dashboard/GraphView.tsx",
   "loc": 7,

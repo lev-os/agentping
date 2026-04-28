@@ -180,9 +180,14 @@ export function ComponentRegistry() {
                   : "Loading..."}
               </p>
             </div>
-            <Link to="/" className="command-center-button">
-              ← Back to Command Center
-            </Link>
+            <div style={{ display: "flex", gap: 8 }}>
+              <Link to="/registry/clusters" className="command-center-button" style={{ background: "rgba(34, 211, 238, 0.12)", borderColor: "rgba(34, 211, 238, 0.4)", color: "#22d3ee" }}>
+                Batch Review →
+              </Link>
+              <Link to="/" className="command-center-button">
+                ← Back to Command Center
+              </Link>
+            </div>
           </div>
         </section>
 

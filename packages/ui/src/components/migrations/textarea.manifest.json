@@ -8,7 +8,7 @@
   ],
   "classification": "ALIAS",
   "levNowElement": "inline",
-  "origin": "unknown",
+  "origin": "kingly",
   "migrationStatus": "unknown",
   "source": "packages/ui/src/components/ui/textarea.tsx",
   "loc": 7,

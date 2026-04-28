@@ -1,0 +1,67 @@
+/**
+ * Tailwind v4 spacing utilities shim.
+ *
+ * TW4's @tailwindcss/vite plugin does not generate spacing utilities (px-*, py-*,
+ * p-*, m-*, gap-*) for classes found via @source in cross-package monorepo setups.
+ * This shim provides the subset used by @kingly/ui components.
+ *
+ * TODO: Remove when tailwindcss/issues/13136 is resolved.
+ */
+
+/* padding-inline (px-*) */
+.px-1 { padding-inline: calc(var(--spacing) * 1); }
+.px-2 { padding-inline: calc(var(--spacing) * 2); }
+.px-3 { padding-inline: calc(var(--spacing) * 3); }
+.px-4 { padding-inline: calc(var(--spacing) * 4); }
+.px-5 { padding-inline: calc(var(--spacing) * 5); }
+.px-6 { padding-inline: calc(var(--spacing) * 6); }
+.px-8 { padding-inline: calc(var(--spacing) * 8); }
+
+/* padding-block (py-*) */
+.py-1 { padding-block: calc(var(--spacing) * 1); }
+.py-2 { padding-block: calc(var(--spacing) * 2); }
+.py-3 { padding-block: calc(var(--spacing) * 3); }
+.py-4 { padding-block: calc(var(--spacing) * 4); }
+.py-5 { padding-block: calc(var(--spacing) * 5); }
+.py-6 { padding-block: calc(var(--spacing) * 6); }
+.py-8 { padding-block: calc(var(--spacing) * 8); }
+
+/* padding shorthand (p-*) */
+.p-1 { padding: calc(var(--spacing) * 1); }
+.p-2 { padding: calc(var(--spacing) * 2); }
+.p-3 { padding: calc(var(--spacing) * 3); }
+.p-4 { padding: calc(var(--spacing) * 4); }
+.p-5 { padding: calc(var(--spacing) * 5); }
+.p-6 { padding: calc(var(--spacing) * 6); }
+.p-8 { padding: calc(var(--spacing) * 8); }
+
+/* margin (m-*, mx-*, my-*) */
+.m-0 { margin: 0; }
+.m-1 { margin: calc(var(--spacing) * 1); }
+.m-2 { margin: calc(var(--spacing) * 2); }
+.m-4 { margin: calc(var(--spacing) * 4); }
+.mx-auto { margin-inline: auto; }
+.my-2 { margin-block: calc(var(--spacing) * 2); }
+.my-4 { margin-block: calc(var(--spacing) * 4); }
+.ml-1 { margin-left: calc(var(--spacing) * 1); }
+.ml-2 { margin-left: calc(var(--spacing) * 2); }
+.mr-2 { margin-right: calc(var(--spacing) * 2); }
+.mt-1 { margin-top: calc(var(--spacing) * 1); }
+.mt-2 { margin-top: calc(var(--spacing) * 2); }
+.mb-1 { margin-bottom: calc(var(--spacing) * 1); }
+.mb-2 { margin-bottom: calc(var(--spacing) * 2); }
+
+/* gap */
+.gap-1 { gap: calc(var(--spacing) * 1); }
+.gap-2 { gap: calc(var(--spacing) * 2); }
+.gap-3 { gap: calc(var(--spacing) * 3); }
+.gap-4 { gap: calc(var(--spacing) * 4); }
+.gap-6 { gap: calc(var(--spacing) * 6); }
+.gap-8 { gap: calc(var(--spacing) * 8); }
+
+/* space-y / space-x (direct children) */
+.space-y-1 > * + * { margin-top: calc(var(--spacing) * 1); }
+.space-y-2 > * + * { margin-top: calc(var(--spacing) * 2); }
+.space-y-4 > * + * { margin-top: calc(var(--spacing) * 4); }
+.space-x-2 > * + * { margin-left: calc(var(--spacing) * 2); }
+.space-x-4 > * + * { margin-left: calc(var(--spacing) * 4); }

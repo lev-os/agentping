@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getParityEntries, type ParityEntry } from "../api/parity";
+import { getParityEntries, paritySlug, type ParityEntry } from "../api/parity";
 
 type Classifier = ParityEntry["classifier"];
 
@@ -14,19 +14,27 @@ const FILTER_OPTIONS: { label: string; value: Classifier | "all" }[] = [
 
 // ── Verdict badge colour mapping ──
 function verdictColor(verdict: string): string {
+  const normalized = verdict.toLowerCase();
+  if (
+    normalized.includes("adopt") ||
+    normalized.includes("steal") ||
+    normalized.includes("integrat") ||
+    normalized.includes("absor")
+  ) {
+    return "#22c55e"; // green
+  }
+  if (normalized.includes("extract") || normalized.includes("build") || normalized.includes("merge")) {
+    return "#f59e0b"; // amber
+  }
+  if (normalized.includes("reference") || normalized.includes("coverage")) {
+    return "#3b82f6"; // blue
+  }
+  if (normalized.includes("reject") || normalized === "pass") {
+    return "#ef4444"; // red
+  }
   switch (verdict) {
-    case "adopt":
-    case "steal":
-    case "integrated":
+    case "implemented":
       return "#22c55e"; // green
-    case "extract":
-    case "build":
-      return "#f59e0b"; // amber
-    case "reference":
-    case "coverage":
-      return "#3b82f6"; // blue
-    case "reject":
-      return "#ef4444"; // red
     default:
       return "#6b7280"; // gray
   }
@@ -114,7 +122,7 @@ function ParityCard({ entry }: { entry: ParityEntry }) {
 
   return (
     <Link
-      to={`/parity/${entry.target.toLowerCase()}`}
+      to={`/parity/${paritySlug(entry.target)}`}
       className="parity-card parity-card--link"
       style={{ textDecoration: "none", color: "inherit", display: "flex" }}
     >
