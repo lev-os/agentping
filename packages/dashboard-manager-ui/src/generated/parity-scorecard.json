@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-04T20:05:31.049027+00:00",
+  "generated_at": "2026-05-04T20:06:46.387781+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
