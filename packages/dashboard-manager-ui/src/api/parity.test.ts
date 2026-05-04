@@ -27,7 +27,7 @@ describe("parity registry snapshot", () => {
     expect(entry?.verdict).toBe("extract");
     expect(entry?.category).toBe("world-runtime");
     expect(entry?.priority).toBe("P1");
-    expect(entry?.features).toHaveLength(22);
+    expect(entry?.features).toHaveLength(23);
     expect(entry?.metrics?.some((metric) => metric.name === "targeted_runtime_tests_passed")).toBe(true);
   });
 });
