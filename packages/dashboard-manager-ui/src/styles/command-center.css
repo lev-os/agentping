@@ -4,17 +4,18 @@
 }
 
 .command-center-shell {
-  width: min(1360px, calc(100vw - 48px));
+  width: min(1360px, 100%);
   margin: 0 auto;
-  padding: 32px 0 56px;
+  padding: 32px 24px 56px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  box-sizing: border-box;
 }
 
 .command-center-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
 }
 
@@ -175,12 +176,13 @@
 }
 
 .command-center-detail {
-  width: min(1360px, calc(100vw - 48px));
+  width: min(1360px, 100%);
   margin: 0 auto;
-  padding: 32px 0 56px;
+  padding: 32px 24px 56px;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  box-sizing: border-box;
 }
 
 .command-center-preview {
@@ -769,6 +771,15 @@
 
   .workflow-hero__meta {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1400px) {
+  .command-center-shell,
+  .command-center-detail {
+    width: min(920px, calc(100% - 48px));
+    margin-left: 24px;
+    margin-right: 24px;
   }
 }
 
