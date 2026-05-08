@@ -40,6 +40,17 @@ export { DocCard, type DocCardProps } from "./DocCard";
 export { SpecPanel, type SpecPanelProps, type SpecSection } from "./SpecPanel";
 export { GraphView, type GraphViewProps, type GraphNode, type GraphEdge } from "./GraphView";
 export { ArtifactBadge, type ArtifactBadgeProps } from "./ArtifactBadge";
+export {
+  SafeDispatchCockpit,
+  getSafeDispatchSummary,
+  type SafeDispatchAction,
+  type SafeDispatchCockpitProps,
+  type SafeDispatchProvider,
+  type SafeDispatchSession,
+  type SafeDispatchState,
+  type SafeDispatchSummary,
+  type SafeDispatchWorkstream,
+} from "./SafeDispatchCockpit";
 
 // Types
 export type {
@@ -59,4 +70,3 @@ export type {
   WidgetFooterProps,
   WidgetCrashFallbackProps,
 } from "./types";
-

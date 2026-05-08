@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { DmDashboardList, type DmDashboardSummary } from "@kingly/ui/components";
+import {
+  DmDashboardList,
+  SafeDispatchCockpit,
+  type DmDashboardSummary,
+  type SafeDispatchAction,
+  type SafeDispatchCockpitProps,
+  type SafeDispatchState,
+} from "@kingly/ui/components";
 
 import { dashboardAPI } from "../api/client";
 import type { Dashboard } from "../types/dashboard";
@@ -37,6 +44,151 @@ function toDashboardSummary(dashboard: Dashboard): DmDashboardSummary {
   };
 }
 
+function toDispatchState(dashboard?: Dashboard): SafeDispatchState {
+  if (!dashboard) return "offline";
+  if (dashboard.status.status === "starting") return "running";
+  if (dashboard.status.status === "online") {
+    return dashboard.status.healthy === false ? "blocked" : "ready";
+  }
+  if (dashboard.status.status === "failed") return "blocked";
+  return "offline";
+}
+
+function buildSafeDispatchCockpitModel(
+  dashboards: Dashboard[],
+  primary: Dashboard | undefined,
+  primaryUrl: string | null,
+): Pick<SafeDispatchCockpitProps, "workstreams" | "providers" | "sessions" | "actions"> {
+  const onlineCount = dashboards.filter((dashboard) => dashboard.status.status === "online").length;
+  const failedDashboards = dashboards.filter((dashboard) => dashboard.status.status === "failed");
+  const failedCount = failedDashboards.length;
+  const interactionSurface = dashboards.find((dashboard) => dashboard.config.metadata?.lane === "interaction");
+  const managerSurface = dashboards.find((dashboard) => dashboard.id === "dashboard-manager-ui");
+  const interactionUrl = getDashboardUrl(interactionSurface);
+  const managerUrl = getDashboardUrl(managerSurface);
+
+  return {
+    workstreams: [
+      {
+        id: "primary-surface-health",
+        title: "Primary surface health",
+        state: primary ? toDispatchState(primary) : "preview",
+        activeRuns: primary?.status.status === "online" ? 1 : 0,
+        nextAction: primaryUrl
+          ? `${primary?.config.name} is reachable at ${primaryUrl}.`
+          : "No online primary surface is available.",
+        gate: primary?.id ?? "primary-surface",
+      },
+      {
+        id: "dashboard-fleet",
+        title: "Dashboard fleet",
+        state: onlineCount > 0 ? "running" : "offline",
+        activeRuns: onlineCount,
+        nextAction: `${onlineCount} of ${dashboards.length} registered surfaces are online.`,
+        gate: "dashboard-runner",
+      },
+      {
+        id: "failed-surfaces",
+        title: "Failed surfaces",
+        state: failedCount > 0 ? "blocked" : "ready",
+        activeRuns: failedCount,
+        nextAction: failedCount > 0
+          ? failedDashboards.map((dashboard) => dashboard.config.name).join(", ")
+          : "No registered surfaces are failed.",
+        gate: "health-checks",
+      },
+    ],
+    providers: [
+      {
+        id: "dashboard-runner",
+        label: "Dashboard runner",
+        kind: "runner",
+        state: dashboards.length > 0 ? "ready" : "preview",
+        detail: `${dashboards.length} hosted surfaces reported`,
+        lease: "none",
+      },
+      {
+        id: "dashboard-manager-ui",
+        label: "Dashboard Manager UI",
+        kind: "daemon",
+        state: toDispatchState(managerSurface),
+        detail: managerUrl ? `Running at ${managerUrl}` : "Manager surface is not online",
+        lease: "none",
+      },
+      {
+        id: "interaction-surface",
+        label: "AgentPing Web UI",
+        kind: "daemon",
+        state: toDispatchState(interactionSurface),
+        detail: interactionUrl ? `Running at ${interactionUrl}` : "Interaction shell is not online",
+        lease: "none",
+      },
+      {
+        id: "acp-mcp",
+        label: "ACP/MCP readiness",
+        kind: "acp",
+        state: "preview",
+        detail: "Provider sync is not wired yet; this is still a planned lane",
+        lease: "required",
+      },
+    ],
+    sessions: [
+      {
+        id: primary?.id ?? "primary-surface",
+        label: primary?.config.name ?? "Primary ops surface",
+        substrate: "dashboard",
+        state: toDispatchState(primary),
+        detail: primaryUrl ? primaryUrl : "No live primary surface selected",
+      },
+      {
+        id: "hosted-surfaces",
+        label: "Hosted dashboard surfaces",
+        substrate: "dashboard",
+        state: onlineCount > 0 ? "running" : "offline",
+        detail: `${onlineCount} online / ${dashboards.length} total`,
+      },
+      {
+        id: interactionSurface?.id ?? "interaction-surface",
+        label: interactionSurface?.config.name ?? "Interaction surface",
+        substrate: "dashboard",
+        state: toDispatchState(interactionSurface),
+        detail: interactionUrl ?? "No online interaction surface selected",
+      },
+    ],
+    actions: [
+      {
+        id: "refresh-runtime",
+        label: "Refresh runtime",
+        description: "Reload dashboard runner API state.",
+        state: "ready",
+      },
+      {
+        id: "open-primary",
+        label: "Open primary surface",
+        description: primaryUrl
+          ? "Open the selected primary dashboard surface."
+          : "Requires an online primary dashboard.",
+        state: primaryUrl ? "ready" : "blocked",
+      },
+      {
+        id: "open-interaction",
+        label: "Open interaction surface",
+        description: interactionUrl
+          ? "Open the AgentPing Web UI surface."
+          : "Requires an online interaction dashboard.",
+        state: interactionUrl ? "ready" : "blocked",
+      },
+      {
+        id: "dispatch-proof",
+        label: "Preview dispatch",
+        description: "No-op dispatch preview; Poly/ACP execution is not wired yet.",
+        state: "preview",
+        leaseRequired: true,
+      },
+    ],
+  };
+}
+
 export function DashboardList() {
   const navigate = useNavigate();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
@@ -44,6 +196,7 @@ export function DashboardList() {
   const [error, setError] = useState<string | null>(null);
   const [isRestartingPrimary, setIsRestartingPrimary] = useState(false);
   const [setupTarget, setSetupTarget] = useState<string | null>(null);
+  const [lastDispatchEvent, setLastDispatchEvent] = useState<string | null>(null);
 
   async function loadDashboards() {
     setIsLoading(true);
@@ -66,6 +219,7 @@ export function DashboardList() {
   const grouped = groupDashboardsByLane(dashboards);
   const primary = getPrimaryDashboard(dashboards);
   const primaryUrl = getDashboardUrl(primary);
+  const dispatchCockpit = buildSafeDispatchCockpitModel(dashboards, primary, primaryUrl);
 
   async function restartPrimaryDashboard() {
     if (!primary) return;
@@ -76,6 +230,32 @@ export function DashboardList() {
     } finally {
       setIsRestartingPrimary(false);
     }
+  }
+
+  function handleDispatchAction(action: SafeDispatchAction) {
+    if (action.id === "refresh-runtime") {
+      setLastDispatchEvent("Runtime refresh requested from safe dispatch cockpit.");
+      void loadDashboards();
+      return;
+    }
+
+    if (action.id === "open-primary" && primaryUrl) {
+      setLastDispatchEvent("Primary surface opened from guarded action lane.");
+      window.open(primaryUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (action.id === "open-interaction") {
+      const interactionSurface = dashboards.find((dashboard) => dashboard.config.metadata?.lane === "interaction");
+      const interactionUrl = getDashboardUrl(interactionSurface);
+      if (interactionUrl) {
+        setLastDispatchEvent("Interaction surface opened from guarded action lane.");
+        window.open(interactionUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
+    }
+
+    setLastDispatchEvent(`${action.label} captured in preview mode; no dispatch was executed.`);
   }
 
   return (
@@ -195,6 +375,12 @@ export function DashboardList() {
             </div>
           </section>
         ) : null}
+
+        <SafeDispatchCockpit
+          {...dispatchCockpit}
+          lastEvent={lastDispatchEvent ?? undefined}
+          onAction={handleDispatchAction}
+        />
 
         {grouped.apps.length > 0 ? (
           <section className="command-center-section">

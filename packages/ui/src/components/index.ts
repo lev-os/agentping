@@ -156,6 +156,8 @@ export {
   SpecPanel,
   GraphView,
   ArtifactBadge,
+  SafeDispatchCockpit,
+  getSafeDispatchSummary,
 } from "./dashboard";
 export type {
   DashboardWidgetProps,
@@ -188,6 +190,13 @@ export type {
   GraphNode,
   GraphEdge,
   ArtifactBadgeProps,
+  SafeDispatchAction,
+  SafeDispatchCockpitProps,
+  SafeDispatchProvider,
+  SafeDispatchSession,
+  SafeDispatchState,
+  SafeDispatchSummary,
+  SafeDispatchWorkstream,
 } from "./dashboard";
 
 // Form Components

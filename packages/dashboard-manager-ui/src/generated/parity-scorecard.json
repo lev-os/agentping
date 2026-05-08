@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T19:54:53.088237+00:00",
+  "generated_at": "2026-05-08T06:26:15.778061+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -10,16 +10,16 @@
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "summary": {
-    "parity_files": 50,
-    "total_features": 827,
+    "parity_files": 51,
+    "total_features": 867,
     "absorbed": 64,
-    "pending": 583,
+    "pending": 614,
     "deferred": 12,
     "rejected": 30,
-    "monitor": 62,
+    "monitor": 67,
     "unclassified": 46,
-    "absorbed_pct": 7.7,
-    "unclassified_pct": 5.6
+    "absorbed_pct": 7.4,
+    "unclassified_pct": 5.3
   },
   "untriaged_targets": [
     "agent-browser",
@@ -8145,6 +8145,395 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "openui-ui-ir",
+      "label": "OpenUI UI IR",
+      "category": "genui-authoring-language",
+      "priority": "P0",
+      "measured_at": "2026-05-08",
+      "updated_at": "2026-05-08",
+      "owner": "lev-now-genui + core/ui + core/poly + core/flowmind",
+      "path": ".lev/pm/parity/openui-ui-ir.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 40,
+      "classified": 40,
+      "unclassified": 0,
+      "counts": {
+        "build": 14,
+        "extract": 14,
+        "extract-with-boundary": 1,
+        "monitor": 5,
+        "merge": 3,
+        "preserve": 3
+      },
+      "features": [
+        {
+          "id": "openui-01",
+          "name": "Compact line-oriented UI source language",
+          "status": "missing",
+          "lev_equivalent": "None; RenderSpec and GenUISpec are JSON/Zod structures.",
+          "action": "build",
+          "notes": "LLM emits `identifier = Expression` statements using component calls, arrays, objects, refs, primitives, and positional args."
+        },
+        {
+          "id": "openui-02",
+          "name": "Root-first progressive rendering",
+          "status": "partial",
+          "lev_equivalent": "RenderSpec has root IDs but requires a valid full JSON object before render.",
+          "action": "extract",
+          "notes": "OpenUI recommends writing `root` first so a shell can render while later statements stream."
+        },
+        {
+          "id": "openui-03",
+          "name": "Forward references",
+          "status": "missing",
+          "lev_equivalent": "RenderSpec child IDs can point to elements, but current authoring is whole-document JSON.",
+          "action": "build",
+          "notes": "Statements can reference identifiers declared later; renderer fills them as they arrive."
+        },
+        {
+          "id": "openui-04",
+          "name": "Schema-derived positional arguments",
+          "status": "missing",
+          "lev_equivalent": "Zod schemas describe props, but no positional source-language lowering exists.",
+          "action": "build",
+          "notes": "Component schemas map concise positional arguments to named props during materialization."
+        },
+        {
+          "id": "openui-05",
+          "name": "Typed parser AST",
+          "status": "missing",
+          "lev_equivalent": "RenderSpec validates final JSON; no authoring AST layer.",
+          "action": "build",
+          "notes": "AST includes components, primitives, refs, state refs, runtime refs, binary/unary/ternary, member/index, assignments, and statement kinds."
+        },
+        {
+          "id": "openui-06",
+          "name": "Streaming parser with incomplete-input tolerance",
+          "status": "missing",
+          "lev_equivalent": "lev.now render expects validated complete RenderSpec input.",
+          "action": "build",
+          "notes": "Parser strips fences/comments, auto-closes incomplete input, and emits progressive parse results."
+        },
+        {
+          "id": "openui-07",
+          "name": "Statement merge by name",
+          "status": "missing",
+          "lev_equivalent": "No name-based UI program merge layer.",
+          "action": "build",
+          "notes": "Patch statements override existing statements by ID; omitted statements remain."
+        },
+        {
+          "id": "openui-08",
+          "name": "Unreachable statement garbage collection",
+          "status": "missing",
+          "lev_equivalent": "No equivalent for UI authoring programs.",
+          "action": "build",
+          "notes": "After merge, statements not reachable from root are removed while state variables are retained."
+        },
+        {
+          "id": "openui-09",
+          "name": "Reactive `$variable` state",
+          "status": "missing",
+          "lev_equivalent": "GenUI actions exist, but no UI source-level reactive variable model.",
+          "action": "build",
+          "notes": "Dollar-prefixed variables bind to inputs, re-run dependent queries, and update expressions."
+        },
+        {
+          "id": "openui-10",
+          "name": "Tool-backed Query primitive",
+          "status": "partial",
+          "lev_equivalent": "Lev has FlowMind/Poly tools, but no UI-bound query primitive.",
+          "action": "extract",
+          "notes": "`Query(tool, args, default, refresh?)` loads data through tools and renders defaults while pending."
+        },
+        {
+          "id": "openui-11",
+          "name": "Tool-backed Mutation primitive",
+          "status": "partial",
+          "lev_equivalent": "Lev has execution envelopes; no UI syntax for mutation binding.",
+          "action": "extract",
+          "notes": "`Mutation` is declared but only runs through an explicit action such as `@Run`."
+        },
+        {
+          "id": "openui-12",
+          "name": "Action composition builtins",
+          "status": "partial",
+          "lev_equivalent": "FlowMind can compose runtime operations; GenUI does not lower UI actions into it.",
+          "action": "extract",
+          "notes": "Actions compose operations such as run mutation, refresh query, reset state, and set variables."
+        },
+        {
+          "id": "openui-13",
+          "name": "Functional data transforms",
+          "status": "missing",
+          "lev_equivalent": "No GenUI-local transform syntax.",
+          "action": "build",
+          "notes": "Builtins compose with calls such as filter, count, sort, sum, avg, round, and each."
+        },
+        {
+          "id": "openui-14",
+          "name": "Renderer toolProvider accepts function maps and MCP-like clients",
+          "status": "partial",
+          "lev_equivalent": "Poly/MCP exists, but renderer-owned direct calls would violate Lev's runtime boundary.",
+          "action": "extract-with-boundary",
+          "notes": "Renderer can execute tools through a function map or client with `callTool({name, arguments})`."
+        },
+        {
+          "id": "openui-15",
+          "name": "LLM-fixable structured errors",
+          "status": "partial",
+          "lev_equivalent": "Zod validation errors exist, but not statement-aware UI repair diagnostics.",
+          "action": "build",
+          "notes": "Errors are scoped to unknown components, missing props, and unknown tools for correction loops."
+        },
+        {
+          "id": "openui-16",
+          "name": "Last-good render retention",
+          "status": "missing",
+          "lev_equivalent": "Static lev.now render does not need this; live GenUI would.",
+          "action": "extract",
+          "notes": "Error boundary preserves prior children during transient render/evaluation errors."
+        },
+        {
+          "id": "openui-17",
+          "name": "Component library prompt compiler",
+          "status": "partial",
+          "lev_equivalent": "Schemas exist, but no prompt compiler from RenderSpec/GenUI catalog.",
+          "action": "build",
+          "notes": "Registered components, props, tools, edit mode, and bindings generate model instructions."
+        },
+        {
+          "id": "openui-18",
+          "name": "Catalog JSON Schema export",
+          "status": "partial",
+          "lev_equivalent": "Zod schemas exist and can describe RenderSpec.",
+          "action": "extract",
+          "notes": "Library can export specs and JSON Schema for catalog metadata."
+        },
+        {
+          "id": "openui-19",
+          "name": "Cross-format benchmark from one semantic AST",
+          "status": "missing",
+          "lev_equivalent": "No RenderSpec/OpenLang token benchmark.",
+          "action": "build",
+          "notes": "OpenUI generates once, parses, then projects into OpenUI Lang, YAML, Vercel JSONL, and C1 JSON for token comparison."
+        },
+        {
+          "id": "openui-20",
+          "name": "AST projections into other UI formats",
+          "status": "missing",
+          "lev_equivalent": "lev.now projects RenderSpec to HTML/Markdown, not from compact source to multiple interchange formats.",
+          "action": "extract",
+          "notes": "Converters lower parsed AST into competing formats for measurement."
+        },
+        {
+          "id": "openui-21",
+          "name": "OpenUI CLI scaffolding/prompt generation",
+          "status": "missing",
+          "lev_equivalent": "Lev CLI exists, but no UI authoring compiler surface.",
+          "action": "monitor",
+          "notes": "CLI participates in scaffolding and prompt generation workflows."
+        },
+        {
+          "id": "openui-22",
+          "name": "Headless chat/runtime package split",
+          "status": "missing",
+          "lev_equivalent": "Lev packages are split, but GenUI lacks this exact boundary.",
+          "action": "extract",
+          "notes": "OpenUI separates language core, React renderer, headless chat, UI packages, and CLI."
+        },
+        {
+          "id": "openui-23",
+          "name": "Reusable component libraries and examples",
+          "status": "partial",
+          "lev_equivalent": "Lev has a smaller `packages/ui/src/genui` palette and lev.now renderers.",
+          "action": "extract",
+          "notes": "Component libraries provide promptable vocabulary and render implementations."
+        },
+        {
+          "id": "jsonrender-24",
+          "name": "Flat root/elements spec",
+          "status": "partial",
+          "lev_equivalent": "RenderSpec has `root` array and flat `elements` map.",
+          "action": "merge",
+          "notes": "Spec has `root`, flat `elements`, and optional `state`."
+        },
+        {
+          "id": "jsonrender-25",
+          "name": "JSONL RFC 6902 patch stream",
+          "status": "missing",
+          "lev_equivalent": "No public RenderSpec patch stream compiler.",
+          "action": "monitor",
+          "notes": "Each streamed line can be a patch operation applied to the spec."
+        },
+        {
+          "id": "jsonrender-26",
+          "name": "Dynamic props, repeat, visible, watch",
+          "status": "missing",
+          "lev_equivalent": "GenUI MVP is simpler and not state-rich.",
+          "action": "extract",
+          "notes": "Elements support state references, two-way bindings, repeats, visibility conditions, event bindings, and state watchers."
+        },
+        {
+          "id": "jsonrender-27",
+          "name": "Broad renderer matrix",
+          "status": "partial",
+          "lev_equivalent": "core/ui supports several platform outputs; lev.now targets HTML.",
+          "action": "extract",
+          "notes": "Packages target React, Vue, Svelte, Solid, React Native, Next, Remotion, PDF, email, Ink, image, 3D, and MCP."
+        },
+        {
+          "id": "jsonrender-28",
+          "name": "Streaming YAML compiler",
+          "status": "missing",
+          "lev_equivalent": "lev.now exports Markdown but does not accept streaming YAML UI input.",
+          "action": "monitor",
+          "notes": "YAML chunks parse to snapshots and emit JSON patches by diff."
+        },
+        {
+          "id": "jsonrender-29",
+          "name": "MCP Apps integration package",
+          "status": "partial",
+          "lev_equivalent": "Lev has MCP/poly concepts and `core/ui` MCP output.",
+          "action": "monitor",
+          "notes": "json-render includes an MCP Apps integration path."
+        },
+        {
+          "id": "a2ui-30",
+          "name": "Surface lifecycle envelope",
+          "status": "partial",
+          "lev_equivalent": "Lev has UI specs and projections, but no A2UI-compatible streaming surface envelope.",
+          "action": "build",
+          "notes": "Protocol defines create surface, update components, update data model, and delete surface messages."
+        },
+        {
+          "id": "a2ui-31",
+          "name": "Catalog ID and inline catalog capabilities",
+          "status": "missing",
+          "lev_equivalent": "No LevUI catalog capability exchange.",
+          "action": "build",
+          "notes": "Clients advertise supported catalog IDs and optional inline catalog definitions."
+        },
+        {
+          "id": "a2ui-32",
+          "name": "Data model update by path",
+          "status": "missing",
+          "lev_equivalent": "No GenUI-level data model stream.",
+          "action": "extract",
+          "notes": "Surface data model updates are separate from component structure and use paths."
+        },
+        {
+          "id": "a2ui-33",
+          "name": "Transport-decoupled UI stream",
+          "status": "partial",
+          "lev_equivalent": "Poly owns protocol surfaces, but no UI stream profile is defined.",
+          "action": "extract",
+          "notes": "A2UI is transport-agnostic and binds to A2A, AG UI, MCP, SSE, WebSocket, and REST."
+        },
+        {
+          "id": "a2ui-34",
+          "name": "Framework-agnostic data layer vs framework-specific view layer",
+          "status": "partial",
+          "lev_equivalent": "core/ui has abstract widgets and platform adapters; lev.now is static HTML.",
+          "action": "merge",
+          "notes": "MessageProcessor/SurfaceModel hold data; framework adapters render pixels."
+        },
+        {
+          "id": "genui-35",
+          "name": "Flutter SurfaceController and Conversation facade",
+          "status": "missing",
+          "lev_equivalent": "AgentPing/LevUI direction exists, but no Flutter host.",
+          "action": "monitor",
+          "notes": "Conversation, SurfaceController, A2uiTransportAdapter, and Surface manage UI generation and interaction."
+        },
+        {
+          "id": "genui-36",
+          "name": "A2UI parser transformer for mixed text/JSON streams",
+          "status": "missing",
+          "lev_equivalent": "No GenUI mixed-stream parser.",
+          "action": "extract",
+          "notes": "Transforms text chunks into text events or A2UI message events using fence and balanced JSON parsing."
+        },
+        {
+          "id": "lev-37",
+          "name": "RenderSpec flat element canon",
+          "status": "implemented",
+          "lev_equivalent": "Implemented.",
+          "action": "preserve",
+          "notes": "Lev already has a canonical static page RenderSpec with root and elements."
+        },
+        {
+          "id": "lev-38",
+          "name": "Nested GenUI MVP schema",
+          "status": "implemented",
+          "lev_equivalent": "Implemented, but should be subsumed by LevUI IR.",
+          "action": "merge",
+          "notes": "Lev has a smaller nested GenUI component union for card/form/table/list/metric/markdown/layout."
+        },
+        {
+          "id": "lev-39",
+          "name": "UniversalWidget platform outputs",
+          "status": "implemented",
+          "lev_equivalent": "Implemented.",
+          "action": "preserve",
+          "notes": "Lev has platform render outputs for html, mcp, telegram, text, openai, json, voice, and fallback."
+        },
+        {
+          "id": "lev-40",
+          "name": "RenderSpec to Markdown/content export",
+          "status": "implemented",
+          "lev_equivalent": "Implemented and strategically aligned.",
+          "action": "preserve",
+          "notes": "lev.now can project RenderSpec elements into Markdown/content bundles for capture/export."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "staged_intake_size",
+          "value": 595,
+          "unit": "MB",
+          "source": "du -sh workshop/intake/openui-stop-making-ai-write-json"
+        },
+        {
+          "name": "cloned_repositories",
+          "value": 4,
+          "unit": "repos",
+          "source": "workshop/intake/openui-stop-making-ai-write-json/repos"
+        },
+        {
+          "name": "openui_benchmark_total_tokens_openui_lang",
+          "value": 4800,
+          "unit": "tokens",
+          "source": "workshop/intake/openui-stop-making-ai-write-json/repos/openui/benchmarks/README.md"
+        },
+        {
+          "name": "openui_benchmark_total_tokens_vercel_json_render",
+          "value": 10180,
+          "unit": "tokens",
+          "source": "workshop/intake/openui-stop-making-ai-write-json/repos/openui/benchmarks/README.md"
+        },
+        {
+          "name": "openui_benchmark_token_delta_vs_vercel",
+          "value": -52.8,
+          "unit": "percent",
+          "source": "workshop/intake/openui-stop-making-ai-write-json/repos/openui/benchmarks/README.md"
+        },
+        {
+          "name": "openui_benchmark_scenarios",
+          "value": 7,
+          "unit": "scenarios",
+          "source": "workshop/intake/openui-stop-making-ai-write-json/repos/openui/benchmarks/README.md"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 31,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 5,
       "deferred_items": [],
       "rejected_items": []
     },
