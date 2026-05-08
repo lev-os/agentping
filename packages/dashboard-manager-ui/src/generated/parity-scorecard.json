@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-04T20:06:46.387781+00:00",
+  "generated_at": "2026-05-06T19:54:53.088237+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -10,23 +10,22 @@
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "summary": {
-    "parity_files": 48,
-    "total_features": 756,
-    "absorbed": 54,
-    "pending": 526,
-    "deferred": 6,
-    "rejected": 29,
-    "monitor": 53,
-    "unclassified": 58,
-    "absorbed_pct": 7.1,
-    "unclassified_pct": 7.7
+    "parity_files": 50,
+    "total_features": 827,
+    "absorbed": 64,
+    "pending": 583,
+    "deferred": 12,
+    "rejected": 30,
+    "monitor": 62,
+    "unclassified": 46,
+    "absorbed_pct": 7.7,
+    "unclassified_pct": 5.6
   },
   "untriaged_targets": [
     "agent-browser",
     "agentfs",
     "axi",
     "dev-browser",
-    "gitagent",
     "ouroboros"
   ],
   "targets": [
@@ -4704,39 +4703,42 @@
       "target": "gitagent",
       "label": "GitAgent",
       "category": "functionality-target",
-      "priority": "P3",
-      "measured_at": "2026-04-10",
-      "updated_at": "2026-04-10",
-      "owner": "plugins/sdlc",
+      "priority": "P0",
+      "measured_at": "2026-05-04",
+      "updated_at": "2026-05-04",
+      "owner": "core/flowmind + core/poly + community/examples",
       "path": ".lev/pm/parity/gitagent.yaml",
-      "verdict": null,
-      "total_features": 12,
-      "classified": 0,
-      "unclassified": 12,
-      "counts": {},
+      "verdict": "recreate",
+      "total_features": 14,
+      "classified": 14,
+      "unclassified": 0,
+      "counts": {
+        "implemented": 10,
+        "build": 4
+      },
       "features": [
         {
           "id": "ga-01",
           "name": "agent.yaml manifest",
           "status": "implemented",
-          "lev_equivalent": "config.yaml",
-          "action": "unclassified",
-          "notes": "Lev uses config.yaml FlowMind. Functionally equivalent, richer schema."
+          "lev_equivalent": ".lev/config.yaml + project config.yaml + FlowMind profile data",
+          "action": "implemented",
+          "notes": "Lev keeps project truth in repo-local config and FlowMind profiles. Functionally equivalent, with richer projection targets."
         },
         {
           "id": "ga-02",
           "name": "SOUL.md personality definition",
           "status": "implemented",
           "lev_equivalent": "dna/*.yaml",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "DNA constraints + behaviors compile to executable gates. SOUL.md is prose-only."
         },
         {
           "id": "ga-03",
           "name": "DUTIES.md SOD compliance",
           "status": "implemented",
-          "lev_equivalent": "community/agentguard/",
-          "action": "unclassified",
+          "lev_equivalent": "DNA constraints + AgentGuard policy",
+          "action": "implemented",
           "notes": "AgentGuard + DNA constraints provide equivalent SOD compliance."
         },
         {
@@ -4744,7 +4746,7 @@
           "name": "skills/ directory (triggered documents)",
           "status": "implemented",
           "lev_equivalent": "core/flowmind/",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "FlowMind triggered documents. Richer than flat skill files."
         },
         {
@@ -4752,7 +4754,7 @@
           "name": "tools/ directory (function definitions)",
           "status": "implemented",
           "lev_equivalent": "core/flowmind/",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "Function nodes in FlowMind graph. Type-safe, composable."
         },
         {
@@ -4760,7 +4762,7 @@
           "name": "rules/ guardrails",
           "status": "implemented",
           "lev_equivalent": "dna/",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "DNA constraints provide guardrails that compile to executable validation gates."
         },
         {
@@ -4768,7 +4770,7 @@
           "name": "memory/ state management",
           "status": "implemented",
           "lev_equivalent": "core/memory/",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "Memory compiler with exponential decay. GitAgent uses flat markdown files."
         },
         {
@@ -4776,45 +4778,80 @@
           "name": "Git supervision",
           "status": "implemented",
           "lev_equivalent": "core/orchestration/src/events/",
-          "action": "unclassified",
+          "action": "implemented",
           "notes": "Event bus + provenance chain. Richer than Git-only supervision."
         },
         {
           "id": "ga-09",
           "name": "Multi-framework export (LangChain, CrewAI, AutoGen, OpenAI, Claude Code)",
           "status": "missing",
-          "lev_equivalent": "N/A",
-          "action": "unclassified",
-          "notes": "Key gap. Target compilers planned for core/flowmind/src/targets/ but not yet built."
+          "lev_equivalent": "FlowMind DocumentCompiler + Poly projections",
+          "action": "build",
+          "notes": "Key gap. FlowMind target compilers exist, but the repo-native agent definition still needs cross-framework document projectors."
         },
         {
           "id": "ga-10",
           "name": "gitagent validate",
           "status": "implemented",
-          "lev_equivalent": "plugins/validator/",
-          "action": "unclassified",
+          "lev_equivalent": "YAML parse + parity registry check + FlowMind/DNA tests",
+          "action": "implemented",
           "notes": "ValidatorChain with 8 built-in adapters. More comprehensive than gitagent validate."
         },
         {
           "id": "ga-11",
           "name": "Agent-as-folder-structure portability",
           "status": "partial",
-          "lev_equivalent": "dna/entities.yaml",
-          "action": "unclassified",
-          "notes": "Lev uses structured YAML entities, not plain folder conventions. More powerful but less portable without export adapters."
+          "lev_equivalent": ".lev fractal surfaces + dna/entities.yaml + community/examples",
+          "action": "build",
+          "notes": "Lev uses structured repo truth rather than plain folder conventions. More powerful, but portability needs export/materialization adapters."
         },
         {
           "id": "ga-12",
           "name": "Framework fragmentation solution",
           "status": "partial",
-          "lev_equivalent": "core/flowmind/",
-          "action": "unclassified",
-          "notes": "FlowMind subsumes frameworks at the graph level. Missing the export adapters that prove it (see ga-09)."
+          "lev_equivalent": "FlowMind + Poly + daemon bindings",
+          "action": "build",
+          "notes": "FlowMind subsumes frameworks at the graph level. Poly/daemon bindings should expose CLI/MCP/SDK surfaces across languages."
+        },
+        {
+          "id": "ga-13",
+          "name": "Repo-native agent truth surface",
+          "status": "implemented",
+          "lev_equivalent": ".lev/pm + .lev/flows + dna/ + community/examples",
+          "action": "implemented",
+          "notes": "This is the core thesis match: agent truths live in the repo. Lev makes those truths fractal, typed, and projectable."
+        },
+        {
+          "id": "ga-14",
+          "name": "One-to-one agentic builder/proof loop",
+          "status": "partial",
+          "lev_equivalent": "community/examples + FlowMind + lev exec",
+          "action": "build",
+          "notes": "Prior art exists as examples-as-evals and compliance-analyst proof. The full builder loop remains a tooling/FlowMind productization gap."
         }
       ],
-      "metrics": [],
-      "absorbed": 0,
-      "pending": 0,
+      "metrics": [
+        {
+          "name": "materialized_gitagent_proof_surfaces",
+          "value": 4,
+          "unit": "count",
+          "source": "community/examples/gitagent/source-manifest.yaml"
+        },
+        {
+          "name": "compliance_analyst_example_files",
+          "value": 20,
+          "unit": "files",
+          "source": ".lev/pm/handoffs/20260326-gitagent-killshot-compliance-analyst-example-session-1.md"
+        },
+        {
+          "name": "compliance_analyst_example_tests",
+          "value": 27,
+          "unit": "tests",
+          "source": ".lev/pm/handoffs/20260326-gitagent-killshot-compliance-analyst-example-session-1.md"
+        }
+      ],
+      "absorbed": 10,
+      "pending": 4,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -8112,6 +8149,399 @@
       "rejected_items": []
     },
     {
+      "target": "orloj",
+      "label": "Orloj",
+      "category": "agent-infrastructure-runtime",
+      "priority": "P0",
+      "measured_at": "2026-05-06",
+      "updated_at": "2026-05-06",
+      "owner": "core/domain + core/flowmind + core/orchestration + core/event-bus + core/exec + core/poly + core/agentguard + plugins/scheduling + plugins/deploy",
+      "path": ".lev/pm/parity/orloj.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 36,
+      "classified": 36,
+      "unclassified": 0,
+      "counts": {
+        "extract": 10,
+        "merge": 11,
+        "build": 8,
+        "deferred": 3,
+        "monitor": 3,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "orloj-l3-01",
+          "name": "Agent infrastructure resource taxonomy",
+          "status": "partial",
+          "lev_equivalent": "core/domain plus FlowMind/Poly/AgentGuard contracts",
+          "action": "extract",
+          "notes": "Orloj models agents, systems, tasks, tools, memory, schedules, webhooks, policies, approvals, workers, and MCP servers as first-class resources."
+        },
+        {
+          "id": "orloj-l3-02",
+          "name": "AgentSpec with model refs, tools, roles, memory, execution, and limits",
+          "status": "partial",
+          "lev_equivalent": "FlowMind agent declarations plus core/exec provider config",
+          "action": "merge",
+          "notes": "AgentSpec binds model_ref, fallback model refs, prompt, tools, allowed_tools, roles, memory, execution policy, and limits."
+        },
+        {
+          "id": "orloj-l3-03",
+          "name": "AgentSystem graph routes, joins, delegates, and review edges",
+          "status": "partial",
+          "lev_equivalent": "core/flowmind GraphDocument plus core/orchestration graph traversal",
+          "action": "extract",
+          "notes": "AgentSystem graph edges include next, rich routes, joins, delegate joins, delegation, and review metadata."
+        },
+        {
+          "id": "orloj-l3-04",
+          "name": "Output-driven route conditions",
+          "status": "missing",
+          "lev_equivalent": "FlowMind branch guards and Orchestration condition evaluator",
+          "action": "build",
+          "notes": "Orloj evaluates conditions such as output contains, regex, JSONPath equals/not/contains/greater/less, default routes, and unconditional routes."
+        },
+        {
+          "id": "orloj-l3-05",
+          "name": "Human review checkpoints inside graph flow",
+          "status": "missing",
+          "lev_equivalent": "AgentPing review gates plus FlowMind policy edges",
+          "action": "build",
+          "notes": "ReviewCheckpointSpec captures checkpoint id, display name, reason, TTL, request-changes behavior, and max cycles."
+        },
+        {
+          "id": "orloj-l3-06",
+          "name": "Task lifecycle resource and trace schema",
+          "status": "partial",
+          "lev_equivalent": "Flyte-derived Run/Action records plus LevEvent trace projection",
+          "action": "merge",
+          "notes": "TaskSpec/TaskStatus store system, mode, input, retry, message retry, requirements, phase, trace events, logs, messages, branch/join state, and delegation state."
+        },
+        {
+          "id": "orloj-l3-07",
+          "name": "Worker resource with heartbeat, capacity, region, GPU, and model matching",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration worker/daemon registry",
+          "action": "merge",
+          "notes": "Worker resources declare region, capabilities, supported models, max concurrent tasks, heartbeat, phase, and current task count."
+        },
+        {
+          "id": "orloj-l3-08",
+          "name": "Task claiming, leasing, heartbeat, and release loop",
+          "status": "missing",
+          "lev_equivalent": "core/orchestration run/action worker API",
+          "action": "build",
+          "notes": "TaskController claims due tasks, acquires worker slots, renews leases, runs reconciliation, records audit/history/metering, and releases slots."
+        },
+        {
+          "id": "orloj-l3-09",
+          "name": "Message-driven agent inboxes",
+          "status": "missing",
+          "lev_equivalent": "LevEvent plus Orchestration inbox adapter",
+          "action": "build",
+          "notes": "AgentMessageBus supports publish/consume with ack, nack, delayed retry, lease extension, durable subscriptions, idempotency keys, branch ids, and delegate refs."
+        },
+        {
+          "id": "orloj-l3-10",
+          "name": "NATS JetStream durable runtime messaging",
+          "status": "partial",
+          "lev_equivalent": "LevEvent transport adapters",
+          "action": "deferred",
+          "notes": "Orloj can back runtime agent messages with NATS JetStream streams and durable pull subscribers."
+        },
+        {
+          "id": "orloj-l3-11",
+          "name": "TaskSchedule cron resource",
+          "status": "missing",
+          "lev_equivalent": "plugins/scheduling schedule-to-run bridge",
+          "action": "build",
+          "notes": "TaskSchedule reconciles cron specs into run tasks with timezone, starting deadline, forbid-concurrency policy, and success/failure retention."
+        },
+        {
+          "id": "orloj-l3-12",
+          "name": "TaskWebhook authenticated event-to-task factory",
+          "status": "missing",
+          "lev_equivalent": "plugins/scheduling webhook/event provider",
+          "action": "build",
+          "notes": "TaskWebhook accepts HMAC/shared-token deliveries, limits payload size, extracts event ids, dedupes, and creates run tasks from templates."
+        },
+        {
+          "id": "orloj-l3-13",
+          "name": "AgentPolicy and AgentRole governance layer",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard policy model",
+          "action": "merge",
+          "notes": "Orloj separates high-level agent policies from role/permission rules used by tool authorization."
+        },
+        {
+          "id": "orloj-l3-14",
+          "name": "Fail-closed ToolPermission evaluation",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard tool authorization",
+          "action": "merge",
+          "notes": "ToolAuthorizer returns allow, deny, or approval_required, and fails closed when roles or matching permissions are missing."
+        },
+        {
+          "id": "orloj-l3-15",
+          "name": "ToolApproval grant lifecycle",
+          "status": "missing",
+          "lev_equivalent": "AgentPing approval grants plus AgentGuard runtime",
+          "action": "build",
+          "notes": "Orloj creates approval-required tool states and can resume execution after approval grants."
+        },
+        {
+          "id": "orloj-l3-16",
+          "name": "TaskApproval checkpoint lifecycle",
+          "status": "missing",
+          "lev_equivalent": "AgentPing task review checkpoint",
+          "action": "build",
+          "notes": "TaskApproval resources support Pending, Approved, Denied, ChangesRequested, and Expired phases with TTL and max cycles."
+        },
+        {
+          "id": "orloj-l3-17",
+          "name": "Governed multi-runtime tool dispatcher",
+          "status": "partial",
+          "lev_equivalent": "core/poly + core/exec tool runtime",
+          "action": "merge",
+          "notes": "GovernedToolRuntime routes HTTP, external, gRPC, webhook, MCP, WASM, CLI, and isolated tool calls through registry, authorizer, and strict fail-closed runtime setup."
+        },
+        {
+          "id": "orloj-l3-18",
+          "name": "CLI tool runtime with explicit command allowlist",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard shell safety plus Exec tool adapters",
+          "action": "extract",
+          "notes": "Direct host CLI execution is refused unless an allowed command list is configured, with argv length limits and bounded output."
+        },
+        {
+          "id": "orloj-l3-19",
+          "name": "Container sandbox defaults for tools",
+          "status": "partial",
+          "lev_equivalent": "Exec sandbox profile and platform adapters",
+          "action": "extract",
+          "notes": "Container tools default to network none, 128m memory, half CPU, pids limit 64, and non-root user."
+        },
+        {
+          "id": "orloj-l3-20",
+          "name": "WASM tool contract",
+          "status": "missing",
+          "lev_equivalent": "future Poly WASM tool adapter",
+          "action": "monitor",
+          "notes": "WASM tools receive a versioned request with namespace, tool, input, capabilities, risk level, runtime limits, and auth headers, returning status/output/error."
+        },
+        {
+          "id": "orloj-l3-21",
+          "name": "MCP server resource and generated Tool resources",
+          "status": "partial",
+          "lev_equivalent": "core/poly MCP projection",
+          "action": "merge",
+          "notes": "McpServerController connects to MCP servers, lists tools, filters them, and creates labeled Tool resources with MCP runtime specs."
+        },
+        {
+          "id": "orloj-l3-22",
+          "name": "MCP session pooling, idle eviction, stdio/http, and containerized stdio",
+          "status": "partial",
+          "lev_equivalent": "Poly MCP connection manager",
+          "action": "extract",
+          "notes": "McpSessionManager caches sessions by server generation, supports stdio/http transports, command allowlists, containerized stdio, image pull secrets, and idle reaping."
+        },
+        {
+          "id": "orloj-l3-23",
+          "name": "ModelEndpoint routing with fallbacks and secret-aware cache",
+          "status": "partial",
+          "lev_equivalent": "core/exec provider registry and FlowMind model profile",
+          "action": "merge",
+          "notes": "ModelRouter resolves ModelEndpoint resources, supports fallback refs, provider registry lookup, secret resolution, cache invalidation by resource version, and private-network controls."
+        },
+        {
+          "id": "orloj-l3-24",
+          "name": "Persistent memory provider registry",
+          "status": "partial",
+          "lev_equivalent": "Graph memory and context adapter substrate",
+          "action": "extract",
+          "notes": "Memory providers include in-memory, HTTP, and pgvector backends behind a registry with key/value/search/list semantics."
+        },
+        {
+          "id": "orloj-l3-25",
+          "name": "ContextAdapter input transformation",
+          "status": "missing",
+          "lev_equivalent": "FlowMind context preparation and Graph patch context",
+          "action": "extract",
+          "notes": "TaskController can run context adapters before task execution to transform task input with tool dependencies."
+        },
+        {
+          "id": "orloj-l3-26",
+          "name": "Resource store with JSONB tables, resource versions, and FOR UPDATE reads",
+          "status": "partial",
+          "lev_equivalent": "local-first JSONL/graph stores with future SQL adapter",
+          "action": "deferred",
+          "notes": "Orloj persists each resource kind in Postgres JSONB tables with resource versions, generations, cursor pagination, and task claim indexes."
+        },
+        {
+          "id": "orloj-l3-27",
+          "name": "Control-plane event bus",
+          "status": "partial",
+          "lev_equivalent": "LevEvent",
+          "action": "merge",
+          "notes": "Orloj supports memory and NATS event bus backends for resource and trace events."
+        },
+        {
+          "id": "orloj-l3-28",
+          "name": "REST API with auth, rate limiting, watches, status, and resource CRUD",
+          "status": "partial",
+          "lev_equivalent": "Poly HTTP projection and local server surfaces",
+          "action": "extract",
+          "notes": "The API server owns resource stores, runtime manager, auth, event bus, memory backends, rate limiters, proxy trust, body limits, and request timeouts."
+        },
+        {
+          "id": "orloj-l3-29",
+          "name": "orlojctl operator CLI",
+          "status": "partial",
+          "lev_equivalent": "Poly CLI and OMX operator commands",
+          "action": "extract",
+          "notes": "orlojctl includes apply, create, approve, deny, request-changes, get, delete, describe, edit, diff, wait, cancel, retry, top, run, logs, trace, graph, events, messages, metrics, memory entries, health, status, admin, auth, config, seal, validate, and tool commands."
+        },
+        {
+          "id": "orloj-l3-30",
+          "name": "Web console and visual task graph",
+          "status": "partial",
+          "lev_equivalent": "core/ui and AgentPing dashboard projections",
+          "action": "monitor",
+          "notes": "Orloj ships a React/Vite console using React Query, XYFlow, Monaco, dagre, and route-driven resource views."
+        },
+        {
+          "id": "orloj-l3-31",
+          "name": "Secrets, sealed secrets, and at-rest encryption",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard/Exec secret resolution and platform secrets",
+          "action": "merge",
+          "notes": "Orloj has Secret, SealedSecret, sealing keys, and optional AES-256-GCM encryption at rest for secret resource data."
+        },
+        {
+          "id": "orloj-l3-32",
+          "name": "Trace, logs, telemetry, and metrics",
+          "status": "partial",
+          "lev_equivalent": "LevEvent, receipts, telemetry, and reports",
+          "action": "merge",
+          "notes": "Task traces include step id, attempt, branch, event type, tool/model data, contract details, retryability, latency, token usage, and auth metadata; runtime also initializes OpenTelemetry and Prometheus."
+        },
+        {
+          "id": "orloj-l3-33",
+          "name": "Native auth and admin/session resources",
+          "status": "partial",
+          "lev_equivalent": "Poly HTTP auth and local operator auth",
+          "action": "monitor",
+          "notes": "Orloj supports bearer token auth, native local admin setup, password reset, sessions, API tokens, trusted proxies, and rate limits."
+        },
+        {
+          "id": "orloj-l3-34",
+          "name": "Deployment packaging for local, VPS, Kubernetes, Docker, and Helm",
+          "status": "missing",
+          "lev_equivalent": "plugins/deploy and platform adapters",
+          "action": "deferred",
+          "notes": "Orloj ships Dockerfile, docker-compose, Helm chart, VPS docs, Kubernetes stack docs, and server/worker binaries."
+        },
+        {
+          "id": "orloj-l3-35",
+          "name": "Hand-written constrained manifest parser",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/schema validators and structured parsers",
+          "action": "reject",
+          "notes": "Orloj accepts JSON or a constrained YAML subset through a hand-written parser for manifest resources."
+        },
+        {
+          "id": "orloj-l3-36",
+          "name": "Broad upstream test surface",
+          "status": "partial",
+          "lev_equivalent": "runtime parity acceptance tests",
+          "action": "extract",
+          "notes": "The repo has 154 Go test files across API, CLI, controllers, runtime, conformance, resources, startup, store, telemetry, and command packages."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_revision",
+          "value": "2144f3adf7dab31f1a59606b03b4607b3a1b218d",
+          "unit": "git_sha",
+          "source": "workshop/intake/orloj"
+        },
+        {
+          "name": "tracked_files",
+          "value": 910,
+          "unit": "files",
+          "source": "workshop/intake/orloj"
+        },
+        {
+          "name": "go_source_files",
+          "value": 317,
+          "unit": "files",
+          "source": "workshop/intake/orloj"
+        },
+        {
+          "name": "go_test_files",
+          "value": 154,
+          "unit": "files",
+          "source": "workshop/intake/orloj"
+        },
+        {
+          "name": "parity_feature_rows",
+          "value": 36,
+          "unit": "features",
+          "source": ".lev/pm/parity/orloj.yaml"
+        },
+        {
+          "name": "compared_parity_neighbors",
+          "value": 16,
+          "unit": "targets",
+          "source": ".lev/pm/parity/orloj.yaml"
+        },
+        {
+          "name": "upstream_verification_commands",
+          "value": 3,
+          "unit": "commands",
+          "source": "workshop/intake/orloj"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 29,
+      "deferred": 3,
+      "rejected": 1,
+      "monitor": 3,
+      "deferred_items": [
+        {
+          "id": "orloj-l3-10",
+          "name": "NATS JetStream durable runtime messaging",
+          "action": "deferred",
+          "absorbed_into": "future event transport adapter",
+          "tribunal_note": null
+        },
+        {
+          "id": "orloj-l3-26",
+          "name": "Resource store with JSONB tables, resource versions, and FOR UPDATE reads",
+          "action": "deferred",
+          "absorbed_into": "future SQL adapter",
+          "tribunal_note": null
+        },
+        {
+          "id": "orloj-l3-34",
+          "name": "Deployment packaging for local, VPS, Kubernetes, Docker, and Helm",
+          "action": "deferred",
+          "absorbed_into": "future deployment profile",
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "orloj-l3-35",
+          "name": "Hand-written constrained manifest parser",
+          "action": "reject",
+          "absorbed_into": "parser safety warning",
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "ouroboros",
       "label": "Ouroboros",
       "category": "agent-framework",
@@ -8859,6 +9289,385 @@
       "rejected_items": []
     },
     {
+      "target": "union-ai",
+      "label": "Union.ai Platform / Flyte 2",
+      "category": "managed-ai-orchestration-platform",
+      "priority": "P1",
+      "measured_at": "2026-05-04",
+      "updated_at": "2026-05-04",
+      "owner": "core/exec + FlowMind + AgentGuard + Poly + platforms",
+      "path": ".lev/pm/parity/union-ai.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 33,
+      "classified": 33,
+      "unclassified": 0,
+      "counts": {
+        "extract": 17,
+        "build": 5,
+        "merge": 2,
+        "monitor": 4,
+        "defer": 3,
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "union-01",
+          "name": "Unified AI platform and single-pane operations",
+          "status": "partial",
+          "lev_equivalent": "Lev has workstreams, FlowMind, dashboards, and event state, but no unified deploy/run/serve platform surface.",
+          "action": "extract",
+          "notes": "Keep Lev's local-first source of truth; use Union as product-surface benchmark."
+        },
+        {
+          "id": "union-02",
+          "name": "Pure-Python async workflow authoring",
+          "status": "partial",
+          "lev_equivalent": "FlowMind graphs and Lev commands are declarative/CLI-first; Python-style task authoring is not a core ergonomic.",
+          "action": "extract",
+          "notes": "Useful as an authoring benchmark, not as a reason to replace FlowMind."
+        },
+        {
+          "id": "union-03",
+          "name": "TaskEnvironment shared infrastructure contract",
+          "status": "partial",
+          "lev_equivalent": "Lev has runtime surfaces and skill/workstream state, but no first-class reusable task environment abstraction.",
+          "action": "build",
+          "notes": "Likely high-value extraction for tool/runtime adapters."
+        },
+        {
+          "id": "union-04",
+          "name": "Task-level CPU, memory, GPU, disk, and accelerator resources",
+          "status": "partial",
+          "lev_equivalent": "Lev has budget and execution-policy concepts, but not typed per-task compute resources across substrates.",
+          "action": "extract",
+          "notes": "Separate generic resource hints from ML/GPU-specific extensions."
+        },
+        {
+          "id": "union-05",
+          "name": "Files, directories, DataFrames, and artifact movement",
+          "status": "partial",
+          "lev_equivalent": "Lev tracks artifacts and events, but lacks a complete typed large-artifact transport contract.",
+          "action": "extract",
+          "notes": "Presigned/reference semantics map better than copying payloads into core state."
+        },
+        {
+          "id": "union-06",
+          "name": "Fanout and dynamic parallel execution",
+          "status": "partial",
+          "lev_equivalent": "Lev has subagent and loop parallelism, but no typed user-workload fanout primitive.",
+          "action": "extract",
+          "notes": "Keep agent coordination and workload fanout as separate contracts."
+        },
+        {
+          "id": "union-07",
+          "name": "Secrets declaration and runtime injection",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard and local policy exist, but secret lease/injection is not uniformly modeled for deployable workloads.",
+          "action": "build",
+          "notes": "Must be guarded by scoped leases and audit receipts before promotion."
+        },
+        {
+          "id": "union-08",
+          "name": "Triggers, schedules, and webhooks",
+          "status": "partial",
+          "lev_equivalent": "Codex app automations and Lev loops exist, but workflow trigger semantics are split across tools.",
+          "action": "merge",
+          "notes": "Unify with existing automation semantics instead of adding a parallel scheduler."
+        },
+        {
+          "id": "union-09",
+          "name": "Task result caching",
+          "status": "partial",
+          "lev_equivalent": "Lev has memoization-like state and trace artifacts in places, but no uniform task-output cache contract.",
+          "action": "extract",
+          "notes": "Cache identity must include code, inputs, environment, and policy."
+        },
+        {
+          "id": "union-10",
+          "name": "Function-level traces and checkpoint visibility",
+          "status": "partial",
+          "lev_equivalent": "Lev has trace/event concepts, but no standardized function-level workload trace decorator.",
+          "action": "extract",
+          "notes": "Map to existing event spans before introducing decorator-style APIs."
+        },
+        {
+          "id": "union-11",
+          "name": "HTML reports from runs",
+          "status": "partial",
+          "lev_equivalent": "Lev can generate reports/dashboards, but run-scoped report artifacts are not a uniform contract.",
+          "action": "extract",
+          "notes": "Good fit for existing `now` and dashboard artifact paths."
+        },
+        {
+          "id": "union-12",
+          "name": "Local, devbox, and remote run modes",
+          "status": "partial",
+          "lev_equivalent": "Lev spans local shells, tmux, automations, and agents, but not a single run-mode matrix for workloads.",
+          "action": "extract",
+          "notes": "This is a clean model for local/remote capability negotiation."
+        },
+        {
+          "id": "union-13",
+          "name": "Agentic AI workflow patterns",
+          "status": "partial",
+          "lev_equivalent": "Lev has rich agent workflows, but less deployable-agent-as-workload packaging.",
+          "action": "extract",
+          "notes": "Keep Lev's agent lifecycle authority; borrow packaging and service boundaries."
+        },
+        {
+          "id": "union-14",
+          "name": "Sandboxed agent workload execution",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard and dcg guardrails exist, but workload sandboxing is not expressed as deployable task environments.",
+          "action": "merge",
+          "notes": "Bridge policy authority before runtime packaging."
+        },
+        {
+          "id": "union-15",
+          "name": "RBAC, audit, tenant isolation, and presigned data access",
+          "status": "partial",
+          "lev_equivalent": "Lev has local trust boundaries and AgentGuard direction, but not enterprise RBAC/audit across deployable data planes.",
+          "action": "extract",
+          "notes": "High-value architecture reference for remote/federated Lev."
+        },
+        {
+          "id": "union-16",
+          "name": "External data and compute integrations",
+          "status": "partial",
+          "lev_equivalent": "Lev supports tool/plugin expansion, but not a typed connector registry for workload execution.",
+          "action": "extract",
+          "notes": "Use as registry-shape reference, not as a dependency list."
+        },
+        {
+          "id": "union-17",
+          "name": "Run/serve/deploy/build/log/abort CLI verbs",
+          "status": "partial",
+          "lev_equivalent": "Lev has many CLI surfaces; lifecycle verbs are not normalized for workloads.",
+          "action": "extract",
+          "notes": "Align with the repo's poly naming contract before adding aliases."
+        },
+        {
+          "id": "union-18",
+          "name": "Example repository with cloud/local/preview validation modes",
+          "status": "partial",
+          "lev_equivalent": "Lev has scattered examples/tests, but no canonical external-reference example harness.",
+          "action": "extract",
+          "notes": "Useful immediately for how Lev should validate example-heavy docs."
+        },
+        {
+          "id": "union-19",
+          "name": "Helm, Terraform, operator, and EKS blueprint deployment automation",
+          "status": "partial",
+          "lev_equivalent": "Lev has local setup and automation patterns, but no cloud deployment stack.",
+          "action": "monitor",
+          "notes": "Reference only until Lev has a concrete deployable control-plane target."
+        },
+        {
+          "id": "union-20",
+          "name": "Control plane / data plane split",
+          "status": "partial",
+          "lev_equivalent": "Lev architecture already separates FlowMind control, orchestration execution, graph state, and Event Bus, but lacks a managed/federated data-plane implementation.",
+          "action": "extract",
+          "notes": "Strong architectural reference for preserving Lev state authority across remote substrates."
+        },
+        {
+          "id": "union-21",
+          "name": "Failure recovery, retries, versioning, and reproducibility",
+          "status": "partial",
+          "lev_equivalent": "Lev has handoffs, Event Bus concepts, and workstream state, but workload retry/version contracts are not unified.",
+          "action": "extract",
+          "notes": "Translate into contract tests before implementation."
+        },
+        {
+          "id": "union-22",
+          "name": "Projects, domains, users, and organization management",
+          "status": "partial",
+          "lev_equivalent": "Lev has workstreams and plugins, but not enterprise org/project administration.",
+          "action": "monitor",
+          "notes": "Useful only if Lev grows multi-tenant platform mode."
+        },
+        {
+          "id": "union-23",
+          "name": "Reusable warm containers and Actors",
+          "status": "missing",
+          "lev_equivalent": "Lev starts processes/agents but lacks a workload-level warm container or actor reuse primitive.",
+          "action": "build",
+          "notes": "High-value if Lev adds long-running tool/service pools."
+        },
+        {
+          "id": "union-24",
+          "name": "Cloud image building",
+          "status": "missing",
+          "lev_equivalent": "Lev does not build/push workload container images as a platform primitive.",
+          "action": "defer",
+          "notes": "Do not implement before a deployable runtime target exists."
+        },
+        {
+          "id": "union-25",
+          "name": "First-class FastAPI, Streamlit, webhook, and app serving",
+          "status": "missing",
+          "lev_equivalent": "Lev can generate UI/report artifacts, but does not run user apps as first-class workload deployments.",
+          "action": "build",
+          "notes": "Promote only behind explicit local-server/remote-server contracts."
+        },
+        {
+          "id": "union-26",
+          "name": "vLLM/SGLang LLM serving with OpenAI-compatible API",
+          "status": "missing",
+          "lev_equivalent": "Lev calls external models and tools, but does not deploy model-serving infrastructure.",
+          "action": "monitor",
+          "notes": "Reference for provider symmetry, not a near-term core feature."
+        },
+        {
+          "id": "union-27",
+          "name": "App autoscaling and scale-to-zero",
+          "status": "missing",
+          "lev_equivalent": "Lev has automations and processes, but no autoscaled app workload plane.",
+          "action": "defer",
+          "notes": "Requires service runtime and observability before it matters."
+        },
+        {
+          "id": "union-28",
+          "name": "Model prefetching and sharding",
+          "status": "missing",
+          "lev_equivalent": "Lev has no model artifact staging or GPU sharding workflow.",
+          "action": "monitor",
+          "notes": "Useful only if Lev becomes a model host, not just a model client."
+        },
+        {
+          "id": "union-29",
+          "name": "Cost observability and resource dashboards",
+          "status": "missing",
+          "lev_equivalent": "Lev tracks budgets in process/policy contexts but lacks a consolidated cost dashboard for workload runs.",
+          "action": "build",
+          "notes": "Valuable for agent/runtime cost accounting even without GPU workloads."
+        },
+        {
+          "id": "union-30",
+          "name": "Outbound-only zero-trust data-plane tunnel",
+          "status": "missing",
+          "lev_equivalent": "Lev has no remote data-plane tunnel product yet.",
+          "action": "extract",
+          "notes": "High-value future remote-worker pattern."
+        },
+        {
+          "id": "union-31",
+          "name": "Notebook and Jupyter workflow authoring",
+          "status": "missing",
+          "lev_equivalent": "Lev does not provide notebook-native workflow authoring.",
+          "action": "defer",
+          "notes": "Not core unless user workflows move into notebook environments."
+        },
+        {
+          "id": "union-32",
+          "name": "Production case studies and scale claims",
+          "status": "partial",
+          "lev_equivalent": "Lev should use these as benchmark inspiration only.",
+          "action": "reference",
+          "notes": "Do not treat marketing claims as implementation requirements without reproducing tests."
+        },
+        {
+          "id": "union-33",
+          "name": "Flyte 1 service decomposition",
+          "status": "partial",
+          "lev_equivalent": "Lev should not recreate Flyte 1 services, but the split remains useful historical architecture evidence.",
+          "action": "reference",
+          "notes": "Prefer current Flyte 2 SDK/core evidence for new design."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "crawled_files",
+          "value": 351,
+          "unit": "files",
+          "source": "workshop/intake/union-ai/raw"
+        },
+        {
+          "name": "converted_markdown_pages",
+          "value": 7,
+          "unit": "pages",
+          "source": "workshop/intake/union-ai/extracted"
+        },
+        {
+          "name": "unionai_public_repos",
+          "value": 46,
+          "unit": "repos",
+          "source": "workshop/intake/union-ai/repos-api/unionai-repos.json"
+        },
+        {
+          "name": "flyteorg_public_repos",
+          "value": 46,
+          "unit": "repos",
+          "source": "workshop/intake/union-ai/repos-api/flyteorg-repos.json"
+        },
+        {
+          "name": "staged_repositories",
+          "value": 16,
+          "unit": "repos",
+          "source": "workshop/intake"
+        },
+        {
+          "name": "cataloged_public_repositories",
+          "value": 92,
+          "unit": "repos",
+          "source": "workshop/analysis/union-ai/repo-catalog.json"
+        },
+        {
+          "name": "cloned_public_repositories",
+          "value": 92,
+          "unit": "repos",
+          "source": "workshop/analysis/union-ai/repo-catalog.json"
+        },
+        {
+          "name": "implementation_scanned_files",
+          "value": 27488,
+          "unit": "tracked_files",
+          "source": "workshop/analysis/union-ai/repo-catalog.json"
+        },
+        {
+          "name": "deep_dived_high_signal_repositories",
+          "value": 16,
+          "unit": "repos",
+          "source": ".lev/pm/parity/union-ai.yaml"
+        },
+        {
+          "name": "parity_feature_rows",
+          "value": 33,
+          "unit": "features",
+          "source": ".lev/pm/parity/union-ai.yaml"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 24,
+      "deferred": 3,
+      "rejected": 0,
+      "monitor": 6,
+      "deferred_items": [
+        {
+          "id": "union-24",
+          "name": "Cloud image building",
+          "action": "defer",
+          "absorbed_into": "future platform deployment adapter",
+          "tribunal_note": null
+        },
+        {
+          "id": "union-27",
+          "name": "App autoscaling and scale-to-zero",
+          "action": "defer",
+          "absorbed_into": "future platform runtime",
+          "tribunal_note": null
+        },
+        {
+          "id": "union-31",
+          "name": "Notebook and Jupyter workflow authoring",
+          "action": "defer",
+          "absorbed_into": "future UX/platform integrations",
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
       "target": "worldseed",
       "label": "WorldSeed",
       "category": "world-runtime",
@@ -9172,6 +9981,12 @@
     "post-1.0 Kubernetes executor adapter": 1,
     "post-1.0 Kubernetes plugin adapter": 1,
     "post-1.0 dataproxy adapter": 1,
-    "post-1.0 Kubernetes log adapter": 1
+    "post-1.0 Kubernetes log adapter": 1,
+    "future event transport adapter": 1,
+    "future SQL adapter": 1,
+    "future deployment profile": 1,
+    "future platform deployment adapter": 1,
+    "future platform runtime": 1,
+    "future UX/platform integrations": 1
   }
 }
