@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-08T06:26:15.778061+00:00",
+  "generated_at": "2026-05-08T06:32:33.393673+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -10,16 +10,16 @@
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "summary": {
-    "parity_files": 51,
-    "total_features": 867,
+    "parity_files": 55,
+    "total_features": 969,
     "absorbed": 64,
-    "pending": 614,
+    "pending": 654,
     "deferred": 12,
-    "rejected": 30,
-    "monitor": 67,
+    "rejected": 31,
+    "monitor": 72,
     "unclassified": 46,
-    "absorbed_pct": 7.4,
-    "unclassified_pct": 5.3
+    "absorbed_pct": 6.6,
+    "unclassified_pct": 4.7
   },
   "untriaged_targets": [
     "agent-browser",
@@ -865,6 +865,309 @@
           "name": "SQLite-backed repositories for app state",
           "action": "reject",
           "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "airflow",
+      "label": "airflow",
+      "category": null,
+      "priority": "P0 for daemon/gateway/event-dispatch design; P1 for SDK ergonomics",
+      "measured_at": null,
+      "updated_at": null,
+      "owner": null,
+      "path": ".lev/pm/parity/airflow.yaml",
+      "verdict": null,
+      "total_features": 0,
+      "classified": 0,
+      "unclassified": 0,
+      "counts": {},
+      "features": [],
+      "metrics": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "anything-llm",
+      "label": "AnythingLLM",
+      "category": "genui-agent-workspace",
+      "priority": "P1",
+      "measured_at": "'2026-05-04'",
+      "updated_at": "'2026-05-04'",
+      "owner": "community/agentping + core/poly + core/harness + core/daemon + plugins/scheduling",
+      "path": ".lev/pm/parity/anything-llm.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 30,
+      "classified": 30,
+      "unclassified": 0,
+      "counts": {
+        "build": 3,
+        "extract": 11,
+        "merge": 11,
+        "reference": 4,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "anythingllm-01",
+          "name": "All-in-one workspace chat and RAG app",
+          "status": "partial",
+          "lev_equivalent": "AgentPing GenUI command center over graph-backed workspaces and memory",
+          "action": "build",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-02",
+          "name": "Workspace document upload, link ingestion, and embedding",
+          "status": "partial",
+          "lev_equivalent": "Workshop/intake plus future graph-backed RAG ingestion",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-03",
+          "name": "Threaded streaming chat",
+          "status": "partial",
+          "lev_equivalent": "AgentPing thread/session model with LevEvent streaming",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-04",
+          "name": "Broad LLM provider registry",
+          "status": "partial",
+          "lev_equivalent": "Poly provider registry and provider capability cards",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-05",
+          "name": "Embedding engine and vector database provider matrix",
+          "status": "partial",
+          "lev_equivalent": "memory/vector providers exposed through Poly and graph adapters",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-06",
+          "name": "Dedicated collector service for file, link, and raw-text parsing",
+          "status": "partial",
+          "lev_equivalent": "workshop intake, document parser workers, and graph ingestion jobs",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-07",
+          "name": "Embedding worker progress with SSE replay",
+          "status": "partial",
+          "lev_equivalent": "daemon task progress projected into AgentPing",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-08",
+          "name": "Watched document sync and stale-source refresh",
+          "status": "missing",
+          "lev_equivalent": "graph source watchers and daemon refresh jobs",
+          "action": "build",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-09",
+          "name": "WebSocket agent invocation",
+          "status": "partial",
+          "lev_equivalent": "AgentSession lifecycle projected through AgentPing live run panes",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-10",
+          "name": "AIbitat agent tool/plugin runtime",
+          "status": "partial",
+          "lev_equivalent": "exec/harness tool runtime plus Poly provider/tool registry",
+          "action": "reference",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-11",
+          "name": "Configurable agent skill defaults and whitelist/suppression",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard capability leases and Poly tool capability policy",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-12",
+          "name": "Imported and community agent plugins",
+          "status": "partial",
+          "lev_equivalent": "skill/plugin lifecycle plus Workshop promotion",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-13",
+          "name": "No-code agent flow builder",
+          "status": "partial",
+          "lev_equivalent": "FlowMind authoring with AgentPing GenUI block editor",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-14",
+          "name": "MCP server management UI/API",
+          "status": "partial",
+          "lev_equivalent": "MCP registrar, Poly MCP surface, AgentPing readiness panel",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-15",
+          "name": "MCP tools projected into agent functions",
+          "status": "partial",
+          "lev_equivalent": "Poly tool capability projection and execution adapters",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-16",
+          "name": "MCP cooldown and duplicate-call guard",
+          "status": "missing",
+          "lev_equivalent": "tool-call policy and loop guard in exec/runtime",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-17",
+          "name": "Scheduled agent jobs",
+          "status": "partial",
+          "lev_equivalent": "daemon scheduled jobs plus AgentPing run history",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-18",
+          "name": "Background worker queue and orphan recovery",
+          "status": "partial",
+          "lev_equivalent": "daemon worker pool, task queue, and lifecycle recovery",
+          "action": "reference",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-19",
+          "name": "Multi-user roles, workspace users, and chat quotas",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard/org policy plus graph workspace membership",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-20",
+          "name": "API keys, developer API, and OpenAI-compatible endpoints",
+          "status": "partial",
+          "lev_equivalent": "Poly northbound HTTP/MCP/CLI surfaces and API gateway",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-21",
+          "name": "Embeddable public chat widget",
+          "status": "missing",
+          "lev_equivalent": "AgentPing embeddable surface over scoped workspace chat",
+          "action": "build",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-22",
+          "name": "Browser extension content capture",
+          "status": "partial",
+          "lev_equivalent": "AgentPing browser adapter and Workshop capture/intake route",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-23",
+          "name": "Mobile, Telegram, and web push channel surfaces",
+          "status": "partial",
+          "lev_equivalent": "AgentPing adapters and platform plugins",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-24",
+          "name": "System prompt variables",
+          "status": "partial",
+          "lev_equivalent": "context assembly variables over graph/session/user state",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-25",
+          "name": "Event logs and audit feed",
+          "status": "partial",
+          "lev_equivalent": "LevEvent, event bus persistence, AgentPing audit feed",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-26",
+          "name": "Frontend model surface for agent/product controls",
+          "status": "partial",
+          "lev_equivalent": "AgentPing UI package, dashboard-manager-ui, GenUI host envelope",
+          "action": "extract",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-27",
+          "name": "Metrics and deployment health endpoint",
+          "status": "partial",
+          "lev_equivalent": "daemon metrics, local dimensional time series, dashboard status cards",
+          "action": "merge",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-28",
+          "name": "Telemetry and privacy controls",
+          "status": "partial",
+          "lev_equivalent": "enterprise telemetry plus local-first opt-in policy",
+          "action": "reference",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-29",
+          "name": "Deployment matrix across desktop, Docker, and cloud",
+          "status": "partial",
+          "lev_equivalent": "local-first install plus deploy plugin targets",
+          "action": "reference",
+          "notes": ""
+        },
+        {
+          "id": "anythingllm-30",
+          "name": "App-local Prisma data authority",
+          "status": "not-applicable",
+          "lev_equivalent": "graph/events/workstreams/policy as canonical state",
+          "action": "reject",
+          "notes": ""
+        }
+      ],
+      "metrics": [],
+      "absorbed": 0,
+      "pending": 25,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "anythingllm-30",
+          "name": "App-local Prisma data authority",
+          "action": "reject",
+          "absorbed_into": "none",
           "tribunal_note": null
         }
       ]
@@ -3740,6 +4043,217 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 5,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "flyte-sdk",
+      "label": "flyte-sdk",
+      "category": "workflow-orchestration-sdk",
+      "priority": "P1",
+      "measured_at": "2026-05-04",
+      "updated_at": "2026-05-04",
+      "owner": "core/sdk + core/exec + core/poly + core/flowmind + core/eval + core/event-dispatch",
+      "path": ".lev/pm/parity/flyte-sdk.yaml",
+      "verdict": "extract",
+      "total_features": 18,
+      "classified": 18,
+      "unclassified": 0,
+      "counts": {
+        "extract": 15,
+        "adapt": 1,
+        "avoid_as_canon": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "flyte-01",
+          "name": "Pure Python SDK authoring; no workflow DSL",
+          "status": "partial",
+          "lev_equivalent": "sdk.flow.define / generated app routes must feel code-native while compiling to FlowMind/Poly declarations.",
+          "action": "extract",
+          "notes": "Flyte 2 positions normal Python control flow as the workflow authoring surface; @env.task is the unit of declaration."
+        },
+        {
+          "id": "flyte-02",
+          "name": "TaskEnvironment configuration owner",
+          "status": "missing",
+          "lev_equivalent": "Fractal app root + execution profile + project/user/global policy cascade.",
+          "action": "extract",
+          "notes": "TaskEnvironment sets shared image/resources/secrets/cache/reusable/queue defaults; task decorator and task.override narrow them."
+        },
+        {
+          "id": "flyte-03",
+          "name": "Task decorator to typed runnable unit",
+          "status": "missing",
+          "lev_equivalent": "User-named capability files compile into FractalEntry -> PolyOp -> ServiceManifest.",
+          "action": "extract",
+          "notes": "@env.task creates a TaskTemplate with NativeInterface, task name, cache, retries, reports, triggers, links, and plugin config."
+        },
+        {
+          "id": "flyte-04",
+          "name": "Async `.aio()` distributed composition",
+          "status": "partial",
+          "lev_equivalent": "FlowMind fanout and SDK session futures.",
+          "action": "extract",
+          "notes": "Tasks can be awaited through `.aio()` inside task context; composition uses normal asyncio/gather."
+        },
+        {
+          "id": "flyte-05",
+          "name": "Local/remote/hybrid run context",
+          "status": "partial",
+          "lev_equivalent": "sdk.agent.session / lev exec substrate profile resolution: tmux/local/remote providers.",
+          "action": "extract",
+          "notes": "flyte.run and with_runcontext support local, remote, and hybrid modes with the same task object."
+        },
+        {
+          "id": "flyte-06",
+          "name": "Remote Run handle",
+          "status": "missing",
+          "lev_equivalent": "AgentSession and FlowRun handle with stream/wait/cancel/attach/capture/receipt.",
+          "action": "extract",
+          "notes": "Run exposes wait, watch, logs, details, inputs, outputs, URL, debug URL, abort, done, and sync."
+        },
+        {
+          "id": "flyte-07",
+          "name": "Action handle and status streaming",
+          "status": "missing",
+          "lev_equivalent": "Per-step execution receipts and event frames.",
+          "action": "extract",
+          "notes": "Action exposes phase, wait, watch, logs, attempts, inputs, outputs, and phase durations."
+        },
+        {
+          "id": "flyte-08",
+          "name": "Typed IO and wire serialization",
+          "status": "partial",
+          "lev_equivalent": "Poly ServiceManifest, typed generated SDK clients, and FlowMind args schemas.",
+          "action": "extract",
+          "notes": "TypeEngine/protobuf/mashumaro/msgpack plus File/Dir/DataFrame and JSON schema conversion provide a strong typed contract layer."
+        },
+        {
+          "id": "flyte-09",
+          "name": "Task serde projection",
+          "status": "partial",
+          "lev_equivalent": "FractalEntry -> PolyOp -> ServiceManifest snapshots.",
+          "action": "extract",
+          "notes": "TaskTemplate is translated to protobuf TaskTemplate with id, metadata, interface, resources, logs, security context, and config."
+        },
+        {
+          "id": "flyte-10",
+          "name": "Triggers as task metadata",
+          "status": "partial",
+          "lev_equivalent": "core/event-dispatch trigger projection + FlowMind event admission.",
+          "action": "extract",
+          "notes": "Trigger supports cron/fixed-rate constructors, inputs, env vars, queue, labels, annotations, and custom context."
+        },
+        {
+          "id": "flyte-11",
+          "name": "Trace/checkpoint/report artifacts",
+          "status": "partial",
+          "lev_equivalent": "content-addressed proof.yaml + receipts + GenUI/now reports.",
+          "action": "adapt",
+          "notes": "@flyte.trace records call outputs/errors; Checkpoint supports previous attempt repair; Report produces HTML artifacts."
+        },
+        {
+          "id": "flyte-12",
+          "name": "Resources and secrets",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard leases + PolyCard provider capabilities.",
+          "action": "extract",
+          "notes": "Environment/task declarations include resources and secrets; task serde emits security context."
+        },
+        {
+          "id": "flyte-13",
+          "name": "Plugin registry",
+          "status": "partial",
+          "lev_equivalent": "plugins/* + PolyCard capability registration.",
+          "action": "extract",
+          "notes": "TaskPluginRegistry maps config types to task template classes; repo has many optional plugin packages."
+        },
+        {
+          "id": "flyte-14",
+          "name": "CLI docs generation",
+          "status": "missing",
+          "lev_equivalent": "lev poly codegen docs/client projection.",
+          "action": "extract",
+          "notes": "flyte gen docs walks the Click command tree and renders command markdown, including plugin metadata."
+        },
+        {
+          "id": "flyte-15",
+          "name": "HITL event/wait plugin",
+          "status": "partial",
+          "lev_equivalent": "AgentPing/ACP typed action intents and approval waits.",
+          "action": "extract",
+          "notes": "HITL plugin creates typed events that pause execution until human input is submitted."
+        },
+        {
+          "id": "flyte-16",
+          "name": "Code generation and evaluation plugin",
+          "status": "partial",
+          "lev_equivalent": "core/eval, final-boss constraints, sandbox provider cards, NAAC-style eval suites.",
+          "action": "extract",
+          "notes": "Codegen plugin loops prompt -> plan -> code -> dependencies -> tests -> sandbox execution -> diagnose/fix, or Claude agent mode with intercepted tests."
+        },
+        {
+          "id": "flyte-17",
+          "name": "Local run store and cache",
+          "status": "not-applicable",
+          "lev_equivalent": "XDG session metadata plus append-only receipts and proof.yaml.",
+          "action": "avoid_as_canon",
+          "notes": "Local SQLite run metadata and cache are useful dev conveniences, but insufficient as proof fabric."
+        },
+        {
+          "id": "flyte-18",
+          "name": "Code bundle/content hash versioning",
+          "status": "partial",
+          "lev_equivalent": "proof.yaml artifact hashes and replay expected_hash.",
+          "action": "monitor",
+          "notes": "Flyte code bundles and cache versions are useful inspiration for artifact hashes but not a substitute for receipts."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_py_files",
+          "value": 257,
+          "unit": "count",
+          "source": "find src/flyte -name '*.py'"
+        },
+        {
+          "name": "plugin_py_files",
+          "value": 234,
+          "unit": "count",
+          "source": "find plugins -name '*.py'"
+        },
+        {
+          "name": "example_py_files",
+          "value": 428,
+          "unit": "count",
+          "source": "find examples -name '*.py'"
+        },
+        {
+          "name": "test_py_files",
+          "value": 237,
+          "unit": "count",
+          "source": "find tests -name '*.py'"
+        },
+        {
+          "name": "optional_plugin_dirs",
+          "value": 24,
+          "unit": "approx_count",
+          "source": "plugins/*/pyproject.toml"
+        },
+        {
+          "name": "cli_entrypoints",
+          "value": 4,
+          "unit": "scripts",
+          "source": "pyproject.toml project.scripts flyte/a0/fserve/c0"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 15,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -9674,6 +10188,572 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "sandcastle",
+      "label": "Sandcastle",
+      "category": "agent-sdk-sandbox-orchestration",
+      "priority": "P0",
+      "measured_at": "2026-05-02",
+      "updated_at": "2026-05-02",
+      "owner": "core/sdk + core/exec + core/tmux-harness + core/poly + core/graph",
+      "path": ".lev/pm/parity/sandcastle.yaml",
+      "verdict": "extract-contracts",
+      "total_features": 54,
+      "classified": 54,
+      "unclassified": 0,
+      "counts": {
+        "Expand @lev-os/sdk facade around sessions, streams, FlowMind authoring, and surface projection.": 1,
+        "Use as ergonomic shape for sdk.agent.run/session, but keep FlowMind/ExecutionService as the only runtime path.": 1,
+        "Model Lev AgentSession/SandboxSession API after this handle, with tmux as canonical CLI substrate.": 1,
+        "Adapt to graph-patch workspace policy and eventual VFS/sandbox backing.": 1,
+        "Use BackendDescriptor as source of command construction; do not add provider-local custom code.": 1,
+        "Keep provider helper as sugar over generic FlowMind/exec path.": 1,
+        "Represent as PolyCard provider capabilities and BackendDescriptor command template.": 1,
+        "Use as parity input for provider capability tests.": 2,
+        "Expose SDK stream frames backed by LevEvent/PolyFrame receipts.": 1,
+        "Emit usage/context-pressure frames in every session substrate.": 1,
+        "Keep completion semantics in FlowMind/orchestration.": 1,
+        "Unify idle/reaper policy as profile/project/user/global config.": 1,
+        "Expose cancel via SDK/CLI/MCP with typed receipt and no silent cleanup.": 1,
+        "Make capture policy explicit per task/session type; no hidden best-effort capture.": 1,
+        "Implement `sdk.agent.resume(sessionId)` / `lev session attach` with substrate-specific proof.": 1,
+        "Build XDG/project session store with raw + metadata retention policy.": 1,
+        "Promote to PolyCard capability profile: tmux, bind_mount, isolated, virtual_fs, cloud_worker.": 1,
+        "Use for future Docker/Podman cards, but keep tmux first.": 1,
+        "Use for cloud-native roadmap after tmux/SDK MVP.": 1,
+        "Future card; not v1 tmux blocker.": 1,
+        "Future local container substrate card.": 1,
+        "Use as market signal for cloud-native substrate roadmap.": 1,
+        "Potential provider plugin after PolyCard substrate taxonomy lands.": 1,
+        "Do not expose as fallback; if direct host mode exists, make it explicit and typed.": 1,
+        "Translate to graph-patch workspace policy rather than direct clone.": 1,
+        "Adopt explicit collision/dirty policy in session/worktree APIs.": 1,
+        "Make retention policy config-driven by task type/project/user/global.": 1,
+        "Represent as declared workspace materialization policy; avoid hidden environment copying.": 1,
+        "Use explicit input source fields; no default prompt.md fallback.": 1,
+        "Adopt: inline task text is data; only declared templates can expand.": 1,
+        "Keep variables typed and schema-validated across SDK/CLI/MCP.": 1,
+        "Avoid implicit shell expansion in prompts; require explicit op/tool declaration.": 1,
+        "Use Lev config chain; never rely on hidden env fallbacks for provider proof.": 1,
+        "Make hooks FlowMind lifecycle events and PolyOp-attached guidance.": 1,
+        "Add identity/materialization policy in workspace/sandbox profile.": 1,
+        "Translate commits into graph patch receipts and workstream artifacts.": 1,
+        "Adopt for isolated cloud sandbox cards.": 1,
+        "Adopt save-before-apply as hard rule for sandbox/VFS mutation.": 1,
+        "Attach remediation to PolyOp, not generic CLI help.": 1,
+        "Expose stream callbacks and durable receipts from SDK.": 1,
+        "Use raw tokens + policy thresholds; avoid fake percentage if model window unknown.": 1,
+        "Borrow setup ceremony for `lev sdk init` / project bind.": 1,
+        "Future provider-plugin op, not core v1.": 1,
+        "Consolidate as SDK/project bind templates backed by Poly/DNA.": 1,
+        "Keep Beads/workstream native; do not duplicate backlog plugins.": 1,
+        "Use typed failures in SDK/session APIs; no hidden fallbacks.": 1,
+        "Projects should bind custom providers through PolyCard declarations and generated SDK handles.": 1,
+        "Track as provider portability requirement.": 1,
+        "Adopt fail-fast lock semantics for session/worktree creation.": 1,
+        "Make timeout fields part of session policy.": 1,
+        "Keep rootPath explicit across SDK/CLI/MCP.": 1,
+        "Move env requirements into BackendDescriptor and preflight.": 1,
+        "Add to tmux harness test suite.": 1
+      },
+      "features": [
+        {
+          "id": "sc-01",
+          "name": "SDK top-level export surface",
+          "status": "partial",
+          "lev_equivalent": "core/sdk package exists, but only exposes exec/agent/claude facade today.",
+          "action": "Expand @lev-os/sdk facade around sessions, streams, FlowMind authoring, and surface projection.",
+          "notes": "Exports run, interactive, createSandbox, createWorktree, prompt/session utilities, provider factories, and sandbox-provider factories from one package."
+        },
+        {
+          "id": "sc-02",
+          "name": "One-shot run() orchestration",
+          "status": "partial",
+          "lev_equivalent": "sdk.agent.run delegates to lev.exec.run but lacks full session/stream/result contract.",
+          "action": "Use as ergonomic shape for sdk.agent.run/session, but keep FlowMind/ExecutionService as the only runtime path.",
+          "notes": "Programmatic one-shot agent run with required AgentProvider and SandboxProvider, cwd, prompt source, branch strategy, iterations, logging, hooks, completion signal, idle timeout, resume, AbortSignal, and result commits/branch/iterations."
+        },
+        {
+          "id": "sc-03",
+          "name": "Reusable createSandbox() handle",
+          "status": "missing",
+          "lev_equivalent": "tmux AgentSession is planned/partial; no general SDK sandbox handle yet.",
+          "action": "Model Lev AgentSession/SandboxSession API after this handle, with tmux as canonical CLI substrate.",
+          "notes": "Creates one sandbox/worktree once and exposes run(), interactive(), close(), and async disposal for multiple agent rounds."
+        },
+        {
+          "id": "sc-04",
+          "name": "First-class createWorktree() lifecycle",
+          "status": "partial",
+          "lev_equivalent": "Lev has workstreams/worktrees convention but not SDK-first Worktree handle.",
+          "action": "Adapt to graph-patch workspace policy and eventual VFS/sandbox backing.",
+          "notes": "Worktree is independent from any sandbox; can run interactive first, then hand the same worktree to sandboxed AFK execution. Dirty worktrees are preserved."
+        },
+        {
+          "id": "sc-05",
+          "name": "AgentProvider command contract",
+          "status": "partial",
+          "lev_equivalent": "Lev has adapter registry plus PolyCard BackendDescriptor plan.",
+          "action": "Use BackendDescriptor as source of command construction; do not add provider-local custom code.",
+          "notes": "Provider interface normalizes print commands, interactive args, stream parsing, session capture, usage parsing, and provider env."
+        },
+        {
+          "id": "sc-06",
+          "name": "Claude Code provider",
+          "status": "partial",
+          "lev_equivalent": "claude-agent-sdk adapter and @lev-os/sdk claude sugar exist, but loop/substrate boundaries need cleanup.",
+          "action": "Keep provider helper as sugar over generic FlowMind/exec path.",
+          "notes": "Builds `claude --print --verbose --output-format stream-json`, supports model, effort, dangerous skip permissions, resumeSession, session capture, and usage parsing."
+        },
+        {
+          "id": "sc-07",
+          "name": "Codex provider",
+          "status": "partial",
+          "lev_equivalent": "Lev has Codex adapter; should be card-driven, not custom tmux logic.",
+          "action": "Represent as PolyCard provider capabilities and BackendDescriptor command template.",
+          "notes": "Builds `codex exec --json --dangerously-bypass-approvals-and-sandbox` with model and effort; parses stream JSON text/tool/error events."
+        },
+        {
+          "id": "sc-08",
+          "name": "OpenCode provider",
+          "status": "partial",
+          "lev_equivalent": "Lev platform matrix includes opencode.",
+          "action": "Use as parity input for provider capability tests.",
+          "notes": "Builds opencode run/interactive commands with model and parses provider output."
+        },
+        {
+          "id": "sc-09",
+          "name": "Pi provider",
+          "status": "partial",
+          "lev_equivalent": "Lev platform matrix includes pi.",
+          "action": "Use as parity input for provider capability tests.",
+          "notes": "Builds pi JSON print-mode command with model and parses assistant/tool/error events."
+        },
+        {
+          "id": "sc-10",
+          "name": "Agent stream event parsing",
+          "status": "missing",
+          "lev_equivalent": "Lev has event bus, but SDK session stream API is thin.",
+          "action": "Expose SDK stream frames backed by LevEvent/PolyFrame receipts.",
+          "notes": "Provider parsers normalize text, tool calls, errors, and session ids for display/logging/observability."
+        },
+        {
+          "id": "sc-11",
+          "name": "Token usage extraction",
+          "status": "partial",
+          "lev_equivalent": "Context-pressure policy exists in tmux-control-plane, but SDK-facing usage frames are incomplete.",
+          "action": "Emit usage/context-pressure frames in every session substrate.",
+          "notes": "Claude session JSONL is parsed for input/cache/output usage and displayed as context-window size."
+        },
+        {
+          "id": "sc-12",
+          "name": "Completion signal loop",
+          "status": "partial",
+          "lev_equivalent": "FlowMind gates and until loops exist; should be semantic policy, not adapter loop.",
+          "action": "Keep completion semantics in FlowMind/orchestration.",
+          "notes": "Iteration loop stops early when any configured completion string appears; default is `<promise>COMPLETE</promise>`."
+        },
+        {
+          "id": "sc-13",
+          "name": "Idle timeout and idle warnings",
+          "status": "partial",
+          "lev_equivalent": "tmux-control-plane has heartbeat/reaper policy; SDK idle semantics need surface contract.",
+          "action": "Unify idle/reaper policy as profile/project/user/global config.",
+          "notes": "Idle timeout resets on stream output; warning interval surfaces lack of output and fails with AgentIdleTimeoutError."
+        },
+        {
+          "id": "sc-14",
+          "name": "AbortSignal cancellation",
+          "status": "missing",
+          "lev_equivalent": "Lev has kill/session control pieces; SDK needs first-class cancel semantics.",
+          "action": "Expose cancel via SDK/CLI/MCP with typed receipt and no silent cleanup.",
+          "notes": "AbortSignal cancels lifecycle hooks and in-flight subprocesses; handles/worktrees remain reusable/preserved where appropriate."
+        },
+        {
+          "id": "sc-15",
+          "name": "Session capture",
+          "status": "partial",
+          "lev_equivalent": "tmux scrollback/session metadata planned; @lev-os/sdk lacks durable session capture API.",
+          "action": "Make capture policy explicit per task/session type; no hidden best-effort capture.",
+          "notes": "Claude sessions are captured by default to host JSONL; capture failure fails the run."
+        },
+        {
+          "id": "sc-16",
+          "name": "Session resume",
+          "status": "partial",
+          "lev_equivalent": "Tmux attach/resume is core design objective; SDK currently has no session resume surface.",
+          "action": "Implement `sdk.agent.resume(sessionId)` / `lev session attach` with substrate-specific proof.",
+          "notes": "resumeSession validates host JSONL existence, transfers it into sandbox for iteration one, and rejects maxIterations > 1."
+        },
+        {
+          "id": "sc-17",
+          "name": "SessionStore abstraction",
+          "status": "missing",
+          "lev_equivalent": "Workstream/tmux session registry planned under XDG state.",
+          "action": "Build XDG/project session store with raw + metadata retention policy.",
+          "notes": "Host and sandbox stores read/write session JSONL and transfer sessions while rewriting cwd fields."
+        },
+        {
+          "id": "sc-18",
+          "name": "SandboxProvider abstraction",
+          "status": "missing",
+          "lev_equivalent": "No unified sandbox provider protocol yet; tmux-harness is one substrate.",
+          "action": "Promote to PolyCard capability profile: tmux, bind_mount, isolated, virtual_fs, cloud_worker.",
+          "notes": "Typed provider taxonomy covers bind-mount handles, isolated handles, no-sandbox handles, branch strategies, exec, interactive exec, copy in/out, and close."
+        },
+        {
+          "id": "sc-19",
+          "name": "Bind-mount provider factory",
+          "status": "missing",
+          "lev_equivalent": "Container sandbox work is parity/future.",
+          "action": "Use for future Docker/Podman cards, but keep tmux first.",
+          "notes": "Factory wraps providers that mount host worktree directly and need no sync-out path."
+        },
+        {
+          "id": "sc-20",
+          "name": "Isolated provider factory",
+          "status": "missing",
+          "lev_equivalent": "Future cloud sandbox provider cards.",
+          "action": "Use for cloud-native roadmap after tmux/SDK MVP.",
+          "notes": "Factory wraps providers that need copyIn/copyFileOut and sync-in/out mechanics."
+        },
+        {
+          "id": "sc-21",
+          "name": "Docker provider",
+          "status": "partial",
+          "lev_equivalent": "Container execution exists in scattered places, not SDK/session policy.",
+          "action": "Future card; not v1 tmux blocker.",
+          "notes": "Starts Docker containers with mounted worktree, git mounts, env, user uid/gid, network, exec, interactiveExec, copyIn/copyFileOut, and cleanup."
+        },
+        {
+          "id": "sc-22",
+          "name": "Podman provider",
+          "status": "partial",
+          "lev_equivalent": "No canonical Podman card yet.",
+          "action": "Future local container substrate card.",
+          "notes": "Rootless-oriented provider with SELinux label, userns keep-id, container uid/gid, networks, machine checks, and copy/exec/cleanup."
+        },
+        {
+          "id": "sc-23",
+          "name": "Vercel isolated provider",
+          "status": "missing",
+          "lev_equivalent": "Cloud sandbox not yet first-class.",
+          "action": "Use as market signal for cloud-native substrate roadmap.",
+          "notes": "Wraps @vercel/sandbox Firecracker microVMs as isolated sandbox handles with runCommand, stream line handling, copy in/out, and close."
+        },
+        {
+          "id": "sc-24",
+          "name": "Daytona isolated provider",
+          "status": "missing",
+          "lev_equivalent": "Cloud sandbox not yet first-class.",
+          "action": "Potential provider plugin after PolyCard substrate taxonomy lands.",
+          "notes": "Wraps @daytona/sdk with ephemeral sandbox creation, process sessions, streaming command execution, copy in/out, and close."
+        },
+        {
+          "id": "sc-25",
+          "name": "No-sandbox interactive provider",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev direction says tmux is canonical CLI substrate; no bare hidden fallback.",
+          "action": "Do not expose as fallback; if direct host mode exists, make it explicit and typed.",
+          "notes": "Runs commands directly on host and is limited to interactive/worktree interactive usage."
+        },
+        {
+          "id": "sc-26",
+          "name": "Branch strategy defaults",
+          "status": "partial",
+          "lev_equivalent": "Graph patch/worktree policy exists conceptually, not SDK shape.",
+          "action": "Translate to graph-patch workspace policy rather than direct clone.",
+          "notes": "Bind-mount defaults to head; isolated defaults to merge-to-head; explicit branch strategy supports named branches."
+        },
+        {
+          "id": "sc-27",
+          "name": "Worktree reuse and dirty warning",
+          "status": "missing",
+          "lev_equivalent": "Workstream resume exists; workspace collision policy is not SDK-level.",
+          "action": "Adopt explicit collision/dirty policy in session/worktree APIs.",
+          "notes": "Named branch worktrees can be reused; dirty existing managed worktrees warn instead of duplicating."
+        },
+        {
+          "id": "sc-28",
+          "name": "Worktree prune stale",
+          "status": "missing",
+          "lev_equivalent": "Lev needs reaper/retention policy for sessions/artifacts.",
+          "action": "Make retention policy config-driven by task type/project/user/global.",
+          "notes": "Prunes stale `.sandcastle/worktrees` entries no longer present in git worktree list."
+        },
+        {
+          "id": "sc-29",
+          "name": "copyToWorktree with CoW flags",
+          "status": "missing",
+          "lev_equivalent": "No explicit SDK field yet.",
+          "action": "Represent as declared workspace materialization policy; avoid hidden environment copying.",
+          "notes": "Copies declared host-relative paths into worktree before sandbox start using platform copy-on-write flags where available and timeouts."
+        },
+        {
+          "id": "sc-30",
+          "name": "Prompt source resolver",
+          "status": "partial",
+          "lev_equivalent": "FlowMind node/task input exists; SDK should make prompt sources explicit.",
+          "action": "Use explicit input source fields; no default prompt.md fallback.",
+          "notes": "Requires exactly one of prompt or promptFile for run paths; promptFile is read from explicit path."
+        },
+        {
+          "id": "sc-31",
+          "name": "Inline prompt literal rule",
+          "status": "missing",
+          "lev_equivalent": "Lev has FlowMind args but needs equivalent safety rule.",
+          "action": "Adopt: inline task text is data; only declared templates can expand.",
+          "notes": "Inline prompts skip promptArgs and command expansion; substitutions only apply to promptFile templates."
+        },
+        {
+          "id": "sc-32",
+          "name": "Prompt argument substitution",
+          "status": "partial",
+          "lev_equivalent": "FlowMind variables and SDK variables field exist.",
+          "action": "Keep variables typed and schema-validated across SDK/CLI/MCP.",
+          "notes": "Validates missing keys, blocks overriding built-in args, and replaces `{{KEY}}` placeholders with sanitized values."
+        },
+        {
+          "id": "sc-33",
+          "name": "Prompt shell command expansion",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev should treat shell as explicit FlowMind op, not template expansion magic.",
+          "action": "Avoid implicit shell expansion in prompts; require explicit op/tool declaration.",
+          "notes": "Prompt files can include marked shell command blocks executed inside sandbox after hooks; argument values are inert."
+        },
+        {
+          "id": "sc-34",
+          "name": "Environment resolver",
+          "status": "partial",
+          "lev_equivalent": "XDG/project config chain exists.",
+          "action": "Use Lev config chain; never rely on hidden env fallbacks for provider proof.",
+          "notes": "Reads `.sandcastle/.env` and merges with process env/provider env for declared keys."
+        },
+        {
+          "id": "sc-35",
+          "name": "Lifecycle hooks",
+          "status": "partial",
+          "lev_equivalent": "FlowMind lifecycle hooks and event bus exist conceptually/code partially.",
+          "action": "Make hooks FlowMind lifecycle events and PolyOp-attached guidance.",
+          "notes": "Host and sandbox hooks run at worktree/sandbox readiness with timeouts, sudo option for sandbox hooks, ordering, parallelism, and AbortSignal propagation."
+        },
+        {
+          "id": "sc-36",
+          "name": "Git identity setup in sandbox lifecycle",
+          "status": "missing",
+          "lev_equivalent": "No explicit SDK policy.",
+          "action": "Add identity/materialization policy in workspace/sandbox profile.",
+          "notes": "Lifecycle reads host git name/email and configures sandbox repo before agent work."
+        },
+        {
+          "id": "sc-37",
+          "name": "Commit collection and merge-to-host",
+          "status": "partial",
+          "lev_equivalent": "Lev graph patch/apply has stronger semantics but less coding-agent branch ergonomics.",
+          "action": "Translate commits into graph patch receipts and workstream artifacts.",
+          "notes": "Collects agent commits and merges/cherry-picks/syncs them to host depending on branch/sandbox mode."
+        },
+        {
+          "id": "sc-38",
+          "name": "Isolated sync-in via git bundle",
+          "status": "missing",
+          "lev_equivalent": "Future cloud sandbox substrate.",
+          "action": "Adopt for isolated cloud sandbox cards.",
+          "notes": "Creates host git bundle, copies into sandbox, clones, checks out branch, and verifies host/sandbox HEAD match."
+        },
+        {
+          "id": "sc-39",
+          "name": "Isolated sync-out two-phase recovery",
+          "status": "missing",
+          "lev_equivalent": "Lev receipts/audit exist, but sandbox recovery path not formalized.",
+          "action": "Adopt save-before-apply as hard rule for sandbox/VFS mutation.",
+          "notes": "Saves committed patches, diff, and untracked files under `.sandcastle/patches/<timestamp>/` before applying; preserves artifacts and recovery instructions on failure."
+        },
+        {
+          "id": "sc-40",
+          "name": "Recovery messages",
+          "status": "missing",
+          "lev_equivalent": "Typed failures are required; remediation should attach to PolyOp.",
+          "action": "Attach remediation to PolyOp, not generic CLI help.",
+          "notes": "Builds user-facing recovery instructions for failed patch/diff/untracked apply steps."
+        },
+        {
+          "id": "sc-41",
+          "name": "File logging with stream callback",
+          "status": "missing",
+          "lev_equivalent": "Event bus/telemetry exists but SDK stream callbacks are thin.",
+          "action": "Expose stream callbacks and durable receipts from SDK.",
+          "notes": "Run logging defaults to `.sandcastle/logs`; supports stdout terminal mode and `onAgentStreamEvent` callback."
+        },
+        {
+          "id": "sc-42",
+          "name": "Context window display",
+          "status": "partial",
+          "lev_equivalent": "Context-pressure tiers exist.",
+          "action": "Use raw tokens + policy thresholds; avoid fake percentage if model window unknown.",
+          "notes": "Formats usage input/cache tokens as approximate context-window size after runs."
+        },
+        {
+          "id": "sc-43",
+          "name": "CLI init scaffolding",
+          "status": "partial",
+          "lev_equivalent": "Lev onboarding/doctor exists but SDK project scaffold is not focused.",
+          "action": "Borrow setup ceremony for `lev sdk init` / project bind.",
+          "notes": "`sandcastle init` picks agent, model, sandbox provider, backlog manager, template, scaffolds `.sandcastle`, and optionally builds Docker/Podman image."
+        },
+        {
+          "id": "sc-44",
+          "name": "Docker and Podman image CLI",
+          "status": "partial",
+          "lev_equivalent": "No unified provider image build surface.",
+          "action": "Future provider-plugin op, not core v1.",
+          "notes": "CLI has docker/podman build-image/remove-image commands with configurable image/containerfile paths."
+        },
+        {
+          "id": "sc-45",
+          "name": "Template catalog",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/project scaffolds exist in multiple places.",
+          "action": "Consolidate as SDK/project bind templates backed by Poly/DNA.",
+          "notes": "Init service lists templates, agents, backlog managers, sandbox providers, and scaffolds selected template files."
+        },
+        {
+          "id": "sc-46",
+          "name": "Backlog manager selection",
+          "status": "partial",
+          "lev_equivalent": "Lev already has Beads/workstreams.",
+          "action": "Keep Beads/workstream native; do not duplicate backlog plugins.",
+          "notes": "Init flow includes backlog manager choice such as GitHub Issues or Beads."
+        },
+        {
+          "id": "sc-47",
+          "name": "Effect-based typed failure pipeline",
+          "status": "partial",
+          "lev_equivalent": "Lev uses typed modules/gates but JS runtime has mixed error style.",
+          "action": "Use typed failures in SDK/session APIs; no hidden fallbacks.",
+          "notes": "Core flows use Effect for layers, timeouts, error mapping, display, and provider injection."
+        },
+        {
+          "id": "sc-48",
+          "name": "Custom sandbox providers",
+          "status": "missing",
+          "lev_equivalent": "Poly plugins can contribute providers, but SDK path is not explicit.",
+          "action": "Projects should bind custom providers through PolyCard declarations and generated SDK handles.",
+          "notes": "Public factories let users implement bind-mount or isolated providers, including localProcess/tempDir examples in README."
+        },
+        {
+          "id": "sc-49",
+          "name": "Windows git worktree mount handling",
+          "status": "missing",
+          "lev_equivalent": "Lev is mac/Linux-heavy; cross-platform mounts need explicit policy.",
+          "action": "Track as provider portability requirement.",
+          "notes": "ADR records deterministic parent git mount handling for Windows git worktree internals."
+        },
+        {
+          "id": "sc-50",
+          "name": "Worktree locking decision",
+          "status": "missing",
+          "lev_equivalent": "Workstream/session locks should be explicit.",
+          "action": "Adopt fail-fast lock semantics for session/worktree creation.",
+          "notes": "ADR proposes file locks under `.sandcastle/locks/<name>.lock` with stale PID detection and fail-fast behavior."
+        },
+        {
+          "id": "sc-51",
+          "name": "Per-step timeout ADR",
+          "status": "missing",
+          "lev_equivalent": "Some Lev gates/timeouts exist; SDK API should publish timeout taxonomy.",
+          "action": "Make timeout fields part of session policy.",
+          "notes": "ADR requires every lifecycle step to have Effect timeout and dedicated error type."
+        },
+        {
+          "id": "sc-52",
+          "name": "cwd option ADR",
+          "status": "implemented",
+          "lev_equivalent": "Lev rootPath/cwd exists.",
+          "action": "Keep rootPath explicit across SDK/CLI/MCP.",
+          "notes": "cwd anchors `.sandcastle` artifacts, env, worktrees, logs, patches, and git operations while promptFile stays process.cwd-relative."
+        },
+        {
+          "id": "sc-53",
+          "name": "Provider env merge",
+          "status": "partial",
+          "lev_equivalent": "Provider cards need env policy.",
+          "action": "Move env requirements into BackendDescriptor and preflight.",
+          "notes": "Merges provider-specific env, `.sandcastle/.env`, and process env before sandbox launch."
+        },
+        {
+          "id": "sc-54",
+          "name": "Terminal cleanup",
+          "status": "missing",
+          "lev_equivalent": "tmux sessions reduce terminal corruption risk but attach/detach needs cleanup tests.",
+          "action": "Add to tmux harness test suite.",
+          "notes": "Tests and helper guard terminal cleanup after interactive sessions."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "package_exports",
+          "value": 6,
+          "unit": "entrypoints",
+          "source": "workshop/intake/sandcastle/package.json:8-32"
+        },
+        {
+          "name": "built_in_sandbox_providers",
+          "value": 5,
+          "unit": "count",
+          "source": "workshop/intake/sandcastle/README.md:66-77"
+        },
+        {
+          "name": "built_in_agent_providers",
+          "value": 4,
+          "unit": "count",
+          "source": "workshop/intake/sandcastle/src/AgentProvider.ts:196-369"
+        },
+        {
+          "name": "source_test_files",
+          "value": 35,
+          "unit": "approx_count",
+          "source": "workshop/intake/sandcastle/src/*.test.ts and src/sandboxes/*.test.ts"
+        },
+        {
+          "name": "sdk_entry_lines",
+          "value": 84,
+          "unit": "lines",
+          "source": "workshop/intake/sandcastle/src/index.ts"
+        },
+        {
+          "name": "run_lines",
+          "value": 546,
+          "unit": "lines",
+          "source": "workshop/intake/sandcastle/src/run.ts"
+        },
+        {
+          "name": "create_sandbox_lines",
+          "value": 856,
+          "unit": "lines",
+          "source": "workshop/intake/sandcastle/src/createSandbox.ts"
+        },
+        {
+          "name": "create_worktree_lines",
+          "value": 650,
+          "unit": "approx_lines",
+          "source": "workshop/intake/sandcastle/src/createWorktree.ts"
+        },
+        {
+          "name": "sync_out_lines",
+          "value": 372,
+          "unit": "lines",
+          "source": "workshop/intake/sandcastle/src/syncOut.ts"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
