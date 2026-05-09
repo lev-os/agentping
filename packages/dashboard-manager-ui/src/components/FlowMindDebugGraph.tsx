@@ -81,6 +81,18 @@ function edgeClass(style: WorkflowGraphEdgeStyle): string {
   return `flowmind-debug-edge--${style}`;
 }
 
+function cssToken(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9_-]+/g, "-") || "unknown";
+}
+
+function laneOrderForGraph(graph: FlowMindGraph): WorkflowGraphLane[] {
+  const ordered = graph.laneOrder?.length ? [...graph.laneOrder] : [...DEFAULT_LANES];
+  for (const node of graph.nodes) {
+    if (!ordered.includes(node.lane)) ordered.push(node.lane);
+  }
+  return ordered;
+}
+
 function nodePath(source: PositionedNode, target: PositionedNode): string {
   const forward = target.x >= source.x;
   const x1 = forward ? source.x + source.width : source.x + source.width / 2;
@@ -98,7 +110,7 @@ function nodePath(source: PositionedNode, target: PositionedNode): string {
 }
 
 function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
-  const laneOrder = graph.laneOrder?.length ? graph.laneOrder : DEFAULT_LANES;
+  const laneOrder = laneOrderForGraph(graph);
   const laneIndex = new Map(laneOrder.map((lane, index) => [lane, index]));
   const maxColumn = Math.max(0, ...graph.nodes.map((node) => node.depth));
   const stackCounts = new Map<string, number>();
@@ -298,7 +310,7 @@ export function FlowMindDebugGraph({ graph }: FlowMindDebugGraphProps) {
             {layout.laneOrder.map((lane, index) => (
               <div
                 key={lane}
-                className={`flowmind-debug-lane flowmind-debug-lane--${lane}`}
+                className={`flowmind-debug-lane flowmind-debug-lane--${cssToken(lane)}`}
                 style={{
                   top: layout.laneTops.get(lane),
                   height: layout.laneHeights[index],

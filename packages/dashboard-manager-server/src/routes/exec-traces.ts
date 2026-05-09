@@ -95,6 +95,15 @@ function parseCommandJson(result: CommandRunResult): unknown {
   return JSON.parse(output);
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function hasWorkflowGraphEnvelope(value: unknown): boolean {
+  if (!isRecord(value) || !isRecord(value.widget)) return false;
+  return isRecord(value.widget.graph);
+}
+
 function outputText(result: CommandRunResult): string {
   return [result.stdout, result.stderr, result.error].filter(Boolean).join('\n');
 }
@@ -186,7 +195,16 @@ export function createExecTraceRoutes(config: ExecTraceRoutesConfig = {}) {
     let graph: unknown = null;
     if (graphResult.ok) {
       try {
-        graph = parseCommandJson(graphResult);
+        const parsedGraph = parseCommandJson(graphResult);
+        if (hasWorkflowGraphEnvelope(parsedGraph)) {
+          graph = parsedGraph;
+        } else {
+          diagnostics.push({
+            level: 'warning',
+            code: 'GRAPH_CONTRACT_INVALID',
+            message: 'FlowMind debug output did not include widget.graph',
+          });
+        }
       } catch (error) {
         diagnostics.push({
           level: 'warning',

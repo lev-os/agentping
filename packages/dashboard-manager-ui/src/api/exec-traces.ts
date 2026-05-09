@@ -9,11 +9,7 @@ export type WorkflowGraphNodeStatus =
   | "waiting"
   | "skipped";
 
-export type WorkflowGraphLane =
-  | "probabilistic"
-  | "boundary"
-  | "deterministic"
-  | "operator";
+export type WorkflowGraphLane = string;
 
 export type WorkflowGraphEdgeStyle =
   | "primary"
