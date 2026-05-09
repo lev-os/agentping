@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-09T03:35:17.325951+00:00",
+  "generated_at": "2026-05-09T06:48:17.107073+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -10,16 +10,16 @@
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "summary": {
-    "parity_files": 55,
-    "total_features": 972,
-    "absorbed": 64,
-    "pending": 656,
-    "deferred": 12,
+    "parity_files": 58,
+    "total_features": 1032,
+    "absorbed": 65,
+    "pending": 701,
+    "deferred": 16,
     "rejected": 31,
-    "monitor": 73,
+    "monitor": 82,
     "unclassified": 46,
-    "absorbed_pct": 6.6,
-    "unclassified_pct": 4.7
+    "absorbed_pct": 6.3,
+    "unclassified_pct": 4.5
   },
   "untriaged_targets": [
     "agent-browser",
@@ -6230,6 +6230,522 @@
       "rejected_items": []
     },
     {
+      "target": "locus",
+      "label": "Locus",
+      "category": "unity-editor-agent-runtime",
+      "priority": "P1",
+      "measured_at": "2026-05-09",
+      "updated_at": "2026-05-09",
+      "owner": ".lev/pm/workstreams/world-model + plugins/gameai + community/agentping",
+      "path": ".lev/pm/parity/locus.yaml",
+      "verdict": "extract",
+      "total_features": 22,
+      "classified": 22,
+      "unclassified": 0,
+      "counts": {
+        "extract": 10,
+        "build": 6,
+        "deferred": 1,
+        "merge": 3,
+        "reference": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "loc-01",
+          "name": "Independent Unity agent desktop shell",
+          "status": "partial",
+          "lev_equivalent": "AgentPing dashboard + LevUI/GenUI projection surfaces",
+          "action": "extract",
+          "notes": "Extract cockpit IA and projection ideas; do not adopt Tauri app architecture."
+        },
+        {
+          "id": "loc-02",
+          "name": "Unity Editor plugin installation, validation, legacy detection, and hash tracking",
+          "status": "missing",
+          "lev_equivalent": "no Unity plugin installer",
+          "action": "build",
+          "notes": "Clean-room package installer should remain optional and adapter-scoped."
+        },
+        {
+          "id": "loc-03",
+          "name": "Windows named-pipe request/reply bridge with JSON envelopes",
+          "status": "missing",
+          "lev_equivalent": "LevEvent + plugin adapter transport boundary",
+          "action": "extract",
+          "notes": "Transport is useful prior art; Lev contract should be typed bridge events."
+        },
+        {
+          "id": "loc-04",
+          "name": "Unity editor status model: disconnected, editing, playing, playing_paused",
+          "status": "missing",
+          "lev_equivalent": "heartbeat/ticks have no Unity editor state",
+          "action": "build",
+          "notes": "Status should become a receipt-bearing UnityBridgeState."
+        },
+        {
+          "id": "loc-05",
+          "name": "Roslyn JIT C# execution inside Unity Editor",
+          "status": "missing",
+          "lev_equivalent": "generic tool execution only",
+          "action": "build",
+          "notes": "Start with read-only inspection snippets, then add guarded mutation."
+        },
+        {
+          "id": "loc-06",
+          "name": "Frame-based runtime debugging state machine",
+          "status": "partial",
+          "lev_equivalent": "heartbeat/ticks + FlowMind, but no Unity frame sampler",
+          "action": "extract",
+          "notes": "Map sampled frames to WorldTickReceipt fixtures for lore/world-model replay."
+        },
+        {
+          "id": "loc-07",
+          "name": "Unity recompile, asset import, and domain reload loop",
+          "status": "missing",
+          "lev_equivalent": "no Unity compiler lifecycle adapter",
+          "action": "build",
+          "notes": "Emit compile/import/domain receipts before exposing write flows."
+        },
+        {
+          "id": "loc-08",
+          "name": "Unity asset database scanning for Assets and Packages",
+          "status": "missing",
+          "lev_equivalent": "generic graph/index adapters without Unity GUID semantics",
+          "action": "extract",
+          "notes": "Build UnityAssetGraphSnapshot as a plugin graph projection."
+        },
+        {
+          "id": "loc-09",
+          "name": "GUID/path dependency and reverse-reference graph with risk reports",
+          "status": "missing",
+          "lev_equivalent": "no Unity GUID graph claims",
+          "action": "build",
+          "notes": "Represent refs, missing scripts, duplicate GUIDs, and parse failures as graph claims."
+        },
+        {
+          "id": "loc-10",
+          "name": "Neutral Unity YAML parser with hierarchy, fileID, component, prefab, and GUID indexes",
+          "status": "missing",
+          "lev_equivalent": "no Unity YAML IR",
+          "action": "build",
+          "notes": "High-value clean-room target; feeds asset graph, semantic diff, and world seed import."
+        },
+        {
+          "id": "loc-11",
+          "name": "Unity asset and YAML retrieval tools optimized for agent context windows",
+          "status": "partial",
+          "lev_equivalent": "read/grep/index tools + graph queries",
+          "action": "extract",
+          "notes": "Tool schemas should compile to Lev graph/index reads and return bounded receipts."
+        },
+        {
+          "id": "loc-12",
+          "name": "Semantic Unity YAML diff with hierarchy and inspector layouts",
+          "status": "missing",
+          "lev_equivalent": "text diff only in current repo surfaces",
+          "action": "extract",
+          "notes": "Good dashboard projection candidate once Unity YAML IR exists."
+        },
+        {
+          "id": "loc-13",
+          "name": "Semantic Unity YAML merge and conflict resolution",
+          "status": "missing",
+          "lev_equivalent": "no semantic Unity merge",
+          "action": "deferred",
+          "notes": "Defer until parser and diff are stable."
+        },
+        {
+          "id": "loc-14",
+          "name": "Per-agent-round git undo stack with cross-session conflict detection",
+          "status": "partial",
+          "lev_equivalent": "git discipline + receipts, not productized undo",
+          "action": "merge",
+          "notes": "Useful AgentPing affordance after receipt ownership is explicit."
+        },
+        {
+          "id": "loc-15",
+          "name": "Session event gateway with run status, deltas, asks, confirmations, knowledge proposals, cancel, compact, and undo",
+          "status": "partial",
+          "lev_equivalent": "LevEvent/EventBus + AgentPing",
+          "action": "merge",
+          "notes": "Promote a narrowed event vocabulary into LevEvent/AgentPing projection contracts."
+        },
+        {
+          "id": "loc-16",
+          "name": "Per-tool auto/ask permission modes and visible governance settings",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard policy direction and approval gates",
+          "action": "merge",
+          "notes": "Dashboard-visible policy controls map well to AgentPing."
+        },
+        {
+          "id": "loc-17",
+          "name": "File-backed agent definitions with rules, env templates, sub-agents, and project overlays",
+          "status": "partial",
+          "lev_equivalent": "skills + prompt-stack + workstream context",
+          "action": "extract",
+          "notes": "Extract governance dashboard ideas; keep Lev's own skill/workstream model."
+        },
+        {
+          "id": "loc-18",
+          "name": "Knowledge taxonomy for Design, Memory, Skill, and Reference",
+          "status": "partial",
+          "lev_equivalent": "PM designs/captures, skills, docs, and graph memory",
+          "action": "extract",
+          "notes": "Useful as UX taxonomy, not as canonical Lev data model."
+        },
+        {
+          "id": "loc-19",
+          "name": "Explicit injection modes: none, path, excerpt, full, rule",
+          "status": "partial",
+          "lev_equivalent": "context graph injection is present but not consistently surfaced",
+          "action": "extract",
+          "notes": "Extract as context-injection policy vocabulary for Lev."
+        },
+        {
+          "id": "loc-20",
+          "name": "SQLite, Tantivy, and optional semantic embedding knowledge index",
+          "status": "partial",
+          "lev_equivalent": "core/index and graph retrieval surfaces",
+          "action": "reference",
+          "notes": "Reference only unless Lev needs a local desktop index package."
+        },
+        {
+          "id": "loc-21",
+          "name": "Knowledge mutation tools with proposal previews",
+          "status": "partial",
+          "lev_equivalent": "PM proposal lifecycle, but no Locus-style preview cards",
+          "action": "extract",
+          "notes": "Preview-confirm UX fits AgentPing; mutation authority remains PM/workstream owned."
+        },
+        {
+          "id": "loc-22",
+          "name": "Unity-embedded overlay window and drag/drop asset refs",
+          "status": "not-applicable",
+          "lev_equivalent": "no Unity-embedded dashboard target",
+          "action": "monitor",
+          "notes": "Useful later, but not needed for the first Unity adapter spike."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "4e27d0db698bbf4b8eaf8d6e09807ddfe1783e5b",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/Locus log -1 --format='%H'"
+        },
+        {
+          "name": "repo_date",
+          "value": "2026-05-09",
+          "unit": "date",
+          "source": "git -C workshop/intake/Locus log -1 --format='%ad' --date=short"
+        },
+        {
+          "name": "package_version",
+          "value": "0.2.12",
+          "unit": "semver",
+          "source": "workshop/intake/Locus/package.json"
+        },
+        {
+          "name": "license",
+          "value": "GPL-3.0-or-later",
+          "unit": "license",
+          "source": "workshop/intake/Locus/package.json and workshop/intake/Locus/src-tauri/Cargo.toml"
+        },
+        {
+          "name": "total_files",
+          "value": 846,
+          "unit": "count",
+          "source": "find workshop/intake/Locus -path '*/.git' -prune -o -type f -print | wc -l"
+        },
+        {
+          "name": "rust_files",
+          "value": 129,
+          "unit": "count",
+          "source": "find workshop/intake/Locus -type f -name '*.rs' | wc -l"
+        },
+        {
+          "name": "typescript_files",
+          "value": 295,
+          "unit": "count",
+          "source": "find workshop/intake/Locus -type f -name '*.ts' | wc -l"
+        },
+        {
+          "name": "vue_files",
+          "value": 126,
+          "unit": "count",
+          "source": "find workshop/intake/Locus -type f -name '*.vue' | wc -l"
+        },
+        {
+          "name": "csharp_files",
+          "value": 10,
+          "unit": "count",
+          "source": "find workshop/intake/Locus -type f -name '*.cs' | wc -l"
+        },
+        {
+          "name": "frontend_tests",
+          "value": 153,
+          "unit": "count",
+          "source": "find workshop/intake/Locus/src/__tests__ -type f -name '*.test.ts' | wc -l"
+        },
+        {
+          "name": "tool_schema_files",
+          "value": 26,
+          "unit": "count",
+          "source": "find workshop/intake/Locus/tools -maxdepth 1 -type f -name '*.json' | wc -l"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 19,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [
+        {
+          "id": "loc-13",
+          "name": "Semantic Unity YAML merge and conflict resolution",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "ml-agents",
+      "label": "Unity ML-Agents",
+      "category": "world-model-training-runtime",
+      "priority": "P1",
+      "measured_at": "2026-05-09",
+      "updated_at": "2026-05-09",
+      "owner": ".lev/pm/workstreams/world-model + plugins/gameai",
+      "path": ".lev/pm/parity/ml-agents.yaml",
+      "verdict": "extract",
+      "total_features": 18,
+      "classified": 18,
+      "unclassified": 0,
+      "counts": {
+        "extract": 7,
+        "build": 4,
+        "merge": 1,
+        "deferred": 1,
+        "reference": 4,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "mla-01",
+          "name": "Academy-managed environment lifecycle with reset, step, and agent event phases",
+          "status": "partial",
+          "lev_equivalent": "Lev heartbeat/ticks + world-model workstream",
+          "action": "extract",
+          "notes": "Extract a WorldEnvironment lifecycle contract that emits LevEvent receipts at tick/reset boundaries."
+        },
+        {
+          "id": "mla-02",
+          "name": "Agent observation, action, reward, and episode contract",
+          "status": "partial",
+          "lev_equivalent": "plugins/gameai blackboard/planner/director plus future world actor schema",
+          "action": "extract",
+          "notes": "Lev has decision primitives but not the full observe-act-reward actor loop."
+        },
+        {
+          "id": "mla-03",
+          "name": "Decision cadence with periodic and staggered decisions",
+          "status": "partial",
+          "lev_equivalent": "heartbeat, ticks, and wake policy",
+          "action": "extract",
+          "notes": "Useful model for heartbeat-driven world actors and lower-frequency simulation decisions."
+        },
+        {
+          "id": "mla-04",
+          "name": "Python BaseEnv loop with reset, step, get_steps, set_actions, and close",
+          "status": "missing",
+          "lev_equivalent": "no canonical external world environment adapter",
+          "action": "build",
+          "notes": "Build a Lev-owned WorldEnvironment interface before any Unity-specific adapter."
+        },
+        {
+          "id": "mla-05",
+          "name": "DecisionSteps and TerminalSteps batched by behavior with stable agent IDs",
+          "status": "missing",
+          "lev_equivalent": "no canonical WorldStepBatch or WorldTerminalBatch",
+          "action": "build",
+          "notes": "This is the cleanest extraction target for WorldTickReceipt batch schema."
+        },
+        {
+          "id": "mla-06",
+          "name": "BehaviorSpec and BehaviorName policy grouping",
+          "status": "partial",
+          "lev_equivalent": "plugins/gameai policy labels and director inputs",
+          "action": "merge",
+          "notes": "Map to `behavior_id`, action-space schema, and policy recommendation metadata."
+        },
+        {
+          "id": "mla-07",
+          "name": "Side channels for structured non-RL data between environment and trainer",
+          "status": "partial",
+          "lev_equivalent": "LevEvent lanes, plugin adapters, event-bus",
+          "action": "extract",
+          "notes": "Keep the concept, but express it as typed LevEvents with policy checks."
+        },
+        {
+          "id": "mla-08",
+          "name": "YAML trainer configuration vocabulary",
+          "status": "partial",
+          "lev_equivalent": "FlowMind config and gameai policy knobs",
+          "action": "extract",
+          "notes": "Use as reference for a WorldTrainingSpec, not as a direct config format dependency."
+        },
+        {
+          "id": "mla-09",
+          "name": "PPO on-policy trainer and trajectory processing",
+          "status": "missing",
+          "lev_equivalent": "plugins/gameai contextual bandit only",
+          "action": "build",
+          "notes": "Future trainer ladder target after receipt/replay and evaluation data exist."
+        },
+        {
+          "id": "mla-10",
+          "name": "SAC off-policy trainer and replay-buffer-oriented learning",
+          "status": "missing",
+          "lev_equivalent": "no off-policy replay trainer",
+          "action": "deferred",
+          "notes": "Defer until WorldTickReceipt storage can support replay semantics."
+        },
+        {
+          "id": "mla-11",
+          "name": "Self-play, team IDs, group rewards, and cooperative groups",
+          "status": "missing",
+          "lev_equivalent": "world-model + gameai group semantics not canonical",
+          "action": "build",
+          "notes": "Relevant to multi-agent lore/world simulations and adversarial policy evaluation."
+        },
+        {
+          "id": "mla-12",
+          "name": "Imitation learning through GAIL, behavioral cloning, and demonstrations",
+          "status": "missing",
+          "lev_equivalent": "no imitation-learning lane",
+          "action": "reference",
+          "notes": "Reference for future player/lore demonstration ingestion, not immediate implementation."
+        },
+        {
+          "id": "mla-13",
+          "name": "Curriculum and environment parameter randomization",
+          "status": "partial",
+          "lev_equivalent": "FlowMind progression gates and lifecycle criteria",
+          "action": "extract",
+          "notes": "Map lesson promotion to FlowMind lifecycle gates and replayable training receipts."
+        },
+        {
+          "id": "mla-14",
+          "name": "Intrinsic reward signals including curiosity and RND",
+          "status": "missing",
+          "lev_equivalent": "no intrinsic reward contract",
+          "action": "reference",
+          "notes": "Useful later when predictive-world-model error becomes a training signal."
+        },
+        {
+          "id": "mla-15",
+          "name": "Trainer and stats plugin extension interfaces",
+          "status": "partial",
+          "lev_equivalent": "Lev plugin model",
+          "action": "extract",
+          "notes": "Extract extension semantics only; do not copy Python packaging into Lev."
+        },
+        {
+          "id": "mla-16",
+          "name": "Unity inference deployment through com.unity.ai.inference",
+          "status": "not-applicable",
+          "lev_equivalent": "no Unity runtime target",
+          "action": "monitor",
+          "notes": "Only relevant if Lev deliberately supports Unity as a simulation backend."
+        },
+        {
+          "id": "mla-17",
+          "name": "Gym and PettingZoo wrappers for external RL ecosystem interoperability",
+          "status": "missing",
+          "lev_equivalent": "no exported RL environment wrapper",
+          "action": "reference",
+          "notes": "Reference for future interop once Lev has a stable world environment API."
+        },
+        {
+          "id": "mla-18",
+          "name": "Simulation benchmark corpus with examples and trainer configs",
+          "status": "partial",
+          "lev_equivalent": "WorldSeed parity plus lore-road-v0 fixture",
+          "action": "reference",
+          "notes": "Use as bar for future world-model POCs: examples must include configs, repeatable runs, and evaluation metrics."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "7d80dbc9d76640312254cfd8485f61c60eb0ce78",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/ml-agents log -1 --format='%H'"
+        },
+        {
+          "name": "repo_date",
+          "value": "2026-04-17",
+          "unit": "date",
+          "source": "git -C workshop/intake/ml-agents log -1 --format='%ad' --date=short"
+        },
+        {
+          "name": "csharp_files",
+          "value": 331,
+          "unit": "count",
+          "source": "find workshop/intake/ml-agents -type f -name '*.cs' | wc -l"
+        },
+        {
+          "name": "python_files",
+          "value": 241,
+          "unit": "count",
+          "source": "find workshop/intake/ml-agents -type f -name '*.py' | wc -l"
+        },
+        {
+          "name": "trainer_config_yaml_files",
+          "value": 39,
+          "unit": "count",
+          "source": "find workshop/intake/ml-agents/config -type f -name '*.yaml' | wc -l"
+        },
+        {
+          "name": "unity_package_version",
+          "value": "4.0.3",
+          "unit": "semver",
+          "source": "workshop/intake/ml-agents/com.unity.ml-agents/package.json"
+        },
+        {
+          "name": "communication_api_version",
+          "value": "1.5.0",
+          "unit": "semver",
+          "source": "workshop/intake/ml-agents/ml-agents-envs/mlagents_envs/environment.py and com.unity.ml-agents/Runtime/Academy.cs"
+        },
+        {
+          "name": "license",
+          "value": "Apache-2.0",
+          "unit": "license",
+          "source": "workshop/intake/ml-agents/LICENSE.md"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 12,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 5,
+      "deferred_items": [
+        {
+          "id": "mla-10",
+          "name": "SAC off-policy trainer and replay-buffer-oriented learning",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
       "target": "mngr",
       "label": "mngr",
       "category": "agent-runtime",
@@ -11209,6 +11725,252 @@
           "name": "Notebook and Jupyter workflow authoring",
           "action": "defer",
           "absorbed_into": "future UX/platform integrations",
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "unity-ai",
+      "label": "Unity AI",
+      "category": "unity-editor-agent-suite",
+      "priority": "P1",
+      "measured_at": "2026-05-09",
+      "updated_at": "2026-05-09",
+      "owner": ".lev/pm/workstreams/world-model + plugins/gameai + community/agentping + core/policy",
+      "path": ".lev/pm/parity/unity-ai.yaml",
+      "verdict": "extract",
+      "total_features": 20,
+      "classified": 20,
+      "unclassified": 0,
+      "counts": {
+        "benchmark": 1,
+        "build": 2,
+        "monitor": 1,
+        "extract": 8,
+        "merge": 4,
+        "deferred": 2,
+        "reference": 1,
+        "implemented": 1
+      },
+      "features": [
+        {
+          "id": "uai-01",
+          "name": "Official Unity AI open beta for Unity 6+",
+          "status": "missing",
+          "lev_equivalent": "no Unity editor-agent package",
+          "action": "benchmark",
+          "notes": "Official platform signal that Unity editor-agent workflows are now a mainstream parity target."
+        },
+        {
+          "id": "uai-02",
+          "name": "Assistant package install through AI button or Package Manager",
+          "status": "missing",
+          "lev_equivalent": "plugin install surfaces but no Unity package bridge",
+          "action": "build",
+          "notes": "Future Lev Unity adapter should publish an explicit Unity package boundary."
+        },
+        {
+          "id": "uai-03",
+          "name": "Unity Cloud link, terms, credits, and tier access state",
+          "status": "not-applicable",
+          "lev_equivalent": "local-first Lev runtime",
+          "action": "monitor",
+          "notes": "Project capability state can be projected; billing/credits should not shape Lev core."
+        },
+        {
+          "id": "uai-04",
+          "name": "In-editor project-aware agentic assistant",
+          "status": "partial",
+          "lev_equivalent": "FlowMind + skills + workstreams without Unity scene context",
+          "action": "extract",
+          "notes": "Map the assistant to Lev work/propose/exec lifecycle plus Unity adapter context."
+        },
+        {
+          "id": "uai-05",
+          "name": "Deep context over scenes, assets, GameObjects, components, packages, hierarchy, settings, and target platforms",
+          "status": "missing",
+          "lev_equivalent": "context graph without Unity extractors",
+          "action": "build",
+          "notes": "Same extraction target as Locus UnityAssetGraphSnapshot, now validated by official Unity language."
+        },
+        {
+          "id": "uai-06",
+          "name": "Ask, Agent, and Plan modes",
+          "status": "partial",
+          "lev_equivalent": "interview/propose/plan/exec lanes",
+          "action": "merge",
+          "notes": "Use Lev lifecycle states as the canonical mode system."
+        },
+        {
+          "id": "uai-07",
+          "name": "Plan Mode for game-development planning and long instructions",
+          "status": "partial",
+          "lev_equivalent": "lev-plan/propose/interview skills",
+          "action": "extract",
+          "notes": "Good fit for lore/world-building design docs feeding executable Unity tasks."
+        },
+        {
+          "id": "uai-08",
+          "name": "Skill modules and custom project skills",
+          "status": "partial",
+          "lev_equivalent": "local Codex/Lev skill system",
+          "action": "merge",
+          "notes": "Expose Lev skills into Unity only when a skill declares Unity capability."
+        },
+        {
+          "id": "uai-09",
+          "name": "Editor verification after changes",
+          "status": "partial",
+          "lev_equivalent": "receipts, harnesses, and validation gates",
+          "action": "extract",
+          "notes": "Verification results should become UnityBridgeReceipt or WorldTickReceipt rows."
+        },
+        {
+          "id": "uai-10",
+          "name": "Scene and asset creation from prompts and references",
+          "status": "partial",
+          "lev_equivalent": "WorldSeed/lore seed importer and gameai planners",
+          "action": "extract",
+          "notes": "Require proposal/admission before persistent world or scene mutation."
+        },
+        {
+          "id": "uai-11",
+          "name": "Generators for placeholder materials, sounds, cubemaps, 2D/3D assets",
+          "status": "missing",
+          "lev_equivalent": "no Unity asset generator",
+          "action": "deferred",
+          "notes": "Defer until provenance and usage-rights tagging are in place."
+        },
+        {
+          "id": "uai-12",
+          "name": "Figma-to-Unity UI generation",
+          "status": "missing",
+          "lev_equivalent": "ux/figma direction but no Unity UI Toolkit projection",
+          "action": "deferred",
+          "notes": "Potential later bridge from design artifacts to Unity UI Toolkit or uGUI."
+        },
+        {
+          "id": "uai-13",
+          "name": "Custom editor tool generation",
+          "status": "partial",
+          "lev_equivalent": "plugin/workflow generation outside Unity",
+          "action": "extract",
+          "notes": "Generated validators/data editors/batch tools must be proposed code with rollback receipts."
+        },
+        {
+          "id": "uai-14",
+          "name": "Profiler capture analysis",
+          "status": "missing",
+          "lev_equivalent": "no Unity profiler ingestion",
+          "action": "reference",
+          "notes": "Later diagnostic tool after read-only status and asset graph land."
+        },
+        {
+          "id": "uai-15",
+          "name": "AI Gateway for third-party agents inside Unity Editor",
+          "status": "partial",
+          "lev_equivalent": "provider/gateway patterns but no Unity editor gateway",
+          "action": "extract",
+          "notes": "Lev could either consume Unity Gateway or become a third-party agent behind it."
+        },
+        {
+          "id": "uai-16",
+          "name": "Official Unity MCP Server for IDE and LLM app control",
+          "status": "partial",
+          "lev_equivalent": "MCP integrations but no Unity MCP target",
+          "action": "extract",
+          "notes": "Evaluate official MCP first; build a Lev bridge only for missing world-model/receipt semantics."
+        },
+        {
+          "id": "uai-17",
+          "name": "Checkpoint and rollback for code and asset changes",
+          "status": "partial",
+          "lev_equivalent": "git receipts and Locus-inspired undo pattern",
+          "action": "merge",
+          "notes": "Minimum gate before Unity write operations."
+        },
+        {
+          "id": "uai-18",
+          "name": "AI-generated asset tagging",
+          "status": "partial",
+          "lev_equivalent": "provenance graph claims",
+          "action": "extract",
+          "notes": "Map tags to generated-artifact claims and app-store declaration tasks."
+        },
+        {
+          "id": "uai-19",
+          "name": "Agent autonomy and permission controls",
+          "status": "partial",
+          "lev_equivalent": "AgentPing approvals + AgentGuard policy",
+          "action": "merge",
+          "notes": "Surface permission choices in dashboard and persist policy receipts."
+        },
+        {
+          "id": "uai-20",
+          "name": "Creator-control posture for AI-assisted iteration",
+          "status": "implemented",
+          "lev_equivalent": "human-in-the-loop workstream lifecycle",
+          "action": "implemented",
+          "notes": "Lev already uses human admission and lifecycle gates; Unity AI reinforces the same product line."
+        }
+      ],
+      "metrics": [
+        {
+          "name": "official_launch_date",
+          "value": "2026-05-01",
+          "unit": "date",
+          "source": "Unity Discussions official launch post"
+        },
+        {
+          "name": "unity_min_version_product_faq",
+          "value": "6.0+",
+          "unit": "version",
+          "source": "https://unity.com/features/ai"
+        },
+        {
+          "name": "unity_min_version_support_flow",
+          "value": "6.3+",
+          "unit": "version",
+          "source": "Unity Support open beta user guide"
+        },
+        {
+          "name": "assistant_package",
+          "value": "com.unity.ai.assistant",
+          "unit": "package-id",
+          "source": "Unity Support open beta user guide"
+        },
+        {
+          "name": "core_suite_surfaces",
+          "value": 4,
+          "unit": "count",
+          "source": "Assistant, Generators, AI Gateway, MCP Server"
+        },
+        {
+          "name": "primary_sources",
+          "value": 4,
+          "unit": "count",
+          "source": "workshop/intake/unity-ai/sources.yaml"
+        }
+      ],
+      "absorbed": 1,
+      "pending": 14,
+      "deferred": 2,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [
+        {
+          "id": "uai-11",
+          "name": "Generators for placeholder materials, sounds, cubemaps, 2D/3D assets",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "uai-12",
+          "name": "Figma-to-Unity UI generation",
+          "action": "deferred",
+          "absorbed_into": null,
           "tribunal_note": null
         }
       ],

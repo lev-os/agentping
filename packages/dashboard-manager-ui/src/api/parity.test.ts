@@ -30,4 +30,46 @@ describe("parity registry snapshot", () => {
     expect(entry?.features).toHaveLength(23);
     expect(entry?.metrics?.some((metric) => metric.name === "targeted_runtime_tests_passed")).toBe(true);
   });
+
+  it("includes the Unity ML-Agents intake with the expected shape", () => {
+    const entries = getParityEntries();
+    const entry = entries.find(
+      (candidate) => candidate.target.toLowerCase() === "ml-agents",
+    );
+
+    expect(entry).toBeDefined();
+    expect(entry?.verdict).toBe("extract");
+    expect(entry?.category).toBe("world-model-training-runtime");
+    expect(entry?.priority).toBe("P1");
+    expect(entry?.features).toHaveLength(18);
+    expect(entry?.metrics?.some((metric) => metric.name === "unity_package_version")).toBe(true);
+  });
+
+  it("includes the Locus intake with the expected shape", () => {
+    const entries = getParityEntries();
+    const entry = entries.find(
+      (candidate) => candidate.target.toLowerCase() === "locus",
+    );
+
+    expect(entry).toBeDefined();
+    expect(entry?.verdict).toBe("extract");
+    expect(entry?.category).toBe("unity-editor-agent-runtime");
+    expect(entry?.priority).toBe("P1");
+    expect(entry?.features).toHaveLength(22);
+    expect(entry?.metrics?.some((metric) => metric.name === "license")).toBe(true);
+  });
+
+  it("includes the Unity AI intake with the expected shape", () => {
+    const entries = getParityEntries();
+    const entry = entries.find(
+      (candidate) => candidate.target.toLowerCase() === "unity-ai",
+    );
+
+    expect(entry).toBeDefined();
+    expect(entry?.verdict).toBe("extract");
+    expect(entry?.category).toBe("unity-editor-agent-suite");
+    expect(entry?.priority).toBe("P1");
+    expect(entry?.features).toHaveLength(20);
+    expect(entry?.metrics?.some((metric) => metric.name === "assistant_package")).toBe(true);
+  });
 });
