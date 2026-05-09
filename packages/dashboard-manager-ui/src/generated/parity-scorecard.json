@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-08T06:32:33.393673+00:00",
+  "generated_at": "2026-05-09T03:35:17.325951+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -11,12 +11,12 @@
   },
   "summary": {
     "parity_files": 55,
-    "total_features": 969,
+    "total_features": 972,
     "absorbed": 64,
-    "pending": 654,
+    "pending": 656,
     "deferred": 12,
     "rejected": 31,
-    "monitor": 72,
+    "monitor": 73,
     "unclassified": 46,
     "absorbed_pct": 6.6,
     "unclassified_pct": 4.7
@@ -8672,14 +8672,14 @@
       "owner": "lev-now-genui + core/ui + core/poly + core/flowmind",
       "path": ".lev/pm/parity/openui-ui-ir.yaml",
       "verdict": "extract-heavy",
-      "total_features": 40,
-      "classified": 40,
+      "total_features": 43,
+      "classified": 43,
       "unclassified": 0,
       "counts": {
         "build": 14,
-        "extract": 14,
+        "extract": 16,
         "extract-with-boundary": 1,
-        "monitor": 5,
+        "monitor": 6,
         "merge": 3,
         "preserve": 3
       },
@@ -8687,8 +8687,8 @@
         {
           "id": "openui-01",
           "name": "Compact line-oriented UI source language",
-          "status": "missing",
-          "lev_equivalent": "None; RenderSpec and GenUISpec are JSON/Zod structures.",
+          "status": "partial",
+          "lev_equivalent": "Static proof exists in plugins/now/src/openlang/compiler.ts; production language and full OpenUI syntax remain unbuilt.",
           "action": "build",
           "notes": "LLM emits `identifier = Expression` statements using component calls, arrays, objects, refs, primitives, and positional args."
         },
@@ -8719,8 +8719,8 @@
         {
           "id": "openui-05",
           "name": "Typed parser AST",
-          "status": "missing",
-          "lev_equivalent": "RenderSpec validates final JSON; no authoring AST layer.",
+          "status": "partial",
+          "lev_equivalent": "Static proof AST exists for page/hero/section/card/kpi/text/table/diagram/code; full OpenUI expression/runtime AST remains unbuilt.",
           "action": "build",
           "notes": "AST includes components, primitives, refs, state refs, runtime refs, binary/unary/ternary, member/index, assignments, and statement kinds."
         },
@@ -8831,8 +8831,8 @@
         {
           "id": "openui-19",
           "name": "Cross-format benchmark from one semantic AST",
-          "status": "missing",
-          "lev_equivalent": "No RenderSpec/OpenLang token benchmark.",
+          "status": "partial",
+          "lev_equivalent": "Static dogfood benchmark emits OpenLang, RenderSpec JSON, json-render-style JSONL, YAML-ish, Markdown, and HTML metrics from one source; real tokenizer and full OpenUI formats remain future work.",
           "action": "build",
           "notes": "OpenUI generates once, parses, then projects into OpenUI Lang, YAML, Vercel JSONL, and C1 JSON for token comparison."
         },
@@ -9003,6 +9003,30 @@
           "lev_equivalent": "Implemented and strategically aligned.",
           "action": "preserve",
           "notes": "lev.now can project RenderSpec elements into Markdown/content bundles for capture/export."
+        },
+        {
+          "id": "openui-41",
+          "name": "OpenUI Lang v0.5 standalone app semantics",
+          "status": "partial",
+          "lev_equivalent": "FlowMind and Poly can own runtime declarations, but the existing OpenLang spike still needs a safe lowering profile into RenderSpec/LevUI.",
+          "action": "extract",
+          "notes": "OpenUI Lang v0.5 extends the authoring model from static UI into interactive apps with Query, Mutation, reactive state, and tool actions."
+        },
+        {
+          "id": "openui-42",
+          "name": "OpenUI frontend integration in LangChain",
+          "status": "missing",
+          "lev_equivalent": "lev.now can render static RenderSpec pages, but Lev has no OpenUI provider/profile integration.",
+          "action": "monitor",
+          "notes": "LangChain documents OpenUI as a frontend integration path for dashboards, reports, and data-rich agent output."
+        },
+        {
+          "id": "openui-43",
+          "name": "AG-UI GenUI spec positioning",
+          "status": "partial",
+          "lev_equivalent": "Poly and AgentPing can own protocol/event bindings while LevUI IR remains the provider-independent UI canon.",
+          "action": "extract",
+          "notes": "AG-UI frames A2UI, MCP-UI, and Open-JSON-UI as GenUI specs while AG-UI carries interaction protocol events."
         }
       ],
       "metrics": [
@@ -9041,13 +9065,67 @@
           "value": 7,
           "unit": "scenarios",
           "source": "workshop/intake/openui-stop-making-ai-write-json/repos/openui/benchmarks/README.md"
+        },
+        {
+          "name": "openui_github_stars",
+          "value": 4471,
+          "unit": "stars",
+          "source": "GitHub API: thesysdev/openui"
+        },
+        {
+          "name": "openui_github_forks",
+          "value": 303,
+          "unit": "forks",
+          "source": "GitHub API: thesysdev/openui"
+        },
+        {
+          "name": "openui_latest_push",
+          "value": "2026-05-08T19:24:17Z",
+          "unit": "timestamp",
+          "source": "GitHub API: thesysdev/openui"
+        },
+        {
+          "name": "openui_license",
+          "value": "MIT",
+          "unit": "license",
+          "source": "GitHub API: thesysdev/openui"
+        },
+        {
+          "name": "openlang_dogfood_elements",
+          "value": 27,
+          "unit": "elements",
+          "source": ".lev/pm/tasks/lev-openlang-render-spec-spike-v1/receipts/20260509-openlang-dogfood-benchmark.yaml"
+        },
+        {
+          "name": "openlang_dogfood_bytes_openlang",
+          "value": 5004,
+          "unit": "bytes",
+          "source": ".lev/pm/tasks/lev-openlang-render-spec-spike-v1/receipts/20260509-openlang-dogfood-benchmark.yaml"
+        },
+        {
+          "name": "openlang_dogfood_bytes_renderspec_json",
+          "value": 7305,
+          "unit": "bytes",
+          "source": ".lev/pm/tasks/lev-openlang-render-spec-spike-v1/receipts/20260509-openlang-dogfood-benchmark.yaml"
+        },
+        {
+          "name": "openlang_dogfood_bytes_jsonl",
+          "value": 8353,
+          "unit": "bytes",
+          "source": ".lev/pm/tasks/lev-openlang-render-spec-spike-v1/receipts/20260509-openlang-dogfood-benchmark.yaml"
+        },
+        {
+          "name": "openlang_dogfood_openlang_vs_renderspec_bytes",
+          "value": 68.5,
+          "unit": "percent",
+          "source": ".lev/pm/tasks/lev-openlang-render-spec-spike-v1/receipts/20260509-openlang-dogfood-benchmark.yaml"
         }
       ],
       "absorbed": 0,
-      "pending": 31,
+      "pending": 33,
       "deferred": 0,
       "rejected": 0,
-      "monitor": 5,
+      "monitor": 6,
       "deferred_items": [],
       "rejected_items": []
     },
