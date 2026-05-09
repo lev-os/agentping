@@ -100,20 +100,21 @@ function nodePath(source: PositionedNode, target: PositionedNode): string {
 function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
   const laneOrder = graph.laneOrder?.length ? graph.laneOrder : DEFAULT_LANES;
   const laneIndex = new Map(laneOrder.map((lane, index) => [lane, index]));
-  const maxWave = Math.max(0, ...graph.nodes.map((node) => node.wave));
+  const maxColumn = Math.max(0, ...graph.nodes.map((node) => node.depth));
   const stackCounts = new Map<string, number>();
   const laneMaxStack = new Map<WorkflowGraphLane, number>();
 
   for (const node of graph.nodes) {
-    const key = `${node.lane}:${node.wave}`;
+    const key = `${node.lane}:${node.depth}`;
     const nextCount = (stackCounts.get(key) ?? 0) + 1;
     stackCounts.set(key, nextCount);
     laneMaxStack.set(node.lane, Math.max(laneMaxStack.get(node.lane) ?? 0, nextCount));
   }
 
-  const laneHeights = laneOrder.map((lane) =>
-    Math.max(180, (laneMaxStack.get(lane) ?? 1) * (NODE_HEIGHT + 18) + 58),
-  );
+  const laneHeights = laneOrder.map((lane) => {
+    const stackCount = laneMaxStack.get(lane) ?? 0;
+    return stackCount === 0 ? 76 : Math.max(190, stackCount * (NODE_HEIGHT + 18) + 58);
+  });
   const laneTops = new Map<WorkflowGraphLane, number>();
   let yCursor = PAD_Y;
   laneOrder.forEach((lane, index) => {
@@ -123,14 +124,20 @@ function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
 
   const seen = new Map<string, number>();
   const nodes = [...graph.nodes]
-    .sort((a, b) => a.wave - b.wave || (laneIndex.get(a.lane) ?? 99) - (laneIndex.get(b.lane) ?? 99) || a.id.localeCompare(b.id))
+    .sort(
+      (a, b) =>
+        a.depth - b.depth ||
+        a.wave - b.wave ||
+        (laneIndex.get(a.lane) ?? 99) - (laneIndex.get(b.lane) ?? 99) ||
+        a.id.localeCompare(b.id),
+    )
     .map((node) => {
-      const key = `${node.lane}:${node.wave}`;
+      const key = `${node.lane}:${node.depth}`;
       const stackIndex = seen.get(key) ?? 0;
       seen.set(key, stackIndex + 1);
       return {
         ...node,
-        x: PAD_X + node.wave * WAVE_WIDTH,
+        x: PAD_X + node.depth * WAVE_WIDTH,
         y: (laneTops.get(node.lane) ?? PAD_Y) + 44 + stackIndex * (NODE_HEIGHT + 18),
         width: NODE_WIDTH,
         height: NODE_HEIGHT,
@@ -170,7 +177,7 @@ function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
     edges,
     activeNodeId,
     activeEdgeId: activeEdge?.id,
-    width: PAD_X * 2 + (maxWave + 1) * WAVE_WIDTH + NODE_WIDTH,
+    width: PAD_X * 2 + (maxColumn + 1) * WAVE_WIDTH + NODE_WIDTH,
     height: yCursor + PAD_Y,
   };
 }
