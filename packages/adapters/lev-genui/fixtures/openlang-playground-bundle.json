@@ -1,0 +1,121 @@
+{
+  "schema": "lev.openlang.playground_bundle.v0",
+  "source": "page title=\"OpenLang GenUI Sidecar Playground\" root=[hero]\nhero hero title=\"GenUI Sidecar v0\"\n$state deployment-state from=\"query.deployments\" scope=\"page\" mode=\"snapshot\"\nQuery deployments capability=\"deployments.list\" input.env=\"prod\" output=\"deployments\" cache=\"30s\"\nMutation restart capability=\"deployments.restart\" input.service=\"$row.service\" effect=\"state_change\" confirm=true guard=\"approval.required\"\n",
+  "sourcePath": "tests/fixtures/openlang/full-playground.openlang",
+  "renderedHtmlPath": "examples/openlang/full-playground.bundle.html",
+  "renderSpec": {
+    "meta": {
+      "title": "OpenLang GenUI Sidecar Playground",
+      "description": "Static Now preview with FlowMind/Poly runtime declarations"
+    },
+    "theme": {
+      "preset": "obsidian-monolith",
+      "mode": "dark"
+    },
+    "root": [
+      "hero"
+    ],
+    "elements": {
+      "hero": {
+        "type": "hero",
+        "variant": "centered",
+        "props": {
+          "title": "GenUI Sidecar v0"
+        },
+        "children": []
+      }
+    }
+  },
+  "runtime": {
+    "schema": "lev.genui.runtime_sidecar.v0",
+    "source": {
+      "language": "openlang",
+      "astSchema": "lev.openlang.ast.v1",
+      "sourceHash": "fixture"
+    },
+    "owners": {
+      "compiler": "plugins/now",
+      "router": "FlowMind/Poly",
+      "interactionHost": "AgentPing"
+    },
+    "mode": "declaration_only",
+    "declarations": [
+      {
+        "kind": "state",
+        "id": "deployment-state",
+        "statementId": "deployment-state",
+        "scope": "page",
+        "mode": "snapshot",
+        "from": "query.deployments"
+      },
+      {
+        "kind": "query",
+        "id": "deployments",
+        "statementId": "deployments",
+        "capability": "deployments.list",
+        "inputs": {
+          "env": "prod"
+        },
+        "output": "deployments",
+        "cache": "30s",
+        "effect": "read_only",
+        "route": {
+          "owner": "FlowMind/Poly",
+          "capability": "deployments.list"
+        }
+      },
+      {
+        "kind": "mutation",
+        "id": "restart",
+        "statementId": "restart",
+        "capability": "deployments.restart",
+        "inputs": {
+          "service": "$row.service"
+        },
+        "effect": "state_change",
+        "confirm": true,
+        "guard": "approval.required",
+        "route": {
+          "owner": "FlowMind/Poly",
+          "capability": "deployments.restart"
+        }
+      }
+    ],
+    "bindings": [],
+    "policy": {
+      "forbidden": [
+        "renderer_local_execution",
+        "renderer_owned_durable_state",
+        "direct_agentping_network_call"
+      ],
+      "requiredGuards": [
+        "agentping.required"
+      ]
+    },
+    "compatibility": {
+      "previousSchemas": [
+        "lev.openlang.runtime.v0"
+      ]
+    }
+  },
+  "diagnostics": [],
+  "benchmark": {
+    "schema": "lev.openlang.benchmark.v0",
+    "token_method": "ceil(bytes / 4)",
+    "formats": [
+      {
+        "format": "openlang",
+        "bytes": 420,
+        "estimated_tokens": 105
+      }
+    ]
+  },
+  "agentPing": {
+    "production_owner": "AgentPing",
+    "runtime_owner": "FlowMind/Poly",
+    "playground_owner": "plugins/now",
+    "consumes": [
+      "lev.genui.runtime_sidecar.v0"
+    ]
+  }
+}
