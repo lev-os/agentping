@@ -52,6 +52,27 @@ function latestFrame(frames: WorkflowGraphFrame[]): WorkflowGraphFrame | undefin
   return frames.length > 0 ? frames[frames.length - 1] : undefined;
 }
 
+function latestActiveFrame(frames: WorkflowGraphFrame[]): WorkflowGraphFrame | undefined {
+  for (let index = frames.length - 1; index >= 0; index -= 1) {
+    if (frames[index].activeNodeId) return frames[index];
+  }
+  return latestFrame(frames);
+}
+
+function previousActiveNodeId(
+  frames: WorkflowGraphFrame[],
+  frame: WorkflowGraphFrame | undefined,
+): string | undefined {
+  if (!frame) return undefined;
+  const frameIndex = frames.findIndex((entry) => entry.index === frame.index);
+  const startIndex = frameIndex >= 0 ? frameIndex - 1 : frames.length - 1;
+
+  for (let index = startIndex; index >= 0; index -= 1) {
+    if (frames[index].activeNodeId) return frames[index].activeNodeId;
+  }
+  return undefined;
+}
+
 function statusClass(status: WorkflowGraphNodeStatus): string {
   return `flowmind-debug-node--${status}`;
 }
@@ -134,7 +155,7 @@ function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
     })
     .filter((edge): edge is PositionedEdge => edge !== null);
 
-  const previousActive = graph.frames.length > 1 ? graph.frames[graph.frames.length - 2]?.activeNodeId : undefined;
+  const previousActive = previousActiveNodeId(graph.frames, frame);
   const activeNodeId = frame?.activeNodeId;
   const activeEdge =
     edges.find((edge) => previousActive && edge.source === previousActive && edge.target === activeNodeId) ??
@@ -158,7 +179,7 @@ export function FlowMindDebugGraph({ graph }: FlowMindDebugGraphProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [zoom, setZoom] = useState(1);
   const [autoFollow, setAutoFollow] = useState(true);
-  const frame = latestFrame(graph.frames);
+  const frame = latestActiveFrame(graph.frames);
   const layout = useMemo(() => buildLayout(graph, frame), [graph, frame]);
   const markerId = useMemo(
     () => `flowmind-debug-arrow-${graph.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`,
