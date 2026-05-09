@@ -752,6 +752,331 @@
   font-family: var(--font-mono);
 }
 
+.exec-debug-hero {
+  align-items: center;
+}
+
+.exec-debug-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.exec-debug-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.exec-debug-status.is-success {
+  border-color: rgba(34, 197, 94, 0.48);
+}
+
+.exec-debug-status.is-error {
+  border-color: rgba(248, 113, 113, 0.48);
+}
+
+.exec-debug-status.is-active {
+  border-color: rgba(34, 211, 238, 0.48);
+}
+
+.exec-debug-receipt {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 8px;
+  background: rgba(5, 10, 14, 0.72);
+}
+
+.exec-debug-receipt pre,
+.exec-debug-command-list code {
+  display: block;
+  overflow: auto;
+  margin: 8px 0 0;
+  color: var(--kingly-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.exec-debug-lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.exec-debug-kv {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px 14px;
+  color: var(--kingly-text-secondary);
+  font-size: 13px;
+}
+
+.exec-debug-kv span {
+  color: var(--kingly-text-muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+}
+
+.exec-debug-kv strong {
+  min-width: 0;
+  color: var(--kingly-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.exec-debug-command-list {
+  display: grid;
+  gap: 10px;
+}
+
+.exec-debug-command-list code {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.exec-debug-error {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.exec-debug-warnings {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.exec-debug-warning-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding-left: 18px;
+  color: var(--kingly-text-secondary);
+  font-size: 13px;
+}
+
+.flowmind-debug-graph {
+  min-height: 620px;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(34, 211, 238, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(5, 8, 12, 0.98), rgba(4, 6, 10, 0.96));
+}
+
+.flowmind-debug-graph__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.flowmind-debug-graph__eyebrow,
+.flowmind-debug-node__topline,
+.flowmind-debug-node__footer {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.flowmind-debug-graph__eyebrow {
+  font-size: 10px;
+  color: var(--kingly-text-muted);
+}
+
+.flowmind-debug-graph__current {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--kingly-text-secondary);
+}
+
+.flowmind-debug-graph__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.flowmind-debug-graph__controls button {
+  border: 1px solid rgba(34, 211, 238, 0.24);
+  border-radius: 8px;
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--kingly-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 7px 10px;
+  cursor: pointer;
+}
+
+.flowmind-debug-graph__controls button:hover,
+.flowmind-debug-graph__controls button.is-active {
+  border-color: rgba(34, 211, 238, 0.7);
+  color: var(--kingly-text-primary);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.14);
+}
+
+.flowmind-debug-graph__viewport {
+  position: relative;
+  flex: 1;
+  min-height: 560px;
+  overflow: auto;
+}
+
+.flowmind-debug-graph__scaled {
+  position: relative;
+}
+
+.flowmind-debug-graph__board {
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform-origin: 0 0;
+  overflow: hidden;
+}
+
+.flowmind-debug-lane {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.025), transparent 58%);
+}
+
+.flowmind-debug-lane--boundary {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), transparent 58%);
+}
+
+.flowmind-debug-lane span {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  color: rgba(148, 163, 184, 0.64);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.flowmind-debug-graph__svg,
+.flowmind-debug-graph__nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.flowmind-debug-edge {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.6);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 12 10;
+  animation: flowmind-edge-flow 1.5s linear infinite;
+}
+
+.flowmind-debug-edge--primary {
+  stroke: rgba(34, 211, 238, 0.7);
+}
+
+.flowmind-debug-edge--branch {
+  stroke: rgba(245, 158, 11, 0.74);
+}
+
+.flowmind-debug-edge--parallel {
+  stroke: rgba(20, 184, 166, 0.7);
+}
+
+.flowmind-debug-edge--boundary {
+  stroke: rgba(248, 113, 113, 0.68);
+}
+
+.flowmind-debug-edge.is-active {
+  stroke: rgba(34, 211, 238, 1);
+  stroke-width: 3.4;
+  filter: drop-shadow(0 0 9px rgba(34, 211, 238, 0.72));
+}
+
+.flowmind-debug-graph__svg marker path {
+  fill: rgba(34, 211, 238, 0.9);
+}
+
+.flowmind-debug-node {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(12, 18, 24, 0.97), rgba(6, 9, 14, 0.96)),
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.14), transparent 45%);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+}
+
+.flowmind-debug-node.is-current {
+  border-color: rgba(34, 211, 238, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.24),
+    0 0 32px rgba(34, 211, 238, 0.22);
+}
+
+.flowmind-debug-node__topline,
+.flowmind-debug-node__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--kingly-text-muted);
+  font-size: 10px;
+}
+
+.flowmind-debug-node__label {
+  color: var(--kingly-text-primary);
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.05;
+}
+
+.flowmind-debug-node__summary {
+  color: var(--kingly-text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flowmind-debug-node--running,
+.flowmind-debug-node--ready {
+  border-color: rgba(34, 211, 238, 0.68);
+}
+
+.flowmind-debug-node--succeeded {
+  border-color: rgba(34, 197, 94, 0.62);
+}
+
+.flowmind-debug-node--failed {
+  border-color: rgba(248, 113, 113, 0.72);
+}
+
+.flowmind-debug-node--waiting {
+  border-color: rgba(245, 158, 11, 0.68);
+}
+
+.flowmind-debug-node--skipped {
+  opacity: 0.62;
+}
+
+@keyframes flowmind-edge-flow {
+  to {
+    stroke-dashoffset: -44;
+  }
+}
+
 @media (max-width: 1100px) {
   .command-center-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -771,6 +1096,11 @@
 
   .workflow-hero__meta {
     grid-template-columns: 1fr;
+  }
+
+  .exec-debug-summary-grid,
+  .exec-debug-lower-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -823,6 +1153,30 @@
 
   .workflow-grid {
     grid-template-columns: 1fr;
+  }
+
+  .exec-debug-actions,
+  .flowmind-debug-graph__toolbar,
+  .flowmind-debug-graph__controls {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .exec-debug-summary-grid,
+  .exec-debug-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flowmind-debug-graph {
+    min-height: 520px;
+  }
+
+  .flowmind-debug-graph__toolbar {
+    flex-direction: column;
+  }
+
+  .flowmind-debug-graph__viewport {
+    min-height: 460px;
   }
 
   .workflow-graph__columns {

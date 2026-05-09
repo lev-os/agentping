@@ -14,6 +14,7 @@ import type { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createDashboardRoutes } from './routes/dashboards.js';
 import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
+import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -74,6 +75,9 @@ export function createServer(config: ServerConfig) {
 
   const componentsRoutes = createComponentsRoutes();
   app.route('/api/components', componentsRoutes);
+
+  const execTraceRoutes = createExecTraceRoutes();
+  app.route('/api/exec-traces', execTraceRoutes);
 
   // =========================================================================
   // Start Server with Optional WebSocket Support
@@ -150,4 +154,4 @@ export function createServer(config: ServerConfig) {
   };
 }
 
-export { createDashboardRoutes, createComponentsRoutes, createWebSocketServer };
+export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createWebSocketServer };
