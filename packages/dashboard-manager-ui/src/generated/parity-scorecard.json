@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-09T06:48:17.107073+00:00",
+  "generated_at": "2026-05-16T00:55:24.847970+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -10,16 +10,16 @@
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "summary": {
-    "parity_files": 58,
-    "total_features": 1032,
+    "parity_files": 59,
+    "total_features": 1042,
     "absorbed": 65,
-    "pending": 701,
-    "deferred": 16,
+    "pending": 709,
+    "deferred": 17,
     "rejected": 31,
-    "monitor": 82,
+    "monitor": 83,
     "unclassified": 46,
-    "absorbed_pct": 6.3,
-    "unclassified_pct": 4.5
+    "absorbed_pct": 6.2,
+    "unclassified_pct": 4.4
   },
   "untriaged_targets": [
     "agent-browser",
@@ -10783,6 +10783,155 @@
       "rejected": 0,
       "monitor": 2,
       "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "runfusion-fusion",
+      "label": "Runfusion Fusion",
+      "category": "distributed-agent-mesh",
+      "priority": "P0",
+      "measured_at": "2026-05-16",
+      "updated_at": "2026-05-16",
+      "owner": "avatar-mesh + platforms-v1 + core/domain/poly-protocol",
+      "path": ".lev/pm/parity/runfusion-fusion.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "build": 3,
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "rf-01",
+          "name": "Shared mesh protocol with explicit coordination matrix",
+          "status": "partial",
+          "lev_equivalent": "docs/ARCHITECTURE.md federate-ready principle + core/domain Poly Protocol topology types",
+          "action": "extract",
+          "notes": ">"
+        },
+        {
+          "id": "rf-02",
+          "name": "Quorum, lease epochs, and fence-token semantics for strong writes",
+          "status": "missing",
+          "lev_equivalent": "Poly topology has routing/health concepts but no quorum/fence write protocol",
+          "action": "build",
+          "notes": ">"
+        },
+        {
+          "id": "rf-03",
+          "name": "Peer exchange service with sync bundle replay",
+          "status": "missing",
+          "lev_equivalent": "No implemented Lev peer gossip service in the active runtime",
+          "action": "extract",
+          "notes": ">"
+        },
+        {
+          "id": "rf-04",
+          "name": "Checksummed shared-state snapshots",
+          "status": "partial",
+          "lev_equivalent": "core/graph projections and LevEvent receipts, without a mesh snapshot envelope",
+          "action": "extract",
+          "notes": ">"
+        },
+        {
+          "id": "rf-05",
+          "name": "Offline mesh write queue, retry classification, and degraded-read state",
+          "status": "missing",
+          "lev_equivalent": "Local-first architecture exists; mesh queue/replay and read-staleness disclosure are not implemented",
+          "action": "build",
+          "notes": ">"
+        },
+        {
+          "id": "rf-06",
+          "name": "Distributed task id reservation and replicated task creation",
+          "status": "missing",
+          "lev_equivalent": "Lev PM/workstream IDs are file/workflow-local, not a mesh-coordinated allocator",
+          "action": "extract",
+          "notes": ">"
+        },
+        {
+          "id": "rf-07",
+          "name": "Mesh lease recovery for abandoned checked-out work",
+          "status": "missing",
+          "lev_equivalent": "No equivalent mesh lease manager for cross-install work claims",
+          "action": "build",
+          "notes": ">"
+        },
+        {
+          "id": "rf-08",
+          "name": "Remote node dashboard, proxy, and live activity surfaces",
+          "status": "partial",
+          "lev_equivalent": "AgentPing/dashboard surfaces exist, but not Fusion-style remote node operations",
+          "action": "extract",
+          "notes": ">"
+        },
+        {
+          "id": "rf-09",
+          "name": "Docker-managed mesh node provisioning",
+          "status": "partial",
+          "lev_equivalent": "Lev has substrate concepts; managed node provisioning is not a polished mesh feature",
+          "action": "reference",
+          "notes": ">"
+        },
+        {
+          "id": "rf-10",
+          "name": "Auth-material sync as a secured queued class",
+          "status": "missing",
+          "lev_equivalent": "AgentGuard/security boundaries exist conceptually; no approved secret mesh-sync contract",
+          "action": "deferred",
+          "notes": ">"
+        }
+      ],
+      "metrics": [
+        {
+          "name": "workspace_package_manifests",
+          "value": 11,
+          "unit": "count",
+          "source": "workshop/intake/Fusion/packages"
+        },
+        {
+          "name": "root_version",
+          "value": "0.31.0",
+          "unit": "semver",
+          "source": "workshop/intake/Fusion/package.json"
+        },
+        {
+          "name": "mesh_protocol_version",
+          "value": 1.0,
+          "unit": "protocol-version",
+          "source": "workshop/intake/Fusion/docs/shared-mesh-protocol.md"
+        },
+        {
+          "name": "mesh_write_classes",
+          "value": 4,
+          "unit": "count",
+          "source": "workshop/intake/Fusion/packages/core/src/mesh-replication-protocol.ts"
+        },
+        {
+          "name": "mesh_sync_interval_minutes_default",
+          "value": 2,
+          "unit": "minutes",
+          "source": "workshop/intake/Fusion/packages/engine/src/peer-exchange-service.ts"
+        }
+      ],
+      "absorbed": 0,
+      "pending": 8,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "rf-10",
+          "name": "Auth-material sync as a secured queued class",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
       "rejected_items": []
     },
     {
