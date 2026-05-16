@@ -21,6 +21,18 @@ const fail = (stderr: string, exitCode = 1): CommandRunResult => ({
   error: stderr,
 });
 
+const workflowGraph = {
+  widget: {
+    type: "WorkflowGraph",
+    graph: {
+      title: "demo",
+      nodes: [{ id: "start" }],
+      edges: [],
+      frames: [],
+    },
+  },
+};
+
 describe("createExecTraceRoutes", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -31,7 +43,7 @@ describe("createExecTraceRoutes", () => {
       if (args[0] === "exec") {
         return ok({ run: "c0343638af93", events: [{ type: "start" }] });
       }
-      return ok({ run: "c0343638af93", nodes: [{ id: "start" }], edges: [] });
+      return ok(workflowGraph);
     });
     const app = createExecTraceRoutes({
       projectRoot: "/repo",
@@ -48,7 +60,7 @@ describe("createExecTraceRoutes", () => {
       execId: "c0343638af93",
       projectRoot: "/repo",
       trace: { run: "c0343638af93", events: [{ type: "start" }] },
-      graph: { run: "c0343638af93", nodes: [{ id: "start" }], edges: [] },
+      graph: workflowGraph,
       commands: {
         trace: "lev exec trace --run=c0343638af93 --json",
         flowmind: "lev flowmind debug --run=c0343638af93 --json",
@@ -77,7 +89,7 @@ describe("createExecTraceRoutes", () => {
       if (args[0] === "exec") {
         return ok({ events: [] });
       }
-      return ok({ nodes: [] });
+      return ok(workflowGraph);
     });
     const app = createExecTraceRoutes({ commandRunner });
 
@@ -174,5 +186,28 @@ describe("createExecTraceRoutes", () => {
       warnings: ["GRAPH_COMMAND_FAILED: flowmind projection failed"],
     });
     expect(commandRunner).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps trace data and warns when FlowMind graph projection has the wrong contract", async () => {
+    const commandRunner = vi.fn<ExecTraceCommandRunner>(async (_command, args) => {
+      if (args[0] === "exec") {
+        return ok({ events: [{ type: "start" }] });
+      }
+      return ok({ nodes: [{ id: "start" }], edges: [] });
+    });
+    const app = createExecTraceRoutes({
+      projectRoot: "/repo",
+      commandRunner,
+    });
+
+    const response = await app.request("/run-123");
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.trace).toEqual({ events: [{ type: "start" }] });
+    expect(payload.graph).toBeNull();
+    expect(payload.diagnostics).toEqual({
+      warnings: ["GRAPH_CONTRACT_INVALID: FlowMind debug output did not include widget.graph"],
+    });
   });
 });
