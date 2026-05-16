@@ -17,7 +17,7 @@ export const Default: Story = {
       { id: "grafana-1", config: { name: "Grafana", port_range: [3000, 3100] }, status: { status: "online", healthy: true, port: 3042, pid: 12345, restartAttempts: 0, startedAt: new Date(Date.now() - 7200000).toISOString() } },
       { id: "prom-1", config: { name: "Prometheus", port_range: [9090, 9099] }, status: { status: "failed", restartAttempts: 3 } },
     ],
-    onViewDetails: (id) => console.log("view:", id),
+    onViewDetails: (id: string) => console.log("view:", id),
     onCreateNew: () => console.log("create"),
   },
 };

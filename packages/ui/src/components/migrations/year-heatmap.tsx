@@ -44,7 +44,7 @@ export function YearHeatmap({
   const maxValue = maxProp ?? Math.max(...data.map((d) => d.value), 1);
   const [tooltip, setTooltip] = React.useState<{ date: string; value: number; x: number; y: number } | null>(null);
 
-  const startDate = new Date(year, 0, 1);
+  const startDate = React.useMemo(() => new Date(year, 0, 1), [year]);
   const startDay = startDate.getDay();
   const offset = startDay === 0 ? 6 : startDay - 1;
 
@@ -60,7 +60,7 @@ export function YearHeatmap({
       d.setDate(d.getDate() + 1);
     }
     return result;
-  }, [year, valueMap, offset]);
+  }, [year, valueMap, offset, startDate]);
 
   const getColor = (val: number) => {
     if (val === 0) return colorScale[0];

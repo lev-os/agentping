@@ -31,7 +31,7 @@ export function GeoMap({ markers = [], width = 600, height = 300, className }: G
         <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider">GEO MAP</span>
         <span className="text-xs font-mono text-cyan-500/40 ml-2">[{markers.length} markers]</span>
       </div>
-      <div className="relative bg-black/40" style={{ height }}>
+      <div className="relative bg-black/40" style={{ height, maxWidth: width }}>
         <svg width="100%" height="100%" viewBox="0 0 600 300" className="opacity-20">
           <ellipse cx="300" cy="150" rx="250" ry="120" fill="none" stroke="rgba(0,229,255,0.3)" strokeWidth="0.5" />
           <line x1="50" y1="150" x2="550" y2="150" stroke="rgba(0,229,255,0.1)" strokeWidth="0.5" />

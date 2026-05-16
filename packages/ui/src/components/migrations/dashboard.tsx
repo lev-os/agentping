@@ -18,7 +18,6 @@ import {
   Cpu,
   HardDrive,
   Loader2,
-  Terminal,
   Zap,
 } from "lucide-react";
 import { cn } from "../../lib/utils";

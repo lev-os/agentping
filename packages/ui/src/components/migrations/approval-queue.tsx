@@ -14,7 +14,6 @@ import {
   XCircle,
   ChevronDown,
   ChevronRight,
-  Clock,
   Shield,
   Terminal,
 } from "lucide-react";

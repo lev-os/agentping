@@ -935,7 +935,3 @@ export { DeleteDialog } from "./recipes/crud/dialogs/DeleteDialog";
 export { RestoreDialog } from "./recipes/crud/dialogs/RestoreDialog";
 export type { HeroBgType } from "./recipes/hero";
 export { ErrorBoundary } from "./migrations/error-boundary";
-
-// GenUI — lev-now → React bridge layer
-export { LevNowElement, LEV_NOW_ELEMENT_MAP } from "./genui";
-export type { LevNowElementProps } from "./genui";

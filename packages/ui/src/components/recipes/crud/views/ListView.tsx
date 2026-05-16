@@ -18,28 +18,28 @@ export function ListView({ className }: ListViewProps) {
     filteredItems,
     config,
     selectedIds,
-	    setSelectedIds,
-	    isLoading,
-	    setEditingItem,
-	    setIsEditDialogOpen,
-	  } = useCrudContext<CrudItem>()
+    setSelectedIds,
+    isLoading,
+    setEditingItem,
+    setIsEditDialogOpen,
+  } = useCrudContext<CrudItem>()
 
-	  const toggleSelectItem = (id: unknown) => {
-	    const newSelected = new Set(selectedIds)
-	    if (newSelected.has(id)) {
-	      newSelected.delete(id)
-	    } else {
-	      newSelected.add(id)
-	    }
-	    setSelectedIds(newSelected)
-	  }
+  const toggleSelectItem = (id: unknown) => {
+    const newSelected = new Set(selectedIds)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedIds(newSelected)
+  }
 
-	  const handleRowClick = (item: CrudItem) => {
-	    if (config.actions?.view) {
-	      setEditingItem(item)
-	      setIsEditDialogOpen(true)
-	    }
-	  }
+  const handleRowClick = (item: CrudItem) => {
+    if (config.actions?.view) {
+      setEditingItem(item)
+      setIsEditDialogOpen(true)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -73,10 +73,10 @@ export function ListView({ className }: ListViewProps) {
 
   return (
     <div className={cn('space-y-2', className)}>
-	      {filteredItems.map((item) => {
-	        const itemId = item[config.primaryKey]
-	        const isSelected = selectedIds.has(itemId)
-	        const hasRowClick = config.actions?.view
+      {filteredItems.map((item) => {
+        const itemId = item[config.primaryKey]
+        const isSelected = selectedIds.has(itemId)
+        const hasRowClick = config.actions?.view
 
         if (CustomListRow) {
           return (

@@ -19,7 +19,6 @@ import {
   RefreshCw,
   Smartphone,
   Tablet,
-  X,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -119,7 +118,10 @@ export function Preview({
   };
 
   return (
-    <div className={cn("flex flex-col h-full bg-zinc-950", className)}>
+    <div
+      className={cn("flex flex-col h-full bg-zinc-950", className)}
+      data-inspector-enabled={onElementSelected ? "true" : undefined}
+    >
       {/* Toolbar */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-zinc-800">
         {/* Navigation */}

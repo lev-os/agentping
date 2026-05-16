@@ -38,6 +38,9 @@ export function Knob({ value, min = 0, max = 100, onChange, size = 60, label, un
             strokeDasharray={`${pct * 163} 163`} strokeLinecap="round" transform="rotate(-135 30 30)"
           />
         </svg>
+        <div className="absolute inset-0 pointer-events-none" style={{ transform: `rotate(${angle}deg)` }}>
+          <div className="absolute left-1/2 top-1 h-2 w-1 -translate-x-1/2 rounded-full bg-primary" />
+        </div>
         <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-foreground">
           {value}{unit}
         </div>

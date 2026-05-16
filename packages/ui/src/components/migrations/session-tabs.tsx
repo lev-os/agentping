@@ -8,7 +8,7 @@
  * @category chat
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { Plus, X, MessageSquare, Bot } from "lucide-react";
 import { cn } from "../../lib/utils";
 

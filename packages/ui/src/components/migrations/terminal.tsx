@@ -15,8 +15,6 @@ import {
   Plus,
   X,
   Search,
-  ZoomIn,
-  ZoomOut,
   Terminal as TerminalIcon,
 } from "lucide-react";
 import { cn } from "../../lib/utils";

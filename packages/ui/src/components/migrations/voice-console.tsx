@@ -8,7 +8,7 @@
  * @category root
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { Mic, MicOff, Volume2, X, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
 

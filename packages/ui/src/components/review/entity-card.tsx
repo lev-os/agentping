@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../../lib/utils";
-import { Badge } from "../ui/badge";
+import { Badge, type BadgeProps } from "../ui/badge";
 
 const statusConfig = {
   active: { color: "var(--color-success)", label: "Active" },
@@ -11,16 +11,18 @@ const statusConfig = {
   offline: { color: "var(--color-muted-foreground)", label: "Offline" },
 } as const;
 
-const typeBadgeVariant = {
+type EntityCardType = "agent" | "model" | "tool" | "workflow";
+
+const typeBadgeVariant: Record<EntityCardType, NonNullable<BadgeProps["variant"]>> = {
   agent: "default",
   model: "secondary",
   tool: "success",
   workflow: "warning",
-} as const;
+};
 
 interface EntityCardProps {
   name: string;
-  type: "agent" | "model" | "tool" | "workflow";
+  type: EntityCardType;
   status?: "active" | "idle" | "error" | "offline";
   description?: string;
   avatar?: React.ReactNode;
@@ -69,7 +71,7 @@ const EntityCard = React.forwardRef<HTMLDivElement, EntityCardProps>(
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={typeBadgeVariant[type] as any}>{type}</Badge>
+              <Badge variant={typeBadgeVariant[type]}>{type}</Badge>
               <span className="text-xs text-muted-foreground capitalize">{statusInfo.label}</span>
             </div>
           </div>

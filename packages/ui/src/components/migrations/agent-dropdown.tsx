@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useRef, useEffect } from "react";
-import { Bot, ChevronDown, Plus, Settings, Square, Trash2, Users } from "lucide-react";
+import { Bot, ChevronDown, Plus, Square, Trash2, Users } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -79,7 +79,6 @@ export function AgentDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const activeAgent = agents.find((a) => a.sessionId === activeSessionId);
   const runningCount = agents.filter((a) => a.status === "running").length;
 
   return (

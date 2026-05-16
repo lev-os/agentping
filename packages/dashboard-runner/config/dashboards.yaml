@@ -135,7 +135,7 @@ dashboards:
       - 5185
       - 5189
     command: pnpm run build && pnpm exec vite preview --host 127.0.0.1 --strictPort --port {port}
-    cwd: ~/digital/leviathan/plugins/system-dashboard
+    cwd: ~/digital/leviathan/plugins/dashboard
     health_check:
       type: http
       path: /

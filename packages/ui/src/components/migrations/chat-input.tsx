@@ -63,10 +63,10 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const value = controlledValue ?? internalValue;
-  const setValue = (v: string) => {
+  const setValue = useCallback((v: string) => {
     if (onChange) onChange(v);
     else setInternalValue(v);
-  };
+  }, [onChange]);
 
   const filteredCommands = slashCommands.filter((cmd) =>
     cmd.name.toLowerCase().includes(slashFilter.toLowerCase()),
@@ -85,7 +85,7 @@ export function ChatInput({
     onSend?.(value.trim());
     setValue("");
     setShowSlashMenu(false);
-  }, [value, isSending, disabled, onSend]);
+  }, [value, isSending, disabled, onSend, setValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (showSlashMenu) {

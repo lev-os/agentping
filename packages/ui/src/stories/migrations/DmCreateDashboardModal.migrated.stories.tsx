@@ -14,6 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     onClose: () => console.log("close"),
-    onSubmit: async (data) => console.log("submit:", data),
+    onSubmit: async (data: unknown) => console.log("submit:", data),
   },
 };

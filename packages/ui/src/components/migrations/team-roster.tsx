@@ -21,12 +21,6 @@ const STATUS_DOT: Record<TeamMember["status"], string> = {
   offline: "bg-gray-500",
 };
 
-const STATUS_RING: Record<TeamMember["status"], string> = {
-  online: "ring-green-400/30",
-  away: "ring-yellow-400/30",
-  offline: "ring-gray-500/30",
-};
-
 function getInitials(name: string) {
   return name
     .split(" ")

@@ -70,6 +70,7 @@ export function LcarsButton({
         disabled && "opacity-40 cursor-not-allowed",
         className
       )}
+      data-variant={variant}
       disabled={disabled}
       {...props}
     >

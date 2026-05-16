@@ -15,6 +15,7 @@ export default defineConfig({
     "components/migrations/crud-list-page": "src/components/migrations/crud-list-page.tsx",
     "components/migrations/crud-archive-page": "src/components/migrations/crud-archive-page.tsx",
     "components/migrations/crud-context": "src/components/migrations/crud-context.tsx",
+    "renderers/lev-now/index": "src/renderers/lev-now/index.ts",
     "theme/index": "src/theme/index.ts",
     "lib/index": "src/lib/index.ts",
     "tailwind.config": "src/tailwind.config.ts",

@@ -21,6 +21,10 @@
       "types": "./dist/components/*.d.ts",
       "import": "./dist/components/*.js"
     },
+    "./renderers/lev-now": {
+      "types": "./dist/renderers/lev-now/index.d.ts",
+      "import": "./dist/renderers/lev-now/index.js"
+    },
     "./theme": {
       "types": "./dist/theme/index.d.ts",
       "import": "./dist/theme/index.js"

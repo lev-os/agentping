@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T04:22:28.991466+00:00",
+  "generated_at": "2026-05-16T07:42:05.544322+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 19726,
+    "operation_count": 20594,
     "by_type": {
-      "upsert_entity": 4719,
-      "add_claim": 10346,
-      "add_link": 4661
+      "upsert_entity": 4923,
+      "add_claim": 10807,
+      "add_link": 4864
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 58,
-    "total_features": 1058,
+    "parity_files": 59,
+    "total_features": 1108,
     "absorbed": 65,
-    "pending": 729,
+    "pending": 777,
     "deferred": 17,
-    "rejected": 32,
-    "monitor": 85,
+    "rejected": 33,
+    "monitor": 86,
     "unclassified": 0,
-    "absorbed_pct": 6.1,
+    "absorbed_pct": 5.9,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -6512,6 +6512,806 @@
           "name": "Legacy QueueService and StateService proto contracts",
           "action": "reject",
           "absorbed_into": "single action API",
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "frankenterm",
+      "label": "FrankenTerm",
+      "category": "terminal-control-plane",
+      "priority": "P0",
+      "measured_at": "2026-05-16",
+      "updated_at": "2026-05-16",
+      "owner": "core/tmux-harness + tmux-control-plane",
+      "path": ".lev/pm/parity/frankenterm.yaml",
+      "verdict": "extract",
+      "total_features": 50,
+      "classified": 50,
+      "unclassified": 0,
+      "counts": {
+        "extract": 25,
+        "build": 20,
+        "reject": 1,
+        "merge": 3,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "ft-01",
+          "name": "Passive pane observation and delta capture",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness AgentSession.capture/deltaAfterMessage",
+          "action": "extract",
+          "notes": "Use FrankenTerm's passive-first and gap-aware capture model to harden Lev's current capture/delta semantics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:README.md",
+            "workshop/intake/frankenterm:frankenterm_guide.md",
+            "core/tmux-harness/src/handlers/agent-session.ts"
+          ]
+        },
+        {
+          "id": "ft-02",
+          "name": "Robot Mode JSON/TOON control envelope",
+          "status": "missing",
+          "lev_equivalent": "No typed ft-compatible robot backend; AgentSession exposes TS methods only.",
+          "action": "build",
+          "notes": "Map state/get-text/send/wait-for/search/events envelopes to AgentSessionObservation and AgentSessionReceipt in a fake backend first.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:README.md",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-envelope.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/robot_envelope.rs",
+            "core/tmux-harness/src/handlers/agent-session.ts"
+          ]
+        },
+        {
+          "id": "ft-03",
+          "name": "Policy-gated reads, writes, approvals, and redaction",
+          "status": "partial",
+          "lev_equivalent": "AgentSession guard receipts and Lev policy plane; no equivalent per-pane redaction/read policy envelope.",
+          "action": "extract",
+          "notes": "Preserve Lev's policy ownership, but copy the envelope shape: read and write surfaces should both be policy-evaluated and receipt-bearing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:README.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core-policy-types/src/lib.rs",
+            "core/tmux-harness/src/handlers/agent-session.ts",
+            "core/harness/src/execution/managed-tmux.ts"
+          ]
+        },
+        {
+          "id": "ft-04",
+          "name": "Search over captured terminal output",
+          "status": "missing",
+          "lev_equivalent": "cass/qmd/index search exist, but no dedicated searchable terminal scrollback backend for AgentSession.",
+          "action": "extract",
+          "notes": "Treat searchable scrollback as evidence storage/projection, not as FlowMind state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:README.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/search",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "ft-05",
+          "name": "Wait-for pattern semantics without sleep loops",
+          "status": "partial",
+          "lev_equivalent": "AgentSession.wait currently polls capture with bounded attempts; managed-tmux has typed WAIT_PATTERN_TIMEOUT.",
+          "action": "extract",
+          "notes": "Upgrade wait-for into event/pattern-driven semantics while retaining Lev's existing typed failure envelope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:README.md",
+            "core/tmux-harness/src/handlers/agent-session.ts",
+            "core/harness/src/execution/managed-tmux.ts"
+          ]
+        },
+        {
+          "id": "ft-06",
+          "name": "Terminal platform as FlowMind spine",
+          "status": "not-applicable",
+          "lev_equivalent": "FlowMind control/policy plane plus Orchestration/Harness/Event Bus plane split.",
+          "action": "reject",
+          "notes": "Rejected as a spine replacement because it would collapse policy, execution, eventing, and terminal substrate boundaries.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            ".lev/pm/specs/spec-tmux-control-plane.md",
+            ".lev/pm/designs/design-polycard-exec-tmux-control-plane-consolidated.md",
+            "workshop/intake/frankenterm:docs/proposals/ft-zoxxq-mux-boundary-truth.md"
+          ]
+        },
+        {
+          "id": "ft-07",
+          "name": "Robot family contracts with schema, side effects, and idempotency",
+          "status": "missing",
+          "lev_equivalent": "Lev has contracts and flow specs, but no standard per-action-family contract pack for machine APIs.",
+          "action": "build",
+          "notes": "Apply the contract shape to AgentSession and FlowMind actions: schema, side effects, failure envelope, idempotency, conformance tests, and state-space proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/robot-contracts/profile.md",
+            "workshop/intake/frankenterm:docs/robot-contracts/meta-schema.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/robot_family_contract.rs"
+          ]
+        },
+        {
+          "id": "ft-08",
+          "name": "Machine API parity across CLI, Robot Mode, and MCP",
+          "status": "missing",
+          "lev_equivalent": "Lev has CLI and TypeScript APIs, but no single generated envelope shared across CLI JSON, robot calls, and MCP tools.",
+          "action": "build",
+          "notes": "Make ExecutionBinding/AgentSession receipts the canonical machine envelope before exposing any MCP bridge.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/mcp-api-spec.md",
+            "workshop/intake/frankenterm:docs/json-schema/wa-mcp-envelope.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/mcp_bridge.rs"
+          ]
+        },
+        {
+          "id": "ft-09",
+          "name": "Stable error-code taxonomy for robot and MCP surfaces",
+          "status": "partial",
+          "lev_equivalent": "Managed tmux has typed errors, but Lev lacks a cross-surface error-code matrix that maps CLI, graph, and MCP failures.",
+          "action": "build",
+          "notes": "Keep Lev's typed errors, but add a stable public code map for automation and dashboard consumers.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/mcp-api-spec.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/mcp_error.rs",
+            "core/harness/src/execution/managed-tmux.ts"
+          ]
+        },
+        {
+          "id": "ft-10",
+          "name": "Read-path policy and redaction gates",
+          "status": "partial",
+          "lev_equivalent": "Lev policies guard execution intent, but terminal reads and search projections do not yet have an explicit read-policy/redaction matrix.",
+          "action": "build",
+          "notes": "Apply to AgentSession.capture, search, event streams, diagnostics, and Graph projections so reads are policy-bearing too.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/security/read-path-redaction-matrix.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/redactor.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/diagnostic_redaction.rs"
+          ]
+        },
+        {
+          "id": "ft-11",
+          "name": "Approval impact simulation before side effects",
+          "status": "missing",
+          "lev_equivalent": "Lev has approval and guard concepts, but no standard pre-effect impact simulator for terminal/session actions.",
+          "action": "extract",
+          "notes": "Use this as the shape for AgentPing approvals: preview action, affected panes/files/work, policy reason, and rollback expectation before execution.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/approval_impact_simulator.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/approval.rs",
+            "workshop/intake/frankenterm:docs/approvals.md"
+          ]
+        },
+        {
+          "id": "ft-12",
+          "name": "Policy audit chain, compliance, metrics, and quarantine",
+          "status": "missing",
+          "lev_equivalent": "Lev records events and receipts, but policy outcomes are not yet promoted into an auditable compliance/quarantine chain.",
+          "action": "extract",
+          "notes": "Apply by emitting durable policy-decision events with chain IDs, compliance dimensions, and quarantine state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core-policy-types/src/policy_audit_chain.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core-policy-types/src/policy_compliance.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core-policy-types/src/policy_quarantine.rs"
+          ]
+        },
+        {
+          "id": "ft-13",
+          "name": "Event annotation, triage, label, mute, and dedupe",
+          "status": "partial",
+          "lev_equivalent": "Lev has Event Bus and workstream state, but event lifecycle operations are spread across tools and not normalized.",
+          "action": "build",
+          "notes": "Promote event lifecycle mutations as graph operations: annotate, triage, label, mute, dedupe, and explain.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/cli-reference.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/events.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/events_dedup_cuckoo.rs"
+          ]
+        },
+        {
+          "id": "ft-14",
+          "name": "SSE event and delta streams with backpressure controls",
+          "status": "missing",
+          "lev_equivalent": "AgentSession.observe exists, but no stable event/delta stream contract with max_hz, keepalive, and backpressure semantics.",
+          "action": "build",
+          "notes": "Use this for browser/dashboard and agent consumers so streaming terminal data cannot overwhelm the control plane.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/backpressure-policy.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/web/sse.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/event_stream.rs"
+          ]
+        },
+        {
+          "id": "ft-15",
+          "name": "Search explainability, index stats, and reindex controls",
+          "status": "missing",
+          "lev_equivalent": "Lev has search tools and generated reports, but no terminal-capture search explain or index health contract.",
+          "action": "build",
+          "notes": "Apply to captured terminal/output evidence: every search result should be explainable and every index should report freshness.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/search-explainability.md",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-search-explain.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/search_explain.rs"
+          ]
+        },
+        {
+          "id": "ft-16",
+          "name": "Hybrid lexical, semantic, and reranked scrollback search",
+          "status": "partial",
+          "lev_equivalent": "cass/qmd cover transcript/session search, but AgentSession scrollback is not yet a first-class hybrid-search corpus.",
+          "action": "extract",
+          "notes": "Do not import the implementation; reuse the domain split for lexical exactness, semantic recall, rerank, and redacted snippets.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/search/hybrid_search.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/search/reranker.rs",
+            "workshop/intake/frankenterm:docs/COMPREHENSIVE_ANALYSIS_OF_frankensearch.md"
+          ]
+        },
+        {
+          "id": "ft-17",
+          "name": "Pattern trigger engine over terminal output",
+          "status": "partial",
+          "lev_equivalent": "AgentSession.wait polls for patterns, but pattern triggers are not durable event producers.",
+          "action": "build",
+          "notes": "Turn wait conditions into durable pattern-trigger events with IDs, evidence spans, and timeout reasons.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/patterns.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/pattern_trigger.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/workflows/wait_execution.rs"
+          ]
+        },
+        {
+          "id": "ft-18",
+          "name": "Reservations and leases for shared resources",
+          "status": "partial",
+          "lev_equivalent": "Lev has workstreams and some lock/claim flows, but no unified reservation ledger for panes, files, work items, and agents.",
+          "action": "build",
+          "notes": "Apply to multi-agent Lev execution as a graph-backed lease system with expiry, owner, conflict reason, and release receipt.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-reservations.json",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-reserve.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/storage/reservation_tests.rs"
+          ]
+        },
+        {
+          "id": "ft-19",
+          "name": "Work claim/release/complete state machine",
+          "status": "partial",
+          "lev_equivalent": ".lev workstreams encode lifecycle state, but execution-time work claims are not backed by a formal work state machine.",
+          "action": "extract",
+          "notes": "Use this to harden Lev work assignment: ready, claim, heartbeat, release, complete, and stale-owner recovery.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/robot-contracts/work.md",
+            "workshop/intake/frankenterm:docs/specs/robot-work.tla",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/robot_work_state_machine.rs"
+          ]
+        },
+        {
+          "id": "ft-20",
+          "name": "Checkpoint state machine and durable session reentry",
+          "status": "partial",
+          "lev_equivalent": "Lev has handoffs and transcript search, but AgentSession reentry is not yet a tested checkpoint family.",
+          "action": "build",
+          "notes": "Apply to resume chains: capture pane, context capsule, active work entity, last receipt, and replayable recovery action.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/robot-contracts/checkpoint.md",
+            "workshop/intake/frankenterm:docs/specs/robot-checkpoint.tla",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/session_resume_with_handoff.rs"
+          ]
+        },
+        {
+          "id": "ft-21",
+          "name": "Context horizon and context budget contracts",
+          "status": "partial",
+          "lev_equivalent": "Lev has context and token-budget concepts, but no shared context-horizon schema tied to runtime output capture.",
+          "action": "extract",
+          "notes": "Apply to FlowMind ticks so context windows are explicit inputs with budget, freshness, omission, and rehydration semantics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/context-horizon-contract.md",
+            "workshop/intake/frankenterm:docs/json-schema/ft-context-horizon.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/context_budget.rs"
+          ]
+        },
+        {
+          "id": "ft-22",
+          "name": "Encrypted and inspectable handoff capsules",
+          "status": "partial",
+          "lev_equivalent": "Lev handoffs are durable markdown/YAML artifacts, but not a typed encrypted/inspectable capsule object.",
+          "action": "extract",
+          "notes": "Keep Lev's readable workstream files, but add an optional capsule schema for portable resume bundles and sensitive session transfer.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/handoff/README.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/handoff_capsule.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/handoff_capsule_encryption.rs"
+          ]
+        },
+        {
+          "id": "ft-23",
+          "name": "Profile apply contracts for agent/runtime bootstrap",
+          "status": "missing",
+          "lev_equivalent": "Lev has session profiles and substrate policy, but profile apply is not a robot-family operation with rollback/idempotency.",
+          "action": "build",
+          "notes": "Apply to tmux/headless session-profile activation: dry-run, validate, apply, rollback, and duplicate-request idempotency.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/robot-contracts/profile.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/robot_profile_state_machine.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/robot_profile_handler.rs"
+          ]
+        },
+        {
+          "id": "ft-24",
+          "name": "Agent detection, configure, list, and running surfaces",
+          "status": "partial",
+          "lev_equivalent": "Lev can spawn and list sessions, but agent runtime discovery/configuration is not exposed as a normalized robot surface.",
+          "action": "build",
+          "notes": "Expose current sessions, supported agent types, runtime config, and detection evidence through one typed surface.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-agents-detect.json",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-agents-running.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/agent_profiles.rs"
+          ]
+        },
+        {
+          "id": "ft-25",
+          "name": "Fleet status, scale, rebalance, and health",
+          "status": "partial",
+          "lev_equivalent": "Lev has native subagents and OMX teams, but no shared fleet health contract across local sessions and orchestration lanes.",
+          "action": "extract",
+          "notes": "Adopt the health/scale/rebalance vocabulary for dashboards and future multi-lane Lev execution, without importing FrankenTerm fleet runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/robot-contracts/fleet.md",
+            "workshop/intake/frankenterm:docs/specs/robot-fleet.tla",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/fleet_mutation.rs"
+          ]
+        },
+        {
+          "id": "ft-26",
+          "name": "Distributed agent mode with explicit stale/live-output boundary",
+          "status": "missing",
+          "lev_equivalent": "Lev does not have a first-class remote-pane persistence model with live-output limitations spelled out.",
+          "action": "extract",
+          "notes": "If Lev adds remote execution, copy the honesty: persisted state may be available when live pane capture is not.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/cli-reference.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/distributed.rs",
+            "workshop/intake/frankenterm:docs/security/distributed-threat-model.md"
+          ]
+        },
+        {
+          "id": "ft-27",
+          "name": "Resource pressure and fleet memory controls",
+          "status": "missing",
+          "lev_equivalent": "Lev budget controls are mostly task/token oriented; runtime memory, fd, and scrollback pressure are not first-class scheduling inputs.",
+          "action": "extract",
+          "notes": "Feed resource pressure into admission, nudge, capture frequency, and shutdown policies for large agent runs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/fleet_memory_controller.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/memory_pressure.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/fd_budget.rs"
+          ]
+        },
+        {
+          "id": "ft-28",
+          "name": "Mission plan/run/status/explain/pause/resume/abort",
+          "status": "partial",
+          "lev_equivalent": "FlowMind and workstreams can express plans, but mission runtime control is not exposed as one stateful operation family.",
+          "action": "build",
+          "notes": "Apply as FlowMind execution API shape: plan, run, status, explain, pause, resume, abort, and event stream.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/cli-reference.md",
+            "workshop/intake/frankenterm:docs/json-schema/ft-mission-objective-plan.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/mission_loop.rs"
+          ]
+        },
+        {
+          "id": "ft-29",
+          "name": "Transactional execution with plan, run, rollback, and killswitch",
+          "status": "partial",
+          "lev_equivalent": "Lev has receipts and gates, but cross-step rollback/compensation is not a standard execution primitive.",
+          "action": "build",
+          "notes": "Use for high-risk lanes: compile a transaction plan, declare compensations, run with receipts, and support operator killswitch.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/specs/tx-killswitch.md",
+            "workshop/intake/frankenterm:docs/specs/tx-killswitch.tla",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/tx_execution.rs"
+          ]
+        },
+        {
+          "id": "ft-30",
+          "name": "Workflow descriptors and built-in wait/action handlers",
+          "status": "partial",
+          "lev_equivalent": "FlowMind graphs and Lev workflows exist, but runtime workflow descriptors are not yet unified with AgentSession wait/action handlers.",
+          "action": "merge",
+          "notes": "Apply by compiling FlowMind workflow steps into typed AgentSession operations with consistent wait, timeout, and event receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/workflows/descriptors.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/workflows/runner.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/workflows/wait_execution.rs"
+          ]
+        },
+        {
+          "id": "ft-31",
+          "name": "Diagnostics bundle and reproduce export/replay",
+          "status": "missing",
+          "lev_equivalent": "Lev verification outputs exist, but there is no one-command incident/reproduce bundle for session runtime failures.",
+          "action": "build",
+          "notes": "Add a bundle shape for AgentSession failures: config, events, redacted capture, receipts, policy decisions, and replay command.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/incident-bundles.md",
+            "workshop/intake/frankenterm:docs/cli-reference.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/diagnostic.rs"
+          ]
+        },
+        {
+          "id": "ft-32",
+          "name": "Replay, forensics, and equivalence contracts",
+          "status": "missing",
+          "lev_equivalent": "Lev can inspect transcripts, but runtime replay equivalence is not a tested contract.",
+          "action": "extract",
+          "notes": "Define replayable evidence for terminal/session incidents and use it as a Pentagon verification corpus.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/replay-equivalence-contract.md",
+            "workshop/intake/frankenterm:docs/replay-ftreplay-schema-v1.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core-replay-types/src/replay_decision_graph.rs"
+          ]
+        },
+        {
+          "id": "ft-33",
+          "name": "Incident autopsy and flight-recorder event schema",
+          "status": "missing",
+          "lev_equivalent": "Lev event logs are not yet packaged as a flight-recorder stream with autopsy-ready schema.",
+          "action": "extract",
+          "notes": "Use this as the durable event schema target for debugging FlowMind/orchestration/tmux failures.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/flight-recorder/ft-recorder-event-v1.json",
+            "workshop/intake/frankenterm:docs/flight-recorder/recorder-event-schema.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/incident_autopsy.rs"
+          ]
+        },
+        {
+          "id": "ft-34",
+          "name": "Attestation manifests and release proof bundles",
+          "status": "partial",
+          "lev_equivalent": "Lev has parity reports and validation gates, but release claims are not packaged as signed/structured attestation manifests.",
+          "action": "extract",
+          "notes": "Apply to promotion gates: every runtime claim should have evidence path, verifier, scope, and retraction path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/attestations/manifest.json",
+            "workshop/intake/frankenterm:docs/attestations/schema.json",
+            "workshop/intake/frankenterm:docs/release/attestation-checklist.md"
+          ]
+        },
+        {
+          "id": "ft-35",
+          "name": "Reality-check discipline for claim hygiene",
+          "status": "partial",
+          "lev_equivalent": "Lev emphasizes evidence, but no standard claim-audit artifact is attached to parity/runtime promotions.",
+          "action": "extract",
+          "notes": "Add claim hygiene to FlowMind/tmux promotions: verified, stale, assumed, blocked, or retracted.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/process/reality-check-discipline.md",
+            "workshop/intake/frankenterm:docs/review/reality-check-vs-vision.md",
+            "workshop/intake/frankenterm:docs/reality-check-bridge-plan.md"
+          ]
+        },
+        {
+          "id": "ft-36",
+          "name": "Browser auth bootstrap flows for agent providers",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev should not absorb provider auth mechanics into FlowMind; auth bootstrap belongs in environment/tooling boundaries.",
+          "action": "monitor",
+          "notes": "Reference for setup UX only; do not wire provider-specific browser auth into core FlowMind execution.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/browser-auth-spec-anthropic-google.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/browser/openai_device.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/browser/anthropic_auth.rs"
+          ]
+        },
+        {
+          "id": "ft-37",
+          "name": "Account usage, cost tracking, and refresh contracts",
+          "status": "partial",
+          "lev_equivalent": "Lev has token usage receipts in AgentSession, but no account-refresh/cost surface shared across providers.",
+          "action": "extract",
+          "notes": "Apply by separating provider account state from execution receipts while linking usage to session/work IDs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-accounts.json",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-accounts-refresh.json",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/cost_tracker.rs"
+          ]
+        },
+        {
+          "id": "ft-38",
+          "name": "Config profiles and ruleset profiles",
+          "status": "partial",
+          "lev_equivalent": "Lev has config files and substrate policies, but profile/ruleset evaluation is not exposed as list/show/test/lint robot calls.",
+          "action": "build",
+          "notes": "Apply to FlowMind/AgentSession policies with list, show, test, lint, and explain operations.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/config-profiles-spec.md",
+            "workshop/intake/frankenterm:docs/ruleset-profiles-spec.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/rulesets.rs"
+          ]
+        },
+        {
+          "id": "ft-39",
+          "name": "Saved searches and bookmarks over runtime evidence",
+          "status": "missing",
+          "lev_equivalent": "Lev can search sessions, but saved search/bookmark state is not part of the runtime evidence model.",
+          "action": "extract",
+          "notes": "Apply to dashboards and workstreams: save useful runtime queries and link them to decisions or incidents.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/saved-searches-spec.md",
+            "workshop/intake/frankenterm:docs/cli-reference.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/search_prefetch_advisor.rs"
+          ]
+        },
+        {
+          "id": "ft-40",
+          "name": "CASS and CAUT style session search and usage integration",
+          "status": "partial",
+          "lev_equivalent": "Lev has cass as a local tool, but capture/search/usage are not wired into AgentSession as one evidence graph.",
+          "action": "merge",
+          "notes": "Use Lev's existing cass strength, but make session runtime receipts discoverable from the same evidence graph.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/COMPREHENSIVE_ANALYSIS_OF_coding_agent_session_search.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/cass.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/caut.rs"
+          ]
+        },
+        {
+          "id": "ft-41",
+          "name": "Command guard and destructive-action policy",
+          "status": "partial",
+          "lev_equivalent": "Lev has dcg and guardrails, but terminal send/prepare/commit are not all one guarded command lifecycle.",
+          "action": "merge",
+          "notes": "Apply by routing send/prepare/commit through a single guard receipt with command class, risk, approval, and audit outcome.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/command_guard.rs",
+            "workshop/intake/frankenterm:docs/asupersync-rch-execution-policy.md",
+            "workshop/intake/frankenterm:docs/audit-checklist.md"
+          ]
+        },
+        {
+          "id": "ft-42",
+          "name": "Noise control, event mutes, and dedupe policy",
+          "status": "missing",
+          "lev_equivalent": "Lev event reporting can become noisy during long runs; no reusable noise-control policy exists for runtime streams.",
+          "action": "extract",
+          "notes": "Apply to rolling statuses and dashboards so repeated terminal patterns collapse without hiding new failures.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/noise-control-policy.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/storage/handle/event_mutes.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/events_dedup_cuckoo.rs"
+          ]
+        },
+        {
+          "id": "ft-43",
+          "name": "Capture overflow and backpressure policy",
+          "status": "missing",
+          "lev_equivalent": "AgentSession capture currently lacks a documented overflow/backpressure behavior under high-output panes.",
+          "action": "build",
+          "notes": "Define drop/truncate/spill behavior explicitly and emit an evidence event whenever capture fidelity changes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/flight-recorder/capture-backpressure-overflow-policy.md",
+            "workshop/intake/frankenterm:docs/backpressure-policy.md",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/fleet_scrollback_coordinator.rs"
+          ]
+        },
+        {
+          "id": "ft-44",
+          "name": "JSON schema corpus as generated conformance surface",
+          "status": "missing",
+          "lev_equivalent": "Lev has TypeScript types and YAML specs, but no generated JSON schema corpus for robot/API consumers.",
+          "action": "build",
+          "notes": "Generate schemas from Lev contract types so CLI, Graph, dashboard, and MCP consumers verify the same envelopes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-api-surface-data-schemas.json",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-state.json",
+            "workshop/intake/frankenterm:docs/json-schema/wa-robot-send.json"
+          ]
+        },
+        {
+          "id": "ft-45",
+          "name": "Formal specs for risky robot families",
+          "status": "partial",
+          "lev_equivalent": "Lev has validation gates, but few stateful execution families have TLA/StateRight-style transition proofs.",
+          "action": "extract",
+          "notes": "Apply only to high-blast-radius Lev families: work claims, checkpoint/reentry, transactions, fleet admission, and policy quarantine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/specs/robot-work.tla",
+            "workshop/intake/frankenterm:docs/specs/robot-fleet.tla",
+            "workshop/intake/frankenterm:docs/specs/tx-killswitch.tla"
+          ]
+        },
+        {
+          "id": "ft-46",
+          "name": "Swarm capacity admission and herd-wave scheduling",
+          "status": "partial",
+          "lev_equivalent": "Lev can spawn native subagents, but admission control is not resource-model-backed across large concurrent runs.",
+          "action": "extract",
+          "notes": "Use for future team/autodev scaling: admit work in waves based on capacity, pressure, and expected output volume.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/swarm-capacity-workload-admission.md",
+            "workshop/intake/frankenterm:docs/specs/herd-wave-admission-mapping.md",
+            "workshop/intake/frankenterm:docs/attestations/proofs/herd-wave-admission.json"
+          ]
+        },
+        {
+          "id": "ft-47",
+          "name": "Latency budget algebra and verification catalog",
+          "status": "missing",
+          "lev_equivalent": "Lev tracks budgets loosely, but no stage-level runtime latency budget algebra exists for terminal/session operations.",
+          "action": "extract",
+          "notes": "Apply to capture, wait-for, search, event streaming, and dashboard projections with per-stage timing receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/latency_stages/budget_algebra.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/latency_stages/budget_enforcer.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/latency_stages/verification_catalog.rs"
+          ]
+        },
+        {
+          "id": "ft-48",
+          "name": "Framework-neutral MCP DTOs and proxy controls",
+          "status": "missing",
+          "lev_equivalent": "Lev connector work exists, but MCP DTOs/proxy mutability policy are not a shared core contract.",
+          "action": "build",
+          "notes": "If Lev exposes MCP, separate DTOs from runtime code and make mutating-tool allowance explicit.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:crates/frankenterm-core-mcp/src/lib.rs",
+            "workshop/intake/frankenterm:crates/frankenterm-core/src/mcp_proxy.rs",
+            "workshop/intake/frankenterm:docs/proposals/ft-t2d70-mcp-connector-extraction-feasibility.md"
+          ]
+        },
+        {
+          "id": "ft-49",
+          "name": "Mux boundary truth and backend identity discipline",
+          "status": "partial",
+          "lev_equivalent": "Lev already has ExecutionBinding, but custom tmux discussions can still blur backend contract vs implementation.",
+          "action": "extract",
+          "notes": "Keep the lesson: call the backend what it is, hide it behind a real contract, and do not fake a generic abstraction before a second backend exists.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/proposals/ft-zoxxq-mux-boundary-truth.md",
+            "core/harness/src/execution/execution-binding.ts",
+            "core/tmux-harness/src/contracts/session-profile.ts"
+          ]
+        },
+        {
+          "id": "ft-50",
+          "name": "NTM capability census and cutover playbook discipline",
+          "status": "partial",
+          "lev_equivalent": "Lev has parity registry and specs, but migration/cutover work does not always start from a capability census.",
+          "action": "extract",
+          "notes": "Apply this exact pattern to any tmux-control replacement: census, preserve/upgrade/drop matrix, corpus, cutover gate, and rollback.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/frankenterm:docs/ntm-capability-census-ft-3681t.1.1.md",
+            "workshop/intake/frankenterm:docs/ntm-cutover-playbook-ft-3681t.8.4.md",
+            "workshop/intake/frankenterm:docs/ntm-parity-corpus-ft-3681t.8.1.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/frankenterm-flowmind-spine/analysis.md",
+        "workshop/analysis/frankenterm/analysis.md",
+        ".lev/pm/specs/spec-tmux-control-plane.md",
+        ".lev/pm/designs/design-polycard-exec-tmux-control-plane-consolidated.md",
+        "core/tmux-harness/src/handlers/agent-session.ts",
+        "core/harness/src/execution/managed-tmux.ts"
+      ],
+      "absorbed": 0,
+      "pending": 48,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "ft-06",
+          "name": "Terminal platform as FlowMind spine",
+          "action": "reject",
+          "absorbed_into": null,
           "tribunal_note": null
         }
       ]

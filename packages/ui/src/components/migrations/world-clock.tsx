@@ -84,7 +84,7 @@ function ClockFace({ hours, minutes, seconds, size = 80 }: { hours: number; minu
  * @migration-status implemented
  */
 export function WorldClock({ timezones, className }: WorldClockProps) {
-  const [tick, setTick] = React.useState(0);
+  const [, setTick] = React.useState(0);
 
   React.useEffect(() => {
     const iv = setInterval(() => setTick((t) => t + 1), 1000);

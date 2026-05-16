@@ -25,6 +25,10 @@ export function ConflictResolver({ base, current, incoming, filename, onResolve,
   return (
     <div className={cn("border border-border rounded-md bg-card overflow-hidden", className)}>
       <div className="px-4 py-2 border-b border-border bg-muted/50 text-sm font-medium text-foreground">{filename}</div>
+      <div className="px-4 py-2 border-b border-border bg-muted/20">
+        <div className="text-xs text-muted-foreground mb-1">Base</div>
+        <pre className="text-xs text-muted-foreground whitespace-pre-wrap max-h-24 overflow-auto">{base}</pre>
+      </div>
       <div className="grid grid-cols-2 gap-0 border-b border-border">
         <div className="p-3 border-r border-border">
           <div className="text-xs text-muted-foreground mb-1">Current</div>

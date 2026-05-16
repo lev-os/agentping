@@ -26,6 +26,8 @@ export interface SankeyDiagramProps {
 const COLUMN_COLORS = [
   "#06b6d4", "#8b5cf6", "#f59e0b", "#10b981", "#ef4444", "#ec4899",
 ];
+const SANKEY_PADDING = { top: 20, right: 20, bottom: 20, left: 20 };
+const SANKEY_NODE_WIDTH = 18;
 
 /**
  * SankeyDiagram - Flow diagram with weighted links
@@ -39,14 +41,17 @@ export function SankeyDiagram({
   height = 400,
   className,
 }: SankeyDiagramProps) {
-  const padding = { top: 20, right: 20, bottom: 20, left: 20 };
-  const nodeWidth = 18;
+  const padding = SANKEY_PADDING;
+  const nodeWidth = SANKEY_NODE_WIDTH;
   const innerW = width - padding.left - padding.right;
   const innerH = height - padding.top - padding.bottom;
 
   const columns = Math.max(...nodes.map((n) => n.column), 0) + 1;
-  const colX = (col: number) =>
-    padding.left + (col / Math.max(columns - 1, 1)) * (innerW - nodeWidth);
+  const colX = React.useCallback(
+    (col: number) =>
+      padding.left + (col / Math.max(columns - 1, 1)) * (innerW - nodeWidth),
+    [columns, innerW, padding.left, nodeWidth],
+  );
 
   const nodesByCol = React.useMemo(() => {
     const grouped: Record<number, SankeyNode[]> = {};
@@ -58,8 +63,6 @@ export function SankeyDiagram({
 
   const nodePositions = React.useMemo(() => {
     const pos: Record<string, { x: number; y: number; h: number }> = {};
-    const totalValue = links.reduce((s, l) => s + l.value, 0) || 1;
-
     for (const [colStr, colNodes] of Object.entries(nodesByCol)) {
       const col = Number(colStr);
       const x = colX(col);
@@ -81,7 +84,7 @@ export function SankeyDiagram({
       });
     }
     return pos;
-  }, [nodesByCol, links, innerW, innerH]);
+  }, [nodesByCol, links, colX, innerH, padding.top]);
 
   const [hovered, setHovered] = React.useState<string | null>(null);
 

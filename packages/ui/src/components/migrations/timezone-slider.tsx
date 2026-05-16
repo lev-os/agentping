@@ -39,7 +39,7 @@ export function TimezoneSlider({
   onChange,
   className,
 }: TimezoneSliderProps) {
-  const base = baseTime ?? new Date();
+  const base = React.useMemo(() => baseTime ?? new Date(), [baseTime]);
   const [offsetMinutes, setOffsetMinutes] = React.useState(0);
 
   const adjustedDate = React.useMemo(() => {
