@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { MouseEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 // ── Types ───────────────────────────────────────────────────
@@ -731,7 +732,7 @@ function MemberCard({
                 color: "#3b82f6",
                 textDecoration: "none",
               }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
             >
               open detail →
             </Link>
