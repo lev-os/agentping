@@ -1,0 +1,24 @@
+{
+  "id": "status-grid",
+  "name": "StatusGrid",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 119,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

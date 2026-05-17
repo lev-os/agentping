@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../components/migrations/card";
+} from "../../components/catalog/card";
 import type {
   CustomHtmlAdapterProps,
   InlineChartProps,

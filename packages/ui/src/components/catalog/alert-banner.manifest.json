@@ -1,0 +1,23 @@
+{
+  "id": "alert-banner",
+  "name": "AlertBanner",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/AlertBanner.tsx",
+  "loc": 44,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

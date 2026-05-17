@@ -1,0 +1,25 @@
+{
+  "id": "voice-console",
+  "name": "VoiceConsole",
+  "family": "domain/media",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "media",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/VoiceConsole.tsx",
+  "loc": 162,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

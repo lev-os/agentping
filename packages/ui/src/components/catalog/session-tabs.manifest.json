@@ -1,0 +1,23 @@
+{
+  "id": "session-tabs",
+  "name": "SessionTabs",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/chat/SessionTabs.tsx",
+  "loc": 154,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

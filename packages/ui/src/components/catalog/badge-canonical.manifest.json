@@ -1,0 +1,29 @@
+{
+  "id": "badge-canonical",
+  "name": "BadgeCanonical",
+  "family": "foundations/badges-labels",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "inline",
+  "origin": "kingly",
+  "catalogStatus": "alias",
+  "source": "",
+  "loc": 8,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "auto-resolved",
+    "api-surface"
+  ],
+  "canonical": "../ui/badge",
+  "reviewStatus": "canonical",
+  "humanDecision": "keep"
+}

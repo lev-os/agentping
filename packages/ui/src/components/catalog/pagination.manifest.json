@@ -1,0 +1,23 @@
+{
+  "id": "pagination",
+  "name": "Pagination",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/Pagination.tsx",
+  "loc": 53,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

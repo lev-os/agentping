@@ -1,0 +1,24 @@
+{
+  "id": "brain-activity",
+  "name": "BrainActivity",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/BrainActivity.tsx",
+  "loc": 35,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { CanvasRenderer } from "../../../components/migrations/canvas-renderer";
-import { ConnectionStatus } from "../../../components/migrations/connection-status";
-import { KanbanBoard } from "../../../components/migrations/kanban-board";
-import { MarkdownCard } from "../../../components/migrations/markdown-card";
-import { PolymorphPlayground } from "../../../components/migrations/polymorph-playground";
-import { TodoList } from "../../../components/migrations/todo-list";
-import { MindMap } from "../../../components/migrations/mind-map";
-import { OrgChart } from "../../../components/migrations/org-chart";
-import { NetworkGraph } from "../../../components/migrations/network-graph";
-import { DependencyGraph } from "../../../components/migrations/dependency-graph";
-import { GraphView } from "../../../components/migrations/graph-view";
+import { CanvasRenderer } from "../../../components/catalog/canvas-renderer";
+import { ConnectionStatus } from "../../../components/catalog/connection-status";
+import { KanbanBoard } from "../../../components/catalog/kanban-board";
+import { MarkdownCard } from "../../../components/catalog/markdown-card";
+import { PolymorphPlayground } from "../../../components/catalog/polymorph-playground";
+import { TodoList } from "../../../components/catalog/todo-list";
+import { MindMap } from "../../../components/catalog/mind-map";
+import { OrgChart } from "../../../components/catalog/org-chart";
+import { NetworkGraph } from "../../../components/catalog/network-graph";
+import { DependencyGraph } from "../../../components/catalog/dependency-graph";
+import { GraphView } from "../../../components/catalog/graph-view";
 
 const meta: Meta = {
   title: "Review/Domain/Canvas & Visual",

@@ -1,0 +1,23 @@
+{
+  "id": "audit-log-table",
+  "name": "AuditLogTable",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/logs/AuditLogTable.tsx",
+  "loc": 65,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,20 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { ApprovalQueue } from "../../components/migrations/approval-queue";
+import { ApprovalQueue } from "../../components/catalog/approval-queue";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../components/migrations/card";
-import { DataTable } from "../../components/migrations/data-table";
-import { EventTimeline } from "../../components/migrations/event-timeline";
-import { Hero } from "../../components/migrations/hero";
-import { InlineMarkdown } from "../../components/migrations/inline-markdown";
-import { StatusCard } from "../../components/migrations/status-card";
-import { Terminal } from "../../components/migrations/terminal";
+} from "../../components/catalog/card";
+import { DataTable } from "../../components/catalog/data-table";
+import { EventTimeline } from "../../components/catalog/event-timeline";
+import { Hero } from "../../components/catalog/hero";
+import { InlineMarkdown } from "../../components/catalog/inline-markdown";
+import { StatusCard } from "../../components/catalog/status-card";
+import { Terminal } from "../../components/catalog/terminal";
 import { Badge } from "../../components/ui/badge";
 import {
   CustomHtmlAdapter,

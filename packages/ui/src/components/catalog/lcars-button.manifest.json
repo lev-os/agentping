@@ -1,0 +1,23 @@
+{
+  "id": "lcars-button",
+  "name": "LcarsButton",
+  "family": "foundations/buttons",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/lcars/LcarsButton.tsx",
+  "loc": 80,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

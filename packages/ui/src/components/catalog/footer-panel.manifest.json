@@ -1,0 +1,25 @@
+{
+  "id": "footer-panel",
+  "name": "FooterPanel",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "navigation",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/FooterPanel.tsx",
+  "loc": 154,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 8,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { LogStream } from "../../components/migrations/log-stream";
-import { LogHistogram } from "../../components/migrations/log-histogram";
-import { AuditLogViewer } from "../../components/migrations/audit-log-viewer";
-import { TerminalView } from "../../components/migrations/terminal-view";
-import { ErrorCluster } from "../../components/migrations/error-cluster";
-import { LatencyHistogram } from "../../components/migrations/latency-histogram";
-import { StackTraceProfiler } from "../../components/migrations/stack-trace-profiler";
-import { DiagnosticPanel } from "../../components/migrations/diagnostic-panel";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
-import { StatsGrid } from "../../components/migrations/stats-grid";
+import { LogStream } from "../../components/catalog/log-stream";
+import { LogHistogram } from "../../components/catalog/log-histogram";
+import { AuditLogViewer } from "../../components/catalog/audit-log-viewer";
+import { TerminalView } from "../../components/catalog/terminal-view";
+import { ErrorCluster } from "../../components/catalog/error-cluster";
+import { LatencyHistogram } from "../../components/catalog/latency-histogram";
+import { StackTraceProfiler } from "../../components/catalog/stack-trace-profiler";
+import { DiagnosticPanel } from "../../components/catalog/diagnostic-panel";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
+import { StatsGrid } from "../../components/catalog/stats-grid";
 
 // ---------------------------------------------------------------------------
 // Mock data

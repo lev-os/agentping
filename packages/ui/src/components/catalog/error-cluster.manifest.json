@@ -1,0 +1,24 @@
+{
+  "id": "error-cluster",
+  "name": "ErrorCluster",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ErrorCluster.tsx",
+  "loc": 38,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

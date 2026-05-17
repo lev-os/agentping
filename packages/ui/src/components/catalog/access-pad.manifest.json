@@ -1,0 +1,27 @@
+{
+  "id": "access-pad",
+  "name": "AccessPad",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/system/AccessPad.tsx",
+  "loc": 74,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "humanDecision": "keep",
+  "reviewStatus": "reviewed",
+  "reviewedAt": "2026-04-18T02:48:20.901Z",
+  "reviewNotes": "CLI test"
+}

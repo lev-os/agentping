@@ -1,0 +1,23 @@
+{
+  "id": "dm-status-badge",
+  "name": "DmStatusBadge",
+  "family": "foundations/badges-labels",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "dashboard-manager",
+  "catalogStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/StatusBadge.tsx",
+  "loc": 44,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

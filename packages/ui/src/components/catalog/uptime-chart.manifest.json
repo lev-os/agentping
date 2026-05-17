@@ -1,0 +1,23 @@
+{
+  "id": "uptime-chart",
+  "name": "UptimeChart",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/charts/UptimeChart.tsx",
+  "loc": 104,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

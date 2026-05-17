@@ -1,0 +1,24 @@
+{
+  "id": "terminal-link-popup",
+  "name": "TerminalLinkPopup",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "navigation",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "studio",
+  "catalogStatus": "complete",
+  "source": "packages/studio/src/renderer/components/TerminalLinkPopup.tsx",
+  "loc": 92,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,26 +1,26 @@
 // @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { LandingPage } from "../../../components/migrations/landing-page";
-import { HistoryView } from "../../../components/migrations/history-view";
-import { WelcomeScreen } from "../../../components/migrations/welcome-screen";
-import { Navigator } from "../../../components/migrations/navigator";
-import { NavigatorWithDashboards } from "../../../components/migrations/navigator-with-dashboards";
-import { ChatPanel } from "../../../components/migrations/chat-panel";
-import { SharedComponents } from "../../../components/migrations/shared-components";
-import { EnrichmentPanel } from "../../../components/migrations/enrichment-panel";
-import { FileExplorer } from "../../../components/migrations/file-explorer";
-import { CanvasRenderer } from "../../../components/migrations/canvas-renderer";
-import { PolymorphPlayground } from "../../../components/migrations/polymorph-playground";
-import { CalendarView } from "../../../components/migrations/calendar-view";
-import { DmLogViewer } from "../../../components/migrations/dm-log-viewer";
-import { DmUptimeChart } from "../../../components/migrations/dm-uptime-chart";
-import { DmRestartHistogram } from "../../../components/migrations/dm-restart-histogram";
-import { GlobeWireframe } from "../../../components/migrations/globe-wireframe";
-import { ParticleStream } from "../../../components/migrations/particle-stream";
-import { MindMap } from "../../../components/migrations/mind-map";
-import { DependencyGraph } from "../../../components/migrations/dependency-graph";
-import { SettingsModal } from "../../../components/migrations/settings-modal";
+import { LandingPage } from "../../../components/catalog/landing-page";
+import { HistoryView } from "../../../components/catalog/history-view";
+import { WelcomeScreen } from "../../../components/catalog/welcome-screen";
+import { Navigator } from "../../../components/catalog/navigator";
+import { NavigatorWithDashboards } from "../../../components/catalog/navigator-with-dashboards";
+import { ChatPanel } from "../../../components/catalog/chat-panel";
+import { SharedComponents } from "../../../components/catalog/shared-components";
+import { EnrichmentPanel } from "../../../components/catalog/enrichment-panel";
+import { FileExplorer } from "../../../components/catalog/file-explorer";
+import { CanvasRenderer } from "../../../components/catalog/canvas-renderer";
+import { PolymorphPlayground } from "../../../components/catalog/polymorph-playground";
+import { CalendarView } from "../../../components/catalog/calendar-view";
+import { DmLogViewer } from "../../../components/catalog/dm-log-viewer";
+import { DmUptimeChart } from "../../../components/catalog/dm-uptime-chart";
+import { DmRestartHistogram } from "../../../components/catalog/dm-restart-histogram";
+import { GlobeWireframe } from "../../../components/catalog/globe-wireframe";
+import { ParticleStream } from "../../../components/catalog/particle-stream";
+import { MindMap } from "../../../components/catalog/mind-map";
+import { DependencyGraph } from "../../../components/catalog/dependency-graph";
+import { SettingsModal } from "../../../components/catalog/settings-modal";
 
 const meta: Meta = {
   title: "Review/Overlays/Needs Review",
@@ -196,7 +196,7 @@ export const AllNeedsReview: Story = {
 
           <ReviewCard
             name="DmLogViewer"
-            note="Original uses useWebSocket hook for live log streaming; migration is static"
+            note="Original uses useWebSocket hook for live log streaming; catalog version is static"
           >
             <DmLogViewer
               dashboardId="app"
@@ -208,14 +208,14 @@ export const AllNeedsReview: Story = {
 
           <ReviewCard
             name="DmUptimeChart"
-            note="Original uses recharts AreaChart; migration uses CSS bar visualization"
+            note="Original uses recharts AreaChart; catalog version uses CSS bar visualization"
           >
             <DmUptimeChart uptimeMs={43200000} />
           </ReviewCard>
 
           <ReviewCard
             name="DmRestartHistogram"
-            note="Original uses recharts BarChart; migration uses CSS bar visualization"
+            note="Original uses recharts BarChart; catalog version uses CSS bar visualization"
           >
             <DmRestartHistogram restarts={12} />
           </ReviewCard>

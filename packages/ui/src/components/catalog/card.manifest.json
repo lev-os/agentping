@@ -1,0 +1,25 @@
+{
+  "id": "card",
+  "name": "Card",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "display"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "card",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/ui/card.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/card"
+}

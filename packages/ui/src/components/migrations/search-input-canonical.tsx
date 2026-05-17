@@ -1,7 +1,0 @@
-/**
- * SearchInput - Migration alias (canonical exists in @kingly/ui)
- * @canonical packages/ui/src/components/ui/search-input.tsx
- * @migration-status alias
- */
-export { SearchInput } from "../ui/search-input";
-export type { SearchInputProps } from "../ui/search-input";

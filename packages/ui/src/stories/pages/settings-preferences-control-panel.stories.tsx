@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { ToggleSwitch } from "../../components/migrations/toggle-switch";
-import { Slider } from "../../components/migrations/slider";
-import { ColorPicker } from "../../components/migrations/color-picker";
-import { TagInput } from "../../components/migrations/tag-input";
-import { SegmentedControl } from "../../components/migrations/segmented-control";
-import { SecretInput } from "../../components/migrations/secret-input";
-import { Knob } from "../../components/migrations/knob";
-import { RangeSlider } from "../../components/migrations/range-slider";
-import { PinInput } from "../../components/migrations/pin-input";
-import { DatePicker } from "../../components/migrations/date-picker";
-import { ThemeToggle } from "../../components/migrations/theme-toggle";
-import { EditableText } from "../../components/migrations/editable-text";
-import { SettingsModal } from "../../components/migrations/settings-modal";
+import { ToggleSwitch } from "../../components/catalog/toggle-switch";
+import { Slider } from "../../components/catalog/slider";
+import { ColorPicker } from "../../components/catalog/color-picker";
+import { TagInput } from "../../components/catalog/tag-input";
+import { SegmentedControl } from "../../components/catalog/segmented-control";
+import { SecretInput } from "../../components/catalog/secret-input";
+import { Knob } from "../../components/catalog/knob";
+import { RangeSlider } from "../../components/catalog/range-slider";
+import { PinInput } from "../../components/catalog/pin-input";
+import { DatePicker } from "../../components/catalog/date-picker";
+import { ThemeToggle } from "../../components/catalog/theme-toggle";
+import { EditableText } from "../../components/catalog/editable-text";
+import { SettingsModal } from "../../components/catalog/settings-modal";
 
 /* ------------------------------------------------------------------ */
 /* State & Helpers                                                     */

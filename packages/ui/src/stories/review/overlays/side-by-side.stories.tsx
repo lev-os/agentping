@@ -1,26 +1,26 @@
 // @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { ActivityFeed } from "../../../components/migrations/activity-feed";
-import { StatsGrid } from "../../../components/migrations/stats-grid";
-import { DataTable } from "../../../components/migrations/data-table";
-import { AgentAvatar } from "../../../components/migrations/agent-avatar";
-import { MetricChart } from "../../../components/migrations/metric-chart";
-import { AlertBanner } from "../../../components/migrations/alert-banner";
-import { TokenStream } from "../../../components/migrations/token-stream";
-import { CalendarView } from "../../../components/migrations/calendar-view";
-import { HeatmapGrid } from "../../../components/migrations/heatmap-grid";
-import { ProgressBar } from "../../../components/migrations/progress-bar";
-import { MessageBubble } from "../../../components/migrations/message-bubble";
-import { FileExplorer } from "../../../components/migrations/file-explorer";
-import { JsonEditor } from "../../../components/migrations/json-editor";
-import { TerminalView } from "../../../components/migrations/terminal-view";
-import { Breadcrumbs } from "../../../components/migrations/breadcrumbs";
-import { TabsContainer } from "../../../components/migrations/tabs-container";
-import { Rating } from "../../../components/migrations/rating";
-import { AudioPlayer } from "../../../components/migrations/audio-player";
-import { WeatherCard } from "../../../components/migrations/weather-card";
-import { WorldClock } from "../../../components/migrations/world-clock";
+import { ActivityFeed } from "../../../components/catalog/activity-feed";
+import { StatsGrid } from "../../../components/catalog/stats-grid";
+import { DataTable } from "../../../components/catalog/data-table";
+import { AgentAvatar } from "../../../components/catalog/agent-avatar";
+import { MetricChart } from "../../../components/catalog/metric-chart";
+import { AlertBanner } from "../../../components/catalog/alert-banner";
+import { TokenStream } from "../../../components/catalog/token-stream";
+import { CalendarView } from "../../../components/catalog/calendar-view";
+import { HeatmapGrid } from "../../../components/catalog/heatmap-grid";
+import { ProgressBar } from "../../../components/catalog/progress-bar";
+import { MessageBubble } from "../../../components/catalog/message-bubble";
+import { FileExplorer } from "../../../components/catalog/file-explorer";
+import { JsonEditor } from "../../../components/catalog/json-editor";
+import { TerminalView } from "../../../components/catalog/terminal-view";
+import { Breadcrumbs } from "../../../components/catalog/breadcrumbs";
+import { TabsContainer } from "../../../components/catalog/tabs-container";
+import { Rating } from "../../../components/catalog/rating";
+import { AudioPlayer } from "../../../components/catalog/audio-player";
+import { WeatherCard } from "../../../components/catalog/weather-card";
+import { WorldClock } from "../../../components/catalog/world-clock";
 
 const meta: Meta = {
   title: "Review/Overlays/Side by Side",

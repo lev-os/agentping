@@ -1,0 +1,24 @@
+{
+  "id": "dm-analytics-panel",
+  "name": "DmAnalyticsPanel",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "dashboard-manager",
+  "catalogStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/AnalyticsPanel.tsx",
+  "loc": 52,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

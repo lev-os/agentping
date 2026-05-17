@@ -1,0 +1,29 @@
+{
+  "id": "input-conflict",
+  "name": "InputConflict",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 126,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "auto-resolved",
+    "review-scaffolding",
+    "winner=../ui/input"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "keep"
+}

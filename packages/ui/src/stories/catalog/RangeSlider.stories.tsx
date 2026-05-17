@@ -1,0 +1,14 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { RangeSlider } from "../../components/catalog/range-slider";
+
+const meta = {
+  title: "Catalog/WebUI/Root/RangeSlider",
+  component: RangeSlider,
+  parameters: { layout: "centered" },
+  tags: ["autodocs"],
+} satisfies Meta<typeof RangeSlider>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = { args: {} };

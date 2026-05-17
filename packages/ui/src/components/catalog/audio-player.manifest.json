@@ -1,0 +1,24 @@
+{
+  "id": "audio-player",
+  "name": "AudioPlayer",
+  "family": "domain/media",
+  "domain": "domain",
+  "capabilities": [
+    "media",
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/AudioPlayer.tsx",
+  "loc": 51,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

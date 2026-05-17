@@ -1,0 +1,25 @@
+{
+  "id": "dashboard-detail-view",
+  "name": "DashboardDetailView",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "navigation",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/DashboardDetailView.tsx",
+  "loc": 192,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

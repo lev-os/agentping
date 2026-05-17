@@ -1,0 +1,24 @@
+{
+  "id": "metric-chart",
+  "name": "MetricChart",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/MetricChart.tsx",
+  "loc": 47,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

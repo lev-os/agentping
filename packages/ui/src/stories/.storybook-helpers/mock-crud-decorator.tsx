@@ -1,5 +1,5 @@
 import React from "react";
-import { CrudProvider } from "../../components/migrations/crud-context";
+import { CrudProvider } from "../../components/catalog/crud-context";
 
 export const mockCrudConfig = {
   entity: { name: "Agent", plural: "Agents" },

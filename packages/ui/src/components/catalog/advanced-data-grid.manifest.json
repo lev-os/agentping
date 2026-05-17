@@ -1,0 +1,25 @@
+{
+  "id": "advanced-data-grid",
+  "name": "AdvancedDataGrid",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display",
+    "input",
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/data/AdvancedDataGrid.tsx",
+  "loc": 100,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

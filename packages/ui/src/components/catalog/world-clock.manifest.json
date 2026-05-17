@@ -1,0 +1,24 @@
+{
+  "id": "world-clock",
+  "name": "WorldClock",
+  "family": "domain/scheduling",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "catalogStatus": "implemented",
+  "source": "packages/adapters/web-ui/src/components/WorldClock.tsx",
+  "loc": 115,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

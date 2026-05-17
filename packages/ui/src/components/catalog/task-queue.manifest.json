@@ -1,0 +1,23 @@
+{
+  "id": "task-queue",
+  "name": "TaskQueue",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 72,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

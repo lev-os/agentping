@@ -1,0 +1,24 @@
+{
+  "id": "gallery-feedback-section",
+  "name": "GalleryFeedbackSection",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "composite",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 70,
+  "imports": 8,
+  "hooks": 1,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

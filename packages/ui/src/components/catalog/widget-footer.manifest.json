@@ -1,0 +1,24 @@
+{
+  "id": "widget-footer",
+  "name": "WidgetFooter",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "layout"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "section",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/WidgetFooter.tsx",
+  "loc": 6,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/WidgetFooter"
+}

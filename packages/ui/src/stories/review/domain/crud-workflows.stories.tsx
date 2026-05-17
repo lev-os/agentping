@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { StepChecklist } from "../../../components/migrations/step-checklist";
-import { TaskWorkflow } from "../../../components/migrations/task-workflow";
-import { WizardStep } from "../../../components/migrations/wizard-step";
-import { PropertyGrid } from "../../../components/migrations/property-grid";
-import { SelectionList } from "../../../components/migrations/selection-list";
-import { ApprovalQueue } from "../../../components/migrations/approval-queue";
-import { TaskQueue } from "../../../components/migrations/task-queue";
-import { TransferList } from "../../../components/migrations/transfer-list";
+import { StepChecklist } from "../../../components/catalog/step-checklist";
+import { TaskWorkflow } from "../../../components/catalog/task-workflow";
+import { WizardStep } from "../../../components/catalog/wizard-step";
+import { PropertyGrid } from "../../../components/catalog/property-grid";
+import { SelectionList } from "../../../components/catalog/selection-list";
+import { ApprovalQueue } from "../../../components/catalog/approval-queue";
+import { TaskQueue } from "../../../components/catalog/task-queue";
+import { TransferList } from "../../../components/catalog/transfer-list";
 
 /**
  * NOTE: EntityForm and FieldRenderer are excluded from this review page.

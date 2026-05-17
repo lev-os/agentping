@@ -1,0 +1,23 @@
+{
+  "id": "candlestick-chart",
+  "name": "CandlestickChart",
+  "family": "domain/finance",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/finance/CandleStickChart.tsx",
+  "loc": 69,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

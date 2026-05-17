@@ -1,0 +1,23 @@
+{
+  "id": "live-badge",
+  "name": "LiveBadge",
+  "family": "foundations/badges-labels",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/LiveBadge.tsx",
+  "loc": 25,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

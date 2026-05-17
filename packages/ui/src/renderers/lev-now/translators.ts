@@ -1,6 +1,6 @@
-import type { PendingApproval } from "../../components/migrations/approval-queue";
-import type { DataTableColumn } from "../../components/migrations/data-table";
-import type { TimelineEvent } from "../../components/migrations/event-timeline";
+import type { PendingApproval } from "../../components/catalog/approval-queue";
+import type { DataTableColumn } from "../../components/catalog/data-table";
+import type { TimelineEvent } from "../../components/catalog/event-timeline";
 import type {
   LevNowDataTableColumn,
   LevNowFeedbackItem,

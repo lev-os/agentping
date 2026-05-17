@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { DataTable } from "../../components/migrations/data-table";
-import { JsonEditor } from "../../components/migrations/json-editor";
-import { CsvViewer } from "../../components/migrations/csv-viewer";
-import { RegexTester } from "../../components/migrations/regex-tester";
-import { TreeBrowser } from "../../components/migrations/tree-browser";
-import { VectorCluster } from "../../components/migrations/vector-cluster";
-import { SqlResultTable } from "../../components/migrations/sql-result-table";
-import { JsonTreeViewer } from "../../components/migrations/json-tree-viewer";
-import { JsonDiff } from "../../components/migrations/json-diff";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
-import { StatsGrid } from "../../components/migrations/stats-grid";
+import { DataTable } from "../../components/catalog/data-table";
+import { JsonEditor } from "../../components/catalog/json-editor";
+import { CsvViewer } from "../../components/catalog/csv-viewer";
+import { RegexTester } from "../../components/catalog/regex-tester";
+import { TreeBrowser } from "../../components/catalog/tree-browser";
+import { VectorCluster } from "../../components/catalog/vector-cluster";
+import { SqlResultTable } from "../../components/catalog/sql-result-table";
+import { JsonTreeViewer } from "../../components/catalog/json-tree-viewer";
+import { JsonDiff } from "../../components/catalog/json-diff";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
+import { StatsGrid } from "../../components/catalog/stats-grid";
 
 // ---------------------------------------------------------------------------
 // Mock data

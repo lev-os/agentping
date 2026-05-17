@@ -1,0 +1,23 @@
+{
+  "id": "latency-histogram",
+  "name": "LatencyHistogram",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/LatencyHistogram.tsx",
+  "loc": 40,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

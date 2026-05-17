@@ -1,0 +1,23 @@
+{
+  "id": "holographic-card",
+  "name": "HolographicCard",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 64,
+  "imports": 2,
+  "hooks": 5,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

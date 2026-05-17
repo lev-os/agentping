@@ -1,18 +1,18 @@
 // @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { TaskQueue } from "../../components/migrations/task-queue";
-import { LeaseApproval } from "../../components/migrations/lease-approval";
-import { StepChecklist } from "../../components/migrations/step-checklist";
-import { SelectionList } from "../../components/migrations/selection-list";
-import { TeamRoster } from "../../components/migrations/team-roster";
-import { TransferList } from "../../components/migrations/transfer-list";
-import { ApprovalQueue } from "../../components/migrations/approval-queue";
-import { AlertFeed } from "../../components/migrations/alert-feed";
-import { TaskChecklist } from "../../components/migrations/task-checklist";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
-import { StatsGrid } from "../../components/migrations/stats-grid";
-import { AlertBanner } from "../../components/migrations/alert-banner";
+import { TaskQueue } from "../../components/catalog/task-queue";
+import { LeaseApproval } from "../../components/catalog/lease-approval";
+import { StepChecklist } from "../../components/catalog/step-checklist";
+import { SelectionList } from "../../components/catalog/selection-list";
+import { TeamRoster } from "../../components/catalog/team-roster";
+import { TransferList } from "../../components/catalog/transfer-list";
+import { ApprovalQueue } from "../../components/catalog/approval-queue";
+import { AlertFeed } from "../../components/catalog/alert-feed";
+import { TaskChecklist } from "../../components/catalog/task-checklist";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
+import { StatsGrid } from "../../components/catalog/stats-grid";
+import { AlertBanner } from "../../components/catalog/alert-banner";
 
 // ---------------------------------------------------------------------------
 // Mock data

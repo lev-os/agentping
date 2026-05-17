@@ -1,0 +1,25 @@
+{
+  "id": "log-search-query",
+  "name": "LogSearchQuery",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "custom-html",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/logs/LogSearchQuery.tsx",
+  "loc": 52,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

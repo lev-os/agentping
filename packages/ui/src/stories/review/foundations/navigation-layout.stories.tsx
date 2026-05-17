@@ -3,20 +3,20 @@ import React from "react";
 import { ReviewPageLayout } from "../_shared/ReviewPageLayout";
 import { ComponentCard } from "../_shared/ComponentCard";
 import type { ComponentMeta } from "../_shared/types";
-import { Breadcrumbs } from "../../../components/migrations/breadcrumbs";
-import { TabsContainer } from "../../../components/migrations/tabs-container";
-import { Stepper } from "../../../components/migrations/stepper";
-import { AccordionList } from "../../../components/migrations/accordion-list";
-import { SplitView } from "../../../components/migrations/split-view";
-import { Pagination } from "../../../components/migrations/pagination";
-import { TreeBrowser } from "../../../components/migrations/tree-browser";
-import { MiniMap } from "../../../components/migrations/mini-map";
+import { Breadcrumbs } from "../../../components/catalog/breadcrumbs";
+import { TabsContainer } from "../../../components/catalog/tabs-container";
+import { Stepper } from "../../../components/catalog/stepper";
+import { AccordionList } from "../../../components/catalog/accordion-list";
+import { SplitView } from "../../../components/catalog/split-view";
+import { Pagination } from "../../../components/catalog/pagination";
+import { TreeBrowser } from "../../../components/catalog/tree-browser";
+import { MiniMap } from "../../../components/catalog/mini-map";
 import {
   Tabs,
   TabList,
   Tab,
   TabPanel,
-} from "../../../components/migrations/tabs";
+} from "../../../components/catalog/tabs";
 
 const meta: Meta = {
   title: "Review/Foundations/Navigation & Layout",

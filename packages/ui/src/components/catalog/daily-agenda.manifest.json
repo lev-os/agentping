@@ -1,0 +1,23 @@
+{
+  "id": "daily-agenda",
+  "name": "DailyAgenda",
+  "family": "domain/scheduling",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "timeline",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/DailyAgenda.tsx",
+  "loc": 50,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

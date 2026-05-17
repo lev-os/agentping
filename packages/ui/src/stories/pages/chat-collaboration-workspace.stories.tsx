@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { MessageBubble } from "../../components/migrations/message-bubble";
-import { TypingIndicator } from "../../components/migrations/typing-indicator";
-import { AgentAvatar } from "../../components/migrations/agent-avatar";
-import { ImageCompare } from "../../components/migrations/image-compare";
-import { MarkdownEditor } from "../../components/migrations/markdown-editor";
-import { RichMarkdownRenderer } from "../../components/migrations/rich-markdown-renderer";
-import { ChatHeader } from "../../components/migrations/chat-header";
-import { ChatInput } from "../../components/migrations/chat-input";
-import { ChatSearch } from "../../components/migrations/chat-search";
-import { ChatMessage } from "../../components/migrations/chat-message";
-import { ChatPanel } from "../../components/migrations/chat-panel";
-import { InlineMarkdown } from "../../components/migrations/inline-markdown";
-import { InlineTodo } from "../../components/migrations/inline-todo";
+import { MessageBubble } from "../../components/catalog/message-bubble";
+import { TypingIndicator } from "../../components/catalog/typing-indicator";
+import { AgentAvatar } from "../../components/catalog/agent-avatar";
+import { ImageCompare } from "../../components/catalog/image-compare";
+import { MarkdownEditor } from "../../components/catalog/markdown-editor";
+import { RichMarkdownRenderer } from "../../components/catalog/rich-markdown-renderer";
+import { ChatHeader } from "../../components/catalog/chat-header";
+import { ChatInput } from "../../components/catalog/chat-input";
+import { ChatSearch } from "../../components/catalog/chat-search";
+import { ChatMessage } from "../../components/catalog/chat-message";
+import { ChatPanel } from "../../components/catalog/chat-panel";
+import { InlineMarkdown } from "../../components/catalog/inline-markdown";
+import { InlineTodo } from "../../components/catalog/inline-todo";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

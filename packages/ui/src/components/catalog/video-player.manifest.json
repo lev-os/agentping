@@ -1,0 +1,23 @@
+{
+  "id": "video-player",
+  "name": "VideoPlayer",
+  "family": "domain/media",
+  "domain": "domain",
+  "capabilities": [
+    "media"
+  ],
+  "classification": "REAL",
+  "levNowElement": "custom-html",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 94,
+  "imports": 2,
+  "hooks": 3,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

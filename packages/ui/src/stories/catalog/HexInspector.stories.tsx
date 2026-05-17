@@ -1,0 +1,19 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { HexInspector } from "../../components/catalog/hex-inspector";
+
+const meta: Meta<typeof HexInspector> = {
+  title: "Catalog/WebUI/HexInspector",
+  component: HexInspector,
+  tags: ["autodocs"],
+};
+export default meta;
+type Story = StoryObj<typeof HexInspector>;
+
+export const Default: Story = {
+  args: {
+    data: [
+      0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21, 0x0a, 0x00, 0xff, 0xfe,
+      0x41, 0x67, 0x65, 0x6e, 0x74, 0x50, 0x69, 0x6e, 0x67, 0x20, 0x76, 0x32, 0x2e, 0x30, 0x00, 0x00,
+    ],
+  },
+};

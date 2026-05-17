@@ -1,0 +1,25 @@
+{
+  "id": "dm-log-viewer",
+  "name": "DmLogViewer",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "input",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "dashboard-manager",
+  "catalogStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/LogViewer.tsx",
+  "loc": 126,
+  "imports": 3,
+  "hooks": 4,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "geo-request-map",
+  "name": "GeoRequestMap",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "SHELL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/GeoRequestMap.tsx",
+  "loc": 42,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "settings-modal",
+  "name": "SettingsModal",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/SettingsModal.tsx",
+  "loc": 195,
+  "imports": 3,
+  "hooks": 2,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

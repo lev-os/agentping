@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { StatsGrid } from "../../components/migrations/stats-grid";
-import { ActivityFeed } from "../../components/migrations/activity-feed";
-import { AlertBanner } from "../../components/migrations/alert-banner";
-import { SystemHealthGauge } from "../../components/migrations/system-health-gauge";
-import { HeatmapGrid } from "../../components/migrations/heatmap-grid";
-import { NetworkTopology } from "../../components/migrations/network-topology";
-import { MetricChart } from "../../components/migrations/metric-chart";
-import { ProcessTable } from "../../components/migrations/process-table";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
+import { StatsGrid } from "../../components/catalog/stats-grid";
+import { ActivityFeed } from "../../components/catalog/activity-feed";
+import { AlertBanner } from "../../components/catalog/alert-banner";
+import { SystemHealthGauge } from "../../components/catalog/system-health-gauge";
+import { HeatmapGrid } from "../../components/catalog/heatmap-grid";
+import { NetworkTopology } from "../../components/catalog/network-topology";
+import { MetricChart } from "../../components/catalog/metric-chart";
+import { ProcessTable } from "../../components/catalog/process-table";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
 
 // ---------------------------------------------------------------------------
 // Mock data

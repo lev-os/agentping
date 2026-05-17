@@ -9,21 +9,21 @@ import {
   ButtonStudioRaw,
   ButtonWebUiRaw,
   ButtonCandidate,
-} from "../../../components/migrations/button-conflict";
+} from "../../../components/catalog/button-conflict";
 import {
   IconButtonStudioRaw,
   IconButtonWebUiRaw,
   IconButtonCandidate,
-} from "../../../components/migrations/icon-button-conflict";
-import { ToggleSwitch } from "../../../components/migrations/toggle-switch";
-import { SegmentedControl } from "../../../components/migrations/segmented-control";
-import { CommandPalette } from "../../../components/migrations/command-palette";
-import { QuickActions } from "../../../components/migrations/quick-actions";
-import { DockMenu } from "../../../components/migrations/dock-menu";
-import { RadialNav } from "../../../components/migrations/radial-nav";
-import { CollapseButton } from "../../../components/migrations/collapse-button";
-import { CopyButton } from "../../../components/migrations/copy-button";
-import { LcarsButton } from "../../../components/migrations/lcars-button";
+} from "../../../components/catalog/icon-button-conflict";
+import { ToggleSwitch } from "../../../components/catalog/toggle-switch";
+import { SegmentedControl } from "../../../components/catalog/segmented-control";
+import { CommandPalette } from "../../../components/catalog/command-palette";
+import { QuickActions } from "../../../components/catalog/quick-actions";
+import { DockMenu } from "../../../components/catalog/dock-menu";
+import { RadialNav } from "../../../components/catalog/radial-nav";
+import { CollapseButton } from "../../../components/catalog/collapse-button";
+import { CopyButton } from "../../../components/catalog/copy-button";
+import { LcarsButton } from "../../../components/catalog/lcars-button";
 
 const meta: Meta = {
   title: "Review/Foundations/Buttons & Actions",

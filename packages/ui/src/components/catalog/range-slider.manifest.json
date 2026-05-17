@@ -1,0 +1,23 @@
+{
+  "id": "range-slider",
+  "name": "RangeSlider",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/RangeSlider.tsx",
+  "loc": 40,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

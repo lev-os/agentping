@@ -1,0 +1,23 @@
+{
+  "id": "event-card",
+  "name": "EventCard",
+  "family": "domain/scheduling",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/EventCard.tsx",
+  "loc": 48,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

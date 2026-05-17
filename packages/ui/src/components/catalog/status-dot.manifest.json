@@ -1,0 +1,24 @@
+{
+  "id": "status-dot",
+  "name": "StatusDot",
+  "family": "foundations/badges-labels",
+  "domain": "foundations",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "inline",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/ui/status-dot.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/status-dot"
+}

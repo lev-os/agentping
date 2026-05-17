@@ -1,0 +1,29 @@
+{
+  "id": "icon-button-conflict",
+  "name": "IconButtonConflict",
+  "family": "foundations/buttons",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 141,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "auto-resolved",
+    "review-scaffolding",
+    "winner=../ui/icon-button"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "keep"
+}

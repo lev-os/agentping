@@ -1,0 +1,25 @@
+{
+  "id": "hero",
+  "name": "Hero",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "display",
+    "layout"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": "hero",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/recipes/hero.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../recipes/hero"
+}

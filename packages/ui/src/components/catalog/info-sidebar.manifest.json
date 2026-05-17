@@ -1,0 +1,24 @@
+{
+  "id": "info-sidebar",
+  "name": "InfoSidebar",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/InfoSidebar.tsx",
+  "loc": 46,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

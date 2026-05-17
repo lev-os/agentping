@@ -12,7 +12,7 @@ import {
   SpinnerCandidate,
   TimelineCandidate,
   LogViewerCandidate,
-} from "../../../components/migrations";
+} from "../../../components/catalog";
 
 const meta: Meta = {
   title: "Review/Style/Sophia (Candidate)",

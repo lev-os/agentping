@@ -1,0 +1,25 @@
+{
+  "id": "terminal-view",
+  "name": "TerminalView",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display",
+    "system"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "webui",
+  "catalogStatus": "implemented",
+  "source": "packages/adapters/web-ui/src/components/TerminalView.tsx",
+  "loc": 93,
+  "imports": 2,
+  "hooks": 3,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

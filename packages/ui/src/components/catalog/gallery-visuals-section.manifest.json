@@ -1,0 +1,24 @@
+{
+  "id": "gallery-visuals-section",
+  "name": "GalleryVisualsSection",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 82,
+  "imports": 13,
+  "hooks": 0,
+  "propCount": 1,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

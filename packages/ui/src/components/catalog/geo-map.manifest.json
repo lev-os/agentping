@@ -1,0 +1,24 @@
+{
+  "id": "geo-map",
+  "name": "GeoMap",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/visuals/GeoMap.tsx",
+  "loc": 59,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

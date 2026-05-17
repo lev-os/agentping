@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { AudioPlayer } from "../../components/migrations/audio-player";
-import { VideoPlayer } from "../../components/migrations/video-player";
-import { ImageCompare } from "../../components/migrations/image-compare";
-import { ImageDiff } from "../../components/migrations/image-diff";
-import { PdfPreview } from "../../components/migrations/pdf-preview";
-import { FileAssetPicker, type FileAsset } from "../../components/migrations/file-asset-picker";
-import { DraggableList, type DraggableItem } from "../../components/migrations/draggable-list";
-import { FileExplorer } from "../../components/migrations/file-explorer";
-import { FileTree, type FileNode } from "../../components/migrations/file-tree";
-import { FileMetadataCard, type FileMetadata } from "../../components/migrations/file-metadata-card";
-import { FileViewer } from "../../components/migrations/file-viewer";
-import { AssetCard } from "../../components/migrations/asset-card";
+import { AudioPlayer } from "../../components/catalog/audio-player";
+import { VideoPlayer } from "../../components/catalog/video-player";
+import { ImageCompare } from "../../components/catalog/image-compare";
+import { ImageDiff } from "../../components/catalog/image-diff";
+import { PdfPreview } from "../../components/catalog/pdf-preview";
+import { FileAssetPicker, type FileAsset } from "../../components/catalog/file-asset-picker";
+import { DraggableList, type DraggableItem } from "../../components/catalog/draggable-list";
+import { FileExplorer } from "../../components/catalog/file-explorer";
+import { FileTree, type FileNode } from "../../components/catalog/file-tree";
+import { FileMetadataCard, type FileMetadata } from "../../components/catalog/file-metadata-card";
+import { FileViewer } from "../../components/catalog/file-viewer";
+import { AssetCard } from "../../components/catalog/asset-card";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

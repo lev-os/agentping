@@ -1,0 +1,24 @@
+{
+  "id": "todo-list",
+  "name": "TodoList",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "canvas",
+  "catalogStatus": "candidate",
+  "source": "packages/canvas/src/components/TodoList.tsx",
+  "loc": 66,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

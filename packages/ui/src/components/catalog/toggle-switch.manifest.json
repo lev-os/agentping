@@ -1,0 +1,23 @@
+{
+  "id": "toggle-switch",
+  "name": "ToggleSwitch",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 65,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { LandingPage } from "../../components/migrations/landing-page";
-import { StatsGrid, type StatItem } from "../../components/migrations/stats-grid";
-import { ResourceGauge } from "../../components/migrations/resource-gauge";
-import { CalendarView, type CalendarEvent } from "../../components/migrations/calendar-view";
-import { YearHeatmap, type HeatmapEntry } from "../../components/migrations/year-heatmap";
-import { CountdownWidget } from "../../components/migrations/countdown-widget";
-import { ProgressTimeline, type ProgressStep } from "../../components/migrations/progress-timeline";
-import { DailyAgenda, type AgendaItem } from "../../components/migrations/daily-agenda";
-import { WeeklySchedule, type ScheduleEvent } from "../../components/migrations/weekly-schedule";
-import { Dashboard, type SystemTelemetry, type QuickOperation } from "../../components/migrations/dashboard";
+import { LandingPage } from "../../components/catalog/landing-page";
+import { StatsGrid, type StatItem } from "../../components/catalog/stats-grid";
+import { ResourceGauge } from "../../components/catalog/resource-gauge";
+import { CalendarView, type CalendarEvent } from "../../components/catalog/calendar-view";
+import { YearHeatmap, type HeatmapEntry } from "../../components/catalog/year-heatmap";
+import { CountdownWidget } from "../../components/catalog/countdown-widget";
+import { ProgressTimeline, type ProgressStep } from "../../components/catalog/progress-timeline";
+import { DailyAgenda, type AgendaItem } from "../../components/catalog/daily-agenda";
+import { WeeklySchedule, type ScheduleEvent } from "../../components/catalog/weekly-schedule";
+import { Dashboard, type SystemTelemetry, type QuickOperation } from "../../components/catalog/dashboard";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

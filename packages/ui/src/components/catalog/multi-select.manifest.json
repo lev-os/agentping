@@ -1,0 +1,23 @@
+{
+  "id": "multi-select",
+  "name": "MultiSelect",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/MultiSelect.tsx",
+  "loc": 76,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

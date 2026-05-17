@@ -1,30 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 // HOLLOW - Gallery sections
-import { GalleryAISection } from "../../../components/migrations/gallery-ai-section";
-import { GalleryContentSection } from "../../../components/migrations/gallery-content-section";
-import { GalleryDashboardSection } from "../../../components/migrations/gallery-dashboard-section";
-import { GalleryDataSection } from "../../../components/migrations/gallery-data-section";
-import { GalleryFeedbackSection } from "../../../components/migrations/gallery-feedback-section";
-import { GalleryFinanceSection } from "../../../components/migrations/gallery-finance-section";
-import { GalleryFormsSection } from "../../../components/migrations/gallery-forms-section";
-import { GalleryInteractionSection } from "../../../components/migrations/gallery-interaction-section";
-import { GalleryLogsSection } from "../../../components/migrations/gallery-logs-section";
-import { GalleryMediaSection } from "../../../components/migrations/gallery-media-section";
-import { GalleryNavigationSection } from "../../../components/migrations/gallery-navigation-section";
-import { GallerySchedulingSection } from "../../../components/migrations/gallery-scheduling-section";
-import { GallerySofiaSection } from "../../../components/migrations/gallery-sofia-section";
-import { GallerySystemSection } from "../../../components/migrations/gallery-system-section";
-import { GalleryVisualsSection } from "../../../components/migrations/gallery-visuals-section";
+import { GalleryAISection } from "../../../components/catalog/gallery-ai-section";
+import { GalleryContentSection } from "../../../components/catalog/gallery-content-section";
+import { GalleryDashboardSection } from "../../../components/catalog/gallery-dashboard-section";
+import { GalleryDataSection } from "../../../components/catalog/gallery-data-section";
+import { GalleryFeedbackSection } from "../../../components/catalog/gallery-feedback-section";
+import { GalleryFinanceSection } from "../../../components/catalog/gallery-finance-section";
+import { GalleryFormsSection } from "../../../components/catalog/gallery-forms-section";
+import { GalleryInteractionSection } from "../../../components/catalog/gallery-interaction-section";
+import { GalleryLogsSection } from "../../../components/catalog/gallery-logs-section";
+import { GalleryMediaSection } from "../../../components/catalog/gallery-media-section";
+import { GalleryNavigationSection } from "../../../components/catalog/gallery-navigation-section";
+import { GallerySchedulingSection } from "../../../components/catalog/gallery-scheduling-section";
+import { GallerySofiaSection } from "../../../components/catalog/gallery-sofia-section";
+import { GallerySystemSection } from "../../../components/catalog/gallery-system-section";
+import { GalleryVisualsSection } from "../../../components/catalog/gallery-visuals-section";
 // SHELL - Visual effect components
-import { GlobeWireframe } from "../../../components/migrations/globe-wireframe";
-import { StarField } from "../../../components/migrations/star-field";
-import { ParticleStream } from "../../../components/migrations/particle-stream";
-import { RadarSweep } from "../../../components/migrations/radar-sweep";
-import { CircuitPattern } from "../../../components/migrations/circuit-pattern";
-import { SonarDisplay } from "../../../components/migrations/sonar-display";
-import { HexGridBackground } from "../../../components/migrations/hex-grid-background";
-import { SignalMonitor } from "../../../components/migrations/signal-monitor";
+import { GlobeWireframe } from "../../../components/catalog/globe-wireframe";
+import { StarField } from "../../../components/catalog/star-field";
+import { ParticleStream } from "../../../components/catalog/particle-stream";
+import { RadarSweep } from "../../../components/catalog/radar-sweep";
+import { CircuitPattern } from "../../../components/catalog/circuit-pattern";
+import { SonarDisplay } from "../../../components/catalog/sonar-display";
+import { HexGridBackground } from "../../../components/catalog/hex-grid-background";
+import { SignalMonitor } from "../../../components/catalog/signal-monitor";
 
 const meta: Meta = {
   title: "Review/Overlays/Placeholders",

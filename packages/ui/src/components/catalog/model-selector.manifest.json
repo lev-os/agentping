@@ -1,0 +1,24 @@
+{
+  "id": "model-selector",
+  "name": "ModelSelector",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ModelSelector.tsx",
+  "loc": 48,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

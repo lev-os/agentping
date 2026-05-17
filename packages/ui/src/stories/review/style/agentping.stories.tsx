@@ -12,7 +12,7 @@ import {
   SpinnerWebUiRaw,
   TimelineWebUiRaw,
   LogViewerWebUiRaw,
-} from "../../../components/migrations";
+} from "../../../components/catalog";
 
 const meta: Meta = {
   title: "Review/Style/AgentPing (WebUI)",

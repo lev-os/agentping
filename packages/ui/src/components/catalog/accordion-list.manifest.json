@@ -1,0 +1,24 @@
+{
+  "id": "accordion-list",
+  "name": "AccordionList",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/AccordionList.tsx",
+  "loc": 71,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

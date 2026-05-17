@@ -1,0 +1,43 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Toolbar } from "../../components/catalog/toolbar";
+
+const meta = {
+  title: "Catalog/Studio/Toolbar",
+  component: Toolbar,
+  parameters: { layout: "fullscreen" },
+  tags: ["autodocs"],
+} satisfies Meta<typeof Toolbar>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    activeTool: "select",
+    layoutMode: "design",
+    fileName: "Dashboard.apen",
+    zoom: 100,
+    onToolChange: () => {},
+    onSave: () => {},
+    onOpen: () => {},
+    onToggleSidebar: () => {},
+    onLayoutModeChange: () => {},
+    onToggleTerminal: () => {},
+    onUndo: () => {},
+    onRedo: () => {},
+    canUndo: true,
+    canRedo: false,
+    onZoomIn: () => {},
+    onZoomOut: () => {},
+    onZoomReset: () => {},
+    onCommandPalette: () => {},
+    onToggleTheme: () => {},
+  },
+};
+
+export const UnsavedChanges: Story = {
+  args: {
+    ...Default.args,
+    hasUnsavedChanges: true,
+  },
+};

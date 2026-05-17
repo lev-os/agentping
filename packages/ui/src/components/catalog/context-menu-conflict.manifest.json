@@ -1,0 +1,30 @@
+{
+  "id": "context-menu-conflict",
+  "name": "ContextMenuConflict",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation",
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 107,
+  "imports": 1,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "winner=webui",
+    "action=promote WebUiRaw as canonical",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "webui"
+}

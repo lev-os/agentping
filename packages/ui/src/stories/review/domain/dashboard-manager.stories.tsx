@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { DmDashboardList } from "../../../components/migrations/dm-dashboard-list";
-import { DmDashboardDetail } from "../../../components/migrations/dm-dashboard-detail";
-import { DmAnalyticsPanel } from "../../../components/migrations/dm-analytics-panel";
-import { DmCreateDashboardModal } from "../../../components/migrations/dm-create-dashboard-modal";
-import { DmLogViewer } from "../../../components/migrations/dm-log-viewer";
-import { DmRestartHistogram } from "../../../components/migrations/dm-restart-histogram";
-import { DmStatusBadge } from "../../../components/migrations/dm-status-badge";
-import { DmUptimeChart } from "../../../components/migrations/dm-uptime-chart";
+import { DmDashboardList } from "../../../components/catalog/dm-dashboard-list";
+import { DmDashboardDetail } from "../../../components/catalog/dm-dashboard-detail";
+import { DmAnalyticsPanel } from "../../../components/catalog/dm-analytics-panel";
+import { DmCreateDashboardModal } from "../../../components/catalog/dm-create-dashboard-modal";
+import { DmLogViewer } from "../../../components/catalog/dm-log-viewer";
+import { DmRestartHistogram } from "../../../components/catalog/dm-restart-histogram";
+import { DmStatusBadge } from "../../../components/catalog/dm-status-badge";
+import { DmUptimeChart } from "../../../components/catalog/dm-uptime-chart";
 
 const meta: Meta = {
   title: "Review/Domain/Dashboard Manager",

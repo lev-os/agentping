@@ -1,0 +1,24 @@
+{
+  "id": "modal",
+  "name": "Modal",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout",
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "complete",
+  "source": "packages/studio/src/renderer/components/ui/Modal.tsx",
+  "loc": 160,
+  "imports": 4,
+  "hooks": 3,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

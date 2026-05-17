@@ -1,0 +1,23 @@
+{
+  "id": "skeleton",
+  "name": "Skeleton",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 57,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

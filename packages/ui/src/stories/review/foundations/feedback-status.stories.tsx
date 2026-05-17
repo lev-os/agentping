@@ -3,16 +3,16 @@ import React from "react";
 import { ReviewPageLayout } from "../_shared/ReviewPageLayout";
 import { ComponentCard } from "../_shared/ComponentCard";
 import type { ComponentMeta } from "../_shared/types";
-import { AlertBanner } from "../../../components/migrations/alert-banner";
-import { ToastManager } from "../../../components/migrations/toast-manager";
-import { Skeleton } from "../../../components/migrations/skeleton";
-import { LoadingProgress } from "../../../components/migrations/loading-progress";
-import { ProgressBar } from "../../../components/migrations/progress-bar";
-import { TypingIndicator } from "../../../components/migrations/typing-indicator";
-import { ErrorBoundary } from "../../../components/migrations/error-boundary";
-import { ConfirmationModal } from "../../../components/migrations/confirmation-modal";
-import { HoverCard } from "../../../components/migrations/hover-card";
-import { StreamingIndicator } from "../../../components/migrations/streaming-indicator";
+import { AlertBanner } from "../../../components/catalog/alert-banner";
+import { ToastManager } from "../../../components/catalog/toast-manager";
+import { Skeleton } from "../../../components/catalog/skeleton";
+import { LoadingProgress } from "../../../components/catalog/loading-progress";
+import { ProgressBar } from "../../../components/catalog/progress-bar";
+import { TypingIndicator } from "../../../components/catalog/typing-indicator";
+import { ErrorBoundary } from "../../../components/catalog/error-boundary";
+import { ConfirmationModal } from "../../../components/catalog/confirmation-modal";
+import { HoverCard } from "../../../components/catalog/hover-card";
+import { StreamingIndicator } from "../../../components/catalog/streaming-indicator";
 
 const meta: Meta = {
   title: "Review/Foundations/Feedback & Status",

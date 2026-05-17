@@ -1,0 +1,23 @@
+{
+  "id": "hex-grid-background",
+  "name": "HexGridBackground",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/visuals/HexGridBackground.tsx",
+  "loc": 43,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

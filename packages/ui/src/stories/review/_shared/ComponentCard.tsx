@@ -21,7 +21,7 @@ const DOMAIN_COLORS: Record<string, string> = {
 };
 
 const CLASSIFICATION_LABELS: Record<string, string> = {
-  REAL: "Fully implemented migration",
+  REAL: "Fully implemented component",
   "RE-EXPORT": "Re-export shim from original package",
   SHELL: "Placeholder shell with typed props",
   HOLLOW: "Gallery section wrapper, no impl",

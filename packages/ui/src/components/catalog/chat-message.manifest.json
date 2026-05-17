@@ -1,0 +1,25 @@
+{
+  "id": "chat-message",
+  "name": "ChatMessage",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "streaming",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/chat/ChatMessage.tsx",
+  "loc": 172,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

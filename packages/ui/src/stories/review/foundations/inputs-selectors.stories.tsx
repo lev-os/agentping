@@ -9,26 +9,26 @@ import {
   InputStudioRaw,
   InputWebUiRaw,
   InputCandidate,
-} from "../../../components/migrations/input-conflict";
+} from "../../../components/catalog/input-conflict";
 import {
   SearchInputStudioRaw,
   SearchInputWebUiRaw,
   SearchInputCandidate,
-} from "../../../components/migrations/search-input-conflict";
-import { TextArea } from "../../../components/migrations/text-area";
-import { MultiSelect } from "../../../components/migrations/multi-select";
-import { DatePicker } from "../../../components/migrations/date-picker";
-import { DatePickerPro } from "../../../components/migrations/date-picker-pro";
-import { ColorPicker } from "../../../components/migrations/color-picker";
-import { PinInput } from "../../../components/migrations/pin-input";
-import { RangeSlider } from "../../../components/migrations/range-slider";
-import { Slider } from "../../../components/migrations/slider";
-import { Knob } from "../../../components/migrations/knob";
-import { TagInput } from "../../../components/migrations/tag-input";
-import { SecretInput } from "../../../components/migrations/secret-input";
-import { EditableText } from "../../../components/migrations/editable-text";
-import { SelectionList } from "../../../components/migrations/selection-list";
-import { FilteredDropdown } from "../../../components/migrations/filtered-dropdown";
+} from "../../../components/catalog/search-input-conflict";
+import { TextArea } from "../../../components/catalog/text-area";
+import { MultiSelect } from "../../../components/catalog/multi-select";
+import { DatePicker } from "../../../components/catalog/date-picker";
+import { DatePickerPro } from "../../../components/catalog/date-picker-pro";
+import { ColorPicker } from "../../../components/catalog/color-picker";
+import { PinInput } from "../../../components/catalog/pin-input";
+import { RangeSlider } from "../../../components/catalog/range-slider";
+import { Slider } from "../../../components/catalog/slider";
+import { Knob } from "../../../components/catalog/knob";
+import { TagInput } from "../../../components/catalog/tag-input";
+import { SecretInput } from "../../../components/catalog/secret-input";
+import { EditableText } from "../../../components/catalog/editable-text";
+import { SelectionList } from "../../../components/catalog/selection-list";
+import { FilteredDropdown } from "../../../components/catalog/filtered-dropdown";
 
 const meta: Meta = {
   title: "Review/Foundations/Inputs & Selectors",

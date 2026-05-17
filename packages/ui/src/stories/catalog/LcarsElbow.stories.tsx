@@ -1,0 +1,20 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { LcarsElbow } from "../../components/catalog/lcars-elbow";
+
+const meta = {
+  title: "Catalog/WebUI/LCARS/LcarsElbow",
+  component: LcarsElbow,
+  parameters: { layout: "centered" },
+  tags: ["autodocs"],
+} satisfies Meta<typeof LcarsElbow>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    position: "top-left",
+    size: "md",
+    color: "tan",
+  },
+};

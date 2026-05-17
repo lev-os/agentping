@@ -1,0 +1,23 @@
+{
+  "id": "depth-chart",
+  "name": "DepthChart",
+  "family": "domain/finance",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/finance/DepthChart.tsx",
+  "loc": 47,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

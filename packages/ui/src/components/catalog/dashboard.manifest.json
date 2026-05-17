@@ -1,0 +1,25 @@
+{
+  "id": "dashboard",
+  "name": "Dashboard",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "layout",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/Dashboard.tsx",
+  "loc": 204,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

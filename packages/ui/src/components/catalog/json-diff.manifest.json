@@ -1,0 +1,24 @@
+{
+  "id": "json-diff",
+  "name": "JsonDiff",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/JsonDiff.tsx",
+  "loc": 34,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

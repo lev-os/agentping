@@ -1,0 +1,23 @@
+{
+  "id": "dropdown",
+  "name": "Dropdown",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "studio",
+  "catalogStatus": "complete",
+  "source": "packages/studio/src/renderer/components/ui/Dropdown.tsx",
+  "loc": 205,
+  "imports": 3,
+  "hooks": 6,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

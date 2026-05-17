@@ -1,0 +1,23 @@
+{
+  "id": "side-panel",
+  "name": "SidePanel",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "layout"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 58,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

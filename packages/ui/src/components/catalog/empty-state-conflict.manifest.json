@@ -1,0 +1,30 @@
+{
+  "id": "empty-state-conflict",
+  "name": "EmptyStateConflict",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 90,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "winner=studio",
+    "action=promote StudioRaw as canonical",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "studio"
+}

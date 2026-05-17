@@ -1,0 +1,24 @@
+{
+  "id": "toolbar",
+  "name": "Toolbar",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/Toolbar.tsx",
+  "loc": 334,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 27,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

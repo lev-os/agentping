@@ -1,0 +1,23 @@
+{
+  "id": "heatmap-grid",
+  "name": "HeatmapGrid",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/HeatmapGrid.tsx",
+  "loc": 49,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

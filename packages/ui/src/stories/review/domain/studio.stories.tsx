@@ -12,7 +12,7 @@ import {
   SpinnerStudioRaw,
   TimelineStudioRaw,
   LogViewerStudioRaw,
-} from "../../../components/migrations";
+} from "../../../components/catalog";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

@@ -1,0 +1,23 @@
+{
+  "id": "globe-wireframe",
+  "name": "GlobeWireframe",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/visuals/GlobeWireframe.tsx",
+  "loc": 33,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

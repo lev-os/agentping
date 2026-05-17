@@ -9,21 +9,21 @@ import {
   BadgeStudioRaw,
   BadgeWebUiRaw,
   BadgeCandidate,
-} from "../../../components/migrations/badge-conflict";
+} from "../../../components/catalog/badge-conflict";
 import {
   SpinnerStudioRaw,
   SpinnerWebUiRaw,
   SpinnerCandidate,
-} from "../../../components/migrations/spinner-conflict";
-import { LiveBadge } from "../../../components/migrations/live-badge";
-import { StatusIndicator } from "../../../components/migrations/status-indicator";
-import { ConnectionSignal } from "../../../components/migrations/connection-signal";
-import { BatteryMeter } from "../../../components/migrations/battery-meter";
-import { Rating } from "../../../components/migrations/rating";
-import { ConfidenceMeter } from "../../../components/migrations/confidence-meter";
-import { CircularProgress } from "../../../components/migrations/circular-progress";
-import { ArtifactBadge } from "../../../components/migrations/artifact-badge";
-import { StatusDot } from "../../../components/migrations/status-dot";
+} from "../../../components/catalog/spinner-conflict";
+import { LiveBadge } from "../../../components/catalog/live-badge";
+import { StatusIndicator } from "../../../components/catalog/status-indicator";
+import { ConnectionSignal } from "../../../components/catalog/connection-signal";
+import { BatteryMeter } from "../../../components/catalog/battery-meter";
+import { Rating } from "../../../components/catalog/rating";
+import { ConfidenceMeter } from "../../../components/catalog/confidence-meter";
+import { CircularProgress } from "../../../components/catalog/circular-progress";
+import { ArtifactBadge } from "../../../components/catalog/artifact-badge";
+import { StatusDot } from "../../../components/catalog/status-dot";
 
 const meta: Meta = {
   title: "Review/Foundations/Badges Labels & Indicators",

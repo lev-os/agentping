@@ -1,0 +1,24 @@
+{
+  "id": "image-diff",
+  "name": "ImageDiff",
+  "family": "domain/media",
+  "domain": "domain",
+  "capabilities": [
+    "media",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ImageDiff.tsx",
+  "loc": 44,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

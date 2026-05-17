@@ -1,0 +1,24 @@
+{
+  "id": "file-asset-picker",
+  "name": "FileAssetPicker",
+  "family": "domain/media",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "media"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/FileAssetPicker.tsx",
+  "loc": 50,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

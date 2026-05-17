@@ -1,0 +1,25 @@
+{
+  "id": "key-value-store",
+  "name": "KeyValueStore",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display",
+    "crud"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/data/KeyValueStore.tsx",
+  "loc": 47,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

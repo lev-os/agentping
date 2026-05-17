@@ -1,0 +1,24 @@
+{
+  "id": "inline-todo",
+  "name": "InlineTodo",
+  "family": "domain/crud",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 93,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

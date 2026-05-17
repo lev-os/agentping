@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { CanvasRenderer } from "../../components/migrations/canvas-renderer";
-import { PolymorphPlayground } from "../../components/migrations/polymorph-playground";
-import { KanbanBoard, type KanbanColumn } from "../../components/migrations/kanban-board";
-import { MindMap, type MindMapNode } from "../../components/migrations/mind-map";
-import { OrgChart, type OrgNode } from "../../components/migrations/org-chart";
-import { NetworkGraph, type NetworkNode, type NetworkLink } from "../../components/migrations/network-graph";
-import { DependencyGraph, type DependencyNode } from "../../components/migrations/dependency-graph";
-import { SchemaGraph, type SchemaNode, type SchemaRelation } from "../../components/migrations/schema-graph";
-import { GeoMap, type MapMarker } from "../../components/migrations/geo-map";
+import { CanvasRenderer } from "../../components/catalog/canvas-renderer";
+import { PolymorphPlayground } from "../../components/catalog/polymorph-playground";
+import { KanbanBoard, type KanbanColumn } from "../../components/catalog/kanban-board";
+import { MindMap, type MindMapNode } from "../../components/catalog/mind-map";
+import { OrgChart, type OrgNode } from "../../components/catalog/org-chart";
+import { NetworkGraph, type NetworkNode, type NetworkLink } from "../../components/catalog/network-graph";
+import { DependencyGraph, type DependencyNode } from "../../components/catalog/dependency-graph";
+import { SchemaGraph, type SchemaNode, type SchemaRelation } from "../../components/catalog/schema-graph";
+import { GeoMap, type MapMarker } from "../../components/catalog/geo-map";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

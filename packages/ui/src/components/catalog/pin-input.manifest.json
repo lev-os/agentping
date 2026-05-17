@@ -1,0 +1,23 @@
+{
+  "id": "pin-input",
+  "name": "PinInput",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/PinInput.tsx",
+  "loc": 56,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 8,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

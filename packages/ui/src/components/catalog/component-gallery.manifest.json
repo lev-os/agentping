@@ -1,0 +1,25 @@
+{
+  "id": "component-gallery",
+  "name": "ComponentGallery",
+  "family": "domain/gallery",
+  "domain": "domain",
+  "capabilities": [
+    "navigation",
+    "display",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/ComponentGallery.tsx",
+  "loc": 174,
+  "imports": 3,
+  "hooks": 1,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

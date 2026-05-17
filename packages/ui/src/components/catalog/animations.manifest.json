@@ -1,0 +1,25 @@
+{
+  "id": "animations",
+  "name": "Animations",
+  "family": "foundations/layout",
+  "domain": "foundations",
+  "capabilities": [
+    "display",
+    "layout"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/ui/animations.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../ui/animations"
+}

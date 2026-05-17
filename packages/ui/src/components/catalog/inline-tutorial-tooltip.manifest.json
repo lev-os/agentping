@@ -1,0 +1,24 @@
+{
+  "id": "inline-tutorial-tooltip",
+  "name": "InlineTutorialTooltip",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "feedback",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "feedback",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/InlineTutorialTooltip.tsx",
+  "loc": 46,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 8,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

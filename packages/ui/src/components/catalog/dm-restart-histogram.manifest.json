@@ -1,0 +1,23 @@
+{
+  "id": "dm-restart-histogram",
+  "name": "DmRestartHistogram",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "chart",
+  "origin": "dashboard-manager",
+  "catalogStatus": "candidate",
+  "source": "packages/dashboard-manager-ui/src/components/charts/RestartHistogram.tsx",
+  "loc": 40,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

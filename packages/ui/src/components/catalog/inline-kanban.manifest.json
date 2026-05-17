@@ -1,0 +1,25 @@
+{
+  "id": "inline-kanban",
+  "name": "InlineKanban",
+  "family": "domain/crud",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "input",
+    "crud"
+  ],
+  "classification": "REAL",
+  "levNowElement": "custom-html",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 145,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 7,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

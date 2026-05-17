@@ -1,0 +1,24 @@
+{
+  "id": "http-inspector",
+  "name": "HttpInspector",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/logs/HttpInspector.tsx",
+  "loc": 71,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 2,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

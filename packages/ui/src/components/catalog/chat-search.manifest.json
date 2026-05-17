@@ -1,0 +1,24 @@
+{
+  "id": "chat-search",
+  "name": "ChatSearch",
+  "family": "domain/chat",
+  "domain": "domain",
+  "capabilities": [
+    "input",
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "complete",
+  "source": "packages/studio/src/renderer/components/chat/ChatSearch.tsx",
+  "loc": 170,
+  "imports": 3,
+  "hooks": 5,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

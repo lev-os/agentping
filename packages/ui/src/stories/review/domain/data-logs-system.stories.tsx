@@ -1,26 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { DataTable } from "../../../components/migrations/data-table";
-import { LogStream } from "../../../components/migrations/log-stream";
-import { LogHistogram } from "../../../components/migrations/log-histogram";
-import { AuditLogViewer } from "../../../components/migrations/audit-log-viewer";
-import { SystemHealthGauge } from "../../../components/migrations/system-health-gauge";
-import { MemoryUsageChart } from "../../../components/migrations/memory-usage-chart";
-import { LatencyHistogram } from "../../../components/migrations/latency-histogram";
-import { NetworkTopology } from "../../../components/migrations/network-topology";
-import { ErrorCluster } from "../../../components/migrations/error-cluster";
-import { ActiveSessions } from "../../../components/migrations/active-sessions";
-import { HexInspector } from "../../../components/migrations/hex-inspector";
-import { TerminalView } from "../../../components/migrations/terminal-view";
+import { DataTable } from "../../../components/catalog/data-table";
+import { LogStream } from "../../../components/catalog/log-stream";
+import { LogHistogram } from "../../../components/catalog/log-histogram";
+import { AuditLogViewer } from "../../../components/catalog/audit-log-viewer";
+import { SystemHealthGauge } from "../../../components/catalog/system-health-gauge";
+import { MemoryUsageChart } from "../../../components/catalog/memory-usage-chart";
+import { LatencyHistogram } from "../../../components/catalog/latency-histogram";
+import { NetworkTopology } from "../../../components/catalog/network-topology";
+import { ErrorCluster } from "../../../components/catalog/error-cluster";
+import { ActiveSessions } from "../../../components/catalog/active-sessions";
+import { HexInspector } from "../../../components/catalog/hex-inspector";
+import { TerminalView } from "../../../components/catalog/terminal-view";
 import {
   LogViewerStudioRaw,
   LogViewerWebUiRaw,
   LogViewerCandidate,
-} from "../../../components/migrations";
-import { TerminalConsole } from "../../../components/migrations/terminal-console";
-import { ProcessTable } from "../../../components/migrations/process-table";
-import { DockerStats } from "../../../components/migrations/docker-stats";
-import { SqlResultTable } from "../../../components/migrations/sql-result-table";
+} from "../../../components/catalog";
+import { TerminalConsole } from "../../../components/catalog/terminal-console";
+import { ProcessTable } from "../../../components/catalog/process-table";
+import { DockerStats } from "../../../components/catalog/docker-stats";
+import { SqlResultTable } from "../../../components/catalog/sql-result-table";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

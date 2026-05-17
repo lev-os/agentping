@@ -1,0 +1,23 @@
+{
+  "id": "sankey-diagram",
+  "name": "SankeyDiagram",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "catalogStatus": "implemented",
+  "source": "packages/adapters/web-ui/src/components/SankeyDiagram.tsx",
+  "loc": 157,
+  "imports": 2,
+  "hooks": 4,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

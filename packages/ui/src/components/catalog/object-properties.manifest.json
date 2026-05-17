@@ -1,0 +1,24 @@
+{
+  "id": "object-properties",
+  "name": "ObjectProperties",
+  "family": "foundations/data-display",
+  "domain": "foundations",
+  "capabilities": [
+    "display",
+    "input"
+  ],
+  "classification": "REAL",
+  "levNowElement": "data-table",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/data/ObjectProperties.tsx",
+  "loc": 53,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 6,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

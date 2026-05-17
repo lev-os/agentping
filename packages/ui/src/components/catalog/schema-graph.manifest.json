@@ -1,0 +1,23 @@
+{
+  "id": "schema-graph",
+  "name": "SchemaGraph",
+  "family": "domain/canvas",
+  "domain": "domain",
+  "capabilities": [
+    "data-viz"
+  ],
+  "classification": "REAL",
+  "levNowElement": "diagram",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/data/SchemaGraph.tsx",
+  "loc": 64,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 5,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

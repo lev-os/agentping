@@ -1,0 +1,25 @@
+{
+  "id": "diagnostic-panel",
+  "name": "DiagnosticPanel",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "feedback",
+    "system"
+  ],
+  "classification": "REAL",
+  "levNowElement": "section",
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/DiagnosticPanel.tsx",
+  "loc": 157,
+  "imports": 3,
+  "hooks": 0,
+  "propCount": 4,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

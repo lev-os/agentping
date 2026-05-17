@@ -1,0 +1,30 @@
+{
+  "id": "log-viewer-conflict",
+  "name": "LogViewerConflict",
+  "family": "domain/logs",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "code-block",
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "",
+  "loc": 123,
+  "imports": 1,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [
+    "winner=defer",
+    "action=keep both raws, skip placeholder candidate",
+    "interview-tick-7"
+  ],
+  "reviewStatus": "reviewed",
+  "humanDecision": "defer"
+}

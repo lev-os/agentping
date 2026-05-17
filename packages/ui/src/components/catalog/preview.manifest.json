@@ -1,0 +1,25 @@
+{
+  "id": "preview",
+  "name": "Preview",
+  "family": "domain/content",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "navigation",
+    "media"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "studio",
+  "catalogStatus": "needs-review",
+  "source": "packages/studio/src/renderer/components/Preview.tsx",
+  "loc": 236,
+  "imports": 3,
+  "hooks": 2,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "confidence-meter",
+  "name": "ConfidenceMeter",
+  "family": "foundations/feedback-status",
+  "domain": "foundations",
+  "capabilities": [
+    "data-viz",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": "inline",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/ConfidenceMeter.tsx",
+  "loc": 33,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

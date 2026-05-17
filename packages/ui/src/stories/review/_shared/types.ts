@@ -33,9 +33,9 @@ export type OriginCodebase =
 export interface ComponentOrigin {
   codebase: OriginCodebase;
   sourcePath: string;          // original @source path
-  migrationStatus: string;     // @migration-status value
-  sourceFile: string;          // current file path (components/migrations/...)
-  storyFile: string;           // current story path (stories/migrations/...)
+  catalogStatus: string;     // @catalog-status value
+  sourceFile: string;          // current file path (components/catalog/...)
+  storyFile: string;           // current story path (stories/catalog/...)
 }
 
 /** What can this component do? Multiple capabilities per component. */

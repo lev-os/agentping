@@ -1,18 +1,18 @@
 // @ts-nocheck
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { CandleStickChart } from "../../../components/migrations/candlestick-chart";
-import { CrudDetailPage } from "../../../components/migrations/crud-detail-page";
-import { CrudListPage } from "../../../components/migrations/crud-list-page";
-import { FadeInOut, AnimatedList } from "../../../components/migrations/animations";
-import { DmCreateDashboardModal } from "../../../components/migrations/dm-create-dashboard-modal";
-import { DmLogViewer } from "../../../components/migrations/dm-log-viewer";
-import { CanvasRenderer } from "../../../components/migrations/canvas-renderer";
-import { TodoList } from "../../../components/migrations/todo-list";
-import { MindMap } from "../../../components/migrations/mind-map";
-import { DependencyGraph } from "../../../components/migrations/dependency-graph";
-import { StatusPieChart } from "../../../components/migrations/status-pie-chart";
-import { AdvancedDataGrid } from "../../../components/migrations/advanced-data-grid";
+import { CandleStickChart } from "../../../components/catalog/candlestick-chart";
+import { CrudDetailPage } from "../../../components/catalog/crud-detail-page";
+import { CrudListPage } from "../../../components/catalog/crud-list-page";
+import { FadeInOut, AnimatedList } from "../../../components/catalog/animations";
+import { DmCreateDashboardModal } from "../../../components/catalog/dm-create-dashboard-modal";
+import { DmLogViewer } from "../../../components/catalog/dm-log-viewer";
+import { CanvasRenderer } from "../../../components/catalog/canvas-renderer";
+import { TodoList } from "../../../components/catalog/todo-list";
+import { MindMap } from "../../../components/catalog/mind-map";
+import { DependencyGraph } from "../../../components/catalog/dependency-graph";
+import { StatusPieChart } from "../../../components/catalog/status-pie-chart";
+import { AdvancedDataGrid } from "../../../components/catalog/advanced-data-grid";
 
 const meta: Meta = {
   title: "Review/Overlays/Actionable Failures",

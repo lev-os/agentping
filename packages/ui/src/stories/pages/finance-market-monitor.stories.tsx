@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { CandleStickChart } from "../../components/migrations/candlestick-chart";
-import { DepthChart } from "../../components/migrations/depth-chart";
-import { MetricChart } from "../../components/migrations/metric-chart";
-import { RadarChart } from "../../components/migrations/radar-chart";
-import { SankeyDiagram } from "../../components/migrations/sankey-diagram";
-import { WorldClock } from "../../components/migrations/world-clock";
-import { WeatherCard } from "../../components/migrations/weather-card";
-import { TickerTape } from "../../components/migrations/ticker-tape";
-import { OrderBook } from "../../components/migrations/order-book";
-import { TradeHistory } from "../../components/migrations/trade-history";
-import { PortfolioPie } from "../../components/migrations/portfolio-pie";
-import { StatsGrid } from "../../components/migrations/stats-grid";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
-import { AlertBanner } from "../../components/migrations/alert-banner";
+import { CandleStickChart } from "../../components/catalog/candlestick-chart";
+import { DepthChart } from "../../components/catalog/depth-chart";
+import { MetricChart } from "../../components/catalog/metric-chart";
+import { RadarChart } from "../../components/catalog/radar-chart";
+import { SankeyDiagram } from "../../components/catalog/sankey-diagram";
+import { WorldClock } from "../../components/catalog/world-clock";
+import { WeatherCard } from "../../components/catalog/weather-card";
+import { TickerTape } from "../../components/catalog/ticker-tape";
+import { OrderBook } from "../../components/catalog/order-book";
+import { TradeHistory } from "../../components/catalog/trade-history";
+import { PortfolioPie } from "../../components/catalog/portfolio-pie";
+import { StatsGrid } from "../../components/catalog/stats-grid";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
+import { AlertBanner } from "../../components/catalog/alert-banner";
 
 // ---------------------------------------------------------------------------
 // Mock data

@@ -1,0 +1,24 @@
+{
+  "id": "knob",
+  "name": "Knob",
+  "family": "foundations/forms",
+  "domain": "foundations",
+  "capabilities": [
+    "input",
+    "display"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/Knob.tsx",
+  "loc": 49,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 9,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

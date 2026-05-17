@@ -1,0 +1,24 @@
+{
+  "id": "countdown-widget",
+  "name": "CountdownWidget",
+  "family": "domain/scheduling",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "streaming"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/CountdownWidget.tsx",
+  "loc": 49,
+  "imports": 2,
+  "hooks": 2,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

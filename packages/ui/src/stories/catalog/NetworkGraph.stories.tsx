@@ -1,0 +1,14 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { NetworkGraph } from "../../components/catalog/network-graph";
+
+const meta = {
+  title: "Catalog/WebUI/Root/NetworkGraph",
+  component: NetworkGraph,
+  parameters: { layout: "centered" },
+  tags: ["autodocs"],
+} satisfies Meta<typeof NetworkGraph>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = { args: {} };

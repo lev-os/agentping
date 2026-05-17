@@ -1,0 +1,25 @@
+{
+  "id": "responsive-dashboard",
+  "name": "ResponsiveDashboard",
+  "family": "domain/dashboard-mgr",
+  "domain": "domain",
+  "capabilities": [
+    "layout",
+    "composite"
+  ],
+  "classification": "ALIAS",
+  "levNowElement": null,
+  "origin": "kingly",
+  "catalogStatus": "unknown",
+  "source": "packages/ui/src/components/dashboard/ResponsiveDashboard.tsx",
+  "loc": 7,
+  "imports": 0,
+  "hooks": 0,
+  "propCount": 0,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": [],
+  "canonical": "../dashboard/ResponsiveDashboard"
+}

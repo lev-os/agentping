@@ -34,7 +34,7 @@ import {
   LogViewerStudioRaw,
   LogViewerWebUiRaw,
   LogViewerCandidate,
-} from "../../../components/migrations";
+} from "../../../components/catalog";
 
 const meta: Meta = {
   title: "Review/Style/Combined (3-Lane Compare)",

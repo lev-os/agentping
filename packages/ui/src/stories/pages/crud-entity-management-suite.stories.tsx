@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
-import { StepChecklist } from "../../components/migrations/step-checklist";
-import { TaskWorkflow, type WorkflowStage } from "../../components/migrations/task-workflow";
-import { WizardStep } from "../../components/migrations/wizard-step";
-import { PropertyGrid, type PropertyGridItem } from "../../components/migrations/property-grid";
-import { SelectionList, type SelectionOption } from "../../components/migrations/selection-list";
-import { ApprovalQueue, type PendingApproval } from "../../components/migrations/approval-queue";
-import { TaskChecklist, type TaskStep } from "../../components/migrations/task-checklist";
+import { StepChecklist } from "../../components/catalog/step-checklist";
+import { TaskWorkflow, type WorkflowStage } from "../../components/catalog/task-workflow";
+import { WizardStep } from "../../components/catalog/wizard-step";
+import { PropertyGrid, type PropertyGridItem } from "../../components/catalog/property-grid";
+import { SelectionList, type SelectionOption } from "../../components/catalog/selection-list";
+import { ApprovalQueue, type PendingApproval } from "../../components/catalog/approval-queue";
+import { TaskChecklist, type TaskStep } from "../../components/catalog/task-checklist";
 
 /* ------------------------------------------------------------------ */
 /* Mock Data                                                           */

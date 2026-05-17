@@ -1,0 +1,23 @@
+{
+  "id": "radial-nav",
+  "name": "RadialNav",
+  "family": "foundations/navigation",
+  "domain": "foundations",
+  "capabilities": [
+    "navigation"
+  ],
+  "classification": "REAL",
+  "levNowElement": null,
+  "origin": "webui",
+  "catalogStatus": "candidate",
+  "source": "packages/adapters/web-ui/src/components/RadialNav.tsx",
+  "loc": 55,
+  "imports": 2,
+  "hooks": 0,
+  "propCount": 3,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}

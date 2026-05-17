@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { AgentAvatar } from "../../components/migrations/agent-avatar";
-import { BrainActivity } from "../../components/migrations/brain-activity";
-import { ToolInvocation } from "../../components/migrations/tool-invocation";
-import { TokenStream } from "../../components/migrations/token-stream";
-import { ContextUsage } from "../../components/migrations/context-usage";
-import { ModelSelector } from "../../components/migrations/model-selector";
-import { PromptEditor } from "../../components/migrations/prompt-editor";
-import { StepTracker } from "../../components/migrations/step-tracker";
-import { StatusIndicator } from "../../components/migrations/status-indicator";
-import { MetricChart } from "../../components/migrations/metric-chart";
-import { StatsGrid } from "../../components/migrations/stats-grid";
+import { AgentAvatar } from "../../components/catalog/agent-avatar";
+import { BrainActivity } from "../../components/catalog/brain-activity";
+import { ToolInvocation } from "../../components/catalog/tool-invocation";
+import { TokenStream } from "../../components/catalog/token-stream";
+import { ContextUsage } from "../../components/catalog/context-usage";
+import { ModelSelector } from "../../components/catalog/model-selector";
+import { PromptEditor } from "../../components/catalog/prompt-editor";
+import { StepTracker } from "../../components/catalog/step-tracker";
+import { StatusIndicator } from "../../components/catalog/status-indicator";
+import { MetricChart } from "../../components/catalog/metric-chart";
+import { StatsGrid } from "../../components/catalog/stats-grid";
 
 // ---------------------------------------------------------------------------
 // Mock data

@@ -1,0 +1,25 @@
+{
+  "id": "task-workflow",
+  "name": "TaskWorkflow",
+  "family": "domain/system",
+  "domain": "domain",
+  "capabilities": [
+    "display",
+    "input",
+    "composite"
+  ],
+  "classification": "REAL",
+  "levNowElement": "card",
+  "origin": "webui",
+  "catalogStatus": "implemented",
+  "source": "packages/adapters/web-ui/src/components/TaskWorkflow.tsx",
+  "loc": 200,
+  "imports": 2,
+  "hooks": 1,
+  "propCount": 10,
+  "lanes": [
+    "agentping"
+  ],
+  "beadId": "",
+  "markers": []
+}
