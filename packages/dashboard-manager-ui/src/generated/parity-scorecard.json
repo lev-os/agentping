@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T07:42:05.544322+00:00",
+  "generated_at": "2026-05-17T09:21:29.104475+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 20594,
+    "operation_count": 21289,
     "by_type": {
-      "upsert_entity": 4923,
-      "add_claim": 10807,
-      "add_link": 4864
+      "upsert_entity": 5102,
+      "add_claim": 11147,
+      "add_link": 5040
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 59,
-    "total_features": 1108,
+    "parity_files": 62,
+    "total_features": 1136,
     "absorbed": 65,
-    "pending": 777,
+    "pending": 802,
     "deferred": 17,
     "rejected": 33,
-    "monitor": 86,
+    "monitor": 89,
     "unclassified": 0,
-    "absorbed_pct": 5.9,
+    "absorbed_pct": 5.7,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -5061,6 +5061,283 @@
       "rejected_items": []
     },
     {
+      "target": "entroly",
+      "label": "Entroly",
+      "category": "context-optimization-runtime",
+      "priority": "P1",
+      "measured_at": "2026-05-17",
+      "updated_at": "2026-05-17",
+      "owner": "core/index + core/exec + core/poly + core/memory + plugins/validator + plugins/workshop",
+      "path": ".lev/pm/parity/entroly.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 11,
+      "classified": 11,
+      "unclassified": 0,
+      "counts": {
+        "extract": 8,
+        "build": 2,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "entroly-01",
+          "name": "FastMCP Python shell over a shared Rust optimization engine",
+          "status": "partial",
+          "lev_equivalent": "core/poly MCP surfaces + plugin-owned context tooling",
+          "action": "extract",
+          "notes": "Entroly treats Python as the protocol shell and Rust as the compute engine. That split is directly relevant to Lev's substrate/surface separation.\n",
+          "absorbed_into": "core/poly + core/index",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/server.py:9",
+            "workshop/intake/entroly-retry/entroly/server.py:14",
+            "workshop/intake/entroly-retry/entroly/server.py:72",
+            "workshop/intake/entroly-retry/entroly/server.py:1733",
+            "workshop/intake/entroly-retry/entroly/server.py:1744",
+            "workshop/intake/entroly-retry/entroly/server.py:1852"
+          ]
+        },
+        {
+          "id": "entroly-02",
+          "name": "Modular Rust engine spanning dedup, depgraph, entropy, guardrails, cache, NKBE, resonance, and causal layers",
+          "status": "partial",
+          "lev_equivalent": "core/index + core/memory + core/graph analysis plugins",
+          "action": "extract",
+          "notes": "The important parity signal is the module boundary and shared engine state, not the repo's product positioning around each subsystem.\n",
+          "absorbed_into": "core/index + core/memory",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly-core/src/lib.rs:13",
+            "workshop/intake/entroly-retry/entroly-core/src/lib.rs:24",
+            "workshop/intake/entroly-retry/entroly-core/src/lib.rs:66",
+            "workshop/intake/entroly-retry/entroly-core/src/lib.rs:137"
+          ]
+        },
+        {
+          "id": "entroly-03",
+          "name": "Differentiable soft-bisection knapsack optimizer with hard-DP fallback",
+          "status": "missing",
+          "lev_equivalent": "explicit context-budget optimizer in core/index or core/exec",
+          "action": "build",
+          "notes": "This is the clearest algorithmic extraction target: a budgeted selector with an explicit Lagrange dual and a deterministic hard fallback.\n",
+          "absorbed_into": "core/index + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:12",
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:19",
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:63",
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:120",
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:123",
+            "workshop/intake/entroly-retry/entroly-core/src/knapsack.rs:332"
+          ]
+        },
+        {
+          "id": "entroly-04",
+          "name": "Invisible HTTP prompt-compiler proxy with privacy and resilience guards",
+          "status": "missing",
+          "lev_equivalent": "optional provider-edge proxy layer above core/poly",
+          "action": "build",
+          "notes": "The proxy is worth exploring as an optional edge surface only if Lev wants a transport-level optimization mode. It should not become the default context architecture.\n",
+          "absorbed_into": "core/poly + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/proxy.py:5",
+            "workshop/intake/entroly-retry/entroly/proxy.py:9",
+            "workshop/intake/entroly-retry/entroly/proxy.py:10",
+            "workshop/intake/entroly-retry/entroly/proxy.py:13",
+            "workshop/intake/entroly-retry/entroly/proxy.py:78",
+            "workshop/intake/entroly-retry/entroly/proxy.py:108",
+            "workshop/intake/entroly-retry/entroly/proxy.py:152",
+            "workshop/intake/entroly-retry/entroly/proxy.py:177",
+            "workshop/intake/entroly-retry/entroly/proxy.py:720"
+          ]
+        },
+        {
+          "id": "entroly-05",
+          "name": "Multi-agent context bridge with NKBE budgets and subagent inheritance",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration + core/exec + core/memory context budgeting",
+          "action": "extract",
+          "notes": "Even with OpenClaw-specific assumptions, the budget-allocation and inheritance mechanics are highly relevant to Lev's multi-agent runtime.\n",
+          "absorbed_into": "core/orchestration + core/exec + core/memory",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:13",
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:82",
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:466",
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:755",
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:1172",
+            "workshop/intake/entroly-retry/entroly/context_bridge.py:1804"
+          ]
+        },
+        {
+          "id": "entroly-06",
+          "name": "Pure WASM/Node packaging for serve, optimize, health, demo, and autotune",
+          "status": "partial",
+          "lev_equivalent": "alternative Node-distribution surface for core/index or plugin tooling",
+          "action": "extract",
+          "notes": "Lev does not need to copy the package, but the JS/WASM surface is a good example of how to package heavier compute without forcing Python.\n",
+          "absorbed_into": "core/poly + core/index",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:1",
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:17",
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:30",
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:31",
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:32",
+            "workshop/intake/entroly-retry/entroly-wasm/package.json:33"
+          ]
+        },
+        {
+          "id": "entroly-07",
+          "name": "Embedded SAST engine and codebase-health scoring",
+          "status": "partial",
+          "lev_equivalent": "plugins/validator + index-backed static analysis surfaces",
+          "action": "extract",
+          "notes": "Entroly bundles vulnerability and health analysis into the same surface as context optimization. Lev should likely keep these as validator/index projections, but the bundling pattern is useful.\n",
+          "absorbed_into": "plugins/validator + core/index",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly-core/src/sast.rs:4",
+            "workshop/intake/entroly-retry/entroly-core/src/sast.rs:11",
+            "workshop/intake/entroly-retry/entroly-core/src/sast.rs:14",
+            "workshop/intake/entroly-retry/entroly-core/src/sast.rs:97",
+            "workshop/intake/entroly-retry/entroly-core/src/sast.rs:113",
+            "workshop/intake/entroly-retry/entroly/server.py:2839",
+            "workshop/intake/entroly-retry/entroly/server.py:2871"
+          ]
+        },
+        {
+          "id": "entroly-08",
+          "name": "Information-theoretic universal compressor for non-code content",
+          "status": "missing",
+          "lev_equivalent": "workshop/intake and future evidence/document compression surfaces",
+          "action": "extract",
+          "notes": "Lev's intake path already handles mixed content, but not with a reusable compression module like this.\n",
+          "absorbed_into": "plugins/workshop + core/memory",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/universal_compress.py:5",
+            "workshop/intake/entroly-retry/entroly/universal_compress.py:14",
+            "workshop/intake/entroly-retry/entroly/universal_compress.py:85",
+            "workshop/intake/entroly-retry/entroly/universal_compress.py:135",
+            "workshop/intake/entroly-retry/entroly/universal_compress.py:382"
+          ]
+        },
+        {
+          "id": "entroly-09",
+          "name": "Repo-map projection that classifies file roles across product layers",
+          "status": "missing",
+          "lev_equivalent": "graph/projection or writer-owned topology reports",
+          "action": "extract",
+          "notes": "The implementation is repo-specific, but the projection pattern is strong: codify role maps from real source layout instead of writing topology docs by hand.\n",
+          "absorbed_into": "core/graph + plugins/writer",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/repo_map.py:2",
+            "workshop/intake/entroly-retry/entroly/server.py:60",
+            "workshop/intake/entroly-retry/entroly/server.py:3552",
+            "workshop/intake/entroly-retry/entroly/server.py:3559"
+          ]
+        },
+        {
+          "id": "entroly-10",
+          "name": "Autotuned weights, feedback journal, and background optimization loop",
+          "status": "partial",
+          "lev_equivalent": "eval/tuning lane for context policy and retrieval weighting",
+          "action": "extract",
+          "notes": "Entroly treats tuning as a first-class operator workflow rather than an offline script. Lev's evaluation/tuning surfaces could use that stance.\n",
+          "absorbed_into": "core/index + plugins/workshop",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/server.py:1753",
+            "workshop/intake/entroly-retry/entroly/server.py:1759",
+            "workshop/intake/entroly-retry/entroly/server.py:1782",
+            "workshop/intake/entroly-retry/entroly/server.py:2319",
+            "workshop/intake/entroly-retry/entroly/server.py:3823",
+            "workshop/intake/entroly-retry/entroly/cli.py:2125",
+            "workshop/intake/entroly-retry/entroly/cli.py:3888"
+          ]
+        },
+        {
+          "id": "entroly-11",
+          "name": "Vault-backed belief, verification, change, and skill sidecar",
+          "status": "partial",
+          "lev_equivalent": "graph claim/evidence/proposal projections plus plugin-owned learning surfaces",
+          "action": "reference",
+          "notes": "This is a substantial implemented subsystem, but it competes with Lev's graph authority. Treat it as a reference projection, not an adoption target.\n",
+          "absorbed_into": "core/graph + plugins/workshop",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/entroly-retry/entroly/server.py:3016",
+            "workshop/intake/entroly-retry/entroly/server.py:3057",
+            "workshop/intake/entroly-retry/entroly/server.py:3116",
+            "workshop/intake/entroly-retry/entroly/server.py:3190",
+            "workshop/intake/entroly-retry/entroly/server.py:3192",
+            "workshop/intake/entroly-retry/entroly/server.py:3193",
+            "workshop/intake/entroly-retry/entroly/server.py:3195"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_revision",
+          "value": "f432f5ce1809c869588ec6acc31da6869ae3faf0",
+          "unit": "git_sha",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "total_files",
+          "value": 416,
+          "unit": "files",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "python_files",
+          "value": 216,
+          "unit": "files",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "rust_files",
+          "value": 57,
+          "unit": "files",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "js_ts_files",
+          "value": 29,
+          "unit": "files",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "test_like_files",
+          "value": 85,
+          "unit": "files",
+          "source": "workshop/intake/entroly-retry"
+        },
+        {
+          "name": "mcp_tools",
+          "value": 41,
+          "unit": "tool_defs",
+          "source": "workshop/intake/entroly-retry/entroly/server.py"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/entroly-retry",
+        "workshop/analysis/entroly/analysis.md",
+        ".lev/pm/handoffs/20260412-workshop-intake-ecosystem-batch-session-1.md",
+        ".lev/pm/handoffs/20260517-workshop-intake-holaos-entroly-parity-session-1.md"
+      ],
+      "absorbed": 0,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "flue",
       "label": "Flue",
       "category": "agent-sdk-reference",
@@ -8781,6 +9058,288 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "holaos",
+      "label": "holaOS",
+      "category": "desktop-agent-workspace",
+      "priority": "P1",
+      "measured_at": "2026-05-17",
+      "updated_at": "2026-05-17",
+      "owner": "community/agentping + core/ui + core/harness + core/memory + core/exec + plugins/scheduling",
+      "path": ".lev/pm/parity/holaos.yaml",
+      "verdict": "adopt",
+      "total_features": 11,
+      "classified": 11,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1,
+        "extract": 5,
+        "merge": 2,
+        "build": 2,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "holaos-01",
+          "name": "Workspace shell with readiness gating and onboarding takeover",
+          "status": "partial",
+          "lev_equivalent": "community/agentping dashboard shell + core/ui LevUI projections",
+          "action": "adopt",
+          "notes": "holaOS treats workspace readiness, blocking reasons, and onboarding takeover as first-class shell state. Lev has pieces of this across AgentPing and LevUI work, but not one canonical workspace cockpit.\n",
+          "absorbed_into": "community/agentping + core/ui",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:112",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:445",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:446",
+            "workshop/intake/holaOS/desktop/src/components/layout/AppShell.tsx:4490",
+            "workshop/intake/holaOS/desktop/src/components/layout/AppShell.tsx:5432"
+          ]
+        },
+        {
+          "id": "holaos-02",
+          "name": "Marketplace catalog and template-driven workspace creation",
+          "status": "partial",
+          "lev_equivalent": "community/agentping app catalog + plugins/workshop template/app bootstrap",
+          "action": "extract",
+          "notes": "The interesting part is not “marketplace” branding, it is the runtime- bound template selection and workspace creation flow with explicit harness and provider prerequisites.\n",
+          "absorbed_into": "community/agentping + plugins/workshop",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:68",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:118",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:141",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:769",
+            "workshop/intake/holaOS/desktop/src/lib/workspaceDesktop.tsx:791",
+            "workshop/intake/holaOS/desktop/src/components/panes/MarketplacePane.tsx:76",
+            "workshop/intake/holaOS/desktop/src/components/panes/MarketplacePane.tsx:250"
+          ]
+        },
+        {
+          "id": "holaos-03",
+          "name": "Harness-aware runtime session tool stratification",
+          "status": "partial",
+          "lev_equivalent": "core/harness + core/exec session-mode tool policy",
+          "action": "merge",
+          "notes": "holaOS explicitly separates main-session and onboarding-session runtime tool sets and anchors the runner to a harness substrate (`pi`). Lev has the harness direction, but not this product-grade session policy split.\n",
+          "absorbed_into": "core/harness + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/package.json:22",
+            "workshop/intake/holaOS/runtime/api-server/package.json:23",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:132",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:146",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:1037",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:1038"
+          ]
+        },
+        {
+          "id": "holaos-04",
+          "name": "Local runtime state store for sessions, memory, proposals, cronjobs, and notifications",
+          "status": "partial",
+          "lev_equivalent": "core/exec + core/memory + plugins/scheduling + AgentPing runtime state projections",
+          "action": "extract",
+          "notes": "This is one of the clearest “local runtime as product substrate” pieces in holaOS. Lev should not mirror the schema wholesale, but the breadth of local persisted surfaces is a useful parity checklist.\n",
+          "absorbed_into": "core/exec + core/memory + plugins/scheduling",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:50",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:52",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:54",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:61",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:62",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:7777",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:8231",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:8384",
+            "workshop/intake/holaOS/runtime/state-store/src/store.ts:8410"
+          ]
+        },
+        {
+          "id": "holaos-05",
+          "name": "Scoped filesystem memory service",
+          "status": "partial",
+          "lev_equivalent": "core/memory backends plus Lev-owned user/workspace memory projections",
+          "action": "merge",
+          "notes": "The notable pattern is strict scope gating over `MEMORY.md`, `workspace/*`, `preference/*`, and `identity/*` with a filesystem API. Lev’s memory surfaces are broader, but this boundary is product-usable.\n",
+          "absorbed_into": "core/memory",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/memory.ts:7",
+            "workshop/intake/holaOS/runtime/api-server/src/memory.ts:119",
+            "workshop/intake/holaOS/runtime/api-server/src/memory.ts:122",
+            "workshop/intake/holaOS/runtime/api-server/src/memory.ts:304"
+          ]
+        },
+        {
+          "id": "holaos-06",
+          "name": "Recalled memory and pending user-memory proposal injection into the runner",
+          "status": "partial",
+          "lev_equivalent": "core/memory recall + agent prompt assembly + preference capture",
+          "action": "extract",
+          "notes": "holaOS explicitly injects recalled durable memory and pending user-memory proposals into the runtime prompt path. Lev has related ideas, but not yet this explicit product-facing split.\n",
+          "absorbed_into": "core/memory + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:83",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:86",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:590",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:743",
+            "workshop/intake/holaOS/docs/runtime-memory-agent-proactive-architecture.md:169",
+            "workshop/intake/holaOS/docs/runtime-memory-agent-proactive-architecture.md:210"
+          ]
+        },
+        {
+          "id": "holaos-07",
+          "name": "Per-workspace MCP host and sidecar bridge",
+          "status": "missing",
+          "lev_equivalent": "core/poly MCP surfaces + workspace-scoped tool registries",
+          "action": "build",
+          "notes": "Lev has MCP surfaces, but not a canonical per-workspace MCP host/sidecar pattern that packages app-local tools into a workspace-scoped runtime.\n",
+          "absorbed_into": "core/poly + core/harness",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/package.json:10",
+            "workshop/intake/holaOS/runtime/api-server/package.json:11",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-mcp-host.ts:163",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-mcp-host.ts:164",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-mcp-host.ts:193",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-mcp-host.ts:218",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:1797",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:2071"
+          ]
+        },
+        {
+          "id": "holaos-08",
+          "name": "Checksummed workspace runtime-plan compiler",
+          "status": "missing",
+          "lev_equivalent": "FlowMind/config compile path for workspace-local app runtimes",
+          "action": "build",
+          "notes": "`workspace.yaml` is compiled into resolved MCP servers, tool refs, applications, and a config checksum. Lev has stronger substrate contracts, but not this workspace-app-specific compile product.\n",
+          "absorbed_into": "core/harness + core/exec + plugins/workshop",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:58",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:74",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:81",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:111",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:114",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:115",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:984"
+          ]
+        },
+        {
+          "id": "holaos-09",
+          "name": "Resolved application lifecycle bootstrap inside the runner",
+          "status": "partial",
+          "lev_equivalent": "harness bootstrap + app lifecycle workers",
+          "action": "extract",
+          "notes": "holaOS bootstraps resolved applications as part of the runtime turn path. Lev should keep app/bootstrap ownership explicit, but this is a useful operator-facing pattern for workspace-bound runtimes.\n",
+          "absorbed_into": "core/harness + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:12",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:13",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:26",
+            "workshop/intake/holaOS/runtime/api-server/src/workspace-runtime-plan.ts:81"
+          ]
+        },
+        {
+          "id": "holaos-10",
+          "name": "Local task-proposal store with optional remote proactive bridge",
+          "status": "partial",
+          "lev_equivalent": "plugins/scheduling + workstream/event capture + future proposal surfaces",
+          "action": "reference",
+          "notes": "The useful extraction is the local task-proposal materialization and context capture shape. The remote-bridge topology itself should remain reference-only for Lev.\n",
+          "absorbed_into": "plugins/scheduling + core/event-bus",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/bridge-worker.ts:74",
+            "workshop/intake/holaOS/runtime/api-server/src/bridge-worker.ts:78",
+            "workshop/intake/holaOS/runtime/api-server/src/bridge-worker.ts:276",
+            "workshop/intake/holaOS/runtime/api-server/src/bridge-worker.ts:294",
+            "workshop/intake/holaOS/runtime/api-server/src/proactive-context.ts:292",
+            "workshop/intake/holaOS/runtime/api-server/src/proactive-context.ts:306"
+          ]
+        },
+        {
+          "id": "holaos-11",
+          "name": "Workspace skill quoting and instruction assembly",
+          "status": "partial",
+          "lev_equivalent": "skill loading + session context assembly in exec/harness surfaces",
+          "action": "extract",
+          "notes": "Lev already has skill infrastructure, but holaOS shows a concrete runner- time composition step that quotes workspace skills into a prepared instruction block.\n",
+          "absorbed_into": "core/exec + core/harness",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:66",
+            "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts:1995"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_revision",
+          "value": "4e997f7e0645d700240732e871454fe6c3fc2fb4",
+          "unit": "git_sha",
+          "source": "workshop/intake/holaOS"
+        },
+        {
+          "name": "total_files",
+          "value": 991,
+          "unit": "files",
+          "source": "workshop/intake/holaOS"
+        },
+        {
+          "name": "desktop_src_files",
+          "value": 255,
+          "unit": "files",
+          "source": "workshop/intake/holaOS/desktop/src"
+        },
+        {
+          "name": "runtime_api_files",
+          "value": 143,
+          "unit": "files",
+          "source": "workshop/intake/holaOS/runtime/api-server/src"
+        },
+        {
+          "name": "runtime_state_files",
+          "value": 10,
+          "unit": "files",
+          "source": "workshop/intake/holaOS/runtime/state-store/src"
+        },
+        {
+          "name": "test_like_files",
+          "value": 213,
+          "unit": "files",
+          "source": "workshop/intake/holaOS"
+        },
+        {
+          "name": "runtime_api_binaries",
+          "value": 5,
+          "unit": "commands",
+          "source": "workshop/intake/holaOS/runtime/api-server/package.json"
+        },
+        {
+          "name": "main_session_runtime_tools",
+          "value": 12,
+          "unit": "tool_ids",
+          "source": "workshop/intake/holaOS/runtime/api-server/src/ts-runner.ts"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/holaOS",
+        "workshop/analysis/holaOS/analysis.md",
+        ".lev/pm/handoffs/20260412-workshop-intake-ecosystem-batch-session-1.md",
+        ".lev/pm/handoffs/20260517-workshop-intake-holaos-entroly-parity-session-1.md"
+      ],
+      "absorbed": 0,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "intercept",
@@ -14976,6 +15535,130 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "peekaboo",
+      "label": "Peekaboo",
+      "category": "desktop-computer-use",
+      "priority": "P0",
+      "measured_at": "2026-05-17",
+      "updated_at": "2026-05-17",
+      "owner": "plugins/apptestr",
+      "path": ".lev/pm/parity/peekaboo.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "pkb-01",
+          "name": "AX-backed `see` snapshot with element refs and screenshot evidence",
+          "status": "partial",
+          "lev_equivalent": "plugins/apptestr/src/contracts/v2/engine.ts + plugins/vision",
+          "action": "extract",
+          "notes": "Lev has UISnapshot and vision capture concepts, but no proven desktop.macos snapshot adapter with Peekaboo-style element refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/docs/commands/see.md",
+            "workshop/intake/Peekaboo/README.md",
+            "plugins/apptestr/src/contracts/v2/engine.ts"
+          ]
+        },
+        {
+          "id": "pkb-02",
+          "name": "Action-first desktop input primitives with coordinate fallback",
+          "status": "partial",
+          "lev_equivalent": "plugins/apptestr/src/contracts/v2/action.ts + plugins/apptestr/src/contracts/v2/selector.ts",
+          "action": "extract",
+          "notes": "Peekaboo's ID/label/coords ladder maps cleanly to AppTestr selectors; desktop target support is the missing contract proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/docs/automation.md",
+            "workshop/intake/Peekaboo/README.md",
+            "plugins/apptestr/src/contracts/v2/action.ts",
+            "plugins/apptestr/src/contracts/v2/selector.ts"
+          ]
+        },
+        {
+          "id": "pkb-03",
+          "name": "Permission-aware TCC Bridge Host over UNIX socket",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "High-value security/ops pattern. Any Lev adapter must model selected host, permissions, and caller trust in receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/docs/bridge-host.md",
+            "workshop/intake/Peekaboo/Core/PeekabooCore/Sources/PeekabooBridge"
+          ]
+        },
+        {
+          "id": "pkb-04",
+          "name": "Same native tools exposed through CLI and stdio MCP",
+          "status": "partial",
+          "lev_equivalent": "plugins/apptestr/src/wrappers/mcp + plugins/browser/config.yaml",
+          "action": "extract",
+          "notes": "Lev has MCP/CLI wrappers, but the proof target is one adapter contract projected through both surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/docs/MCP.md",
+            "plugins/apptestr/src/wrappers/mcp/index.ts",
+            "plugins/browser/config.yaml"
+          ]
+        },
+        {
+          "id": "pkb-05",
+          "name": "Native agent flow over UI primitives",
+          "status": "not-applicable",
+          "lev_equivalent": "core/flowmind",
+          "action": "reference",
+          "notes": "Reference only. FlowMind should own policy/compile/gating; Peekaboo agent mode should not become Lev's control plane.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/README.md",
+            "workshop/intake/Peekaboo/docs/ARCHITECTURE.md",
+            "core/flowmind/src"
+          ]
+        },
+        {
+          "id": "pkb-06",
+          "name": "Desktop automation test fixtures across click/type/scroll/window/menu/snapshot",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Use as prior art for fixture-first POC tests with no real host input in CI.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Peekaboo/Core/PeekabooAutomationKit/Tests/PeekabooAutomationKitTests",
+            "workshop/intake/Peekaboo/Apps/CLI/Tests"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/Peekaboo/analysis.md",
+        "workshop/analysis/computer-use-peekaboo-ui-tars-claudebrowser/analysis.md",
+        "workshop/analysis/UI-TARS/analysis.md",
+        "workshop/analysis/UI-TARS-desktop/analysis.md",
+        "workshop/analysis/openclaw/analysis.md"
+      ],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "raroque-agent",
