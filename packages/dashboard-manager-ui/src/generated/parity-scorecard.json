@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T09:21:29.104475+00:00",
+  "generated_at": "2026-05-17T20:04:46.809463+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,22 +14,22 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 21289,
+    "operation_count": 21373,
     "by_type": {
-      "upsert_entity": 5102,
-      "add_claim": 11147,
-      "add_link": 5040
+      "upsert_entity": 5118,
+      "add_claim": 11200,
+      "add_link": 5055
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 62,
-    "total_features": 1136,
+    "parity_files": 63,
+    "total_features": 1142,
     "absorbed": 65,
-    "pending": 802,
+    "pending": 806,
     "deferred": 17,
-    "rejected": 33,
-    "monitor": 89,
+    "rejected": 34,
+    "monitor": 90,
     "unclassified": 0,
     "absorbed_pct": 5.7,
     "unclassified_pct": 0.0
@@ -2053,6 +2053,152 @@
       "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "cass",
+      "label": "coding-agent-search",
+      "category": "coding-agent-transcript-index",
+      "priority": "P0",
+      "measured_at": "2026-05-17",
+      "updated_at": "2026-05-17",
+      "owner": "plugins/platforms + tmux-hardening",
+      "path": ".lev/pm/parity/cass.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "wrap": 1,
+        "build": 1,
+        "extract": 3,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "cass-01",
+          "name": "Coding-agent transcript connector catalog",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms/src/sync/registry.ts",
+          "action": "wrap",
+          "notes": "Cass covers Codex, Claude Code, Gemini, Cursor, OpenCode, Pi-Agent, and more; Lev should not duplicate path knowledge where cass is already stronger.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_session_search/README.md:13",
+            "workshop/intake/coding_agent_session_search/src/connectors/mod.rs:10",
+            "cass capabilities --json"
+          ]
+        },
+        {
+          "id": "cass-02",
+          "name": "Robot JSON contract for agents",
+          "status": "partial",
+          "lev_equivalent": "no stable plugins/platforms robot wrapper",
+          "action": "build",
+          "notes": "Wrap cass robot commands behind a typed adapter and never call interactive cass in automation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_session_search/README.md:47",
+            "workshop/intake/coding_agent_session_search/README.md:102"
+          ]
+        },
+        {
+          "id": "cass-03",
+          "name": "SQLite source-of-truth archive for indexed conversations",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms normalized sync pipeline",
+          "action": "extract",
+          "notes": "Useful as a temporary heavy-lift transcript substrate while provider cards still own source policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_session_search/README.md:84"
+          ]
+        },
+        {
+          "id": "cass-04",
+          "name": "Remote source sync and raw mirror retention",
+          "status": "missing",
+          "lev_equivalent": "no provider-owned remote transcript mirror in plugins/platforms",
+          "action": "extract",
+          "notes": "Post-MVP; relevant for warm workers across machines, not required for local tmux proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_session_search/README.md:522"
+          ]
+        },
+        {
+          "id": "cass-05",
+          "name": "Golden JSON schema stability",
+          "status": "missing",
+          "lev_equivalent": "partial JSON receipt tests in harness/poly",
+          "action": "extract",
+          "notes": "Adopt the contract style for provider model list, transcript search, and receipt JSON surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_session_search/README.md:102"
+          ]
+        },
+        {
+          "id": "cass-06",
+          "name": "Tmux control plane",
+          "status": "not-applicable",
+          "lev_equivalent": "core/tmux-harness + core/harness managed tmux",
+          "action": "reject",
+          "notes": "Cass observes and indexes conversations. It does not launch, nudge, capture panes, or own agent lifecycle.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/pm/designs/design-polycard-platforms-fractal-refactor-20260517.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "installed_connectors",
+          "value": 12,
+          "unit": "count",
+          "source": "cass capabilities --json"
+        },
+        {
+          "name": "intake_connector_files",
+          "value": 22,
+          "unit": "count",
+          "source": "workshop/intake/coding_agent_session_search/src/connectors"
+        },
+        {
+          "name": "upstream_package_version",
+          "value": "0.4.8",
+          "unit": "semver",
+          "source": "workshop/intake/coding_agent_session_search/Cargo.toml"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/coding_agent_session_search/README.md",
+        "workshop/intake/coding_agent_session_search/Cargo.toml",
+        "workshop/intake/coding_agent_session_search/src/connectors/mod.rs",
+        "plugins/platforms/src/sync/registry.ts",
+        "plugins/platforms/src/sync/scanner-bridge.ts",
+        ".lev/pm/designs/design-polycard-platforms-fractal-refactor-20260517.md"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "cass-06",
+          "name": "Tmux control plane",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "claude-agent-sdk",
