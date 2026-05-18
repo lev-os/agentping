@@ -421,3 +421,4 @@ export function createHttpApi(config: HttpApiConfig) {
 }
 
 export { Hono };
+export * from './runtime-intent-approval.js';

@@ -203,7 +203,8 @@ describe('PingService', () => {
 
             expect(mockEventBus.emit).toHaveBeenCalledWith(
                 'ping:responded',
-                expect.objectContaining({ id: 'ping-123', status: 'responded' })
+                expect.objectContaining({ id: 'ping-123', status: 'responded' }),
+                expect.objectContaining({ action: 'answered', data: { type: 'answer', value: 'test' } })
             );
         });
     });

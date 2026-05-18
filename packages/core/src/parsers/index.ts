@@ -296,7 +296,7 @@ export const questionParser: IInteractionParser = createParser({
             });
         }
 
-        if (!p.options || p.options.length === 0 || p.allowFreeform) {
+        if (!p.options || p.options.length === 0 || (p.allowFreeform ?? true)) {
             quickActions.push({
                 id: 'answer-in-ui',
                 label: 'Type Answer...',
