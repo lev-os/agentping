@@ -123,6 +123,7 @@ describe("command-center helpers", () => {
       ops: [dashboards[0]],
       interaction: [dashboards[1]],
       development: [dashboards[2]],
+      apps: [],
     });
   });
 
