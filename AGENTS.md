@@ -83,15 +83,15 @@ Current intended runner-managed surfaces in this workspace:
    Name: `AgentPing Studio`
    Package: `packages/studio`
 
-8. `system-dashboard`
-   Name: `System Dashboard`
+8. `dashboard`
+   Name: `Dashboard`
    Package: external to this repo in the Leviathan workspace
-   Path: `plugins/system-dashboard`
+   Path: `plugins/dashboard`
    Meaning: this is a Leviathan-hosted ops surface federated into AgentPing's host runtime
 
 Important:
 
-- `system-dashboard` is part of the Leviathan workspace host setup, not a standalone AgentPing-owned package.
+- `dashboard` is part of the Leviathan workspace host setup, not a standalone AgentPing-owned package.
 - If you are working in `community/agentping` outside the Leviathan super-repo context, treat that entry as workspace-specific and re-check the runner config before assuming it exists.
 
 ## What Is Done
@@ -100,7 +100,7 @@ These items are implemented in the current Leviathan workspace integration:
 
 1. AgentPing remains the browser-hosted command-center shell.
 
-2. `plugins/system-dashboard` is federated into that shell as the primary ops surface.
+2. `plugins/dashboard` is federated into that shell as the primary ops surface.
 
 3. Dashboard metadata is real runtime contract now, not just UI decoration.
    Shape:
@@ -114,16 +114,16 @@ These items are implemented in the current Leviathan workspace integration:
 
 6. `dashboard-manager-ui` detail view can embed a live preview when `openMode=embed`.
 
-7. `lev dashboard build` is now a real CLI path via a concrete handler in `plugins/system-dashboard/src/handlers/dashboard.ts`.
+7. `lev dashboard build` is now a real CLI path via a concrete handler in `plugins/dashboard/src/handlers/dashboard.ts`.
 
-8. The broken `plugins/system-dashboard` flow declaration was repaired with a real:
-   `plugins/system-dashboard/flows/build.flow.yaml`
+8. The broken dashboard flow declaration was repaired with a real:
+   `plugins/dashboard/flows/build.flow.yaml`
 
 9. The prior storybook ambiguity was corrected by:
    - renaming the existing storybook surfaces explicitly
    - adding `web-ui-storybook` as a separate runner-managed development surface
 
-10. The `system-dashboard` hosted preview path was fixed so the runner-assigned port is passed directly to `vite preview`.
+10. The `dashboard` hosted preview path was fixed so the runner-assigned port is passed directly to `vite preview`.
 
 ## What Is Not Done Yet
 
