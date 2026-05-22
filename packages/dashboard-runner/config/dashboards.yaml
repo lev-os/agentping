@@ -128,8 +128,8 @@ dashboards:
       lane: apps
       openMode: external
       description: AgentPing Studio Electron app (the canonical desktop GUI)
-  - name: System Dashboard
-    id: system-dashboard
+  - name: Dashboard
+    id: dashboard
     port: 5185
     port_range:
       - 5185

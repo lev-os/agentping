@@ -9,13 +9,13 @@ import {
 
 const dashboards: Dashboard[] = [
   {
-    id: "system-dashboard",
+    id: "dashboard",
     config: {
-      id: "system-dashboard",
-      name: "System Dashboard",
+      id: "dashboard",
+      name: "Dashboard",
       port: 5185,
       command: "pnpm run preview:runner -- --port {port}",
-      cwd: "/tmp/system-dashboard",
+      cwd: "/tmp/dashboard",
       port_range: [5185, 5189],
       health_check: {
         type: "http",
@@ -115,7 +115,7 @@ const dashboards: Dashboard[] = [
 
 describe("command-center helpers", () => {
   it("selects the primary ops dashboard", () => {
-    expect(getPrimaryDashboard(dashboards)?.id).toBe("system-dashboard");
+    expect(getPrimaryDashboard(dashboards)?.id).toBe("dashboard");
   });
 
   it("groups dashboards by lane", () => {

@@ -4,11 +4,11 @@ import { createDashboardRoutes } from "../src/routes/dashboards";
 
 const dashboards = [
   {
-    id: "system-dashboard",
-    name: "System Dashboard",
+    id: "dashboard",
+    name: "Dashboard",
     port: 5185,
     command: "pnpm run preview:runner -- --port {port}",
-    cwd: "/tmp/system-dashboard",
+    cwd: "/tmp/dashboard",
     port_range: [5185, 5189],
     metadata: {
       lane: "ops",
@@ -34,8 +34,8 @@ const dashboards = [
 
 const runner = {
   getAllStatus: vi.fn(() => ({
-    "system-dashboard": {
-      id: "system-dashboard",
+    dashboard: {
+      id: "dashboard",
       status: "online",
       port: 5185,
       pid: 123,
@@ -82,7 +82,7 @@ describe("createDashboardRoutes", () => {
     expect(payload).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          id: "system-dashboard",
+          id: "dashboard",
           config: expect.objectContaining({
             metadata: {
               lane: "ops",
@@ -99,7 +99,7 @@ describe("createDashboardRoutes", () => {
   it("includes dashboard metadata in detail responses", async () => {
     const app = createDashboardRoutes({ runner: runner as any });
 
-    const response = await app.request("/system-dashboard");
+    const response = await app.request("/dashboard");
     const payload = await response.json();
 
     expect(response.status).toBe(200);
