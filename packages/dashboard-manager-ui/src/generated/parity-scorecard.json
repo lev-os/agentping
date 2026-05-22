@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T20:04:46.809463+00:00",
+  "generated_at": "2026-05-22T13:37:52.994533+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 21373,
+    "operation_count": 22099,
     "by_type": {
-      "upsert_entity": 5118,
-      "add_claim": 11200,
-      "add_link": 5055
+      "upsert_entity": 5265,
+      "add_claim": 11637,
+      "add_link": 5197
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 63,
-    "total_features": 1142,
+    "parity_files": 68,
+    "total_features": 1193,
     "absorbed": 65,
-    "pending": 806,
+    "pending": 848,
     "deferred": 17,
     "rejected": 34,
-    "monitor": 90,
+    "monitor": 92,
     "unclassified": 0,
-    "absorbed_pct": 5.7,
+    "absorbed_pct": 5.4,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -264,6 +264,121 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "agent-vault",
+      "label": "Agent Vault",
+      "category": "agent-secret-broker",
+      "priority": "P0",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "agentguard + core/exec + core/harness + avatar-mesh",
+      "path": ".lev/pm/parity/agent-vault.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "build": 2,
+        "extract": 4
+      },
+      "features": [
+        {
+          "id": "agent-vault-01",
+          "name": "Vault-scoped proxy session token with TTL",
+          "status": "missing",
+          "lev_equivalent": "AgentLease is conceptual; no shared grant/session runtime contract",
+          "action": "build",
+          "notes": "This is the closest implementation precedent for AgentLeaseGrant. Lev should default sensitive auth-material leases to much shorter TTLs such as 10m, with FlowMind/config policy controlling extensions.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/internal/server/handle_sessions.go",
+            "workshop/intake/agent-vault/cmd/skill_http.md",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "agent-vault-02",
+          "name": "Run wrapper injects broker env and CA trust, not raw service credentials",
+          "status": "missing",
+          "lev_equivalent": "Exec descriptors carry cwd/env policy, but no broker descriptor shape",
+          "action": "extract",
+          "notes": "Extract an `AgentLeaseBrokerDescriptor` consumed by harness providers: proxy env, broker token ref, vault/scope, CA path, and strict-deny policy should be derived before spawn.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/cmd/run.go",
+            ".lev/pm/designs/design-polycard-exec-tmux-control-plane-consolidated.md"
+          ]
+        },
+        {
+          "id": "agent-vault-03",
+          "name": "Discover-first and proposal-on-deny workflow",
+          "status": "missing",
+          "lev_equivalent": "AgentPing approval surfaces exist, but no credential/service proposal loop for broker access",
+          "action": "build",
+          "notes": "Lev should make new credential/host access an AgentPing proposal, not a hidden agent failure or direct CLI prompt. This is the auth-material version of a human-loop approval gate.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/cmd/skill_http.md",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "agent-vault-04",
+          "name": "Service auth rules with passthrough and substitutions",
+          "status": "missing",
+          "lev_equivalent": "No shared auth-material service rule model",
+          "action": "extract",
+          "notes": "Useful policy vocabulary for FlowMind/config: bearer, basic, api-key, custom headers, passthrough, scoped URL/header substitutions, and explicit credential-key references.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/internal/broker/broker.go",
+            "workshop/intake/agent-vault/cmd/skill_http.md"
+          ]
+        },
+        {
+          "id": "agent-vault-05",
+          "name": "Secret-free request logging",
+          "status": "partial",
+          "lev_equivalent": "Evidence fabric exists; no auth-material request log schema",
+          "action": "extract",
+          "notes": "Lev should log method, host, path, matched service, credential key names, lease id, and status. Bodies, query strings, headers, and values should be excluded by schema, not merely redacted later.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/internal/brokercore/logging.go",
+            "workshop/intake/agent-vault/cmd/skill_http.md"
+          ]
+        },
+        {
+          "id": "agent-vault-06",
+          "name": "Container isolation blocks vault data and Docker socket exposure",
+          "status": "missing",
+          "lev_equivalent": "Harness has substrate policy concepts but no AgentLease broker isolation profile",
+          "action": "extract",
+          "notes": "Directly relevant to Lev remote/local sandbox work: the broker-owned CA, encrypted vault data, firewall entrypoint, reserved paths, and Docker socket must be non-overridable.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agent-vault/internal/isolation/docker.go",
+            "workshop/intake/agent-vault/internal/isolation/env.go",
+            "workshop/intake/agent-vault/internal/isolation/integration_test.go"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "agentfab",
@@ -737,6 +852,107 @@
       "lineage": [],
       "absorbed": 0,
       "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "agentsecrets",
+      "label": "AgentSecrets",
+      "category": "agent-secret-broker",
+      "priority": "P0",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "agentguard + plugins/vault + core/exec + core/harness",
+      "path": ".lev/pm/parity/agentsecrets.yaml",
+      "verdict": "extract",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "build": 2,
+        "extract": 3
+      },
+      "features": [
+        {
+          "id": "agentsecrets-01",
+          "name": "Key-name-only agent credential surface",
+          "status": "missing",
+          "lev_equivalent": "plugins/vault returns plaintext values after depth checks",
+          "action": "build",
+          "notes": "AgentSecrets frames runtime secret retrieval as the unsafe pattern and exposes calls by key name instead. Lev should make brokered key-name access the default AgentLease path and reserve plaintext retrieval for exceptional compatibility modes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agentsecrets/README.md",
+            "plugins/vault/src/handlers/vault-engine.ts"
+          ]
+        },
+        {
+          "id": "agentsecrets-02",
+          "name": "Proxy and MCP credential injection without value exposure",
+          "status": "missing",
+          "lev_equivalent": "No active AgentGuard credential broker; Poly/Exec can spawn processes but not broker auth material",
+          "action": "extract",
+          "notes": "Useful as the default shape for AgentLease-backed third-party API calls: agents provide target, method, and credential key refs; broker resolves and injects outside model/tool-visible context.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agentsecrets/docs/PROXY.md",
+            "workshop/intake/agentsecrets/pkg/mcp/server.go",
+            "workshop/intake/agentsecrets/pkg/proxy/engine.go"
+          ]
+        },
+        {
+          "id": "agentsecrets-03",
+          "name": "Audit log schema that cannot carry secret values",
+          "status": "partial",
+          "lev_equivalent": "Evidence fabric and receipts exist, but no frozen auth-material audit schema",
+          "action": "extract",
+          "notes": "Lev should add a negative invariant: Run, Receipt, GateProof, mesh envelopes, and auth-material logs may include key names, material class, lease id, and broker route, but never material values.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agentsecrets/pkg/proxy/audit.go",
+            "workshop/intake/agentsecrets/pkg/proxy/engine_test.go"
+          ]
+        },
+        {
+          "id": "agentsecrets-04",
+          "name": "Allowlist-before-secret-resolution",
+          "status": "missing",
+          "lev_equivalent": "AgentGuard scoped permissions are conceptual; plugins/vault does not gate outbound target before decryption",
+          "action": "build",
+          "notes": "The order matters for Lev: deny host/scope first, then resolve material. This should become an AgentLease admission rule and an adversarial test.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agentsecrets/README.md",
+            "workshop/intake/agentsecrets/docs/PROXY.md"
+          ]
+        },
+        {
+          "id": "agentsecrets-05",
+          "name": "Response body credential echo redaction",
+          "status": "missing",
+          "lev_equivalent": "Harness guardrails detect secret file exposure, but no response-body redaction broker",
+          "action": "extract",
+          "notes": "Extract both behavior and test shape: if an upstream echoes a credential, the broker strips it before the response can become agent context.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/agentsecrets/docs/PROXY.md",
+            "workshop/intake/agentsecrets/pkg/proxy/engine_test.go",
+            "plugins/harness-patterns/src/guardrails/engine.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 5,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -8736,6 +8952,241 @@
       "rejected_items": []
     },
     {
+      "target": "graphify-v3",
+      "label": "graphify-v3",
+      "category": "graph-batch-intelligence",
+      "priority": "P1",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "workshop-intake + graph-cms + plugins/bench",
+      "path": ".lev/pm/parity/graphify-v3.yaml",
+      "verdict": "extract",
+      "total_features": 13,
+      "classified": 13,
+      "unclassified": 0,
+      "counts": {
+        "benchmark": 3,
+        "extract": 5,
+        "merge": 2,
+        "build": 2,
+        "keep-lev": 1
+      },
+      "features": [
+        {
+          "id": "gf-01",
+          "name": "Deterministic AST extraction pass",
+          "status": "partial",
+          "lev_equivalent": "CodeGraphAdapter + plugins/code-graph/GitNexus wrapper",
+          "action": "benchmark",
+          "notes": "Useful for code orientation, but Lev needs adapter outputs normalized to GraphOperation[] and compared to GitNexus/ck.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-02",
+          "name": "Multimodal corpus graph",
+          "status": "missing",
+          "lev_equivalent": "No unified media/doc/code graph import path",
+          "action": "extract",
+          "notes": "Code, docs, papers, screenshots, diagrams, audio, and video in one batch graph is unique among current local graph surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-03",
+          "name": "Relationship confidence tags",
+          "status": "partial",
+          "lev_equivalent": "Claim.truth_state + evidence_refs",
+          "action": "merge",
+          "notes": "EXTRACTED/INFERRED/AMBIGUOUS should map to accepted/proposed/contested or evidence-confidence metadata in Lev graph imports.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-04",
+          "name": "Topology-based Leiden clustering",
+          "status": "missing",
+          "lev_equivalent": "core/graph views/gap-analysis clustering",
+          "action": "benchmark",
+          "notes": "Benchmark cluster quality against Lev gap-analysis and UA layer/tour projections on the graph patch/world-model query set.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-05",
+          "name": "GRAPH_REPORT assistant orientation",
+          "status": "partial",
+          "lev_equivalent": "ViewEngine / graph:export_ai_context / capture summaries",
+          "action": "extract",
+          "notes": "The always-on report pattern should become a Lev-owned view, not a hook that bypasses workstream context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-06",
+          "name": "Focused graph query command",
+          "status": "partial",
+          "lev_equivalent": "GraphReader.query/traverse + future graph:export_ai_context",
+          "action": "benchmark",
+          "notes": "Use `graphify query` output as one benchmark competitor for world-model and graph patch questions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-07",
+          "name": "Shortest path / explain commands",
+          "status": "missing",
+          "lev_equivalent": "No prompt-ready path explanation projection",
+          "action": "build",
+          "notes": "Path explanations are valuable for personal/wiki/project/org graph overlays and execution graph debugging.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-08",
+          "name": "MCP server over graph.json",
+          "status": "partial",
+          "lev_equivalent": "core/poly MCP surfaces + graph handlers",
+          "action": "extract",
+          "notes": "Useful as an external query shape; Lev should expose its own governed graph query MCP rather than serving graphify output as authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-09",
+          "name": "Neo4j/GraphML/Obsidian exports",
+          "status": "partial",
+          "lev_equivalent": "ViewEngine export projections",
+          "action": "extract",
+          "notes": "Export breadth is worth copying after ViewEngine exists; not a kernel concern.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-10",
+          "name": "Incremental cache and watch mode",
+          "status": "partial",
+          "lev_equivalent": "FileGraphAdapter watch + EventStore replay",
+          "action": "merge",
+          "notes": "Lev has stronger event replay; graphify has a pragmatic changed-file cache and watch UX.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-11",
+          "name": "Token-reduction benchmark",
+          "status": "missing",
+          "lev_equivalent": "plugins/bench + parity scorecard metrics",
+          "action": "build",
+          "notes": "graphify's benchmark.py gives a concrete corpus-vs-subgraph token metric Lev should add to the graph benchmark fabric.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/graphify/benchmark.py"
+          ]
+        },
+        {
+          "id": "gf-12",
+          "name": "Always-on assistant graph hook",
+          "status": "partial",
+          "lev_equivalent": "AGENTS.md, workstream routing, FlowMind context assembly",
+          "action": "extract",
+          "notes": "Take the reminder pattern cautiously; Lev must preserve workstream and source-of-truth hierarchy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/graphify/README.md"
+          ]
+        },
+        {
+          "id": "gf-13",
+          "name": "Canonical source-of-truth discipline",
+          "status": "implemented",
+          "lev_equivalent": "core/graph append-only events and graph patches",
+          "action": "keep-lev",
+          "notes": "Lev is stronger as canon. graphify should remain an orientation/benchmark/import sidecar.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "core/graph/src/types.ts"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "e03c4604fb782d84cdb0e53e81d31707e54152a3",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/graphify rev-parse HEAD"
+        },
+        {
+          "name": "python_files",
+          "value": 20,
+          "unit": "count",
+          "source": "find workshop/intake/graphify/graphify -type f -name '*.py'"
+        },
+        {
+          "name": "tree_sitter_languages",
+          "value": 20,
+          "unit": "count",
+          "source": "workshop/intake/graphify/README.md"
+        },
+        {
+          "name": "pypi_package",
+          "value": "graphifyy@0.3.29",
+          "unit": "package-version",
+          "source": "workshop/intake/graphify/pyproject.toml"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/graphify/",
+        "workshop/analysis/graphify-v3/analysis.md",
+        ".lev/pm/designs/design-unified-graph-architecture.md",
+        ".lev/pm/workstreams/workshop-intake/captures/20260522-code-graph-poc-benchmark-goal.yaml",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "dna/graph.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 9,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "graphnosis",
       "label": "graphnosis",
       "category": "graph-memory-framework",
@@ -15807,6 +16258,232 @@
       "rejected_items": []
     },
     {
+      "target": "pulumi-agentic-infrastructure-era",
+      "label": "Pulumi Agentic Infrastructure Era",
+      "category": "agentic-infrastructure-control-plane",
+      "priority": "P1",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "plugins/pulumi + plugins/deploy + plugins/bench + core/poly + core/exec + core/daemon + community/agentguard + community/agentping",
+      "path": ".lev/pm/parity/pulumi-agentic-infrastructure-era.yaml",
+      "verdict": "adopt",
+      "total_features": 12,
+      "classified": 12,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1,
+        "build": 8,
+        "merge": 1,
+        "extract": 1,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "pulumi-aie-01",
+          "name": "Code-first infrastructure substrate",
+          "status": "partial",
+          "lev_equivalent": "plugins/pulumi + plugins/deploy + core/poly + FlowMind declarations",
+          "action": "adopt",
+          "notes": "Adopt Pulumi as a programmable-infra adapter lane; do not flatten it into generic deploy extraction.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "plugins/pulumi/config.yaml",
+            "plugins/deploy/config.yaml",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "pulumi-aie-02",
+          "name": "Preview diff proof loop for infrastructure changes",
+          "status": "partial",
+          "lev_equivalent": "plugins/pulumi command envelopes + core/exec events + deploy_plan/deploy_verify declarations",
+          "action": "build",
+          "notes": "First slice emits deterministic Pulumi preview/update/destroy/refresh command envelopes with side-effect and approval metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "plugins/pulumi/src/shared/pulumi-command.ts",
+            "core/exec/src/index.ts",
+            "plugins/deploy/config.yaml"
+          ]
+        },
+        {
+          "id": "pulumi-aie-03",
+          "name": "Agent-friendly CLI JSON and structured errors",
+          "status": "partial",
+          "lev_equivalent": "core/poly/src/surfaces/cli/envelope.ts",
+          "action": "merge",
+          "notes": "JSON output routing exists; uniform typed error envelopes and side-effect declarations remain the extraction target.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "core/poly/src/surfaces/cli/envelope.ts",
+            "core/poly/src/surfaces/cli/execute.ts"
+          ]
+        },
+        {
+          "id": "pulumi-aie-04",
+          "name": "Zero-install agent execution path",
+          "status": "missing",
+          "lev_equivalent": "npx-style Lev/Poly command packaging",
+          "action": "build",
+          "notes": "Pulumi's `npx pulumi` pattern is a distribution/ergonomics precedent for Lev commands.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "core/poly/src/surfaces/cli/execute.ts"
+          ]
+        },
+        {
+          "id": "pulumi-aie-05",
+          "name": "Imperative infrastructure CRUD that can graduate to IaC",
+          "status": "missing",
+          "lev_equivalent": "plugins/pulumi `do-plan` + future `lev infra do|plan|apply|verify`",
+          "action": "build",
+          "notes": "The first plugin slice plans imperative intent into a non-executing Pulumi program envelope; execution stays behind propose/exec gates.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "plugins/pulumi/src/shared/pulumi-command.ts",
+            "plugins/pulumi/config.yaml"
+          ]
+        },
+        {
+          "id": "pulumi-aie-06",
+          "name": "Ephemeral agent accounts and claimable identity",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard leases + Vault scoped credentials",
+          "action": "build",
+          "notes": "Build Lev-owned lease and credential gates for Pulumi operations; do not adopt Pulumi account authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "community/agentguard/README.md",
+            "plugins/vault/README.md"
+          ]
+        },
+        {
+          "id": "pulumi-aie-07",
+          "name": "Local/cloud infrastructure agent loop",
+          "status": "partial",
+          "lev_equivalent": "core/daemon + core/exec + AgentPing surfaces",
+          "action": "build",
+          "notes": "Route the infrastructure-agent loop through Lev runtime primitives with Pulumi as one programmable-infra adapter.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "core/daemon/src/supervisor.ts",
+            "core/exec/src/index.ts",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "pulumi-aie-08",
+          "name": "GitHub Slack and external integration catalog for infrastructure context",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms Poly adapters + AgentPing",
+          "action": "extract",
+          "notes": "Use as product-surface and connector-catalog precedent; do not couple to Neo.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "pulumi-aie-09",
+          "name": "Scheduled and read-only infrastructure sessions",
+          "status": "partial",
+          "lev_equivalent": "core/daemon queue/scheduler + read-only CLI bootstrap policy",
+          "action": "build",
+          "notes": "Lev has queue and read-only command recognition pieces; the infra-session policy needs a coherent lease/proof path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "core/daemon/src/queue-manager.ts",
+            "core/poly/src/surfaces/cli/bootstrap-policy.test.ts"
+          ]
+        },
+        {
+          "id": "pulumi-aie-10",
+          "name": "Infrastructure-agent benchmark suite",
+          "status": "partial",
+          "lev_equivalent": "plugins/bench",
+          "action": "build",
+          "notes": "Bench exists, but an InfraBench-equivalent scenario suite is missing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "plugins/bench/README.md",
+            "plugins/bench/src/handlers/bench.ts"
+          ]
+        },
+        {
+          "id": "pulumi-aie-11",
+          "name": "Agent-friendly infrastructure skills and docs",
+          "status": "partial",
+          "lev_equivalent": "community/clawstore Pulumi skills + Lev skills/workshop",
+          "action": "build",
+          "notes": "Use the Pulumi skill inventory to shape plugin usage docs and tests after the command envelope contract stabilizes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md",
+            "community/clawstore/skills/devops/pulumi/pulumi-basics.skill.yaml",
+            "community/clawstore/skills/iac/pulumi/pulumi-security.skill.yaml"
+          ]
+        },
+        {
+          "id": "pulumi-aie-12",
+          "name": "CoreWeave and NVIDIA AICR providers",
+          "status": "not-applicable",
+          "lev_equivalent": "optional deploy adapter/provider catalogue",
+          "action": "reference",
+          "notes": "Provider launches are useful market signals, not Lev runtime canon.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/the-agentic-infrastructure-era/article.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "pulumi_llm_deployments_current_share",
+          "value": 20,
+          "unit": "percent_plus",
+          "source": "https://www.pulumi.com/blog/the-agentic-infrastructure-era/"
+        },
+        {
+          "name": "pulumi_llm_deployments_expected_share_2026",
+          "value": 50,
+          "unit": "percent_plus",
+          "source": "https://www.pulumi.com/blog/the-agentic-infrastructure-era/"
+        }
+      ],
+      "lineage": [
+        "{'source': ['https://www.pulumi.com/blog/the-agentic-infrastructure-era/', 'workshop/intake/the-agentic-infrastructure-era/article.md'], 'lev_baseline': ['docs/NORTH_STAR.md', 'docs/ARCHITECTURE.md', 'core/exec/src/index.ts', 'core/domain/src/exec-events.ts', 'core/poly/src/surfaces/cli/envelope.ts', 'core/poly/src/surfaces/cli/execute.ts', 'plugins/pulumi/config.yaml', 'plugins/deploy/config.yaml', 'plugins/bench/README.md', 'community/agentguard/README.md'], 'prior_art_scan': {'result': 'no_existing_pulumi_agentic_infrastructure_parity_row', 'checked': ['.lev/pm/parity', 'workshop/analysis', 'workshop/cache/workshop-analysis-index.json', 'docs', '.lev/pm/plans']}}"
+      ],
+      "absorbed": 0,
+      "pending": 11,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "raroque-agent",
       "label": "Raroque Personal Agent",
       "category": "agent-architecture-reference",
@@ -17411,6 +18088,280 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "understand-anything",
+      "label": "Understand-Anything",
+      "category": "graph-codebase-understanding",
+      "priority": "P1",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "workshop-intake + graph-cms + plugins/system-dashboard",
+      "path": ".lev/pm/parity/understand-anything.yaml",
+      "verdict": "extract",
+      "total_features": 15,
+      "classified": 15,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "merge": 3,
+        "build": 3,
+        "benchmark": 2,
+        "monitor": 1,
+        "keep-lev": 1
+      },
+      "features": [
+        {
+          "id": "ua-01",
+          "name": "Multi-agent graph assembly pipeline",
+          "status": "partial",
+          "lev_equivalent": "FlowMind + workshop intake + core/graph compositor",
+          "action": "extract",
+          "notes": "UA uses scanner, file analyzers, architecture analyzer, tour builder, reviewer, and domain/article analyzers. Lev has stronger runtime primitives but not this packaged graph assembly workflow.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/"
+          ]
+        },
+        {
+          "id": "ua-02",
+          "name": "Intermediate graph artifacts outside chat context",
+          "status": "partial",
+          "lev_equivalent": ".lev/pm captures, handoffs, reports, FlowMind state",
+          "action": "merge",
+          "notes": "UA writes intermediate analysis to disk and merges later; Lev should apply the same discipline to graph PoCs and projections.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/CLAUDE.md"
+          ]
+        },
+        {
+          "id": "ua-03",
+          "name": "Typed KnowledgeGraph JSON",
+          "status": "partial",
+          "lev_equivalent": "core/graph Entity/Claim/Link + GraphOperation[]",
+          "action": "build",
+          "notes": "UA has a clean graph interchange shape. Lev needs an importer/exporter that preserves provenance and confidence instead of accepting UA graph state as truth.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/types.ts"
+          ]
+        },
+        {
+          "id": "ua-04",
+          "name": "21 node types across code, infra, domain, knowledge",
+          "status": "partial",
+          "lev_equivalent": "Entity.type + overlay rtypes in dna/graph.yaml",
+          "action": "merge",
+          "notes": "Node taxonomy maps well to Lev projections, especially article/entity/topic/claim/source and domain/flow/step.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/types.ts"
+          ]
+        },
+        {
+          "id": "ua-05",
+          "name": "35 relationship types",
+          "status": "partial",
+          "lev_equivalent": "Link.type + Claim.predicate",
+          "action": "extract",
+          "notes": "Useful edge vocabulary for code/domain/knowledge projections, but Lev should preserve predicate governance rather than adopting raw edge strings as canon.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/types.ts"
+          ]
+        },
+        {
+          "id": "ua-06",
+          "name": "Graph reviewer validation agent",
+          "status": "missing",
+          "lev_equivalent": "Parity registry check + GraphOperation validation hooks",
+          "action": "build",
+          "notes": "UA validates schema, referential integrity, completeness, layer/tour refs, duplicate IDs, and orphaned nodes. Lev should add this as graph projection QA.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/graph-reviewer.md"
+          ]
+        },
+        {
+          "id": "ua-07",
+          "name": "Guided tour projection",
+          "status": "missing",
+          "lev_equivalent": "ViewEngine and plugins/now projections",
+          "action": "build",
+          "notes": "TourStep is an L3 projection over graph nodes. This is directly applicable to Lev onboarding, graph patch flows, and world-model navigation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/tour-builder.md"
+          ]
+        },
+        {
+          "id": "ua-08",
+          "name": "Domain graph projection",
+          "status": "partial",
+          "lev_equivalent": "dna/graph overlay rtypes + project/org/domain graph overlays",
+          "action": "extract",
+          "notes": "UA's domain -> flow -> step hierarchy is a good benchmark for Lev's execution/project/domain overlays.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/domain-analyzer.md"
+          ]
+        },
+        {
+          "id": "ua-09",
+          "name": "Knowledge-base graph over wiki articles",
+          "status": "partial",
+          "lev_equivalent": "FileGraphAdapter + wiki/autowiki projections + Claim/Evidence",
+          "action": "merge",
+          "notes": "Article/entity/topic/claim/source maps strongly to Lev personal/wiki graph use cases, with strict evidence labeling required.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/article-analyzer.md"
+          ]
+        },
+        {
+          "id": "ua-10",
+          "name": "Fuzzy graph search baseline",
+          "status": "partial",
+          "lev_equivalent": "ck, qmd, core/index, future graph+vector adapter",
+          "action": "benchmark",
+          "notes": "Fuse.js name/tags/summary/languageNotes weights are a simple baseline for graph query benchmarking.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/search.ts"
+          ]
+        },
+        {
+          "id": "ua-11",
+          "name": "Layer visualization",
+          "status": "partial",
+          "lev_equivalent": "plugins/system-dashboard parity matrix and graph projections",
+          "action": "extract",
+          "notes": "Layer assignment from graph structure should inform dashboard projections without becoming graph authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/understand-anything-plugin/agents/architecture-analyzer.md"
+          ]
+        },
+        {
+          "id": "ua-12",
+          "name": "Diff impact analysis",
+          "status": "partial",
+          "lev_equivalent": "plugins/code-graph GitNexus wrapper + core graph patch receipts",
+          "action": "benchmark",
+          "notes": "Benchmark against GitNexus/code-graph and Lev graph patch use cases before selecting an impact-analysis backend.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/README.md"
+          ]
+        },
+        {
+          "id": "ua-13",
+          "name": "Dashboard-first graph UX",
+          "status": "partial",
+          "lev_equivalent": "community/agentping dashboard + plugins/system-dashboard",
+          "action": "extract",
+          "notes": "Graph-first layout, node detail, file tree, and tours are practical UI patterns for Lev graph parity and world-model views.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/CLAUDE.md"
+          ]
+        },
+        {
+          "id": "ua-14",
+          "name": "Persona-adaptive graph detail",
+          "status": "missing",
+          "lev_equivalent": "No canonical Lev graph persona projection",
+          "action": "monitor",
+          "notes": "Useful product idea, but lower priority than graph correctness, import/export, and benchmark evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Understand-Anything/README.md"
+          ]
+        },
+        {
+          "id": "ua-15",
+          "name": "Canonical graph source-of-truth discipline",
+          "status": "implemented",
+          "lev_equivalent": "LevEvent -> GraphOperation[] -> Entity/Claim/Link",
+          "action": "keep-lev",
+          "notes": "Lev is stronger. UA graph JSON is product state; Lev should only import it as derived evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "core/graph/src/types.ts"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "17eed788767d97dc29cfe812640af0133a97f767",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/Understand-Anything rev-parse HEAD"
+        },
+        {
+          "name": "plugin_ts_tsx_md_files",
+          "value": 268,
+          "unit": "count",
+          "source": "find workshop/intake/Understand-Anything/understand-anything-plugin -type f"
+        },
+        {
+          "name": "core_ts_files",
+          "value": 134,
+          "unit": "count",
+          "source": "find workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src -type f"
+        },
+        {
+          "name": "agent_definitions",
+          "value": 9,
+          "unit": "count",
+          "source": "find workshop/intake/Understand-Anything/understand-anything-plugin/agents -type f -name '*.md'"
+        },
+        {
+          "name": "node_types",
+          "value": 21,
+          "unit": "count",
+          "source": "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/types.ts"
+        },
+        {
+          "name": "edge_types",
+          "value": 35,
+          "unit": "count",
+          "source": "workshop/intake/Understand-Anything/understand-anything-plugin/packages/core/src/types.ts"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/Understand-Anything/",
+        "workshop/analysis/understand-anything/analysis.md",
+        ".lev/pm/designs/design-unified-graph-architecture.md",
+        ".lev/pm/workstreams/workshop-intake/captures/20260522-code-graph-poc-benchmark-goal.yaml",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "dna/graph.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 11,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
