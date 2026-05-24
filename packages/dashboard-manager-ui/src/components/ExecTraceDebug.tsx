@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GraphView } from "@kingly/ui/components";
 
 import {
+  deriveProofBackedStatus,
   getExecTraceDebug,
   type AgentPingExecDebugPayload,
   type ExecTrace,
@@ -16,10 +17,6 @@ function asNumber(value: unknown): number | null {
 
 function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
-}
-
-function traceStatus(trace: ExecTrace): string {
-  return asString(trace.status) ?? "unknown";
 }
 
 function traceEventCount(trace: ExecTrace): number {
@@ -113,13 +110,14 @@ export function ExecTraceDebug() {
 
   const summary = useMemo(() => {
     if (!payload) return null;
-    const status = traceStatus(payload.trace);
+    const proofStatus = deriveProofBackedStatus(payload.trace);
     return {
-      status,
+      status: proofStatus.status,
+      proofStatus,
       eventCount: traceEventCount(payload.trace),
       exitCode: traceExitCode(payload.trace),
       flowPath: graphFlowPath(payload),
-      receipt: traceReceipt(payload.trace),
+      receipt: proofStatus.receiptRef ?? traceReceipt(payload.trace),
       latestFrame: payload.graph?.widget.graph.frames[payload.graph.widget.graph.frames.length - 1],
     };
   }, [payload]);
@@ -202,8 +200,9 @@ export function ExecTraceDebug() {
 
               <div className="exec-debug-summary-grid">
                 <div className={`command-center-status-card exec-debug-status ${statusTone(summary.status)}`}>
-                  <div className="command-center-status-card__label">Status</div>
+                  <div className="command-center-status-card__label">Proof Status</div>
                   <div className="command-center-status-card__value">{summary.status}</div>
+                  <div className="command-center-section__meta">{summary.proofStatus.reason}</div>
                 </div>
                 <div className="command-center-status-card">
                   <div className="command-center-status-card__label">Events</div>
