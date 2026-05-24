@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-22T13:37:52.994533+00:00",
+  "generated_at": "2026-05-24T07:12:30.859468+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 22099,
+    "operation_count": 22865,
     "by_type": {
-      "upsert_entity": 5265,
-      "add_claim": 11637,
-      "add_link": 5197
+      "upsert_entity": 5425,
+      "add_claim": 12084,
+      "add_link": 5356
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 68,
-    "total_features": 1193,
+    "parity_files": 69,
+    "total_features": 1249,
     "absorbed": 65,
-    "pending": 848,
+    "pending": 899,
     "deferred": 17,
     "rejected": 34,
-    "monitor": 92,
+    "monitor": 97,
     "unclassified": 0,
-    "absorbed_pct": 5.4,
+    "absorbed_pct": 5.2,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -2267,6 +2267,844 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "betterstack",
+      "label": "Better Stack",
+      "category": "observability-incident-sre-platform",
+      "priority": "P0",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "core/telemetry + core/event-bus + core/daemon + community/agentping + plugins/scheduling + plugins/platforms",
+      "path": ".lev/pm/parity/betterstack.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 56,
+      "classified": 56,
+      "unclassified": 0,
+      "counts": {
+        "build": 41,
+        "merge": 2,
+        "extract": 8,
+        "monitor": 5
+      },
+      "features": [
+        {
+          "id": "betterstack-01",
+          "name": "Unified observability, uptime, incident, on-call, and status page suite",
+          "status": "partial",
+          "lev_equivalent": "Lev runtime planes plus AgentPing dashboard, not one unified shipped SRE product",
+          "action": "build",
+          "notes": "Build an AgentPing operational command center that composes Lev telemetry, events, daemon health, incidents, and public/private status projections.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/log-management.md",
+            "https://betterstack.com/incident-management.md",
+            "https://betterstack.com/status-page.md"
+          ]
+        },
+        {
+          "id": "betterstack-02",
+          "name": "Thirty-second multi-location uptime checks",
+          "status": "missing",
+          "lev_equivalent": "No Lev-native synthetic uptime monitor fleet",
+          "action": "build",
+          "notes": "Requires scheduled probes, region metadata, failure quorum, and proof receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/website-monitoring.md"
+          ]
+        },
+        {
+          "id": "betterstack-03",
+          "name": "Broad monitor types across HTTP, keyword, ping, TCP, UDP, SMTP, POP3, IMAP, DNS, and Playwright",
+          "status": "missing",
+          "lev_equivalent": "No single typed monitor registry or probe executor",
+          "action": "build",
+          "notes": "Model monitor kinds as typed domain declarations before implementing adapters.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-04",
+          "name": "Playwright transaction monitoring",
+          "status": "partial",
+          "lev_equivalent": "Browser plugin and AppTestr-like work can run browser checks but lacks scheduled incident binding",
+          "action": "merge",
+          "notes": "Reuse existing browser automation primitives and add monitor lifecycle, screenshots, step logs, and incident receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/website-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-05",
+          "name": "Error screenshots, response logs, traceroute, and MTR evidence on failures",
+          "status": "missing",
+          "lev_equivalent": "Receipts exist conceptually but not network-diagnostic uptime evidence",
+          "action": "build",
+          "notes": "Add diagnostic attachments to probe receipts so incidents carry network, HTTP, screenshot, and route evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-06",
+          "name": "Confirmation periods, recovery periods, maintenance windows, and probe regions",
+          "status": "missing",
+          "lev_equivalent": "Scheduling and gates exist, but not monitor-specific debounce and regional quorum",
+          "action": "build",
+          "notes": "Treat these as first-class monitor policy fields, not ad hoc alert dampening.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-07",
+          "name": "Heartbeat and cron monitoring",
+          "status": "partial",
+          "lev_equivalent": "Scheduling and daemon receipts exist without heartbeat product UX",
+          "action": "build",
+          "notes": "Lev should expose expected job receipts and missed-heartbeat incidents for cron, workers, and scheduled automations.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/website-monitoring.md"
+          ]
+        },
+        {
+          "id": "betterstack-08",
+          "name": "SSL certificate and domain expiration monitoring",
+          "status": "missing",
+          "lev_equivalent": "No active certificate/domain expiration monitor",
+          "action": "build",
+          "notes": "Useful as a small, high-signal platform probe family.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-09",
+          "name": "Monitor groups, bulk imports, and monitor API management",
+          "status": "missing",
+          "lev_equivalent": "No monitor management API or import path",
+          "action": "build",
+          "notes": "Build only after monitor schema stabilizes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__bulk-importing-monitors.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-10",
+          "name": "Phone, SMS, email, push, Slack, and Microsoft Teams alert channels",
+          "status": "partial",
+          "lev_equivalent": "AgentPing notification surfaces and integrations exist, but not incident alert channel parity",
+          "action": "build",
+          "notes": "Alert routing should compile from escalation policy plus AgentGuard contact permissions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__monitoring-start.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-11",
+          "name": "On-call schedules, rotations, overrides, and calendar integrations",
+          "status": "missing",
+          "lev_equivalent": "Scheduling exists without human on-call roster semantics",
+          "action": "build",
+          "notes": "This is a core AgentPing enterprise surface because it binds humans, teams, availability, and incident responsibility.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-oncall-v2.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-12",
+          "name": "Escalation policies with steps, delays, repeating, time windows, severities, and metadata rules",
+          "status": "missing",
+          "lev_equivalent": "FlowMind can express policies, but no incident escalation policy product",
+          "action": "build",
+          "notes": "Good candidate for FlowMind policy declarations projected into AgentPing UI.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__escalation-policies.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-13",
+          "name": "Incident lifecycle with create, acknowledge, comment, escalate, resolve, and timeline APIs",
+          "status": "partial",
+          "lev_equivalent": "LevEvent receipts and workstream state exist, but no SRE incident lifecycle object",
+          "action": "build",
+          "notes": "Introduce Incident as a domain plugin entity rather than overloading PM workstreams.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md",
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__mcp.md"
+          ]
+        },
+        {
+          "id": "betterstack-14",
+          "name": "Smart incident merging",
+          "status": "missing",
+          "lev_equivalent": "No incident correlation/merge engine",
+          "action": "build",
+          "notes": "Use graph/event correlation over source, dependency, time window, monitor group, and metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md",
+            "https://betterstack.com/uptime.md"
+          ]
+        },
+        {
+          "id": "betterstack-15",
+          "name": "Runbooks, todo lists, and workflow instructions inserted into incident timelines",
+          "status": "partial",
+          "lev_equivalent": "Skills and FlowMind plans exist, but not incident-attached runbooks",
+          "action": "merge",
+          "notes": "Convert runbooks into FlowMind-backed checklists with evidence and completion receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__escalation-policies.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-16",
+          "name": "Incident metadata and catalog for severity, ownership, reporting, routing, and status impact",
+          "status": "partial",
+          "lev_equivalent": "Graph entities and metadata exist without SRE catalog product flows",
+          "action": "build",
+          "notes": "Strong fit for Lev's graph/provenance plane; use catalog relations to bind service ownership to incident routing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-17",
+          "name": "Incident, organization, team, on-call, monitor, SLA, MTTA, MTTR, and status page reporting",
+          "status": "missing",
+          "lev_equivalent": "Reports exist as artifacts, not operational SRE analytics",
+          "action": "build",
+          "notes": "Project through generated reports first, then dashboards.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting.md"
+          ]
+        },
+        {
+          "id": "betterstack-18",
+          "name": "Slack-native incident creation, acknowledgement, resolution, and event sync",
+          "status": "partial",
+          "lev_equivalent": "AgentPing can notify, but no Slack-native incident command surface",
+          "action": "build",
+          "notes": "Use AgentPing command/action envelopes so chat operations produce audited events.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-19",
+          "name": "Public and private status pages",
+          "status": "missing",
+          "lev_equivalent": "No generated operational status page product",
+          "action": "build",
+          "notes": "Start with generated read-only status pages from Incident and Monitor state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md"
+          ]
+        },
+        {
+          "id": "betterstack-20",
+          "name": "Custom status page domains, branding, CSS, JavaScript, dark mode, and translations",
+          "status": "missing",
+          "lev_equivalent": "Publisher surfaces exist but not status-page theming controls",
+          "action": "build",
+          "notes": "Defer until status pages exist; keep custom JavaScript behind strict policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__working-with-status-pages__customize-status-page-css-js.md"
+          ]
+        },
+        {
+          "id": "betterstack-21",
+          "name": "Status resources, structure, monitor binding, and metadata-controlled degraded/down state",
+          "status": "missing",
+          "lev_equivalent": "No StatusResource model",
+          "action": "build",
+          "notes": "Status resources should be projections, not mutable truth separate from incidents and monitors.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-22",
+          "name": "Status subscribers and component-level email subscriptions",
+          "status": "missing",
+          "lev_equivalent": "Notification subscriptions are not modeled for public status pages",
+          "action": "build",
+          "notes": "Requires external subscriber storage and unsubscribe/privacy handling.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md"
+          ]
+        },
+        {
+          "id": "betterstack-23",
+          "name": "Incident updates, planned maintenance, announcements, and service degradations on status pages",
+          "status": "missing",
+          "lev_equivalent": "No status update authoring workflow",
+          "action": "build",
+          "notes": "Use Incident timeline events as the source, with optional human-approved public projection.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md"
+          ]
+        },
+        {
+          "id": "betterstack-24",
+          "name": "Embeddable status badges and status charts",
+          "status": "missing",
+          "lev_equivalent": "No embeddable operational widget contract",
+          "action": "build",
+          "notes": "Natural AgentPing widget projection once status pages exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__working-with-status-pages__embeddable-status-badge.md",
+            "https://betterstack.com/status-page.md"
+          ]
+        },
+        {
+          "id": "betterstack-25",
+          "name": "External monitoring integrations for Datadog, New Relic, Grafana, Prometheus, Zabbix, AWS, Azure, and Google Cloud",
+          "status": "partial",
+          "lev_equivalent": "Poly/platform adapters exist, but not SRE-specific inbound incident connectors",
+          "action": "build",
+          "notes": "Connectors should normalize inbound alerts into IncidentCandidate events with source metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-26",
+          "name": "Log source creation, source tokens, and HTTP log ingestion",
+          "status": "partial",
+          "lev_equivalent": "Logger and event bus exist, but no multi-source log ingestion tenant model",
+          "action": "build",
+          "notes": "Lev should define source identity, auth, retention, and ingest receipts before UI.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__logging-start.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__ingesting-data__http__logs.md"
+          ]
+        },
+        {
+          "id": "betterstack-27",
+          "name": "Better Stack collector with eBPF no-code instrumentation and remote collector control",
+          "status": "missing",
+          "lev_equivalent": "No eBPF collector or remotely controlled collector fleet",
+          "action": "extract",
+          "notes": "Extract the control-plane shape; do not attempt kernel-level collector work until telemetry goals demand it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__collector.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-28",
+          "name": "OpenTelemetry logs, traces, metrics, and OTLP forwarding",
+          "status": "partial",
+          "lev_equivalent": "core/telemetry provides OpenTelemetry primitives, but ingestion/storage/product flows are incomplete",
+          "action": "build",
+          "notes": "This is the direct bridge from Lev runtime receipts to an observability product.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__collector.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-29",
+          "name": "Logging integrations for Vector, Syslog, Fluent Bit, Fluentd, Logstash, Filebeat, Docker, Kubernetes, cloud platforms, and languages",
+          "status": "partial",
+          "lev_equivalent": "Some adapters and logger packages exist, but no polished ingestion integration catalog",
+          "action": "extract",
+          "notes": "Recreate as integration recipes plus generated connector tests, not a hand-written docs sprawl.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__logging-start.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-30",
+          "name": "Wide events plus time-series storage model",
+          "status": "missing",
+          "lev_equivalent": "Event bus and telemetry data exist without a dedicated wide-event/time-series query architecture",
+          "action": "extract",
+          "notes": "Useful architecture for separating ad-hoc event search from fast dashboard metrics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/log-management.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md"
+          ]
+        },
+        {
+          "id": "betterstack-31",
+          "name": "Live tail search with simple, compound, regex, fulltext, and typed field filters",
+          "status": "partial",
+          "lev_equivalent": "lev find/search surfaces exist, but not live telemetry tail query language",
+          "action": "build",
+          "notes": "Could reuse Lev query grammar discipline; avoid inventing a one-off log-only language if `lev find` can project it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__using-logtail__live-tail-query-language.md"
+          ]
+        },
+        {
+          "id": "betterstack-32",
+          "name": "Explore queries through drag-and-drop, SQL, PromQL, PQL, and log filters",
+          "status": "missing",
+          "lev_equivalent": "No visual telemetry query builder",
+          "action": "build",
+          "notes": "Start with saved query objects and generated charts rather than freeform UI builder scope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__getting-started.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-33",
+          "name": "Dashboards, charts, templates, variables, static text, import, and export",
+          "status": "partial",
+          "lev_equivalent": "Dashboards and generated reports exist, but not a telemetry dashboard editor",
+          "action": "build",
+          "notes": "Keep dashboards as projections from typed query/chart specs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__getting-started.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__api__dashboards__import.md"
+          ]
+        },
+        {
+          "id": "betterstack-34",
+          "name": "Extract metrics from logs",
+          "status": "missing",
+          "lev_equivalent": "No logs-to-metrics compiler",
+          "action": "build",
+          "notes": "High leverage for event-bus receipts that need trendable operational metrics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__logs-to-metrics.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md"
+          ]
+        },
+        {
+          "id": "betterstack-35",
+          "name": "Dashboard and exploration alerts",
+          "status": "missing",
+          "lev_equivalent": "FlowMind gates and notifications exist without telemetry alert definitions",
+          "action": "build",
+          "notes": "Alert rules should compile into FlowMind/AgentGuard-gated notification actions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__alerts.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__api__dashboard-alerts__create.md"
+          ]
+        },
+        {
+          "id": "betterstack-36",
+          "name": "Query boost, sampling, pre-aggregated metrics, and custom clusters for performance",
+          "status": "missing",
+          "lev_equivalent": "No telemetry query acceleration tier",
+          "action": "monitor",
+          "notes": "Monitor as future scale architecture; not needed before base telemetry store and query UX exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__query-boost.md"
+          ]
+        },
+        {
+          "id": "betterstack-37",
+          "name": "Read-only SQL API over logs, spans, and metrics with ClickHouse-compatible access",
+          "status": "missing",
+          "lev_equivalent": "No external SQL telemetry API",
+          "action": "extract",
+          "notes": "Useful API precedent for machine access and Grafana compatibility.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__query-api__connect-remotely.md"
+          ]
+        },
+        {
+          "id": "betterstack-38",
+          "name": "Customer-owned S3-compatible telemetry bucket with ClickHouse-local analysis",
+          "status": "missing",
+          "lev_equivalent": "No bring-your-own-bucket telemetry archive",
+          "action": "extract",
+          "notes": "Strong sovereignty fit, but belongs after telemetry persistence boundaries are stable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__host-data-in-your-own-bucket.md"
+          ]
+        },
+        {
+          "id": "betterstack-39",
+          "name": "Usage transparency, billing alerts, spending limits, and retention controls",
+          "status": "partial",
+          "lev_equivalent": "Some budget concepts exist, but no telemetry usage/billing product surface",
+          "action": "build",
+          "notes": "Adapt as resource/budget guards even when Lev is not billing users.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/infrastructure-monitoring.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-40",
+          "name": "Real user monitoring with website analytics, referrers, UTM data, user agents, and frontend/backend correlation",
+          "status": "missing",
+          "lev_equivalent": "No real-user monitoring product",
+          "action": "build",
+          "notes": "Mostly relevant for AgentPing, hosted apps, and community products rather than core CLI runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-41",
+          "name": "Session replay with filtering, pause skipping, related errors/traces/logs/metrics, and sensitive-field exclusion",
+          "status": "missing",
+          "lev_equivalent": "No session replay capture or privacy masking system",
+          "action": "monitor",
+          "notes": "Good product precedent; defer unless AgentPing web product telemetry becomes a priority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-42",
+          "name": "Web vitals, browser performance, Chrome memory, and degradation alerts",
+          "status": "missing",
+          "lev_equivalent": "No RUM performance monitor",
+          "action": "monitor",
+          "notes": "Valuable once AgentPing has a production hosted web surface with user traffic.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-43",
+          "name": "Product analytics funnels and auto-captured anonymous or identified user events",
+          "status": "missing",
+          "lev_equivalent": "No product analytics/funnel product",
+          "action": "monitor",
+          "notes": "Keep separate from core runtime telemetry to avoid conflating user behavior analytics with execution receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-44",
+          "name": "Sentry-compatible error tracking across languages and platforms",
+          "status": "missing",
+          "lev_equivalent": "No Sentry-compatible error ingestion product",
+          "action": "extract",
+          "notes": "Compatibility is a smart adoption path; Lev should consider accepting common error envelopes before custom SDKs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__collecting-errors__sentry-sdk.md"
+          ]
+        },
+        {
+          "id": "betterstack-45",
+          "name": "Source maps, releases, stack traces, browser context, environment data, and breadcrumbs",
+          "status": "missing",
+          "lev_equivalent": "No application error context workflow",
+          "action": "build",
+          "notes": "Maps well to proof-carrying failure reports and code-agent debugging context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__collecting-errors__upload-source-maps.md"
+          ]
+        },
+        {
+          "id": "betterstack-46",
+          "name": "Exception grouping, snooze, occurrence thresholds, and severity handling",
+          "status": "missing",
+          "lev_equivalent": "No error-group lifecycle product",
+          "action": "build",
+          "notes": "Treat groups as graph clusters with lifecycle, thresholds, and human decisions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__using-the-product__exception-grouping.md"
+          ]
+        },
+        {
+          "id": "betterstack-47",
+          "name": "Error integrations with Slack, Microsoft Teams, Linear, Jira, GitHub, and incident escalation",
+          "status": "partial",
+          "lev_equivalent": "Platform adapters exist, but no error-to-ticket/incident workflow",
+          "action": "build",
+          "notes": "Route through AgentPing approvals and external-system leases.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__integrations__github.md"
+          ]
+        },
+        {
+          "id": "betterstack-48",
+          "name": "Fix with AI ready-made prompts for Claude Code, Cursor, and Codex",
+          "status": "partial",
+          "lev_equivalent": "Lev has skills/prompts and execution surfaces, but no error-derived prompt composer",
+          "action": "extract",
+          "notes": "Directly relevant to Lev's agentic SDLC surface; compose prompts from error context and repo evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__using-the-product__fix-with-ai.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md"
+          ]
+        },
+        {
+          "id": "betterstack-49",
+          "name": "AI SRE chat for root-cause analysis over logs, metrics, traces, errors, web events, deployments, and trends",
+          "status": "partial",
+          "lev_equivalent": "Timetravel/research, telemetry, graph, and AgentPing pieces exist but no AI SRE incident chat",
+          "action": "build",
+          "notes": "This should be a productized AgentPing incident room backed by graph, telemetry, and controlled tools.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/ai-sre.md",
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__analyzing-data__logs.md"
+          ]
+        },
+        {
+          "id": "betterstack-50",
+          "name": "Remote MCP server with OAuth/API token auth and tool allowlist/blocklist headers",
+          "status": "partial",
+          "lev_equivalent": "Lev has MCP/Poly surfaces but not scoped remote SRE MCP tool server parity",
+          "action": "build",
+          "notes": "Strong fit for Poly Robot/Machine Mode and AgentGuard scoped tool grants.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__mcp.md",
+            "https://betterstack.com/ai-sre.md"
+          ]
+        },
+        {
+          "id": "betterstack-51",
+          "name": "AI SRE GitHub sandbox that clones repositories, writes fixes, validates, and opens linked pull requests",
+          "status": "partial",
+          "lev_equivalent": "Lev exec/SDLC can modify repos, but no error-linked AI SRE sandbox product",
+          "action": "build",
+          "notes": "Very high relevance, but Lev should require explicit leases, side-effect declarations, and receipt-linked PRs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__writing-code__error-pull-requests.md"
+          ]
+        },
+        {
+          "id": "betterstack-52",
+          "name": "AI SRE creates dashboards and imports Grafana or Datadog dashboards",
+          "status": "missing",
+          "lev_equivalent": "No dashboard import/generation agent",
+          "action": "extract",
+          "notes": "Useful for AgentPing generated dashboards once chart specs exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__managing-data__creating-dashboards.md",
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__managing-data__importing-grafana-dashboards.md"
+          ]
+        },
+        {
+          "id": "betterstack-53",
+          "name": "Security and compliance posture covering SOC 2 Type 2, GDPR, ISO 27001 data centers, regions, private pages, SSO, and SCIM",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard and config principles exist, but no enterprise compliance product pack",
+          "action": "build",
+          "notes": "Treat as enterprise readiness requirements, not just marketing copy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/ai-sre.md",
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__password-protected-status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__okta-sso__overview.md"
+          ]
+        },
+        {
+          "id": "betterstack-54",
+          "name": "Team and account management with real-time reporting exports and custom reports",
+          "status": "partial",
+          "lev_equivalent": "Workstreams/users exist in scattered forms, no unified ops reporting admin",
+          "action": "build",
+          "notes": "Useful as a dashboard/admin shape for AgentPing and operations teams.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting.md",
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting__custom-reports.md"
+          ]
+        },
+        {
+          "id": "betterstack-55",
+          "name": "Terraform providers for uptime, on-call, status pages, telemetry, dashboards, and alerts",
+          "status": "missing",
+          "lev_equivalent": "No Terraform provider or IaC import path for Lev operational resources",
+          "action": "monitor",
+          "notes": "Defer until resource schemas exist; later expose generated IaC from Poly capability metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__terraform.md"
+          ]
+        },
+        {
+          "id": "betterstack-56",
+          "name": "Public dogfood status page and incident history for Better Stack itself",
+          "status": "missing",
+          "lev_equivalent": "No public status page dogfood surface",
+          "action": "build",
+          "notes": "Lev should dogfood its own uptime/status projection before asking users to trust it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://status.betterstack.com/"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "selected_sitemap_urls",
+          "value": 668,
+          "unit": "count",
+          "source": "workshop/intake/betterstack/raw/meta/scrape-manifest.json"
+        },
+        {
+          "name": "saved_markdown_pages",
+          "value": 600,
+          "unit": "count",
+          "source": "workshop/intake/betterstack/raw/meta/scrape-manifest.json"
+        },
+        {
+          "name": "docs_sitemap_urls",
+          "value": 607,
+          "unit": "count",
+          "source": "https://betterstack.com/docs-sitemap.xml"
+        },
+        {
+          "name": "authored_feature_rows",
+          "value": 56,
+          "unit": "count",
+          "source": ".lev/pm/parity/betterstack.yaml"
+        }
+      ],
+      "lineage": [
+        "workshop/analysis/betterstack/analysis.md",
+        "workshop/intake/betterstack/article.md",
+        "workshop/intake/betterstack/raw/meta/scrape-manifest.json",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "docs/specs/spec-parity.md"
+      ],
+      "absorbed": 0,
+      "pending": 51,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 5,
       "deferred_items": [],
       "rejected_items": []
     },
