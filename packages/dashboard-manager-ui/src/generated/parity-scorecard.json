@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-24T07:12:30.859468+00:00",
+  "generated_at": "2026-05-26T06:52:23.011872+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,22 +14,22 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 22865,
+    "operation_count": 23031,
     "by_type": {
-      "upsert_entity": 5425,
-      "add_claim": 12084,
-      "add_link": 5356
+      "upsert_entity": 5465,
+      "add_claim": 12171,
+      "add_link": 5395
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 69,
-    "total_features": 1249,
+    "parity_files": 70,
+    "total_features": 1257,
     "absorbed": 65,
-    "pending": 899,
+    "pending": 905,
     "deferred": 17,
     "rejected": 34,
-    "monitor": 97,
+    "monitor": 99,
     "unclassified": 0,
     "absorbed_pct": 5.2,
     "unclassified_pct": 0.0
@@ -18926,6 +18926,180 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tencentdb-agent-memory",
+      "label": "TencentDB Agent Memory",
+      "category": "agent-memory-framework",
+      "priority": "P1",
+      "measured_at": "2026-05-26",
+      "updated_at": "2026-05-26",
+      "owner": "core/memory + plugins/evolve-memory",
+      "path": ".lev/pm/parity/tencentdb-agent-memory.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "reference": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tdam-01",
+          "name": "L0 to L3 layered conversation memory",
+          "status": "partial",
+          "lev_equivalent": "core/memory memory taxonomy + plugins/evolve-memory",
+          "action": "extract",
+          "notes": "Map L0 raw conversation, L1 episodic facts, L2 scenes, and L3 persona onto Lev memory items and provenance rather than copying the target schema.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/README.md",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        },
+        {
+          "id": "tdam-02",
+          "name": "Host-neutral memory core facade",
+          "status": "partial",
+          "lev_equivalent": "core/memory backend interfaces + plugin adapters",
+          "action": "extract",
+          "notes": "Useful boundary pattern: adapters translate host hooks, core owns recall/capture/search. Keep Lev naming and contracts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/adapters/openclaw/host-adapter.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/adapters/standalone/host-adapter.ts",
+            "core/memory/src/backends/interface.ts"
+          ]
+        },
+        {
+          "id": "tdam-03",
+          "name": "SQLite plus VectorDB store bundle with capability flags",
+          "status": "partial",
+          "lev_equivalent": "core/memory backend registry",
+          "action": "extract",
+          "notes": "Extract capability/degraded-mode checks and adapter tests, not Tencent Cloud-specific storage as a default.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/types.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/sqlite.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/tcvdb.ts",
+            "core/memory/src/orchestrator.ts"
+          ]
+        },
+        {
+          "id": "tdam-04",
+          "name": "Hybrid FTS and vector recall with RRF",
+          "status": "implemented",
+          "lev_equivalent": "core/memory RRF fusion and retrieval routing",
+          "action": "reference",
+          "notes": "Comparable to existing Lev retrieval; use as corroborating prior art and test-shape evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tools/memory-search.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+            "core/memory/src/orchestrator.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        },
+        {
+          "id": "tdam-05",
+          "name": "Conversation capture and active recall hooks",
+          "status": "partial",
+          "lev_equivalent": "LevEvent lineage + memory retrieval tools",
+          "action": "extract",
+          "notes": "Promote only through event/receipt provenance so raw conversation capture, memory rows, and retrieval hits stay traceable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tools/conversation-search.ts",
+            "core/memory/src/backends/interface.ts"
+          ]
+        },
+        {
+          "id": "tdam-06",
+          "name": "Symbolic context offload with Mermaid drilldown",
+          "status": "missing",
+          "lev_equivalent": "FlowMind/graph projections + prompt-stack context controls",
+          "action": "extract",
+          "notes": "Spike the idea as compact symbolic projection with node-level evidence recovery; do not import OpenClaw context-engine hooks.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/README.md",
+            "workshop/intake/TencentDB-Agent-Memory/src/offload/index.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/offload/hooks/llm-input-l3.ts",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "tdam-07",
+          "name": "Gateway sidecar with health, backpressure, and session flush",
+          "status": "partial",
+          "lev_equivalent": "core/daemon + plugins/platforms process supervision",
+          "action": "extract",
+          "notes": "Use as sidecar lifecycle hardening evidence only if a future memory runtime needs an external process.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/gateway/server.ts",
+            "workshop/intake/TencentDB-Agent-Memory/hermes-plugin/memory/memory_tencentdb/README.md",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "tdam-08",
+          "name": "Degraded embedding and false-green recall risk",
+          "status": "partial",
+          "lev_equivalent": "validation gates + receipt-backed capability checks",
+          "action": "monitor",
+          "notes": "The target keeps running when embedding config is incomplete; any Lev extraction needs explicit gates proving vector recall is actually enabled when claimed.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/config.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/tencentdb-agent-memory/analysis.md",
+        "workshop/intake/TencentDB-Agent-Memory/README.md",
+        "workshop/intake/TencentDB-Agent-Memory/package.json",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/types.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/sqlite.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/tcvdb.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/offload/index.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/gateway/server.ts",
+        "workshop/intake/TencentDB-Agent-Memory/hermes-plugin/memory/memory_tencentdb/README.md",
+        "docs/specs/spec-memory.md",
+        "core/memory/src/orchestrator.ts",
+        "core/memory/src/backends/interface.ts"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
       "deferred_items": [],
       "rejected_items": []
     },
