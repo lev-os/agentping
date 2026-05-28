@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-26T06:52:23.011872+00:00",
+  "generated_at": "2026-05-27T22:02:53.254342+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,28 +14,70 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 23031,
+    "operation_count": 23744,
     "by_type": {
-      "upsert_entity": 5465,
-      "add_claim": 12171,
-      "add_link": 5395
+      "upsert_entity": 5589,
+      "add_claim": 12667,
+      "add_link": 5488
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 70,
-    "total_features": 1257,
+    "parity_files": 101,
+    "total_features": 1288,
     "absorbed": 65,
-    "pending": 905,
+    "pending": 922,
     "deferred": 17,
-    "rejected": 34,
-    "monitor": 99,
+    "rejected": 35,
+    "monitor": 110,
     "unclassified": 0,
-    "absorbed_pct": 5.2,
+    "absorbed_pct": 5.0,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
   "targets": [
+    {
+      "target": "activitywatch",
+      "label": "ActivityWatch",
+      "category": "capture-memory-app",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/activitywatch.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "activitywatch-capture-substrate",
+          "name": "ActivityWatch capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
     {
       "target": "agent-browser",
       "label": "agent-browser",
@@ -2108,6 +2150,48 @@
       ]
     },
     {
+      "target": "apple-screencapturekit",
+      "label": "Apple ScreenCaptureKit",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/apple-screencapturekit.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "apple-screencapturekit-capture-substrate",
+          "name": "Apple ScreenCaptureKit capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "axi",
       "label": "AXI",
       "category": "cli-design",
@@ -2267,6 +2351,48 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "bettercapture",
+      "label": "BetterCapture",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/bettercapture.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "bettercapture-capture-substrate",
+          "name": "BetterCapture capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -3105,6 +3231,48 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 5,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "cap-creator",
+      "label": "Cap",
+      "category": "creator-tool",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/cap-creator.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "cap-creator-capture-substrate",
+          "name": "Cap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -5924,6 +6092,48 @@
       "rejected_items": []
     },
     {
+      "target": "easyocr",
+      "label": "EasyOCR",
+      "category": "ocr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/easyocr.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "easyocr-capture-substrate",
+          "name": "EasyOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "egregore",
       "label": "Egregore",
       "category": "collaboration-shell",
@@ -6534,6 +6744,90 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "faster-whisper",
+      "label": "faster-whisper",
+      "category": "asr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/faster-whisper.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "faster-whisper-capture-substrate",
+          "name": "faster-whisper capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=asr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "ffmpeg-devices",
+      "label": "FFmpeg devices",
+      "category": "capture-facade-library",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/ffmpeg-devices.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "ffmpeg-devices-capture-substrate",
+          "name": "FFmpeg devices capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -11136,6 +11430,90 @@
       "rejected_items": []
     },
     {
+      "target": "lancedb",
+      "label": "LanceDB",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/lancedb.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "lancedb-capture-substrate",
+          "name": "LanceDB capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "langgraph-durable-execution",
+      "label": "LangGraph durable action patterns",
+      "category": "follow-up-orchestration",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "core/flowmind",
+      "path": ".lev/pm/parity/langgraph-durable-execution.yaml",
+      "verdict": "extract_reject_as_owner",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract_reject_as_owner": 1
+      },
+      "features": [
+        {
+          "id": "langgraph-durable-execution-capture-substrate",
+          "name": "LangGraph durable action patterns capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract_reject_as_owner",
+          "notes": "Registry row from approved intake; category=follow-up-orchestration.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "larql",
       "label": "larql",
       "category": "knowledge-runtime",
@@ -13745,6 +14123,48 @@
       "rejected_items": []
     },
     {
+      "target": "obs-libobs",
+      "label": "OBS Studio/libobs",
+      "category": "creator-tool",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/obs-libobs.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "obs-libobs-capture-substrate",
+          "name": "OBS Studio/libobs capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "omc",
       "label": "OMC",
       "category": "agent-framework",
@@ -14992,6 +15412,56 @@
       "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "openrecall",
+      "label": "OpenRecall",
+      "category": "capture-memory-app",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/openrecall.yaml",
+      "verdict": "reject",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "openrecall-capture-substrate",
+          "name": "OpenRecall capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "reject",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "openrecall-capture-substrate",
+          "name": "OpenRecall capture substrate role",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "openrig",
@@ -16848,6 +17318,48 @@
       "rejected_items": []
     },
     {
+      "target": "paddleocr",
+      "label": "PaddleOCR",
+      "category": "ocr-engine",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/paddleocr.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "paddleocr-capture-substrate",
+          "name": "PaddleOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "paperbanana",
       "label": "PaperBanana",
       "category": "illustration-pipeline",
@@ -17096,6 +17608,90 @@
       "rejected_items": []
     },
     {
+      "target": "pensieve",
+      "label": "Pensieve",
+      "category": "capture-memory-app",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/pensieve.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "pensieve-capture-substrate",
+          "name": "Pensieve capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "pipewire-xdg-portal",
+      "label": "PipeWire/XDG Desktop Portal ScreenCast",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/pipewire-xdg-portal.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "pipewire-xdg-portal-capture-substrate",
+          "name": "PipeWire/XDG Desktop Portal ScreenCast capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "pulumi-agentic-infrastructure-era",
       "label": "Pulumi Agentic Infrastructure Era",
       "category": "agentic-infrastructure-control-plane",
@@ -17318,6 +17914,132 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "qdrant",
+      "label": "Qdrant",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/qdrant.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "qdrant-capture-substrate",
+          "name": "Qdrant capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "quickrecorder",
+      "label": "QuickRecorder",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/quickrecorder.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "quickrecorder-capture-substrate",
+          "name": "QuickRecorder capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "rapidocr",
+      "label": "RapidOCR",
+      "category": "ocr-engine",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rapidocr.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "rapidocr-capture-substrate",
+          "name": "RapidOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -17853,6 +18575,48 @@
       ]
     },
     {
+      "target": "recordly",
+      "label": "Recordly",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/recordly.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "recordly-capture-substrate",
+          "name": "Recordly capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "rivet",
       "label": "rivet",
       "category": "runtime-substrate",
@@ -18193,6 +18957,90 @@
           "tribunal_note": null
         }
       ],
+      "rejected_items": []
+    },
+    {
+      "target": "rust-scap",
+      "label": "Rust scap",
+      "category": "capture-facade-library",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rust-scap.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "rust-scap-capture-substrate",
+          "name": "Rust scap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "rust-xcap",
+      "label": "Rust xcap",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rust-xcap.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "rust-xcap-capture-substrate",
+          "name": "Rust xcap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
       "rejected_items": []
     },
     {
@@ -18930,6 +19778,258 @@
       "rejected_items": []
     },
     {
+      "target": "screencapturekit-rs",
+      "label": "screencapturekit-rs",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screencapturekit-rs.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "screencapturekit-rs-capture-substrate",
+          "name": "screencapturekit-rs capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "screenity",
+      "label": "Screenity",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screenity.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "screenity-capture-substrate",
+          "name": "Screenity capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "screenpipe",
+      "label": "Screenpipe",
+      "category": "capture-memory-app",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screenpipe.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "screenpipe-capture-substrate",
+          "name": "Screenpipe capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "sqlite-fts5-sqlite-vec",
+      "label": "SQLite FTS5/sqlite-vec",
+      "category": "search-index",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/sqlite-fts5-sqlite-vec.yaml",
+      "verdict": "adopt_with_feature_flag",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt_with_feature_flag": 1
+      },
+      "features": [
+        {
+          "id": "sqlite-fts5-sqlite-vec-capture-substrate",
+          "name": "SQLite FTS5/sqlite-vec capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt_with_feature_flag",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "sqlite-wal-json-timeline",
+      "label": "SQLite WAL/JSON timeline",
+      "category": "storage-timeline",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/sqlite-wal-json-timeline.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "sqlite-wal-json-timeline-capture-substrate",
+          "name": "SQLite WAL/JSON timeline capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=storage-timeline.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tantivy",
+      "label": "Tantivy",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/tantivy.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tantivy-capture-substrate",
+          "name": "Tantivy capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "tencentdb-agent-memory",
       "label": "TencentDB Agent Memory",
       "category": "agent-memory-framework",
@@ -19100,6 +20200,48 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tesseract",
+      "label": "Tesseract",
+      "category": "ocr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/tesseract.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tesseract-capture-substrate",
+          "name": "Tesseract capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -20302,6 +21444,174 @@
           "tribunal_note": null
         }
       ],
+      "rejected_items": []
+    },
+    {
+      "target": "whisper-cpp",
+      "label": "whisper.cpp",
+      "category": "asr-engine",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/whisper-cpp.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "whisper-cpp-capture-substrate",
+          "name": "whisper.cpp capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=asr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windows-capture",
+      "label": "windows-capture",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windows-capture.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "windows-capture-capture-substrate",
+          "name": "windows-capture capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windows-graphics-capture",
+      "label": "Windows.Graphics.Capture",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windows-graphics-capture.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "windows-graphics-capture-capture-substrate",
+          "name": "Windows.Graphics.Capture capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windrecorder",
+      "label": "Windrecorder",
+      "category": "capture-memory-app",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windrecorder.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "windrecorder-capture-substrate",
+          "name": "Windrecorder capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
       "rejected_items": []
     },
     {
