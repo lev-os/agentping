@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-27T22:02:53.254342+00:00",
+  "generated_at": "2026-05-31T22:00:58.528876+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,21 +14,21 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 23744,
+    "operation_count": 24007,
     "by_type": {
-      "upsert_entity": 5589,
-      "add_claim": 12667,
-      "add_link": 5488
+      "upsert_entity": 5646,
+      "add_claim": 12818,
+      "add_link": 5543
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 101,
-    "total_features": 1288,
+    "parity_files": 103,
+    "total_features": 1304,
     "absorbed": 65,
-    "pending": 922,
+    "pending": 936,
     "deferred": 17,
-    "rejected": 35,
+    "rejected": 36,
     "monitor": 110,
     "unclassified": 0,
     "absorbed_pct": 5.0,
@@ -3233,6 +3233,211 @@
       "monitor": 5,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "birch-html",
+      "label": "birch-html",
+      "category": "artifact-generation-benchmark",
+      "priority": "P1",
+      "measured_at": "2026-05-25",
+      "updated_at": "2026-05-25",
+      "owner": "plugins/now + core/ui + plugins/bench + plugins/evolve-memory + AgentPing",
+      "path": ".lev/pm/parity/birch-html.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4,
+        "build": 3,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "bh-01",
+          "name": "Strict self-contained HTML skill contract",
+          "status": "partial",
+          "lev_equivalent": "plugins/now RenderSpec schema + core/ui HTMLAdapter + prompt/spec guidance",
+          "action": "extract",
+          "notes": "Birch has unusually concrete artifact rules: complete HTML, no network assets, embedded CSS, mobile safety, and strict component child contracts. Lev has stronger typed render surfaces, but the generation contract and failure taxonomy should be ported.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/skill/SKILL.md",
+            "plugins/now/src/contracts/schema.ts",
+            "core/ui/src/renderers/html.ts"
+          ]
+        },
+        {
+          "id": "bh-02",
+          "name": "Deterministic artifact checker",
+          "status": "missing",
+          "lev_equivalent": "No Lev-owned generated-HTML quality gate equivalent",
+          "action": "build",
+          "notes": "The checker combines static contract checks, optional screenshots, and render smoke metrics. Lev should build a typed quality gate for RenderSpec/GenUI outputs rather than copy the Birch implementation verbatim.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/scripts/check_birch_renderings.py",
+            "plugins/now/src/engine/render.test.ts"
+          ]
+        },
+        {
+          "id": "bh-03",
+          "name": "VLM screenshot defect review as ASI",
+          "status": "missing",
+          "lev_equivalent": "plugins/bench provider eval contracts + future AgentPing visual QA projection",
+          "action": "build",
+          "notes": "Birch limits VLM review to egregious visible defects and records structured findings with optional bounding boxes. That is the right shape for visual QA receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/scripts/review_birch_screenshots_with_vision.py",
+            "plugins/bench/src/provider-eval-contracts.ts"
+          ]
+        },
+        {
+          "id": "bh-04",
+          "name": "Multi-model artifact benchmark",
+          "status": "missing",
+          "lev_equivalent": "plugins/bench scenario/evidence scoring plus parity report projections",
+          "action": "build",
+          "notes": "The 13-model, five-task benchmark packages artifacts, checker summaries, VLM findings, token/time metrics, and a published report. Lev should model this as artifact-quality bench data, not as a generic model leaderboard.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/PUBLISH_REPORT.md",
+            "workshop/intake/birch-html/analysis/data/model-summary.json"
+          ]
+        },
+        {
+          "id": "bh-05",
+          "name": "GEPA skill/recipe mutation boundary",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory skill mutation contracts + EvolutionRunArtifact follow-on",
+          "action": "extract",
+          "notes": "Birch mutates only `SKILL.md` and selected recipes, then materializes full isolated candidate skill directories. Lev should reuse the mutation boundary and candidate evidence layout for accepted skill evolution.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/scripts/optimize_birch_skill_with_gepa.py",
+            "plugins/evolve-memory/src/evolution/skill-mutation-contract.ts",
+            ".lev/pm/parity/gepa-viz.yaml"
+          ]
+        },
+        {
+          "id": "bh-06",
+          "name": "Actionable Side Information feedback bundle",
+          "status": "partial",
+          "lev_equivalent": "TraceBundle evidence refs + bench eval receipts",
+          "action": "extract",
+          "notes": "Deterministic failures, warnings, generated screenshots, VLM findings, and structured score files form a strong ASI bundle. Lev should bind this to TraceBundle/eval receipts before using it for optimization.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/README.md",
+            "workshop/intake/birch-html/scripts/eval_harness.py",
+            "core/domain/src/execution-contract/trace-bundle.ts"
+          ]
+        },
+        {
+          "id": "bh-07",
+          "name": "Published static evidence bundle",
+          "status": "partial",
+          "lev_equivalent": "parity scorecard reports + AgentPing static/dashboard projections",
+          "action": "extract",
+          "notes": "Birch's published report and packaged artifact tree are a useful reference for browseable eval evidence. Lev parity/report projections should preserve links to artifacts, screenshots, findings, and score JSON.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/results/publish/manifest.json",
+            "workshop/intake/birch-html/analysis/report.html",
+            "reports/parity-scorecard.json"
+          ]
+        },
+        {
+          "id": "bh-08",
+          "name": "Direct Birch design-system adoption",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "The Birch visual system is useful prior art, but Lev should keep its own RenderSpec themes, UniversalWidget adapters, and AgentPing surfaces. Adopt the quality loop, not the style as canon.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/birch-html/skill/assets/birch-system.css",
+            "plugins/now/src/contracts/schema.ts"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "e2ea9a3aca7e97f2b2a431cfa392aa4e99d8fa90",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/birch-html rev-parse HEAD"
+        },
+        {
+          "name": "benchmark_models_packaged",
+          "value": 13,
+          "unit": "model-runs",
+          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+        },
+        {
+          "name": "final_artifacts_packaged",
+          "value": 65,
+          "unit": "artifacts",
+          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+        },
+        {
+          "name": "immediate_provenance_passes",
+          "value": 52,
+          "unit": "tasks",
+          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+        },
+        {
+          "name": "total_task_opportunities",
+          "value": 65,
+          "unit": "tasks",
+          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+        },
+        {
+          "name": "vlm_findings_with_bbox",
+          "value": 55,
+          "unit": "findings",
+          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/birch-html/",
+        "workshop/analysis/birch-html/analysis.md",
+        "workshop/intake/birch-html/README.md",
+        "workshop/intake/birch-html/skill/SKILL.md",
+        "workshop/intake/birch-html/scripts/check_birch_renderings.py",
+        "workshop/intake/birch-html/scripts/run_skill_evals.py",
+        "workshop/intake/birch-html/scripts/review_birch_screenshots_with_vision.py",
+        "workshop/intake/birch-html/scripts/optimize_birch_skill_with_gepa.py",
+        "workshop/intake/birch-html/PUBLISH_REPORT.md",
+        "plugins/now/src/contracts/schema.ts",
+        "plugins/now/src/engine/render.ts",
+        "core/ui/src/renderers/html.ts",
+        ".lev/pm/parity/gepa-viz.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "bh-08",
+          "name": "Direct Birch design-system adoption",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "cap-creator",
@@ -9871,6 +10076,185 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "gepa-viz",
+      "label": "gepa-viz",
+      "category": "evolution-run-visualization",
+      "priority": "P1",
+      "measured_at": "2026-05-25",
+      "updated_at": "2026-05-25",
+      "owner": "workshop-intake + plugins/evolve-memory + plugins/bench + AgentPing",
+      "path": ".lev/pm/parity/gepa-viz.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "build": 4,
+        "keep-lev": 1
+      },
+      "features": [
+        {
+          "id": "gv-01",
+          "name": "Evolution run artifact schema",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory EvolutionResult + EvolutionCandidate lineage",
+          "action": "extract",
+          "notes": "gepa-viz run.json is a concrete projection shape for examples, candidates, parent links, predictions, minibatch feedback, and prompt text. Lev has the core candidate/result types but not a viewer-ready run artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/README.md",
+            "workshop/intake/gepa-viz/python/src/gepa_viz/callback.py",
+            "plugins/evolve-memory/src/evolution/types.ts"
+          ]
+        },
+        {
+          "id": "gv-02",
+          "name": "Live stream plus static replay modes",
+          "status": "missing",
+          "lev_equivalent": "LevEvent/eval receipt stream + future AgentPing run view",
+          "action": "build",
+          "notes": "The live/static split is worth copying, but Lev should stream from governed runtime events and sealed receipts rather than callback-owned process memory.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/python/src/gepa_viz/server.py",
+            "workshop/intake/gepa-viz/client/packages/react/src/run/provider.tsx"
+          ]
+        },
+        {
+          "id": "gv-03",
+          "name": "Candidate lineage graph",
+          "status": "partial",
+          "lev_equivalent": "EvolutionResult.lineage, graph projections, AgentPing dashboards",
+          "action": "extract",
+          "notes": "Force-directed parent/child rendering is directly applicable to skill/prompt evolution debugging, especially rejected candidates and branch structure.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
+            "plugins/evolve-memory/src/evolution/types.ts"
+          ]
+        },
+        {
+          "id": "gv-04",
+          "name": "Per-example valset score rings",
+          "status": "missing",
+          "lev_equivalent": "plugins/bench scenario/evidence scoring projected into LevUI",
+          "action": "build",
+          "notes": "The donut/pixel-grid score UI makes multi-case performance visible. Lev should map this to bench/eval receipts and evidence refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
+            "workshop/intake/gepa-viz/client/packages/react/src/components/ParetoGrid.tsx",
+            "plugins/bench/src/provider-eval-contracts.ts"
+          ]
+        },
+        {
+          "id": "gv-05",
+          "name": "Rejected candidate inspection",
+          "status": "missing",
+          "lev_equivalent": "No first-class rejected evolution candidate projection",
+          "action": "build",
+          "notes": "Rejected minibatch proposals are still explainable in gepa-viz. Lev should preserve rejected candidates as finite evidence, not only final Pareto winners.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/python/src/gepa_viz/callback.py",
+            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx"
+          ]
+        },
+        {
+          "id": "gv-06",
+          "name": "Feedback-edge hover",
+          "status": "missing",
+          "lev_equivalent": "TraceBundle evaluator/agent-message evidence refs",
+          "action": "extract",
+          "notes": "Showing reflection feedback on lineage edges is a strong UX pattern for trace-based evolution, but Lev should bind it to TraceBundle evidence layers.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
+            "core/domain/src/execution-contract/trace-bundle.ts"
+          ]
+        },
+        {
+          "id": "gv-07",
+          "name": "Prompt diff detail view",
+          "status": "missing",
+          "lev_equivalent": "No evolve-memory prompt/artifact diff projection",
+          "action": "build",
+          "notes": "Candidate detail pages compare prompt to parent and expose minibatch changes. This should become a static evolution artifact view before live streaming.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/gepa-viz/client/packages/react/src/components/CandidateView.tsx",
+            "workshop/intake/gepa-viz/client/packages/react/src/components/PromptDiff.tsx"
+          ]
+        },
+        {
+          "id": "gv-08",
+          "name": "Canonical source-of-truth discipline",
+          "status": "implemented",
+          "lev_equivalent": "FlowMind + LevEvent + exec/eval receipts",
+          "action": "keep-lev",
+          "notes": "Lev is stronger as canon. Extract gepa-viz as a projection pattern only; source-of-truth should remain receipt-backed and evented.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "docs/NORTH_STAR.md",
+            "plugins/evolve-memory/src/evolution/engine.ts"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "1a8483da742eeff1d38d5a0017636788d93fb784",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/gepa-viz rev-parse HEAD"
+        },
+        {
+          "name": "python_source_files",
+          "value": 5,
+          "unit": "count",
+          "source": "find workshop/intake/gepa-viz/python/src -type f -name '*.py'"
+        },
+        {
+          "name": "react_package_source_files",
+          "value": 15,
+          "unit": "count",
+          "source": "find workshop/intake/gepa-viz/client/packages/react/src -type f"
+        },
+        {
+          "name": "app_source_files",
+          "value": 5,
+          "unit": "count",
+          "source": "find workshop/intake/gepa-viz/client/packages/app/src -type f"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/gepa-viz/",
+        "workshop/analysis/gepa-viz/analysis.md",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "docs/plugins/evolve-memory.md",
+        "plugins/evolve-memory/src/evolution/types.ts",
+        "plugins/evolve-memory/src/evolution/engine.ts",
+        "plugins/evolve-memory/flows/skill-evolution.flow.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "gitagent",
