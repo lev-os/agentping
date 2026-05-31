@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-25T00:50:18.514772+00:00",
+  "generated_at": "2026-05-27T22:02:53.254342+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,28 +14,70 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 22362,
+    "operation_count": 23744,
     "by_type": {
-      "upsert_entity": 5322,
-      "add_claim": 11788,
-      "add_link": 5252
+      "upsert_entity": 5589,
+      "add_claim": 12667,
+      "add_link": 5488
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 70,
-    "total_features": 1209,
+    "parity_files": 101,
+    "total_features": 1288,
     "absorbed": 65,
-    "pending": 862,
+    "pending": 922,
     "deferred": 17,
     "rejected": 35,
-    "monitor": 92,
+    "monitor": 110,
     "unclassified": 0,
-    "absorbed_pct": 5.4,
+    "absorbed_pct": 5.0,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
   "targets": [
+    {
+      "target": "activitywatch",
+      "label": "ActivityWatch",
+      "category": "capture-memory-app",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/activitywatch.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "activitywatch-capture-substrate",
+          "name": "ActivityWatch capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
     {
       "target": "agent-browser",
       "label": "agent-browser",
@@ -2108,6 +2150,48 @@
       ]
     },
     {
+      "target": "apple-screencapturekit",
+      "label": "Apple ScreenCaptureKit",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/apple-screencapturekit.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "apple-screencapturekit-capture-substrate",
+          "name": "Apple ScreenCaptureKit capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "axi",
       "label": "AXI",
       "category": "cli-design",
@@ -2271,209 +2355,926 @@
       "rejected_items": []
     },
     {
-      "target": "birch-html",
-      "label": "birch-html",
-      "category": "artifact-generation-benchmark",
-      "priority": "P1",
-      "measured_at": "2026-05-25",
-      "updated_at": "2026-05-25",
-      "owner": "plugins/now + core/ui + plugins/bench + plugins/evolve-memory + AgentPing",
-      "path": ".lev/pm/parity/birch-html.yaml",
-      "verdict": "extract",
-      "total_features": 8,
-      "classified": 8,
+      "target": "bettercapture",
+      "label": "BetterCapture",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/bettercapture.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
       "unclassified": 0,
       "counts": {
-        "extract": 4,
-        "build": 3,
-        "reject": 1
+        "monitor": 1
       },
       "features": [
         {
-          "id": "bh-01",
-          "name": "Strict self-contained HTML skill contract",
+          "id": "bettercapture-capture-substrate",
+          "name": "BetterCapture capture substrate role",
           "status": "partial",
-          "lev_equivalent": "plugins/now RenderSpec schema + core/ui HTMLAdapter + prompt/spec guidance",
-          "action": "extract",
-          "notes": "Birch has unusually concrete artifact rules: complete HTML, no network assets, embedded CSS, mobile safety, and strict component child contracts. Lev has stronger typed render surfaces, but the generation contract and failure taxonomy should be ported.",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=creator-tool.",
           "absorbed_into": null,
           "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/birch-html/skill/SKILL.md",
-            "plugins/now/src/contracts/schema.ts",
-            "core/ui/src/renderers/html.ts"
-          ]
-        },
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "betterstack",
+      "label": "Better Stack",
+      "category": "observability-incident-sre-platform",
+      "priority": "P0",
+      "measured_at": "2026-05-22",
+      "updated_at": "2026-05-22",
+      "owner": "core/telemetry + core/event-bus + core/daemon + community/agentping + plugins/scheduling + plugins/platforms",
+      "path": ".lev/pm/parity/betterstack.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 56,
+      "classified": 56,
+      "unclassified": 0,
+      "counts": {
+        "build": 41,
+        "merge": 2,
+        "extract": 8,
+        "monitor": 5
+      },
+      "features": [
         {
-          "id": "bh-02",
-          "name": "Deterministic artifact checker",
-          "status": "missing",
-          "lev_equivalent": "No Lev-owned generated-HTML quality gate equivalent",
+          "id": "betterstack-01",
+          "name": "Unified observability, uptime, incident, on-call, and status page suite",
+          "status": "partial",
+          "lev_equivalent": "Lev runtime planes plus AgentPing dashboard, not one unified shipped SRE product",
           "action": "build",
-          "notes": "The checker combines static contract checks, optional screenshots, and render smoke metrics. Lev should build a typed quality gate for RenderSpec/GenUI outputs rather than copy the Birch implementation verbatim.",
+          "notes": "Build an AgentPing operational command center that composes Lev telemetry, events, daemon health, incidents, and public/private status projections.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/scripts/check_birch_renderings.py",
-            "plugins/now/src/engine/render.test.ts"
+            "https://betterstack.com/log-management.md",
+            "https://betterstack.com/incident-management.md",
+            "https://betterstack.com/status-page.md"
           ]
         },
         {
-          "id": "bh-03",
-          "name": "VLM screenshot defect review as ASI",
+          "id": "betterstack-02",
+          "name": "Thirty-second multi-location uptime checks",
           "status": "missing",
-          "lev_equivalent": "plugins/bench provider eval contracts + future AgentPing visual QA projection",
+          "lev_equivalent": "No Lev-native synthetic uptime monitor fleet",
           "action": "build",
-          "notes": "Birch limits VLM review to egregious visible defects and records structured findings with optional bounding boxes. That is the right shape for visual QA receipts.",
+          "notes": "Requires scheduled probes, region metadata, failure quorum, and proof receipts.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/scripts/review_birch_screenshots_with_vision.py",
-            "plugins/bench/src/provider-eval-contracts.ts"
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/website-monitoring.md"
           ]
         },
         {
-          "id": "bh-04",
-          "name": "Multi-model artifact benchmark",
+          "id": "betterstack-03",
+          "name": "Broad monitor types across HTTP, keyword, ping, TCP, UDP, SMTP, POP3, IMAP, DNS, and Playwright",
           "status": "missing",
-          "lev_equivalent": "plugins/bench scenario/evidence scoring plus parity report projections",
+          "lev_equivalent": "No single typed monitor registry or probe executor",
           "action": "build",
-          "notes": "The 13-model, five-task benchmark packages artifacts, checker summaries, VLM findings, token/time metrics, and a published report. Lev should model this as artifact-quality bench data, not as a generic model leaderboard.",
+          "notes": "Model monitor kinds as typed domain declarations before implementing adapters.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/PUBLISH_REPORT.md",
-            "workshop/intake/birch-html/analysis/data/model-summary.json"
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
           ]
         },
         {
-          "id": "bh-05",
-          "name": "GEPA skill/recipe mutation boundary",
+          "id": "betterstack-04",
+          "name": "Playwright transaction monitoring",
           "status": "partial",
-          "lev_equivalent": "plugins/evolve-memory skill mutation contracts + EvolutionRunArtifact follow-on",
-          "action": "extract",
-          "notes": "Birch mutates only `SKILL.md` and selected recipes, then materializes full isolated candidate skill directories. Lev should reuse the mutation boundary and candidate evidence layout for accepted skill evolution.",
+          "lev_equivalent": "Browser plugin and AppTestr-like work can run browser checks but lacks scheduled incident binding",
+          "action": "merge",
+          "notes": "Reuse existing browser automation primitives and add monitor lifecycle, screenshots, step logs, and incident receipts.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/scripts/optimize_birch_skill_with_gepa.py",
-            "plugins/evolve-memory/src/evolution/skill-mutation-contract.ts",
-            ".lev/pm/parity/gepa-viz.yaml"
+            "https://betterstack.com/website-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
           ]
         },
         {
-          "id": "bh-06",
-          "name": "Actionable Side Information feedback bundle",
+          "id": "betterstack-05",
+          "name": "Error screenshots, response logs, traceroute, and MTR evidence on failures",
+          "status": "missing",
+          "lev_equivalent": "Receipts exist conceptually but not network-diagnostic uptime evidence",
+          "action": "build",
+          "notes": "Add diagnostic attachments to probe receipts so incidents carry network, HTTP, screenshot, and route evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-06",
+          "name": "Confirmation periods, recovery periods, maintenance windows, and probe regions",
+          "status": "missing",
+          "lev_equivalent": "Scheduling and gates exist, but not monitor-specific debounce and regional quorum",
+          "action": "build",
+          "notes": "Treat these as first-class monitor policy fields, not ad hoc alert dampening.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-07",
+          "name": "Heartbeat and cron monitoring",
           "status": "partial",
-          "lev_equivalent": "TraceBundle evidence refs + bench eval receipts",
-          "action": "extract",
-          "notes": "Deterministic failures, warnings, generated screenshots, VLM findings, and structured score files form a strong ASI bundle. Lev should bind this to TraceBundle/eval receipts before using it for optimization.",
+          "lev_equivalent": "Scheduling and daemon receipts exist without heartbeat product UX",
+          "action": "build",
+          "notes": "Lev should expose expected job receipts and missed-heartbeat incidents for cron, workers, and scheduled automations.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/README.md",
-            "workshop/intake/birch-html/scripts/eval_harness.py",
-            "core/domain/src/execution-contract/trace-bundle.ts"
+            "https://betterstack.com/uptime.md",
+            "https://betterstack.com/website-monitoring.md"
           ]
         },
         {
-          "id": "bh-07",
-          "name": "Published static evidence bundle",
+          "id": "betterstack-08",
+          "name": "SSL certificate and domain expiration monitoring",
+          "status": "missing",
+          "lev_equivalent": "No active certificate/domain expiration monitor",
+          "action": "build",
+          "notes": "Useful as a small, high-signal platform probe family.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/uptime.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-09",
+          "name": "Monitor groups, bulk imports, and monitor API management",
+          "status": "missing",
+          "lev_equivalent": "No monitor management API or import path",
+          "action": "build",
+          "notes": "Build only after monitor schema stabilizes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__bulk-importing-monitors.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__api__monitors-api-response-params.md"
+          ]
+        },
+        {
+          "id": "betterstack-10",
+          "name": "Phone, SMS, email, push, Slack, and Microsoft Teams alert channels",
           "status": "partial",
-          "lev_equivalent": "parity scorecard reports + AgentPing static/dashboard projections",
-          "action": "extract",
-          "notes": "Birch's published report and packaged artifact tree are a useful reference for browseable eval evidence. Lev parity/report projections should preserve links to artifacts, screenshots, findings, and score JSON.",
+          "lev_equivalent": "AgentPing notification surfaces and integrations exist, but not incident alert channel parity",
+          "action": "build",
+          "notes": "Alert routing should compile from escalation policy plus AgentGuard contact permissions.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/results/publish/manifest.json",
-            "workshop/intake/birch-html/analysis/report.html",
-            "reports/parity-scorecard.json"
+            "workshop/intake/betterstack/raw/md/docs__uptime__monitoring-start.md",
+            "https://betterstack.com/incident-management.md"
           ]
         },
         {
-          "id": "bh-08",
-          "name": "Direct Birch design-system adoption",
-          "status": "not-applicable",
-          "lev_equivalent": "N/A",
-          "action": "reject",
-          "notes": "The Birch visual system is useful prior art, but Lev should keep its own RenderSpec themes, UniversalWidget adapters, and AgentPing surfaces. Adopt the quality loop, not the style as canon.",
+          "id": "betterstack-11",
+          "name": "On-call schedules, rotations, overrides, and calendar integrations",
+          "status": "missing",
+          "lev_equivalent": "Scheduling exists without human on-call roster semantics",
+          "action": "build",
+          "notes": "This is a core AgentPing enterprise surface because it binds humans, teams, availability, and incident responsibility.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
-            "workshop/intake/birch-html/skill/assets/birch-system.css",
-            "plugins/now/src/contracts/schema.ts"
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-oncall-v2.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-12",
+          "name": "Escalation policies with steps, delays, repeating, time windows, severities, and metadata rules",
+          "status": "missing",
+          "lev_equivalent": "FlowMind can express policies, but no incident escalation policy product",
+          "action": "build",
+          "notes": "Good candidate for FlowMind policy declarations projected into AgentPing UI.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__escalation-policies.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-13",
+          "name": "Incident lifecycle with create, acknowledge, comment, escalate, resolve, and timeline APIs",
+          "status": "partial",
+          "lev_equivalent": "LevEvent receipts and workstream state exist, but no SRE incident lifecycle object",
+          "action": "build",
+          "notes": "Introduce Incident as a domain plugin entity rather than overloading PM workstreams.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md",
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__mcp.md"
+          ]
+        },
+        {
+          "id": "betterstack-14",
+          "name": "Smart incident merging",
+          "status": "missing",
+          "lev_equivalent": "No incident correlation/merge engine",
+          "action": "build",
+          "notes": "Use graph/event correlation over source, dependency, time window, monitor group, and metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md",
+            "https://betterstack.com/uptime.md"
+          ]
+        },
+        {
+          "id": "betterstack-15",
+          "name": "Runbooks, todo lists, and workflow instructions inserted into incident timelines",
+          "status": "partial",
+          "lev_equivalent": "Skills and FlowMind plans exist, but not incident-attached runbooks",
+          "action": "merge",
+          "notes": "Convert runbooks into FlowMind-backed checklists with evidence and completion receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__escalation-policies.md",
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-16",
+          "name": "Incident metadata and catalog for severity, ownership, reporting, routing, and status impact",
+          "status": "partial",
+          "lev_equivalent": "Graph entities and metadata exist without SRE catalog product flows",
+          "action": "build",
+          "notes": "Strong fit for Lev's graph/provenance plane; use catalog relations to bind service ownership to incident routing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-17",
+          "name": "Incident, organization, team, on-call, monitor, SLA, MTTA, MTTR, and status page reporting",
+          "status": "missing",
+          "lev_equivalent": "Reports exist as artifacts, not operational SRE analytics",
+          "action": "build",
+          "notes": "Project through generated reports first, then dashboards.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting.md"
+          ]
+        },
+        {
+          "id": "betterstack-18",
+          "name": "Slack-native incident creation, acknowledgement, resolution, and event sync",
+          "status": "partial",
+          "lev_equivalent": "AgentPing can notify, but no Slack-native incident command surface",
+          "action": "build",
+          "notes": "Use AgentPing command/action envelopes so chat operations produce audited events.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/incident-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-19",
+          "name": "Public and private status pages",
+          "status": "missing",
+          "lev_equivalent": "No generated operational status page product",
+          "action": "build",
+          "notes": "Start with generated read-only status pages from Incident and Monitor state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md"
+          ]
+        },
+        {
+          "id": "betterstack-20",
+          "name": "Custom status page domains, branding, CSS, JavaScript, dark mode, and translations",
+          "status": "missing",
+          "lev_equivalent": "Publisher surfaces exist but not status-page theming controls",
+          "action": "build",
+          "notes": "Defer until status pages exist; keep custom JavaScript behind strict policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__working-with-status-pages__customize-status-page-css-js.md"
+          ]
+        },
+        {
+          "id": "betterstack-21",
+          "name": "Status resources, structure, monitor binding, and metadata-controlled degraded/down state",
+          "status": "missing",
+          "lev_equivalent": "No StatusResource model",
+          "action": "build",
+          "notes": "Status resources should be projections, not mutable truth separate from incidents and monitors.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-22",
+          "name": "Status subscribers and component-level email subscriptions",
+          "status": "missing",
+          "lev_equivalent": "Notification subscriptions are not modeled for public status pages",
+          "action": "build",
+          "notes": "Requires external subscriber storage and unsubscribe/privacy handling.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__getting-started-with-status-pages.md"
+          ]
+        },
+        {
+          "id": "betterstack-23",
+          "name": "Incident updates, planned maintenance, announcements, and service degradations on status pages",
+          "status": "missing",
+          "lev_equivalent": "No status update authoring workflow",
+          "action": "build",
+          "notes": "Use Incident timeline events as the source, with optional human-approved public projection.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md"
+          ]
+        },
+        {
+          "id": "betterstack-24",
+          "name": "Embeddable status badges and status charts",
+          "status": "missing",
+          "lev_equivalent": "No embeddable operational widget contract",
+          "action": "build",
+          "notes": "Natural AgentPing widget projection once status pages exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__uptime__working-with-status-pages__embeddable-status-badge.md",
+            "https://betterstack.com/status-page.md"
+          ]
+        },
+        {
+          "id": "betterstack-25",
+          "name": "External monitoring integrations for Datadog, New Relic, Grafana, Prometheus, Zabbix, AWS, Azure, and Google Cloud",
+          "status": "partial",
+          "lev_equivalent": "Poly/platform adapters exist, but not SRE-specific inbound incident connectors",
+          "action": "build",
+          "notes": "Connectors should normalize inbound alerts into IncidentCandidate events with source metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__incident-metadata.md"
+          ]
+        },
+        {
+          "id": "betterstack-26",
+          "name": "Log source creation, source tokens, and HTTP log ingestion",
+          "status": "partial",
+          "lev_equivalent": "Logger and event bus exist, but no multi-source log ingestion tenant model",
+          "action": "build",
+          "notes": "Lev should define source identity, auth, retention, and ingest receipts before UI.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__logging-start.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__ingesting-data__http__logs.md"
+          ]
+        },
+        {
+          "id": "betterstack-27",
+          "name": "Better Stack collector with eBPF no-code instrumentation and remote collector control",
+          "status": "missing",
+          "lev_equivalent": "No eBPF collector or remotely controlled collector fleet",
+          "action": "extract",
+          "notes": "Extract the control-plane shape; do not attempt kernel-level collector work until telemetry goals demand it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__collector.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-28",
+          "name": "OpenTelemetry logs, traces, metrics, and OTLP forwarding",
+          "status": "partial",
+          "lev_equivalent": "core/telemetry provides OpenTelemetry primitives, but ingestion/storage/product flows are incomplete",
+          "action": "build",
+          "notes": "This is the direct bridge from Lev runtime receipts to an observability product.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__collector.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-29",
+          "name": "Logging integrations for Vector, Syslog, Fluent Bit, Fluentd, Logstash, Filebeat, Docker, Kubernetes, cloud platforms, and languages",
+          "status": "partial",
+          "lev_equivalent": "Some adapters and logger packages exist, but no polished ingestion integration catalog",
+          "action": "extract",
+          "notes": "Recreate as integration recipes plus generated connector tests, not a hand-written docs sprawl.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__logging-start.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-30",
+          "name": "Wide events plus time-series storage model",
+          "status": "missing",
+          "lev_equivalent": "Event bus and telemetry data exist without a dedicated wide-event/time-series query architecture",
+          "action": "extract",
+          "notes": "Useful architecture for separating ad-hoc event search from fast dashboard metrics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/log-management.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md"
+          ]
+        },
+        {
+          "id": "betterstack-31",
+          "name": "Live tail search with simple, compound, regex, fulltext, and typed field filters",
+          "status": "partial",
+          "lev_equivalent": "lev find/search surfaces exist, but not live telemetry tail query language",
+          "action": "build",
+          "notes": "Could reuse Lev query grammar discipline; avoid inventing a one-off log-only language if `lev find` can project it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__using-logtail__live-tail-query-language.md"
+          ]
+        },
+        {
+          "id": "betterstack-32",
+          "name": "Explore queries through drag-and-drop, SQL, PromQL, PQL, and log filters",
+          "status": "missing",
+          "lev_equivalent": "No visual telemetry query builder",
+          "action": "build",
+          "notes": "Start with saved query objects and generated charts rather than freeform UI builder scope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__getting-started.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-33",
+          "name": "Dashboards, charts, templates, variables, static text, import, and export",
+          "status": "partial",
+          "lev_equivalent": "Dashboards and generated reports exist, but not a telemetry dashboard editor",
+          "action": "build",
+          "notes": "Keep dashboards as projections from typed query/chart specs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__getting-started.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__api__dashboards__import.md"
+          ]
+        },
+        {
+          "id": "betterstack-34",
+          "name": "Extract metrics from logs",
+          "status": "missing",
+          "lev_equivalent": "No logs-to-metrics compiler",
+          "action": "build",
+          "notes": "High leverage for event-bus receipts that need trendable operational metrics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__logs-to-metrics.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md"
+          ]
+        },
+        {
+          "id": "betterstack-35",
+          "name": "Dashboard and exploration alerts",
+          "status": "missing",
+          "lev_equivalent": "FlowMind gates and notifications exist without telemetry alert definitions",
+          "action": "build",
+          "notes": "Alert rules should compile into FlowMind/AgentGuard-gated notification actions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__dashboards__alerts.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__api__dashboard-alerts__create.md"
+          ]
+        },
+        {
+          "id": "betterstack-36",
+          "name": "Query boost, sampling, pre-aggregated metrics, and custom clusters for performance",
+          "status": "missing",
+          "lev_equivalent": "No telemetry query acceleration tier",
+          "action": "monitor",
+          "notes": "Monitor as future scale architecture; not needed before base telemetry store and query UX exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__faster-queries.md",
+            "workshop/intake/betterstack/raw/md/docs__logs__query-boost.md"
+          ]
+        },
+        {
+          "id": "betterstack-37",
+          "name": "Read-only SQL API over logs, spans, and metrics with ClickHouse-compatible access",
+          "status": "missing",
+          "lev_equivalent": "No external SQL telemetry API",
+          "action": "extract",
+          "notes": "Useful API precedent for machine access and Grafana compatibility.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__query-api__connect-remotely.md"
+          ]
+        },
+        {
+          "id": "betterstack-38",
+          "name": "Customer-owned S3-compatible telemetry bucket with ClickHouse-local analysis",
+          "status": "missing",
+          "lev_equivalent": "No bring-your-own-bucket telemetry archive",
+          "action": "extract",
+          "notes": "Strong sovereignty fit, but belongs after telemetry persistence boundaries are stable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__logs__host-data-in-your-own-bucket.md"
+          ]
+        },
+        {
+          "id": "betterstack-39",
+          "name": "Usage transparency, billing alerts, spending limits, and retention controls",
+          "status": "partial",
+          "lev_equivalent": "Some budget concepts exist, but no telemetry usage/billing product surface",
+          "action": "build",
+          "notes": "Adapt as resource/budget guards even when Lev is not billing users.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/infrastructure-monitoring.md",
+            "https://betterstack.com/log-management.md"
+          ]
+        },
+        {
+          "id": "betterstack-40",
+          "name": "Real user monitoring with website analytics, referrers, UTM data, user agents, and frontend/backend correlation",
+          "status": "missing",
+          "lev_equivalent": "No real-user monitoring product",
+          "action": "build",
+          "notes": "Mostly relevant for AgentPing, hosted apps, and community products rather than core CLI runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-41",
+          "name": "Session replay with filtering, pause skipping, related errors/traces/logs/metrics, and sensitive-field exclusion",
+          "status": "missing",
+          "lev_equivalent": "No session replay capture or privacy masking system",
+          "action": "monitor",
+          "notes": "Good product precedent; defer unless AgentPing web product telemetry becomes a priority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-42",
+          "name": "Web vitals, browser performance, Chrome memory, and degradation alerts",
+          "status": "missing",
+          "lev_equivalent": "No RUM performance monitor",
+          "action": "monitor",
+          "notes": "Valuable once AgentPing has a production hosted web surface with user traffic.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-43",
+          "name": "Product analytics funnels and auto-captured anonymous or identified user events",
+          "status": "missing",
+          "lev_equivalent": "No product analytics/funnel product",
+          "action": "monitor",
+          "notes": "Keep separate from core runtime telemetry to avoid conflating user behavior analytics with execution receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__js-tag__configure.md"
+          ]
+        },
+        {
+          "id": "betterstack-44",
+          "name": "Sentry-compatible error tracking across languages and platforms",
+          "status": "missing",
+          "lev_equivalent": "No Sentry-compatible error ingestion product",
+          "action": "extract",
+          "notes": "Compatibility is a smart adoption path; Lev should consider accepting common error envelopes before custom SDKs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__collecting-errors__sentry-sdk.md"
+          ]
+        },
+        {
+          "id": "betterstack-45",
+          "name": "Source maps, releases, stack traces, browser context, environment data, and breadcrumbs",
+          "status": "missing",
+          "lev_equivalent": "No application error context workflow",
+          "action": "build",
+          "notes": "Maps well to proof-carrying failure reports and code-agent debugging context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__collecting-errors__upload-source-maps.md"
+          ]
+        },
+        {
+          "id": "betterstack-46",
+          "name": "Exception grouping, snooze, occurrence thresholds, and severity handling",
+          "status": "missing",
+          "lev_equivalent": "No error-group lifecycle product",
+          "action": "build",
+          "notes": "Treat groups as graph clusters with lifecycle, thresholds, and human decisions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__using-the-product__exception-grouping.md"
+          ]
+        },
+        {
+          "id": "betterstack-47",
+          "name": "Error integrations with Slack, Microsoft Teams, Linear, Jira, GitHub, and incident escalation",
+          "status": "partial",
+          "lev_equivalent": "Platform adapters exist, but no error-to-ticket/incident workflow",
+          "action": "build",
+          "notes": "Route through AgentPing approvals and external-system leases.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__integrations__github.md"
+          ]
+        },
+        {
+          "id": "betterstack-48",
+          "name": "Fix with AI ready-made prompts for Claude Code, Cursor, and Codex",
+          "status": "partial",
+          "lev_equivalent": "Lev has skills/prompts and execution surfaces, but no error-derived prompt composer",
+          "action": "extract",
+          "notes": "Directly relevant to Lev's agentic SDLC surface; compose prompts from error context and repo evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__errors__using-the-product__fix-with-ai.md",
+            "workshop/intake/betterstack/raw/md/docs__errors__start.md"
+          ]
+        },
+        {
+          "id": "betterstack-49",
+          "name": "AI SRE chat for root-cause analysis over logs, metrics, traces, errors, web events, deployments, and trends",
+          "status": "partial",
+          "lev_equivalent": "Timetravel/research, telemetry, graph, and AgentPing pieces exist but no AI SRE incident chat",
+          "action": "build",
+          "notes": "This should be a productized AgentPing incident room backed by graph, telemetry, and controlled tools.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/ai-sre.md",
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__analyzing-data__logs.md"
+          ]
+        },
+        {
+          "id": "betterstack-50",
+          "name": "Remote MCP server with OAuth/API token auth and tool allowlist/blocklist headers",
+          "status": "partial",
+          "lev_equivalent": "Lev has MCP/Poly surfaces but not scoped remote SRE MCP tool server parity",
+          "action": "build",
+          "notes": "Strong fit for Poly Robot/Machine Mode and AgentGuard scoped tool grants.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__mcp.md",
+            "https://betterstack.com/ai-sre.md"
+          ]
+        },
+        {
+          "id": "betterstack-51",
+          "name": "AI SRE GitHub sandbox that clones repositories, writes fixes, validates, and opens linked pull requests",
+          "status": "partial",
+          "lev_equivalent": "Lev exec/SDLC can modify repos, but no error-linked AI SRE sandbox product",
+          "action": "build",
+          "notes": "Very high relevance, but Lev should require explicit leases, side-effect declarations, and receipt-linked PRs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__writing-code__error-pull-requests.md"
+          ]
+        },
+        {
+          "id": "betterstack-52",
+          "name": "AI SRE creates dashboards and imports Grafana or Datadog dashboards",
+          "status": "missing",
+          "lev_equivalent": "No dashboard import/generation agent",
+          "action": "extract",
+          "notes": "Useful for AgentPing generated dashboards once chart specs exist.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__managing-data__creating-dashboards.md",
+            "workshop/intake/betterstack/raw/md/docs__ai-sre__managing-data__importing-grafana-dashboards.md"
+          ]
+        },
+        {
+          "id": "betterstack-53",
+          "name": "Security and compliance posture covering SOC 2 Type 2, GDPR, ISO 27001 data centers, regions, private pages, SSO, and SCIM",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard and config principles exist, but no enterprise compliance product pack",
+          "action": "build",
+          "notes": "Treat as enterprise readiness requirements, not just marketing copy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://betterstack.com/ai-sre.md",
+            "https://betterstack.com/real-user-monitoring.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__password-protected-status-page.md",
+            "workshop/intake/betterstack/raw/md/docs__uptime__okta-sso__overview.md"
+          ]
+        },
+        {
+          "id": "betterstack-54",
+          "name": "Team and account management with real-time reporting exports and custom reports",
+          "status": "partial",
+          "lev_equivalent": "Workstreams/users exist in scattered forms, no unified ops reporting admin",
+          "action": "build",
+          "notes": "Useful as a dashboard/admin shape for AgentPing and operations teams.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting.md",
+            "workshop/intake/betterstack/raw/md/docs__getting-started__team-and-account-management__reporting__custom-reports.md"
+          ]
+        },
+        {
+          "id": "betterstack-55",
+          "name": "Terraform providers for uptime, on-call, status pages, telemetry, dashboards, and alerts",
+          "status": "missing",
+          "lev_equivalent": "No Terraform provider or IaC import path for Lev operational resources",
+          "action": "monitor",
+          "notes": "Defer until resource schemas exist; later expose generated IaC from Poly capability metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/betterstack/raw/md/docs__getting-started__integrations__terraform.md"
+          ]
+        },
+        {
+          "id": "betterstack-56",
+          "name": "Public dogfood status page and incident history for Better Stack itself",
+          "status": "missing",
+          "lev_equivalent": "No public status page dogfood surface",
+          "action": "build",
+          "notes": "Lev should dogfood its own uptime/status projection before asking users to trust it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://status.betterstack.com/"
           ]
         }
       ],
       "metrics": [
         {
-          "name": "repo_head",
-          "value": "e2ea9a3aca7e97f2b2a431cfa392aa4e99d8fa90",
-          "unit": "git-sha",
-          "source": "git -C workshop/intake/birch-html rev-parse HEAD"
+          "name": "selected_sitemap_urls",
+          "value": 668,
+          "unit": "count",
+          "source": "workshop/intake/betterstack/raw/meta/scrape-manifest.json"
         },
         {
-          "name": "benchmark_models_packaged",
-          "value": 13,
-          "unit": "model-runs",
-          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+          "name": "saved_markdown_pages",
+          "value": 600,
+          "unit": "count",
+          "source": "workshop/intake/betterstack/raw/meta/scrape-manifest.json"
         },
         {
-          "name": "final_artifacts_packaged",
-          "value": 65,
-          "unit": "artifacts",
-          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+          "name": "docs_sitemap_urls",
+          "value": 607,
+          "unit": "count",
+          "source": "https://betterstack.com/docs-sitemap.xml"
         },
         {
-          "name": "immediate_provenance_passes",
-          "value": 52,
-          "unit": "tasks",
-          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
-        },
-        {
-          "name": "total_task_opportunities",
-          "value": 65,
-          "unit": "tasks",
-          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
-        },
-        {
-          "name": "vlm_findings_with_bbox",
-          "value": 55,
-          "unit": "findings",
-          "source": "workshop/intake/birch-html/PUBLISH_REPORT.md"
+          "name": "authored_feature_rows",
+          "value": 56,
+          "unit": "count",
+          "source": ".lev/pm/parity/betterstack.yaml"
         }
       ],
       "lineage": [
-        "workshop/intake/birch-html/",
-        "workshop/analysis/birch-html/analysis.md",
-        "workshop/intake/birch-html/README.md",
-        "workshop/intake/birch-html/skill/SKILL.md",
-        "workshop/intake/birch-html/scripts/check_birch_renderings.py",
-        "workshop/intake/birch-html/scripts/run_skill_evals.py",
-        "workshop/intake/birch-html/scripts/review_birch_screenshots_with_vision.py",
-        "workshop/intake/birch-html/scripts/optimize_birch_skill_with_gepa.py",
-        "workshop/intake/birch-html/PUBLISH_REPORT.md",
-        "plugins/now/src/contracts/schema.ts",
-        "plugins/now/src/engine/render.ts",
-        "core/ui/src/renderers/html.ts",
-        ".lev/pm/parity/gepa-viz.yaml"
+        "workshop/analysis/betterstack/analysis.md",
+        "workshop/intake/betterstack/article.md",
+        "workshop/intake/betterstack/raw/meta/scrape-manifest.json",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "docs/specs/spec-parity.md"
       ],
       "absorbed": 0,
-      "pending": 7,
+      "pending": 51,
       "deferred": 0,
-      "rejected": 1,
+      "rejected": 0,
+      "monitor": 5,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "cap-creator",
+      "label": "Cap",
+      "category": "creator-tool",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/cap-creator.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "cap-creator-capture-substrate",
+          "name": "Cap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
       "monitor": 0,
       "deferred_items": [],
-      "rejected_items": [
-        {
-          "id": "bh-08",
-          "name": "Direct Birch design-system adoption",
-          "action": "reject",
-          "absorbed_into": null,
-          "tribunal_note": null
-        }
-      ]
+      "rejected_items": []
     },
     {
       "target": "cass",
@@ -5291,6 +6092,48 @@
       "rejected_items": []
     },
     {
+      "target": "easyocr",
+      "label": "EasyOCR",
+      "category": "ocr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/easyocr.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "easyocr-capture-substrate",
+          "name": "EasyOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "egregore",
       "label": "Egregore",
       "category": "collaboration-shell",
@@ -5901,6 +6744,90 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "faster-whisper",
+      "label": "faster-whisper",
+      "category": "asr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/faster-whisper.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "faster-whisper-capture-substrate",
+          "name": "faster-whisper capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=asr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "ffmpeg-devices",
+      "label": "FFmpeg devices",
+      "category": "capture-facade-library",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/ffmpeg-devices.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "ffmpeg-devices-capture-substrate",
+          "name": "FFmpeg devices capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -8946,185 +9873,6 @@
       ]
     },
     {
-      "target": "gepa-viz",
-      "label": "gepa-viz",
-      "category": "evolution-run-visualization",
-      "priority": "P1",
-      "measured_at": "2026-05-25",
-      "updated_at": "2026-05-25",
-      "owner": "workshop-intake + plugins/evolve-memory + plugins/bench + AgentPing",
-      "path": ".lev/pm/parity/gepa-viz.yaml",
-      "verdict": "extract",
-      "total_features": 8,
-      "classified": 8,
-      "unclassified": 0,
-      "counts": {
-        "extract": 3,
-        "build": 4,
-        "keep-lev": 1
-      },
-      "features": [
-        {
-          "id": "gv-01",
-          "name": "Evolution run artifact schema",
-          "status": "partial",
-          "lev_equivalent": "plugins/evolve-memory EvolutionResult + EvolutionCandidate lineage",
-          "action": "extract",
-          "notes": "gepa-viz run.json is a concrete projection shape for examples, candidates, parent links, predictions, minibatch feedback, and prompt text. Lev has the core candidate/result types but not a viewer-ready run artifact.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/README.md",
-            "workshop/intake/gepa-viz/python/src/gepa_viz/callback.py",
-            "plugins/evolve-memory/src/evolution/types.ts"
-          ]
-        },
-        {
-          "id": "gv-02",
-          "name": "Live stream plus static replay modes",
-          "status": "missing",
-          "lev_equivalent": "LevEvent/eval receipt stream + future AgentPing run view",
-          "action": "build",
-          "notes": "The live/static split is worth copying, but Lev should stream from governed runtime events and sealed receipts rather than callback-owned process memory.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/python/src/gepa_viz/server.py",
-            "workshop/intake/gepa-viz/client/packages/react/src/run/provider.tsx"
-          ]
-        },
-        {
-          "id": "gv-03",
-          "name": "Candidate lineage graph",
-          "status": "partial",
-          "lev_equivalent": "EvolutionResult.lineage, graph projections, AgentPing dashboards",
-          "action": "extract",
-          "notes": "Force-directed parent/child rendering is directly applicable to skill/prompt evolution debugging, especially rejected candidates and branch structure.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
-            "plugins/evolve-memory/src/evolution/types.ts"
-          ]
-        },
-        {
-          "id": "gv-04",
-          "name": "Per-example valset score rings",
-          "status": "missing",
-          "lev_equivalent": "plugins/bench scenario/evidence scoring projected into LevUI",
-          "action": "build",
-          "notes": "The donut/pixel-grid score UI makes multi-case performance visible. Lev should map this to bench/eval receipts and evidence refs.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
-            "workshop/intake/gepa-viz/client/packages/react/src/components/ParetoGrid.tsx",
-            "plugins/bench/src/provider-eval-contracts.ts"
-          ]
-        },
-        {
-          "id": "gv-05",
-          "name": "Rejected candidate inspection",
-          "status": "missing",
-          "lev_equivalent": "No first-class rejected evolution candidate projection",
-          "action": "build",
-          "notes": "Rejected minibatch proposals are still explainable in gepa-viz. Lev should preserve rejected candidates as finite evidence, not only final Pareto winners.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/python/src/gepa_viz/callback.py",
-            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx"
-          ]
-        },
-        {
-          "id": "gv-06",
-          "name": "Feedback-edge hover",
-          "status": "missing",
-          "lev_equivalent": "TraceBundle evaluator/agent-message evidence refs",
-          "action": "extract",
-          "notes": "Showing reflection feedback on lineage edges is a strong UX pattern for trace-based evolution, but Lev should bind it to TraceBundle evidence layers.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/client/packages/react/src/components/Graph.tsx",
-            "core/domain/src/execution-contract/trace-bundle.ts"
-          ]
-        },
-        {
-          "id": "gv-07",
-          "name": "Prompt diff detail view",
-          "status": "missing",
-          "lev_equivalent": "No evolve-memory prompt/artifact diff projection",
-          "action": "build",
-          "notes": "Candidate detail pages compare prompt to parent and expose minibatch changes. This should become a static evolution artifact view before live streaming.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/gepa-viz/client/packages/react/src/components/CandidateView.tsx",
-            "workshop/intake/gepa-viz/client/packages/react/src/components/PromptDiff.tsx"
-          ]
-        },
-        {
-          "id": "gv-08",
-          "name": "Canonical source-of-truth discipline",
-          "status": "implemented",
-          "lev_equivalent": "FlowMind + LevEvent + exec/eval receipts",
-          "action": "keep-lev",
-          "notes": "Lev is stronger as canon. Extract gepa-viz as a projection pattern only; source-of-truth should remain receipt-backed and evented.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": [
-            "docs/ARCHITECTURE.md",
-            "docs/NORTH_STAR.md",
-            "plugins/evolve-memory/src/evolution/engine.ts"
-          ]
-        }
-      ],
-      "metrics": [
-        {
-          "name": "repo_head",
-          "value": "1a8483da742eeff1d38d5a0017636788d93fb784",
-          "unit": "git-sha",
-          "source": "git -C workshop/intake/gepa-viz rev-parse HEAD"
-        },
-        {
-          "name": "python_source_files",
-          "value": 5,
-          "unit": "count",
-          "source": "find workshop/intake/gepa-viz/python/src -type f -name '*.py'"
-        },
-        {
-          "name": "react_package_source_files",
-          "value": 15,
-          "unit": "count",
-          "source": "find workshop/intake/gepa-viz/client/packages/react/src -type f"
-        },
-        {
-          "name": "app_source_files",
-          "value": 5,
-          "unit": "count",
-          "source": "find workshop/intake/gepa-viz/client/packages/app/src -type f"
-        }
-      ],
-      "lineage": [
-        "workshop/intake/gepa-viz/",
-        "workshop/analysis/gepa-viz/analysis.md",
-        "docs/NORTH_STAR.md",
-        "docs/ARCHITECTURE.md",
-        "docs/plugins/evolve-memory.md",
-        "plugins/evolve-memory/src/evolution/types.ts",
-        "plugins/evolve-memory/src/evolution/engine.ts",
-        "plugins/evolve-memory/flows/skill-evolution.flow.yaml"
-      ],
-      "absorbed": 0,
-      "pending": 7,
-      "deferred": 0,
-      "rejected": 0,
-      "monitor": 0,
-      "deferred_items": [],
-      "rejected_items": []
-    },
-    {
       "target": "gitagent",
       "label": "GitAgent",
       "category": "functionality-target",
@@ -10675,6 +11423,90 @@
       ],
       "absorbed": 0,
       "pending": 5,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "lancedb",
+      "label": "LanceDB",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/lancedb.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "lancedb-capture-substrate",
+          "name": "LanceDB capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "langgraph-durable-execution",
+      "label": "LangGraph durable action patterns",
+      "category": "follow-up-orchestration",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "core/flowmind",
+      "path": ".lev/pm/parity/langgraph-durable-execution.yaml",
+      "verdict": "extract_reject_as_owner",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract_reject_as_owner": 1
+      },
+      "features": [
+        {
+          "id": "langgraph-durable-execution-capture-substrate",
+          "name": "LangGraph durable action patterns capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract_reject_as_owner",
+          "notes": "Registry row from approved intake; category=follow-up-orchestration.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -13291,6 +14123,48 @@
       "rejected_items": []
     },
     {
+      "target": "obs-libobs",
+      "label": "OBS Studio/libobs",
+      "category": "creator-tool",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/obs-libobs.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "obs-libobs-capture-substrate",
+          "name": "OBS Studio/libobs capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "omc",
       "label": "OMC",
       "category": "agent-framework",
@@ -14538,6 +15412,56 @@
       "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "openrecall",
+      "label": "OpenRecall",
+      "category": "capture-memory-app",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/openrecall.yaml",
+      "verdict": "reject",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "openrecall-capture-substrate",
+          "name": "OpenRecall capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "reject",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "openrecall-capture-substrate",
+          "name": "OpenRecall capture substrate role",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "openrig",
@@ -16394,6 +17318,48 @@
       "rejected_items": []
     },
     {
+      "target": "paddleocr",
+      "label": "PaddleOCR",
+      "category": "ocr-engine",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/paddleocr.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "paddleocr-capture-substrate",
+          "name": "PaddleOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "paperbanana",
       "label": "PaperBanana",
       "category": "illustration-pipeline",
@@ -16642,6 +17608,90 @@
       "rejected_items": []
     },
     {
+      "target": "pensieve",
+      "label": "Pensieve",
+      "category": "capture-memory-app",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/pensieve.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "pensieve-capture-substrate",
+          "name": "Pensieve capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "pipewire-xdg-portal",
+      "label": "PipeWire/XDG Desktop Portal ScreenCast",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/pipewire-xdg-portal.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "pipewire-xdg-portal-capture-substrate",
+          "name": "PipeWire/XDG Desktop Portal ScreenCast capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "pulumi-agentic-infrastructure-era",
       "label": "Pulumi Agentic Infrastructure Era",
       "category": "agentic-infrastructure-control-plane",
@@ -16864,6 +17914,132 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "qdrant",
+      "label": "Qdrant",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/qdrant.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "qdrant-capture-substrate",
+          "name": "Qdrant capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "quickrecorder",
+      "label": "QuickRecorder",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/quickrecorder.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "quickrecorder-capture-substrate",
+          "name": "QuickRecorder capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "rapidocr",
+      "label": "RapidOCR",
+      "category": "ocr-engine",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rapidocr.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "rapidocr-capture-substrate",
+          "name": "RapidOCR capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -17399,6 +18575,48 @@
       ]
     },
     {
+      "target": "recordly",
+      "label": "Recordly",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/recordly.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "recordly-capture-substrate",
+          "name": "Recordly capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "rivet",
       "label": "rivet",
       "category": "runtime-substrate",
@@ -17739,6 +18957,90 @@
           "tribunal_note": null
         }
       ],
+      "rejected_items": []
+    },
+    {
+      "target": "rust-scap",
+      "label": "Rust scap",
+      "category": "capture-facade-library",
+      "priority": "P1",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rust-scap.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "rust-scap-capture-substrate",
+          "name": "Rust scap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "rust-xcap",
+      "label": "Rust xcap",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/rust-xcap.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "rust-xcap-capture-substrate",
+          "name": "Rust xcap capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
       "rejected_items": []
     },
     {
@@ -18472,6 +19774,474 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "screencapturekit-rs",
+      "label": "screencapturekit-rs",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screencapturekit-rs.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "screencapturekit-rs-capture-substrate",
+          "name": "screencapturekit-rs capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "screenity",
+      "label": "Screenity",
+      "category": "creator-tool",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screenity.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "screenity-capture-substrate",
+          "name": "Screenity capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=creator-tool.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "screenpipe",
+      "label": "Screenpipe",
+      "category": "capture-memory-app",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/screenpipe.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "screenpipe-capture-substrate",
+          "name": "Screenpipe capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "sqlite-fts5-sqlite-vec",
+      "label": "SQLite FTS5/sqlite-vec",
+      "category": "search-index",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/sqlite-fts5-sqlite-vec.yaml",
+      "verdict": "adopt_with_feature_flag",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt_with_feature_flag": 1
+      },
+      "features": [
+        {
+          "id": "sqlite-fts5-sqlite-vec-capture-substrate",
+          "name": "SQLite FTS5/sqlite-vec capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt_with_feature_flag",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "sqlite-wal-json-timeline",
+      "label": "SQLite WAL/JSON timeline",
+      "category": "storage-timeline",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/sqlite-wal-json-timeline.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "sqlite-wal-json-timeline-capture-substrate",
+          "name": "SQLite WAL/JSON timeline capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=storage-timeline.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tantivy",
+      "label": "Tantivy",
+      "category": "search-index",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/tantivy.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tantivy-capture-substrate",
+          "name": "Tantivy capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=search-index.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tencentdb-agent-memory",
+      "label": "TencentDB Agent Memory",
+      "category": "agent-memory-framework",
+      "priority": "P1",
+      "measured_at": "2026-05-26",
+      "updated_at": "2026-05-26",
+      "owner": "core/memory + plugins/evolve-memory",
+      "path": ".lev/pm/parity/tencentdb-agent-memory.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "reference": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tdam-01",
+          "name": "L0 to L3 layered conversation memory",
+          "status": "partial",
+          "lev_equivalent": "core/memory memory taxonomy + plugins/evolve-memory",
+          "action": "extract",
+          "notes": "Map L0 raw conversation, L1 episodic facts, L2 scenes, and L3 persona onto Lev memory items and provenance rather than copying the target schema.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/README.md",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        },
+        {
+          "id": "tdam-02",
+          "name": "Host-neutral memory core facade",
+          "status": "partial",
+          "lev_equivalent": "core/memory backend interfaces + plugin adapters",
+          "action": "extract",
+          "notes": "Useful boundary pattern: adapters translate host hooks, core owns recall/capture/search. Keep Lev naming and contracts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/adapters/openclaw/host-adapter.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/adapters/standalone/host-adapter.ts",
+            "core/memory/src/backends/interface.ts"
+          ]
+        },
+        {
+          "id": "tdam-03",
+          "name": "SQLite plus VectorDB store bundle with capability flags",
+          "status": "partial",
+          "lev_equivalent": "core/memory backend registry",
+          "action": "extract",
+          "notes": "Extract capability/degraded-mode checks and adapter tests, not Tencent Cloud-specific storage as a default.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/types.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/sqlite.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/tcvdb.ts",
+            "core/memory/src/orchestrator.ts"
+          ]
+        },
+        {
+          "id": "tdam-04",
+          "name": "Hybrid FTS and vector recall with RRF",
+          "status": "implemented",
+          "lev_equivalent": "core/memory RRF fusion and retrieval routing",
+          "action": "reference",
+          "notes": "Comparable to existing Lev retrieval; use as corroborating prior art and test-shape evidence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tools/memory-search.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+            "core/memory/src/orchestrator.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        },
+        {
+          "id": "tdam-05",
+          "name": "Conversation capture and active recall hooks",
+          "status": "partial",
+          "lev_equivalent": "LevEvent lineage + memory retrieval tools",
+          "action": "extract",
+          "notes": "Promote only through event/receipt provenance so raw conversation capture, memory rows, and retrieval hits stay traceable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/tools/conversation-search.ts",
+            "core/memory/src/backends/interface.ts"
+          ]
+        },
+        {
+          "id": "tdam-06",
+          "name": "Symbolic context offload with Mermaid drilldown",
+          "status": "missing",
+          "lev_equivalent": "FlowMind/graph projections + prompt-stack context controls",
+          "action": "extract",
+          "notes": "Spike the idea as compact symbolic projection with node-level evidence recovery; do not import OpenClaw context-engine hooks.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/README.md",
+            "workshop/intake/TencentDB-Agent-Memory/src/offload/index.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/offload/hooks/llm-input-l3.ts",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "tdam-07",
+          "name": "Gateway sidecar with health, backpressure, and session flush",
+          "status": "partial",
+          "lev_equivalent": "core/daemon + plugins/platforms process supervision",
+          "action": "extract",
+          "notes": "Use as sidecar lifecycle hardening evidence only if a future memory runtime needs an external process.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/gateway/server.ts",
+            "workshop/intake/TencentDB-Agent-Memory/hermes-plugin/memory/memory_tencentdb/README.md",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "tdam-08",
+          "name": "Degraded embedding and false-green recall risk",
+          "status": "partial",
+          "lev_equivalent": "validation gates + receipt-backed capability checks",
+          "action": "monitor",
+          "notes": "The target keeps running when embedding config is incomplete; any Lev extraction needs explicit gates proving vector recall is actually enabled when claimed.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/TencentDB-Agent-Memory/src/config.ts",
+            "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+            "docs/specs/spec-memory.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/tencentdb-agent-memory/analysis.md",
+        "workshop/intake/TencentDB-Agent-Memory/README.md",
+        "workshop/intake/TencentDB-Agent-Memory/package.json",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/tdai-core.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/types.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/factory.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/sqlite.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/store/tcvdb.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-capture.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/core/hooks/auto-recall.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/offload/index.ts",
+        "workshop/intake/TencentDB-Agent-Memory/src/gateway/server.ts",
+        "workshop/intake/TencentDB-Agent-Memory/hermes-plugin/memory/memory_tencentdb/README.md",
+        "docs/specs/spec-memory.md",
+        "core/memory/src/orchestrator.ts",
+        "core/memory/src/backends/interface.ts"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tesseract",
+      "label": "Tesseract",
+      "category": "ocr-engine",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/tesseract.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "tesseract-capture-substrate",
+          "name": "Tesseract capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=ocr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -19674,6 +21444,174 @@
           "tribunal_note": null
         }
       ],
+      "rejected_items": []
+    },
+    {
+      "target": "whisper-cpp",
+      "label": "whisper.cpp",
+      "category": "asr-engine",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/whisper-cpp.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "whisper-cpp-capture-substrate",
+          "name": "whisper.cpp capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=asr-engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windows-capture",
+      "label": "windows-capture",
+      "category": "capture-facade-library",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windows-capture.yaml",
+      "verdict": "monitor",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "windows-capture-capture-substrate",
+          "name": "windows-capture capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "monitor",
+          "notes": "Registry row from approved intake; category=capture-facade-library.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windows-graphics-capture",
+      "label": "Windows.Graphics.Capture",
+      "category": "native-capture-api",
+      "priority": "P0",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windows-graphics-capture.yaml",
+      "verdict": "adopt",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1
+      },
+      "features": [
+        {
+          "id": "windows-graphics-capture-capture-substrate",
+          "name": "Windows.Graphics.Capture capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "adopt",
+          "notes": "Registry row from approved intake; category=native-capture-api.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "windrecorder",
+      "label": "Windrecorder",
+      "category": "capture-memory-app",
+      "priority": "P2",
+      "measured_at": "2026-05-27",
+      "updated_at": "2026-05-27",
+      "owner": "plugins/vision",
+      "path": ".lev/pm/parity/windrecorder.yaml",
+      "verdict": "extract",
+      "total_features": 1,
+      "classified": 1,
+      "unclassified": 0,
+      "counts": {
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "windrecorder-capture-substrate",
+          "name": "Windrecorder capture substrate role",
+          "status": "partial",
+          "lev_equivalent": "plugins/vision provider/timeline spine (planned)",
+          "action": "extract",
+          "notes": "Registry row from approved intake; category=capture-memory-app.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/workstreams/workshop-intake/captures/20260524-screen-capture-oss-intake.yaml",
+        "docs/_inbox/parity-registry/vision-capture-substrate-sources.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
       "rejected_items": []
     },
     {

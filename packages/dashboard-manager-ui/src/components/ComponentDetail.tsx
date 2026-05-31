@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { LevNowElement } from "@kingly/ui/components";
+import { LevNowElement } from "@kingly/ui/renderers/lev-now";
 import { LEV_NOW_SAMPLES } from "./lev-now-samples";
 
 // ── Types (shared with ComponentRegistry) ──────────────────
