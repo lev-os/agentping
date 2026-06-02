@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-27T22:02:53.254342+00:00",
+  "generated_at": "2026-05-31T21:47:27.876007+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,22 +14,22 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 23744,
+    "operation_count": 24023,
     "by_type": {
-      "upsert_entity": 5589,
-      "add_claim": 12667,
-      "add_link": 5488
+      "upsert_entity": 5648,
+      "add_claim": 12830,
+      "add_link": 5545
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 101,
-    "total_features": 1288,
+    "parity_files": 103,
+    "total_features": 1306,
     "absorbed": 65,
-    "pending": 922,
+    "pending": 936,
     "deferred": 17,
-    "rejected": 35,
-    "monitor": 110,
+    "rejected": 36,
+    "monitor": 111,
     "unclassified": 0,
     "absorbed_pct": 5.0,
     "unclassified_pct": 0.0
@@ -2355,6 +2355,223 @@
       "rejected_items": []
     },
     {
+      "target": "background-agents",
+      "label": "Background Agents / Open-Inspect",
+      "category": "background-agent-runtime",
+      "priority": "P0",
+      "measured_at": "2026-05-30",
+      "updated_at": "2026-05-31",
+      "owner": "runtime-lifecycle-exec-proof-spine + agent-runtime-convergence",
+      "path": ".lev/pm/parity/background-agents.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 7,
+        "build": 1,
+        "reject": 1,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "background-agents-01",
+          "name": "Per-session control-plane state",
+          "status": "partial",
+          "lev_equivalent": "core/event-bus + receipts + traces + workstream state; no equivalent per-session SQLite projection",
+          "action": "extract",
+          "notes": "Useful as a projection model for messages, events, artifacts, participants, and sandbox state. Must not replace Lev's proof spine.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/control-plane/src/session/schema.ts",
+            "workshop/analysis/background-agents/analysis.md"
+          ]
+        },
+        {
+          "id": "background-agents-02",
+          "name": "Prompt queue, dispatch, stop, timeout, and callback completion extraction",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration loop events + core/harness managed tmux + exec receipts",
+          "action": "extract",
+          "notes": "Good source evidence for conversation-sync observer design. Completion extraction is evidence only; Lev close authority remains gates and proof.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/control-plane/src/session/message-queue.ts",
+            "workshop/intake/background-agents/packages/shared/src/completion/extractor.ts"
+          ]
+        },
+        {
+          "id": "background-agents-03",
+          "name": "Sandbox provider capability abstraction",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms provider declarations + core/harness execution binding",
+          "action": "extract",
+          "notes": "Extract capability vocabulary and pure decision tests. Keep cloud providers optional overlays under Lev's local-first policy.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/control-plane/src/sandbox/provider.ts",
+            "workshop/intake/background-agents/packages/control-plane/src/sandbox/lifecycle/decisions.ts",
+            "workshop/intake/background-agents/packages/control-plane/src/sandbox/lifecycle/manager.ts"
+          ]
+        },
+        {
+          "id": "background-agents-04",
+          "name": "Warm starts, repo images, setup/start hooks, tunnels, and snapshots",
+          "status": "missing",
+          "lev_equivalent": "partial in tmux/worktree execution; no unified sandbox warm-start contract",
+          "action": "build",
+          "notes": "Open-Inspect shows the hosted version. mngr adds the CLI/operator model. Lev needs a provider-neutral sandbox capability card before implementation.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/docs/HOW_IT_WORKS.md",
+            "workshop/intake/background-agents/packages/modal-infra/src/sandbox/manager.py",
+            "workshop/intake/background-agents/packages/daytona-infra/src/toolchain.py"
+          ]
+        },
+        {
+          "id": "background-agents-05",
+          "name": "Agent-spawned child sessions",
+          "status": "partial",
+          "lev_equivalent": "FlowMind fanout + warm-worker lifecycle API",
+          "action": "extract",
+          "notes": "Extract depth, total, and concurrent child limits. In Lev, fanout is a lifecycle decision emitted by FlowMind/control policy, not a sandbox-local action.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/sandbox-runtime/src/sandbox_runtime/tools/spawn-task.js",
+            "workshop/intake/background-agents/packages/sandbox-runtime/src/sandbox_runtime/tools/get-task-status.js",
+            "workshop/intake/background-agents/packages/sandbox-runtime/src/sandbox_runtime/tools/cancel-task.js",
+            "workshop/intake/background-agents/packages/control-plane/src/router.spawn-child.test.ts"
+          ]
+        },
+        {
+          "id": "background-agents-06",
+          "name": "Schedule, webhook, and Sentry automations",
+          "status": "partial",
+          "lev_equivalent": "universal hooks + FlowMind scheduler + Codex app automations",
+          "action": "extract",
+          "notes": "Extract trigger conditions, idempotency keys, minimum cadence, and untrusted payload wrapping into event-triggered FlowMind policies.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/docs/AUTOMATIONS.md",
+            "workshop/intake/background-agents/packages/control-plane/src/routes/automations.ts",
+            "workshop/intake/background-agents/packages/control-plane/src/webhooks/automation-webhook.ts"
+          ]
+        },
+        {
+          "id": "background-agents-07",
+          "name": "Multi-client collaboration, presence, and shared event stream",
+          "status": "missing",
+          "lev_equivalent": "AgentPing + LevUI IR + event bus projections",
+          "action": "extract",
+          "notes": "DX target: mngr-grade CLI plus Open-Inspect-grade web/mobile/multiplayer session surface. Presence is observability, not lifecycle authority.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/README.md",
+            "workshop/intake/background-agents/docs/HOW_IT_WORKS.md",
+            "workshop/intake/background-agents/packages/control-plane/src/session/presence-service.ts"
+          ]
+        },
+        {
+          "id": "background-agents-08",
+          "name": "Slack, GitHub, Linear, and webhook session entrypoints",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms + AgentPing surfaces + universal hooks",
+          "action": "extract",
+          "notes": "Extract routing and prompt-wrapping patterns. All external payloads must enter Lev as untrusted context with receipt-bound provenance.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/slack-bot/src/index.ts",
+            "workshop/intake/background-agents/packages/github-bot/src/index.ts",
+            "workshop/intake/background-agents/packages/linear-bot/src/webhook-handler.test.ts"
+          ]
+        },
+        {
+          "id": "background-agents-09",
+          "name": "Single-tenant GitHub App token broker",
+          "status": "not-applicable",
+          "lev_equivalent": "AgentGuard leases + scoped project/workspace authority",
+          "action": "reject",
+          "notes": "Explicitly reject the ambient org-wide shared GitHub App trust model. Only extract short-lived token and attribution ideas where they fit scoped leases.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/README.md"
+          ]
+        },
+        {
+          "id": "background-agents-10",
+          "name": "Execution-complete bridge event",
+          "status": "partial",
+          "lev_equivalent": "Semantic Control VERIFY_GATE + receipts + gate proof refs",
+          "action": "reference",
+          "notes": "Reference as event evidence only. A bridge completion event cannot close Lev work unless the close policy consumes independent proof and passes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/background-agents/packages/sandbox-runtime/src/sandbox_runtime/bridge.py",
+            "workshop/intake/background-agents/packages/shared/src/completion/extractor.ts",
+            "docs/specs/spec-semantic-control.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "github_stars",
+          "value": 1804,
+          "unit": "count",
+          "source": "gh repo view ColeMurray/background-agents on 2026-05-30"
+        },
+        {
+          "name": "github_forks",
+          "value": 273,
+          "unit": "count",
+          "source": "gh repo view ColeMurray/background-agents on 2026-05-30"
+        },
+        {
+          "name": "tracked_files",
+          "value": 734,
+          "unit": "count",
+          "source": "git -C workshop/intake/background-agents ls-files"
+        },
+        {
+          "name": "workspaces",
+          "value": 8,
+          "unit": "count",
+          "source": "workshop/intake/background-agents/packages"
+        }
+      ],
+      "lineage": [
+        "workshop/analysis/background-agents/analysis.md",
+        "workshop/analysis/background-agents-electric-sql/synthesis.md",
+        ".lev/pm/designs/design-runtime-conversation-sync-proof-spine-20260522.md",
+        "docs/specs/spec-semantic-control.md",
+        ".lev/pm/parity/mngr.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 8,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "background-agents-09",
+          "name": "Single-tenant GitHub App token broker",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "bettercapture",
       "label": "BetterCapture",
       "category": "creator-tool",
@@ -3770,6 +3987,185 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "codegraph",
+      "label": "CodeGraph",
+      "category": "code-intelligence-graph",
+      "priority": "P1",
+      "measured_at": "2026-05-30",
+      "updated_at": "2026-05-30",
+      "owner": "graph-cms + plugins/code-graph",
+      "path": ".lev/pm/parity/codegraph.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "benchmark": 1,
+        "extract": 3,
+        "build": 2,
+        "merge": 1,
+        "keep-lev": 1
+      },
+      "features": [
+        {
+          "id": "cg-01",
+          "name": "Tree-sitter symbol extraction",
+          "status": "partial",
+          "lev_equivalent": "plugins/code-graph + core/graph code fact projections",
+          "action": "benchmark",
+          "notes": "Use as a source-code index competitor for coding-agent questions; do not replace GraphOperation[] truth.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/README.md",
+            "workshop/intake/codegraph/src/extraction/index.ts"
+          ]
+        },
+        {
+          "id": "cg-02",
+          "name": "SQLite graph store with FTS5",
+          "status": "partial",
+          "lev_equivalent": "core/index + future graph query store",
+          "action": "extract",
+          "notes": "DB-backed symbol and edge lookup is a better hot-query substrate than giant JSON artifacts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/src/db/schema.sql"
+          ]
+        },
+        {
+          "id": "cg-03",
+          "name": "Hard dependency/build/cache ignores",
+          "status": "missing",
+          "lev_equivalent": "No enforced graph corpus manifest for Lev code/PM graph runs",
+          "action": "build",
+          "notes": "Direct fix for prior graph bloat: `.venv`, site-packages, and `.lev` runtime artifacts dominated the graph outputs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/src/extraction/index.ts",
+            "workshop/analysis/codegraph/analysis.md"
+          ]
+        },
+        {
+          "id": "cg-04",
+          "name": "MCP tools by graph intent",
+          "status": "partial",
+          "lev_equivalent": "core/poly MCP surfaces + plugins/code-graph",
+          "action": "extract",
+          "notes": "Context, explore, trace, impact, callers/callees, files, and status are the right northbound verbs for coding agents.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/README.md",
+            "workshop/intake/codegraph/src/mcp/tools.ts"
+          ]
+        },
+        {
+          "id": "cg-05",
+          "name": "Adaptive explore budget",
+          "status": "missing",
+          "lev_equivalent": "No graph query budget keyed by indexed source size",
+          "action": "build",
+          "notes": "Lev graph answers should scale by clean indexed corpus size and query intent, not total repo disk size.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/src/mcp/tools.ts"
+          ]
+        },
+        {
+          "id": "cg-06",
+          "name": "Bounded BFS/DFS traversal",
+          "status": "partial",
+          "lev_equivalent": "core/graph traversal contracts",
+          "action": "merge",
+          "notes": "Use traversal caps and prioritized edge kinds as a reference for Lev graph projection APIs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/src/graph/traversal.ts"
+          ]
+        },
+        {
+          "id": "cg-07",
+          "name": "Auto-sync and status surface",
+          "status": "partial",
+          "lev_equivalent": "Event Bus receipts + graph/index freshness checks",
+          "action": "extract",
+          "notes": "Useful staleness UX; Lev should express freshness through events/proofs and graph/index status.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/codegraph/README.md"
+          ]
+        },
+        {
+          "id": "cg-08",
+          "name": "Canonical graph source-of-truth discipline",
+          "status": "implemented",
+          "lev_equivalent": "LevEvent -> GraphOperation[] -> Entity/Claim/Link",
+          "action": "keep-lev",
+          "notes": "CodeGraph is an index/query service. Lev remains stronger as the governed graph substrate.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "core/graph/src/types.ts"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "b026e64b413bb4dca1bc7326d7de0837afe0a899",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/codegraph rev-parse HEAD"
+        },
+        {
+          "name": "current_graphify_nodes_from_venv",
+          "value": 354093,
+          "unit": "nodes",
+          "source": "jq/awk over workshop/analysis/code-knowledge-graph-comparison/run-20260529/outputs/graphify/graphify-out/graph.json"
+        },
+        {
+          "name": "current_understand_anything_nodes_from_venv",
+          "value": 209006,
+          "unit": "nodes",
+          "source": "jq/awk over workshop/analysis/code-knowledge-graph-comparison/run-20260529/outputs/understand-anything/knowledge-graph.json"
+        },
+        {
+          "name": "staged_node_modules_files",
+          "value": 0,
+          "unit": "files",
+          "source": "find workshop/analysis/code-knowledge-graph-comparison/run-20260529/input -path '*/node_modules/*' -type f"
+        },
+        {
+          "name": "staged_virtualenv_files",
+          "value": 61586,
+          "unit": "files",
+          "source": "find workshop/analysis/code-knowledge-graph-comparison/run-20260529/input -path '*/.venv*/*' -type f"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/codegraph/",
+        "workshop/intake/codegraph-site/article.md",
+        "workshop/analysis/codegraph/analysis.md",
+        ".lev/pm/parity/graphify-v3.yaml",
+        ".lev/pm/parity/understand-anything.yaml",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "codemix-graph",

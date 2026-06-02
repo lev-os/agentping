@@ -205,6 +205,14 @@ export const LeaseRequestPayloadSchema = z.object({
     scope: z.enum(['browser', 'filesystem', 'network', 'shell', 'custom']),
     ttl: z.string(), // e.g. "15m", "1h", "30s"
     reason: z.string(),
+    actionId: z.string().optional(),
+    operation: z.string().optional(),
+    resourceRef: z.string().optional(),
+    tenantId: z.string().optional(),
+    projectId: z.string().optional(),
+    confirmationRequired: z.boolean().default(false),
+    receiptRefs: z.array(z.string()).default([]),
+    auditRefs: z.array(z.string()).default([]),
     constraints: z.record(z.string(), z.unknown()).optional(),
 });
 
@@ -292,6 +300,19 @@ export const ResponseActionSchema = z.enum([
 
 export type ResponseAction = z.infer<typeof ResponseActionSchema>;
 
+export const LeaseResponseDataSchema = z.object({
+    type: z.literal('lease'),
+    granted: z.boolean(),
+    token: z.string().optional(),
+    expiresAt: z.string().optional(),
+    leaseRef: z.string().optional(),
+    decisionReceiptRef: z.string().optional(),
+    receiptRef: z.string().optional(),
+    auditRefs: z.array(z.string()).default([]),
+});
+
+export type LeaseResponseData = z.infer<typeof LeaseResponseDataSchema>;
+
 export interface HumanResponse {
     action: ResponseAction;
     data: ResponseData;
@@ -309,7 +330,7 @@ export type ResponseData =
     | { type: 'dismissed' }
     | { type: 'custom'; data: Record<string, unknown> }
     | { type: 'canvas_interaction'; data: Record<string, unknown> }
-    | { type: 'lease'; granted: boolean; token?: string; expiresAt?: string };
+    | LeaseResponseData;
 
 // ============================================================================
 // Response Enrichment (The Magic - Beyond Yes/No)

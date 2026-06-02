@@ -66,6 +66,21 @@ function renderReceipt(receipt: unknown) {
   return <pre>{JSON.stringify(receipt, null, 2)}</pre>;
 }
 
+function renderRefs(label: string, refs: string[]) {
+  return (
+    <div className="exec-debug-proof-chain__group">
+      <div className="command-center-status-card__label">{label}</div>
+      {refs.length > 0 ? (
+        <ul className="exec-debug-warning-list">
+          {refs.map((ref) => <li key={ref}><code>{ref}</code></li>)}
+        </ul>
+      ) : (
+        <p className="command-center-section__meta">missing</p>
+      )}
+    </div>
+  );
+}
+
 export function ExecTraceDebug() {
   const { execId } = useParams<{ execId: string }>();
   const navigate = useNavigate();
@@ -226,6 +241,13 @@ export function ExecTraceDebug() {
                   {renderReceipt(summary.receipt)}
                 </div>
               ) : null}
+
+              <div className="exec-debug-proof-chain">
+                {renderRefs("GateProof", summary.proofStatus.proofRefs)}
+                {renderRefs("Trace", summary.proofStatus.traceRef ? [summary.proofStatus.traceRef] : [])}
+                {renderRefs("Evidence", summary.proofStatus.evidenceRefs)}
+                {renderRefs("Audit", summary.proofStatus.auditRefs)}
+              </div>
             </section>
 
             {payload.graph?.widget.graph ? (

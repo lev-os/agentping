@@ -18,6 +18,9 @@ function proofTrace(overrides: Partial<ExecTrace> = {}): ExecTrace {
       evidence_refs: [
         ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/stdout.txt",
       ],
+      audit_refs: [
+        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/audit.json",
+      ],
     }],
     claim_verdicts: [{
       claim_id: "monitor-run-evidence-queryable",
@@ -36,8 +39,12 @@ describe("proof-backed exec trace status", () => {
       monitorId: "monitor-api-heartbeat",
       receiptRef: "rcpt-monitor-heartbeat",
       traceRef: ".lev/agentfs/exec/events.jsonl",
+      proofRefs: ["gate-monitor-heartbeat"],
       evidenceRefs: [
         ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/stdout.txt",
+      ],
+      auditRefs: [
+        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/audit.json",
       ],
     });
   });
@@ -68,6 +75,12 @@ describe("proof-backed exec trace status", () => {
     expect(deriveProofBackedStatus(proofTrace({ gate_proof_refs: [{ verdict: "pass", evidence_refs: [] }] }), NOW)).toMatchObject({
       status: "blocked",
       reason: "missing-evidence-refs",
+    });
+    expect(deriveProofBackedStatus(proofTrace({
+      gate_proof_refs: [{ gate_id: "gate-monitor-heartbeat", verdict: "pass", evidence_refs: ["artifact"] }],
+    }), NOW)).toMatchObject({
+      status: "blocked",
+      reason: "missing-audit-refs",
     });
   });
 });

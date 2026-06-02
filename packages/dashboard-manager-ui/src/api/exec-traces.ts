@@ -115,7 +115,9 @@ export interface ProofBackedStatus {
   monitorId?: string;
   receiptRef?: string;
   traceRef?: string;
+  proofRefs: string[];
   evidenceRefs: string[];
+  auditRefs: string[];
 }
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -179,6 +181,19 @@ function proofEvidenceRefs(proofs: Record<string, unknown>[]): string[] {
   )));
 }
 
+function proofRefs(proofs: Record<string, unknown>[]): string[] {
+  return Array.from(new Set(proofs.flatMap((proof) =>
+    firstString([proof.gate_proof_ref, proof.gateProofRef, proof.gate_id, proof.gateId, proof.id, proof.ref]) ?? [],
+  )));
+}
+
+function proofAuditRefs(proofs: Record<string, unknown>[]): string[] {
+  return Array.from(new Set(proofs.flatMap((proof) =>
+    asArray(proof.audit_refs ?? proof.auditRefs)
+      .flatMap((item) => asString(item) ?? []),
+  )));
+}
+
 function isFresh(trace: ExecTrace, now: Date): boolean | null {
   const observedAt = asString(trace.observed_at);
   const freshnessMs = asNumber(trace.freshness_ms);
@@ -191,6 +206,8 @@ function isFresh(trace: ExecTrace, now: Date): boolean | null {
 export function deriveProofBackedStatus(trace: ExecTrace, now: Date = new Date()): ProofBackedStatus {
   const proofs = gateProofs(trace);
   const evidenceRefs = proofEvidenceRefs(proofs);
+  const gateProofRefs = proofRefs(proofs);
+  const auditRefs = proofAuditRefs(proofs);
   const receipt = receiptRef(trace);
   const tracePath = traceRef(trace);
   const freshness = isFresh(trace, now);
@@ -201,7 +218,9 @@ export function deriveProofBackedStatus(trace: ExecTrace, now: Date = new Date()
     monitorId: asString(trace.monitor_id) ?? undefined,
     receiptRef: receipt,
     traceRef: tracePath,
+    proofRefs: gateProofRefs,
     evidenceRefs,
+    auditRefs,
   };
 
   if (hasFailingGateProof) {
@@ -218,6 +237,9 @@ export function deriveProofBackedStatus(trace: ExecTrace, now: Date = new Date()
   }
   if (evidenceRefs.length === 0) {
     return { ...base, status: "blocked", reason: "missing-evidence-refs" };
+  }
+  if (auditRefs.length === 0) {
+    return { ...base, status: "blocked", reason: "missing-audit-refs" };
   }
   if (freshness === false) {
     return { ...base, status: "degraded", reason: "stale-proof" };

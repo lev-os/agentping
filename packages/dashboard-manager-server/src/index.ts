@@ -15,6 +15,7 @@ import { createDashboardRoutes } from './routes/dashboards.js';
 import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
+import { createLevObservabilityRoutes } from './routes/lev-observability.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -78,6 +79,9 @@ export function createServer(config: ServerConfig) {
 
   const execTraceRoutes = createExecTraceRoutes();
   app.route('/api/exec-traces', execTraceRoutes);
+
+  const levObservabilityRoutes = createLevObservabilityRoutes();
+  app.route('/api/lev', levObservabilityRoutes);
 
   // =========================================================================
   // Start Server with Optional WebSocket Support
@@ -154,4 +158,4 @@ export function createServer(config: ServerConfig) {
   };
 }
 
-export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createWebSocketServer };
+export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createWebSocketServer };
