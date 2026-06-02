@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T06:35:30.551866+00:00",
+  "generated_at": "2026-06-02T10:14:27.562992+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,19 +14,19 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 24286,
+    "operation_count": 24482,
     "by_type": {
-      "upsert_entity": 5705,
-      "add_claim": 12981,
-      "add_link": 5600
+      "upsert_entity": 5740,
+      "add_claim": 13108,
+      "add_link": 5634
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 105,
-    "total_features": 1322,
+    "parity_files": 106,
+    "total_features": 1339,
     "absorbed": 65,
-    "pending": 950,
+    "pending": 967,
     "deferred": 17,
     "rejected": 37,
     "monitor": 111,
@@ -7345,6 +7345,277 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "eval-frameworks",
+      "label": "Agentic Eval Frameworks",
+      "category": "eval-framework",
+      "priority": "P0",
+      "measured_at": "2026-06-02",
+      "updated_at": "2026-06-02",
+      "owner": "core/domain + core/orchestration + core/exec + core/graph + plugins/bench + plugins/sdlc + skills/pentagon",
+      "path": ".lev/pm/parity/eval-frameworks.yaml",
+      "verdict": "extract-heavy",
+      "total_features": 17,
+      "classified": 17,
+      "unclassified": 0,
+      "counts": {
+        "build": 14,
+        "merge": 1,
+        "extract": 2
+      },
+      "features": [
+        {
+          "id": "eval-fw-01",
+          "name": "Spec-first EvalSuite with FlowMind target, cases, scorers, and promotion policy",
+          "status": "partial",
+          "lev_equivalent": "core/domain EvalSuite/EvalCase/EvalTarget contracts",
+          "action": "build",
+          "notes": "OpenAI Evals, Mastra, LangSmith, Braintrust, and Langfuse all make datasets/cases explicit. Lev has registry pieces but lacks the canonical domain suite.",
+          "absorbed_into": "core/domain",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/eval/registry.ts; docs/design/proposal-enterprise-evals.md; https://developers.openai.com/api/docs/guides/evals"
+          ]
+        },
+        {
+          "id": "eval-fw-02",
+          "name": "Lev Exec target abstraction for agents, workflows, CLIs, services, and trace replay",
+          "status": "missing",
+          "lev_equivalent": "EvalTarget compiled to FlowMind execute-target lane",
+          "action": "build",
+          "notes": "Targets are explicit: Lev Exec profiles, FlowMind files, CLI commands, MCP tools, HTTP services, trace replay, or community example harnesses.",
+          "absorbed_into": "core/orchestration + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://mastra.ai/reference/evals/run-evals; https://www.promptfoo.dev/docs/intro/"
+          ]
+        },
+        {
+          "id": "eval-fw-03",
+          "name": "FlowMind lane assembly from eval specs",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/eval-harness.flow.yaml + EvalJob scheduling",
+          "action": "build",
+          "notes": "The existing eval-harness flow has produce/judge/compare/keep-discard. It needs a compiler from EvalSuite into setup/run/collect/score/compare/receipt/admit lanes.",
+          "absorbed_into": "core/orchestration",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/sdlc/flows/eval-harness.flow.yaml; core/orchestration/src/proof/eval-job-executor.ts"
+          ]
+        },
+        {
+          "id": "eval-fw-04",
+          "name": "Project-owned target adapters",
+          "status": "missing",
+          "lev_equivalent": "EvalTargetAdapter registry for Lev Exec and project services",
+          "action": "build",
+          "notes": "Adapters normalize target outputs into traces, artifacts, receipts, and score inputs. Core supplies contracts; owners supply suite-specific runners.",
+          "absorbed_into": "core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "community/examples/architect-app/pentagon/run-fabric-agentic-suite.ts; workshop/analysis/eval-frameworks/analysis.md"
+          ]
+        },
+        {
+          "id": "eval-fw-05",
+          "name": "Typed scorer catalog",
+          "status": "partial",
+          "lev_equivalent": "EvalScorerKind gate-based | metric-based | llm-as-judge | adversarial",
+          "action": "merge",
+          "notes": "DeepEval, Mastra, AgentEvals, and Phoenix show useful scorer categories. Lev already has four strategy kinds but not a suite-owned scorer catalog.",
+          "absorbed_into": "core/domain + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/orchestration/src/eval/types.ts; core/exec/src/eval/registry.ts; https://deepeval.com/docs/metrics-introduction"
+          ]
+        },
+        {
+          "id": "eval-fw-06",
+          "name": "Trajectory and tool-call scoring modes",
+          "status": "partial",
+          "lev_equivalent": "trajectory scorers over normalized trace/tool-call events",
+          "action": "extract",
+          "notes": "Extract AgentEvals strict/unordered/subset/superset modes and Mastra expectedTrajectory behavior.",
+          "absorbed_into": "core/orchestration eval + plugins/bench",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.langchain.com/langsmith/trajectory-evals; https://mastra.ai/reference/evals/run-evals"
+          ]
+        },
+        {
+          "id": "eval-fw-07",
+          "name": "Trace, artifact, receipt, and GateProof linked evidence",
+          "status": "partial",
+          "lev_equivalent": "EvalScorecard receipt_refs, trace_refs, gate_proof_refs, evidence_refs",
+          "action": "build",
+          "notes": "Lev already validates refs for passing scorecards; EvalSuite should make those evidence obligations part of every promotion gate.",
+          "absorbed_into": "core/exec + core/orchestration proof",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/eval/registry.ts; docs/design/design-proof-eval-fabric.md"
+          ]
+        },
+        {
+          "id": "eval-fw-08",
+          "name": "Fail-closed promotion policy",
+          "status": "partial",
+          "lev_equivalent": "EvalPromotionPolicy + BenchmarkPromotionReadiness",
+          "action": "build",
+          "notes": "Passing rows must fail closed without receipts, traces, GateProof refs, claim evidence, and evidence refs. Negative cases should become mandatory for agentic suites.",
+          "absorbed_into": "core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/eval/registry.ts; core/exec/src/eval/benchmark.ts"
+          ]
+        },
+        {
+          "id": "eval-fw-09",
+          "name": "Repetition, variance, and baseline comparison",
+          "status": "partial",
+          "lev_equivalent": "EvalComparison + benchmark variance policy + eval-harness compare",
+          "action": "build",
+          "notes": "Lev has statistical comparison and benchmark variance pieces, but suites do not yet declare repetition/baseline policies.",
+          "absorbed_into": "core/orchestration + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/orchestration/src/eval/types.ts; core/exec/src/eval/benchmark.ts; plugins/sdlc/flows/eval-harness.flow.yaml"
+          ]
+        },
+        {
+          "id": "eval-fw-10",
+          "name": "CI and PR gating",
+          "status": "partial",
+          "lev_equivalent": "FlowMind gates + lev task validate + eval scorecard readiness",
+          "action": "build",
+          "notes": "Promptfoo, DeepEval, Braintrust, Langfuse, and Mastra all expose CI paths. Lev needs a local scorecard gate that refuses promotion without fresh evidence.",
+          "absorbed_into": "plugins/sdlc + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://www.promptfoo.dev/docs/intro/; https://mastra.ai/docs/evals/running-in-ci"
+          ]
+        },
+        {
+          "id": "eval-fw-11",
+          "name": "Online/live production scoring",
+          "status": "missing",
+          "lev_equivalent": "Telemetry/EventBus sourced EvalRun from production traces",
+          "action": "build",
+          "notes": "Mastra live evals, Braintrust online scoring, Langfuse scores, and Phoenix trace annotations show the pattern.",
+          "absorbed_into": "core/event-bus + telemetry + core/graph",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://mastra.ai/docs/evals/overview; https://www.braintrust.dev/docs/evaluate; https://langfuse.com/docs/evaluation/overview"
+          ]
+        },
+        {
+          "id": "eval-fw-12",
+          "name": "Dataset, experiment, score, and run persistence",
+          "status": "missing",
+          "lev_equivalent": "core/graph EvalDataset/EvalRun/EvalScore projection",
+          "action": "build",
+          "notes": "Langfuse, Phoenix, Braintrust, OpenAI Evals, and Mastra all make persisted datasets/runs/scores central.",
+          "absorbed_into": "core/graph",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://langfuse.com/docs/evaluation/overview; https://arize.com/docs/phoenix/get-started/get-started-evaluations"
+          ]
+        },
+        {
+          "id": "eval-fw-13",
+          "name": "Human review and annotation queue",
+          "status": "partial",
+          "lev_equivalent": "AgentPing HITL review and attestation lane",
+          "action": "build",
+          "notes": "Human scoring should become a witness/attestation path, not a dashboard-only annotation.",
+          "absorbed_into": "community/agentping + core/orchestration proof",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/design/proposal-enterprise-evals.md; https://langfuse.com/docs/evaluation/overview"
+          ]
+        },
+        {
+          "id": "eval-fw-14",
+          "name": "Red-team and adversarial negative cases",
+          "status": "partial",
+          "lev_equivalent": "Pentagon/UltraQA negative-case suites compiled into EvalSuite",
+          "action": "extract",
+          "notes": "Promptfoo red-team configs and Lev Pentagon intent align here. Negative cases should be first-class cases, not receipt theater.",
+          "absorbed_into": "skills/pentagon + plugins/sdlc + plugins/bench",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://www.promptfoo.dev/docs/intro/; .lev/pm/specs/skill-eval-design.md"
+          ]
+        },
+        {
+          "id": "eval-fw-15",
+          "name": "Provider and model comparison",
+          "status": "partial",
+          "lev_equivalent": "EvalScorecard provider/model fields and comparison",
+          "action": "build",
+          "notes": "Lev has provider/model scorecard fields and comparison ordering, but EvalSuite does not yet drive provider matrices.",
+          "absorbed_into": "core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/eval/registry.ts; https://developers.openai.com/api/docs/guides/evals"
+          ]
+        },
+        {
+          "id": "eval-fw-16",
+          "name": "Judge-the-judge and scorer calibration",
+          "status": "missing",
+          "lev_equivalent": "Meta-eval suites for scorer validity",
+          "action": "build",
+          "notes": "Mastra experiments can target a scorer; local prior art includes judge-the-judge analysis. Lev needs scorer calibration suites before trusting LLM judges.",
+          "absorbed_into": "plugins/bench + core/orchestration eval",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/judge-the-judge-building-llm-evaluators-that-actually-work/analysis.md; https://mastra.ai/docs/evals/datasets/running-experiments"
+          ]
+        },
+        {
+          "id": "eval-fw-17",
+          "name": "Lev agentic surface example suites",
+          "status": "missing",
+          "lev_equivalent": "community/examples + plugins/bench suite loader",
+          "action": "build",
+          "notes": "Use Lev-native examples as inference seeds: router-bench, skill-loop, worktree-continuity, memory-recall, observe-runtime, plugin-scaffolder, workshop-promote, multi-agent-design-review, architect-app run fabric, and provider-boundary audit.",
+          "absorbed_into": "core/exec + core/orchestration",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "community/examples/lev-native/*/pentagon-test.md; community/examples/architect-app/pentagon/suites/run-fabric-agentic.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/eval-frameworks/analysis.md",
+        "workshop/analysis/mastra/mastra-package-patterns-for-leviathan.md",
+        "workshop/analysis/langgraph/analysis.md",
+        "workshop/analysis/flyte/analysis.md",
+        "workshop/analysis/flyte-sdk/analysis.md",
+        "workshop/analysis/eval-driven-development-intake.md",
+        "workshop/analysis/why-building-eval-platforms-is-hard-phil-hetzel-braintrust/analysis.md",
+        "workshop/analysis/judge-the-judge-building-llm-evaluators-that-actually-work/analysis.md",
+        ".lev/pm/specs/skill-eval-design.md",
+        "docs/design/design-proof-eval-fabric.md",
+        "docs/design/proposal-enterprise-evals.md",
+        ".lev/pm/plans/plan-proof-eval-fabric-spikes-and-simulation.md",
+        "core/orchestration/src/eval/types.ts",
+        "core/orchestration/src/proof/eval-job-types.ts",
+        "core/orchestration/src/proof/eval-job-executor.ts",
+        "core/exec/src/eval/registry.ts",
+        "core/exec/src/eval/benchmark.ts",
+        "plugins/sdlc/flows/eval-harness.flow.yaml",
+        "plugins/bench"
+      ],
+      "absorbed": 0,
+      "pending": 17,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
