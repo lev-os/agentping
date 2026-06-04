@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T10:14:27.562992+00:00",
+  "generated_at": "2026-06-03T20:51:16.944490+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 24482,
+    "operation_count": 24667,
     "by_type": {
-      "upsert_entity": 5740,
-      "add_claim": 13108,
-      "add_link": 5634
+      "upsert_entity": 5783,
+      "add_claim": 13208,
+      "add_link": 5676
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 106,
-    "total_features": 1339,
+    "parity_files": 107,
+    "total_features": 1349,
     "absorbed": 65,
-    "pending": 967,
+    "pending": 973,
     "deferred": 17,
-    "rejected": 37,
-    "monitor": 111,
+    "rejected": 38,
+    "monitor": 114,
     "unclassified": 0,
-    "absorbed_pct": 4.9,
+    "absorbed_pct": 4.8,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -21253,6 +21253,212 @@
       "monitor": 2,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "terminal-control",
+      "label": "Terminal Control",
+      "category": "terminal-control-plane",
+      "priority": "P1",
+      "measured_at": "2026-06-03",
+      "updated_at": "2026-06-03",
+      "owner": "core/tmux-harness + core/eval",
+      "path": ".lev/pm/parity/terminal-control.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4,
+        "reference": 2,
+        "build": 2,
+        "monitor": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "terminal-control-01",
+          "name": "Visible terminal frame schema",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness AgentSession pane capture and AgentSessionObservation text/delta surfaces",
+          "action": "extract",
+          "notes": "Lev has pane text/delta capture but not a stable cell/frame evidence schema for eval fixtures and artifact comparison.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/frame.rs",
+            "workshop/intake/terminal-control/schemas/frame-v1.schema.json",
+            "core/tmux-harness/src/handlers/agent-session.ts"
+          ]
+        },
+        {
+          "id": "terminal-control-02",
+          "name": "PTY-backed disposable capture and persistent named sessions",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness owns tmux-backed session lifecycle, registry, reaper, capture, input, and kill",
+          "action": "reference",
+          "notes": "Use as a behavioral reference only. Lev should not introduce a second PTY/session runtime beside tmux-harness.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/session.rs",
+            "workshop/intake/terminal-control/src/shot.rs",
+            "workshop/intake/terminal-control/src/main.rs",
+            "core/tmux-harness/src/session-registry.ts",
+            "core/tmux-harness/src/tmux-reaper.ts"
+          ]
+        },
+        {
+          "id": "terminal-control-03",
+          "name": "Explicit capture reasons",
+          "status": "partial",
+          "lev_equivalent": "AgentSession wait/readback diagnostics and typed tmux execution transport errors",
+          "action": "extract",
+          "notes": "Capture should say whether it ended because of idle, deadline, process exit, closed output, typed unavailable state, or pattern timeout.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/session.rs",
+            "workshop/intake/terminal-control/src/shot.rs",
+            "core/tmux-harness/src/handlers/agent-session.ts",
+            "core/tmux-harness/src/execution-transport/index.ts"
+          ]
+        },
+        {
+          "id": "terminal-control-04",
+          "name": "JSONL driver protocol for embedded tests",
+          "status": "missing",
+          "lev_equivalent": "No narrow terminal-test driver protocol; Lev has owner-local TypeScript APIs and CLI surfaces",
+          "action": "extract",
+          "notes": "Useful shape for core/eval terminal scenarios: launch, status, send, waitForText, waitForIdle, waitForExit, capture, logs, recording, resize, stop.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/driver.rs",
+            "workshop/intake/terminal-control/packages/test/src/index.ts"
+          ]
+        },
+        {
+          "id": "terminal-control-05",
+          "name": "Artifacts-on-failure testing ergonomics",
+          "status": "partial",
+          "lev_equivalent": "Lev tests and tmux-harness diagnostics exist, but no focused terminal-screen matcher/artifact path",
+          "action": "build",
+          "notes": "Adopt the testing idea, not the package boundary: failing terminal evals should emit text/frame/log artifacts automatically.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/packages/test/src/index.ts",
+            "workshop/intake/terminal-control/packages/test/src/vitest.ts",
+            "core/tmux-harness/tests/harness/default-execution-transport.test.ts"
+          ]
+        },
+        {
+          "id": "terminal-control-06",
+          "name": "Recording timeline with input, output, resize, and markers",
+          "status": "missing",
+          "lev_equivalent": "Lev event refs and agentfs traces exist, but not a terminal-specific replayable recording timeline",
+          "action": "extract",
+          "notes": "Good model for tmux-harness mechanical replay artifacts, especially markers around prompts, waits, and provider transitions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/recording.rs",
+            "workshop/intake/terminal-control/schemas/recording-entry-v1.schema.json",
+            "workshop/intake/terminal-control/src/main.rs"
+          ]
+        },
+        {
+          "id": "terminal-control-07",
+          "name": "Video export from terminal recordings",
+          "status": "missing",
+          "lev_equivalent": "No tmux-harness video artifact export",
+          "action": "monitor",
+          "notes": "Useful for demos and review packets, but not a core tmux-harness foundation requirement.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/src/main.rs",
+            "workshop/intake/terminal-control/src/recording.rs",
+            "workshop/intake/terminal-control/schemas/video-edit-v1.schema.json"
+          ]
+        },
+        {
+          "id": "terminal-control-08",
+          "name": "OpenTUI host compatibility profile",
+          "status": "missing",
+          "lev_equivalent": "Provider readiness and terminal host quirks are not isolated as a tmux-harness host profile",
+          "action": "reference",
+          "notes": "Keep host quirks mechanical and tmux-local. Do not let provider-specific business logic leak into tmux-harness.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/README.md",
+            "workshop/intake/terminal-control/src/main.rs",
+            "workshop/intake/terminal-control/src/shot.rs"
+          ]
+        },
+        {
+          "id": "terminal-control-09",
+          "name": "Secret-aware recording and artifact handling",
+          "status": "partial",
+          "lev_equivalent": "Lev has broader proof/evidence and policy direction; tmux-harness must avoid owning privacy policy",
+          "action": "build",
+          "notes": "Terminal artifacts must be treated as sensitive. Tmux-harness can emit raw mechanical refs; redaction and policy live above or beside it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/terminal-control/README.md",
+            "workshop/intake/terminal-control/src/recording.rs",
+            "dna/core/tmux-harness.dna.yaml"
+          ]
+        },
+        {
+          "id": "terminal-control-10",
+          "name": "Terminal Control as Lev runtime substrate",
+          "status": "not-applicable",
+          "lev_equivalent": "core/tmux-harness remains the tmux mechanics owner",
+          "action": "reject",
+          "notes": "Reject direct runtime replacement. Extract test and evidence patterns only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "dna/core/tmux-harness.dna.yaml",
+            ".lev/pm/workstreams/tmux-hardening/state/workstream.yaml",
+            "workshop/intake/terminal-control/src/session.rs"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/terminal-control/analysis.md",
+        "workshop/intake/terminal-control/README.md",
+        "workshop/intake/terminal-control/src/main.rs",
+        "workshop/intake/terminal-control/src/session.rs",
+        "workshop/intake/terminal-control/src/driver.rs",
+        "workshop/intake/terminal-control/src/frame.rs",
+        "workshop/intake/terminal-control/src/recording.rs",
+        "workshop/intake/terminal-control/packages/test/src/index.ts",
+        "workshop/intake/terminal-control/packages/test/src/vitest.ts",
+        "dna/core/tmux-harness.dna.yaml",
+        ".lev/pm/workstreams/tmux-hardening/state/workstream.yaml",
+        ".lev/pm/parity/frankenterm.yaml",
+        ".lev/pm/parity/openrig.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 3,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "terminal-control-10",
+          "name": "Terminal Control as Lev runtime substrate",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "tesseract",
