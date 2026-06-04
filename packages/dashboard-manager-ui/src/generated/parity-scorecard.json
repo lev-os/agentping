@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T20:51:16.944490+00:00",
+  "generated_at": "2026-06-04T05:42:00.992242+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,21 +14,21 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 24667,
+    "operation_count": 24795,
     "by_type": {
-      "upsert_entity": 5783,
-      "add_claim": 13208,
-      "add_link": 5676
+      "upsert_entity": 5812,
+      "add_claim": 13279,
+      "add_link": 5704
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 107,
-    "total_features": 1349,
+    "parity_files": 108,
+    "total_features": 1356,
     "absorbed": 65,
-    "pending": 973,
+    "pending": 979,
     "deferred": 17,
-    "rejected": 38,
+    "rejected": 39,
     "monitor": 114,
     "unclassified": 0,
     "absorbed_pct": 4.8,
@@ -2190,6 +2190,158 @@
       "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "arscontexta",
+      "label": "ArsContexta",
+      "category": "agent-memory-architecture",
+      "priority": "P1",
+      "measured_at": "2026-06-04",
+      "updated_at": "2026-06-04",
+      "owner": "plugins/autowiki",
+      "path": ".lev/pm/parity/arscontexta.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "build": 2,
+        "merge": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "arscontexta-01",
+          "name": "Conversational derivation engine",
+          "status": "missing",
+          "lev_equivalent": "plugins/autowiki setup/refinement flow",
+          "action": "extract",
+          "notes": "Derive second-brain structure from user intent instead of hardcoding a folder taxonomy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/README.md",
+            "workshop/intake/arscontexta/skills/setup/SKILL.md",
+            "workshop/analysis/arscontexta/analysis.md"
+          ]
+        },
+        {
+          "id": "arscontexta-02",
+          "name": "Three-space memory architecture",
+          "status": "partial",
+          "lev_equivalent": "source-backed graph plus wiki/dashboard/ops projections",
+          "action": "extract",
+          "notes": "Keep self-model, knowledge graph, and operational coordination separate while mapping them to Lev's source/projection boundary.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/README.md",
+            "workshop/intake/arscontexta/methodology/memory-architecture.md",
+            "docs/design/design-graph-stack-product-definition.md"
+          ]
+        },
+        {
+          "id": "arscontexta-03",
+          "name": "6R knowledge refinement pipeline",
+          "status": "missing",
+          "lev_equivalent": "AutoWiki refinement lifecycle",
+          "action": "build",
+          "notes": "Record, reduce, reflect, reweave, verify, and rethink are knowledge refinement phases, not Lev execution ticks.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/README.md",
+            "workshop/intake/arscontexta/methodology/processing-workflows.md",
+            ".lev/pm/handoffs/20260314-s17-arscontexta-skill-graph-social-session-17.md"
+          ]
+        },
+        {
+          "id": "arscontexta-04",
+          "name": "Reweave backward pass",
+          "status": "missing",
+          "lev_equivalent": "graph hygiene and projection refresh pass",
+          "action": "build",
+          "notes": "New captures should update or flag existing claims, links, MOCs, and wiki projections.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/methodology/processing-workflows.md",
+            ".lev/pm/handoffs/20260314-s17-arscontexta-skill-graph-social-session-17.md",
+            "workshop/analysis/arscontexta/analysis.md"
+          ]
+        },
+        {
+          "id": "arscontexta-05",
+          "name": "Discovery-first write gate",
+          "status": "partial",
+          "lev_equivalent": "intake and AutoWiki lint/query before write",
+          "action": "merge",
+          "notes": "Lev should query existing graph/wiki state before generating new artifacts, then lint projections for drift.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/reference/kernel.yaml",
+            "workshop/intake/arscontexta/hooks/scripts/write-validate.sh",
+            "plugins/autowiki/src/wiki/engine.ts"
+          ]
+        },
+        {
+          "id": "arscontexta-06",
+          "name": "Session capture hooks",
+          "status": "partial",
+          "lev_equivalent": "Codex/cass capture bridge and Lev receipt surface",
+          "action": "extract",
+          "notes": "Useful capture pattern, but durable writes must route through Lev receipts and source-backed capture contracts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/hooks/hooks.json",
+            "workshop/intake/arscontexta/hooks/scripts/session-capture.sh",
+            "workshop/analysis/arscontexta/analysis.md"
+          ]
+        },
+        {
+          "id": "arscontexta-07",
+          "name": "File-as-complete-artifact authority",
+          "status": "not-applicable",
+          "lev_equivalent": "rejected in favor of world-model/EntityGraph authority plus projections",
+          "action": "reject",
+          "notes": "Do not adopt this authority model. Markdown, Notion, and dashboard surfaces remain projections.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arscontexta/reference/kernel.yaml",
+            ".lev/pm/intake/20260504-openbrain-autowiki-primitives.md",
+            "docs/design/design-graph-stack-product-definition.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/arscontexta",
+        "workshop/analysis/arscontexta/analysis.md",
+        ".lev/pm/intake/20260504-openbrain-autowiki-primitives.md",
+        "docs/design/design-graph-stack-product-definition.md",
+        "plugins/autowiki/src/wiki/engine.ts",
+        ".lev/pm/reports/20260222-graph-intake-landscape.md",
+        ".lev/pm/handoffs/20260314-s17-arscontexta-skill-graph-social-session-17.md"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "arscontexta-07",
+          "name": "File-as-complete-artifact authority",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "axi",
