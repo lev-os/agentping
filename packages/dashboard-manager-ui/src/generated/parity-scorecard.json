@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T05:42:00.992242+00:00",
+  "generated_at": "2026-06-13T05:09:18.234410+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 24795,
+    "operation_count": 25088,
     "by_type": {
-      "upsert_entity": 5812,
-      "add_claim": 13279,
-      "add_link": 5704
+      "upsert_entity": 5877,
+      "add_claim": 13445,
+      "add_link": 5766
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 108,
-    "total_features": 1356,
+    "parity_files": 111,
+    "total_features": 1372,
     "absorbed": 65,
-    "pending": 979,
+    "pending": 991,
     "deferred": 17,
-    "rejected": 39,
-    "monitor": 114,
+    "rejected": 41,
+    "monitor": 116,
     "unclassified": 0,
-    "absorbed_pct": 4.8,
+    "absorbed_pct": 4.7,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -16617,6 +16617,72 @@
       "rejected_items": []
     },
     {
+      "target": "openprose-reactor",
+      "label": "OpenProse Reactor Harness",
+      "category": "reactive-world-model-runtime",
+      "priority": "P0",
+      "measured_at": "2026-06-03",
+      "updated_at": "2026-06-03",
+      "owner": "reactive-source-fabric + core/flowmind + core/orchestration + core/event-dispatch",
+      "path": ".lev/pm/parity/openprose-reactor.yaml",
+      "verdict": "extract",
+      "total_features": 0,
+      "classified": 0,
+      "unclassified": 0,
+      "counts": {},
+      "features": [],
+      "metrics": [
+        {
+          "name": "repo_head",
+          "value": "a77c8b8d2a9e3cce3b0c8db6559127d9025c4f86",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/openprose-prose rev-parse HEAD"
+        },
+        {
+          "name": "packages",
+          "value": 5,
+          "unit": "count",
+          "source": "co, reactor, reactor-cli, reactor-devtools, std"
+        },
+        {
+          "name": "reactor_src_ts_files",
+          "value": 131,
+          "unit": "count",
+          "source": "find packages/reactor/src -name '*.ts'"
+        },
+        {
+          "name": "example_prose_contracts",
+          "value": 143,
+          "unit": "count",
+          "source": "find skills -name '*.prose.md'"
+        },
+        {
+          "name": "example_replay_reuse",
+          "value": 32,
+          "unit": "percent",
+          "source": "README masked-relay keyless replay: reused/total tokens"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/openprose-prose/",
+        "core/flowmind/src/targets/openprose.ts",
+        ".lev/pm/workstreams/reactive-source-fabric/state/workstream.yaml",
+        ".lev/pm/designs/20260509-reactive-source-event-fabric.md",
+        ".lev/pm/designs/design-world-model-stack.md",
+        "core/orchestration/src/epic/graph-runner.ts",
+        "core/orchestration/src/receipt/types.ts",
+        "docs/VISION.md",
+        "workshop/pocs/reactor-harness-lev/"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "openrecall",
       "label": "OpenRecall",
       "category": "capture-memory-app",
@@ -21653,6 +21719,381 @@
       "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "the-log-is-the-agent-activegraph",
+      "label": "The Log is the Agent / ActiveGraph",
+      "category": "event-sourced-agent-runtime",
+      "priority": "P1",
+      "measured_at": "2026-06-13",
+      "updated_at": "2026-06-13",
+      "owner": "reactive-source-fabric + core/event-bus + core/graph + core/reconciler + core/exec",
+      "path": ".lev/pm/parity/the-log-is-the-agent-activegraph.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "merge": 1,
+        "extract": 2,
+        "build": 2,
+        "reference": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "activegraph-01",
+          "name": "Append-only event log as run source of truth",
+          "status": "partial",
+          "lev_equivalent": "core/event-bus LevEvent JSONL persistence plus docs/ARCHITECTURE.md event spine",
+          "action": "merge",
+          "notes": "Lev has append-only event persistence and canonical LevEvent shape, but not yet a complete agent-run reconstruction/fork harness over the full runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "core/event-bus/src/events/lev-event-persistence.ts",
+            "core/event-bus/tests/lev-event-persistence.test.ts",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "activegraph-02",
+          "name": "Graph projection over event history",
+          "status": "partial",
+          "lev_equivalent": "core/graph Entity/Claim/Link/Evidence model plus lineage adapter tests",
+          "action": "extract",
+          "notes": "Lev already treats graph as state/knowledge plane; extract ActiveGraph's crisp replay-to-graph framing without moving scheduling into graph.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "core/graph/src/types.ts",
+            "core/graph/tests/lineage.test.ts",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "activegraph-03",
+          "name": "Strict and permissive replay modes with content-addressed response cache",
+          "status": "partial",
+          "lev_equivalent": "core/reconciler keyless receipt replay plus future exec RunEnvelope/effect cache",
+          "action": "build",
+          "notes": "Lev has content-addressed receipt replay for reconciler facets; missing piece is full run-level strict/permissive replay over model/tool/effect calls.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "core/reconciler/README.md",
+            "core/reconciler/src/reconcile.ts",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "activegraph-04",
+          "name": "Fork at arbitrary event and structural diff",
+          "status": "missing",
+          "lev_equivalent": "planned eval/proof primitive over event logs, graph projections, and receipts",
+          "action": "build",
+          "notes": "This is the highest-value extraction: fork after a shared prefix, rerun only post-cutoff work, and diff graph/receipt outcomes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "workshop/analysis/the-log-is-the-agent-activegraph/analysis.md",
+            "docs/ROADMAP.md"
+          ]
+        },
+        {
+          "id": "activegraph-05",
+          "name": "Relation behavior: logic attached to typed edges",
+          "status": "missing",
+          "lev_equivalent": "FlowMind-admitted graph trigger plus graph pattern matcher",
+          "action": "extract",
+          "notes": "Do not let graph own execution. Compile edge-local semantics into admitted FlowMind triggers routed through orchestration.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "https://activegraph.ai/",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "activegraph-06",
+          "name": "Pack plus deterministic fixture demo as first-run proof",
+          "status": "partial",
+          "lev_equivalent": "FlowMind flows, prompt-stack sessions, workshop POCs, and receipt-backed demos",
+          "action": "reference",
+          "notes": "Good onboarding/eval pattern: every runtime primitive should ship with a deterministic fixture path that proves the mechanism before live providers are introduced.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/yoheinakajima/activegraph",
+            "workshop/analysis/the-log-is-the-agent-activegraph/analysis.md",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "activegraph-07",
+          "name": "Side-effect replay by recorded response",
+          "status": "not-applicable",
+          "lev_equivalent": "core/exec effect IDs, leases, and verification receipts",
+          "action": "reject",
+          "notes": "Useful as a limitation, not as a target pattern. Lev should never treat response replay alone as proof for irreversible external effects.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/papers/raw/2605.21997v1.txt",
+            "docs/ARCHITECTURE.md",
+            "workshop/analysis/the-log-is-the-agent-activegraph/analysis.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/the-log-is-the-agent-activegraph/analysis.md",
+        "workshop/papers/analysis/tier2-enhancement/the-log-is-the-agent-activegraph/insights.md",
+        "workshop/papers/raw/2605.21997v1.txt",
+        "workshop/papers/raw/2605.21997v1.pdf",
+        "core/event-bus/src/events/lev-event-persistence.ts",
+        "core/event-bus/tests/lev-event-persistence.test.ts",
+        "core/graph/src/types.ts",
+        "core/graph/tests/lineage.test.ts",
+        "core/reconciler/README.md",
+        "core/reconciler/src/reconcile.ts",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "activegraph-07",
+          "name": "Side-effect replay by recorded response",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "ultraswarm",
+      "label": "ultraswarm",
+      "category": "coding-agent-orchestration-runtime",
+      "priority": "P1",
+      "measured_at": "2026-06-13",
+      "updated_at": "2026-06-13",
+      "owner": "plugins/sdlc + plugins/samurai + core/orchestration",
+      "path": ".lev/pm/parity/ultraswarm.yaml",
+      "verdict": "extract",
+      "total_features": 9,
+      "classified": 9,
+      "unclassified": 0,
+      "counts": {
+        "extract": 7,
+        "reference": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "ultraswarm-01",
+          "name": "Portable Codex/Claude host-runner contract",
+          "status": "partial",
+          "lev_equivalent": "OMX/ultrawork skills plus Lev FlowMind/Orchestration split; no ultraswarm-specific host runner.",
+          "action": "extract",
+          "notes": "Useful as ceremony and safety prior art. Do not copy the target's skill as a core control surface.",
+          "absorbed_into": "plugins/sdlc or plugins/samurai host-runner UX",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/hosts/codex/skills/ultraswarm/SKILL.md",
+            "workshop/approved/ultraswarm/bin/ultraswarm.mjs"
+          ]
+        },
+        {
+          "id": "ultraswarm-02",
+          "name": "Atomic task plan schema for coding CLI workers",
+          "status": "partial",
+          "lev_equivalent": "FlowMind GraphDocument + Orchestration execution-contract types, but no imported ultraswarm task schema.",
+          "action": "extract",
+          "notes": "Map to Lev's owned declaration/proof contracts instead of adopting the JSON shape directly.",
+          "absorbed_into": "core/orchestration planning adapter or plugin-owned task-plan compiler",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/plan-schema.mjs",
+            "workshop/approved/ultraswarm/hosts/codex/skills/ultraswarm/SKILL.md"
+          ]
+        },
+        {
+          "id": "ultraswarm-03",
+          "name": "Provider CLI roster with tiered command routing",
+          "status": "missing",
+          "lev_equivalent": "Exec profiles and provider/platform adapters exist, but no target-equivalent coding CLI roster should live as hardcoded core data.",
+          "action": "extract",
+          "notes": "Extract failure taxonomy and config merge behavior; keep provider commands behind Lev-owned profiles.",
+          "absorbed_into": "core/exec profiles + plugins/platforms provider descriptors",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/scripts/router.mjs",
+            "workshop/approved/ultraswarm/ultraswarm.config.advanced.json"
+          ]
+        },
+        {
+          "id": "ultraswarm-04",
+          "name": "Per-task git worktree attempts and safe merge loop",
+          "status": "implemented",
+          "lev_equivalent": "core/orchestration/src/git/worktree.ts already owns worktree create, commit, squash merge, cleanup, keep, and prune policy.",
+          "action": "reference",
+          "notes": "Lev has the stronger owner path; ultraswarm is useful as a small behavior fixture for no-scaffold-sweep and worker-error tests.",
+          "absorbed_into": "core/orchestration worktree behavior tests",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/orchestrator/implement.mjs",
+            "workshop/approved/ultraswarm/lib/orchestrator/merge.mjs",
+            "core/orchestration/src/git/worktree.ts"
+          ]
+        },
+        {
+          "id": "ultraswarm-05",
+          "name": "Dependency waves and failed-prerequisite blocking",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration/src/topology/scheduler.ts provides topological wave scheduling; graph-runner/task semantics need target-specific mapping.",
+          "action": "extract",
+          "notes": "Behavior should become a receipt-backed blocked state in Lev, not just a runner report row.",
+          "absorbed_into": "core/orchestration topology tests and plugin task planner",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/orchestrator/waves.mjs",
+            "workshop/approved/ultraswarm/lib/orchestrator/runner.mjs",
+            "core/orchestration/src/topology/scheduler.ts"
+          ]
+        },
+        {
+          "id": "ultraswarm-06",
+          "name": "Adaptive QA and high-risk competition cascade",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration receipts, core/testing proof gates, and semantic-control evaluators; no exact coding-CLI competition cascade is canonical.",
+          "action": "extract",
+          "notes": "Extract the verdict-polarity and critical-refutation patterns into proof/eval tests before any runtime adoption.",
+          "absorbed_into": "core/testing + core/orchestration/proof + plugin-owned coding swarm spike",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/orchestrator/core.mjs",
+            "workshop/approved/ultraswarm/lib/prompts.mjs",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "ultraswarm-07",
+          "name": "Prompt-hash journal for resumable QA/brain calls",
+          "status": "missing",
+          "lev_equivalent": "Event Bus JSONL persistence, durable queues, and receipts exist, but no target-equivalent prompt-hash journal should be standalone canon.",
+          "action": "extract",
+          "notes": "Useful as a minimal resumability fixture; Lev should store causality through events/receipts.",
+          "absorbed_into": "core/event-bus + core/orchestration receipt/cache seam",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/journal.mjs",
+            "core/orchestration/src/queue/durable-task-queue.ts"
+          ]
+        },
+        {
+          "id": "ultraswarm-08",
+          "name": "Worker launch failure taxonomy",
+          "status": "missing",
+          "lev_equivalent": "Daemon/worker events have failure types but not this exact coding CLI launch taxonomy.",
+          "action": "extract",
+          "notes": "This is a small, high-value pattern for provider readiness blockers and AgentPing dashboards.",
+          "absorbed_into": "core/exec provider readiness + plugins/platforms diagnostics",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/orchestrator/implement.mjs",
+            "core/daemon/src/worker-pool.ts",
+            "core/poly/src/events/event-catalog.ts"
+          ]
+        },
+        {
+          "id": "ultraswarm-09",
+          "name": "Local-only shell runner as runtime substrate",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev execution must pass through scoped exec/harness/provider contracts, events, receipts, and leases.",
+          "action": "reject",
+          "notes": "Do not adopt this as the Lev runtime boundary; only extract tests and failure taxonomy.",
+          "absorbed_into": "none",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/ultraswarm/lib/orchestrator/implement.mjs",
+            "docs/ARCHITECTURE.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_revision",
+          "value": "151290019c16753dca847506be0d7465261086b7",
+          "unit": "git_sha",
+          "source": "workshop/approved/ultraswarm"
+        },
+        {
+          "name": "tracked_files",
+          "value": 63,
+          "unit": "files",
+          "source": "git -C workshop/approved/ultraswarm ls-files | wc -l"
+        },
+        {
+          "name": "local_repo_size",
+          "value": 888,
+          "unit": "KB",
+          "source": "du -sh workshop/approved/ultraswarm"
+        },
+        {
+          "name": "local_tests_passed",
+          "value": 99,
+          "unit": "tests",
+          "source": "cd workshop/approved/ultraswarm && npm test"
+        },
+        {
+          "name": "local_tests_failed",
+          "value": 0,
+          "unit": "tests",
+          "source": "cd workshop/approved/ultraswarm && npm test"
+        },
+        {
+          "name": "runtime_dependencies",
+          "value": 2,
+          "unit": "packages",
+          "source": "workshop/approved/ultraswarm/package.json"
+        }
+      ],
+      "lineage": [
+        "workshop/approved/ultraswarm",
+        "workshop/analysis/ultraswarm/analysis.md",
+        "workshop/analysis/ntm-vs-omx/analysis.md",
+        "workshop/analysis/oh-my-claudecode/analysis.md",
+        "workshop/analysis/claude-swarm/analysis.md",
+        ".lev/pm/parity/omx.yaml",
+        ".lev/pm/parity/ntm.yaml",
+        ".lev/pm/parity/openai-symphony.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "ultraswarm-09",
+          "name": "Local-only shell runner as runtime substrate",
+          "action": "reject",
+          "absorbed_into": "none",
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "understand-anything",
