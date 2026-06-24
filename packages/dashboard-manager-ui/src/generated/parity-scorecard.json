@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T06:50:02.732603+00:00",
+  "generated_at": "2026-06-20T17:01:36.001351+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,21 +14,21 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 25270,
+    "operation_count": 25403,
     "by_type": {
-      "upsert_entity": 5919,
-      "add_claim": 13544,
-      "add_link": 5807
+      "upsert_entity": 5948,
+      "add_claim": 13620,
+      "add_link": 5835
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 112,
-    "total_features": 1382,
+    "parity_files": 113,
+    "total_features": 1390,
     "absorbed": 65,
-    "pending": 995,
+    "pending": 1002,
     "deferred": 17,
-    "rejected": 42,
+    "rejected": 43,
     "monitor": 121,
     "unclassified": 0,
     "absorbed_pct": 4.7,
@@ -2337,6 +2337,196 @@
         {
           "id": "arscontexta-07",
           "name": "File-as-complete-artifact authority",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "autonomy-loop",
+      "label": "Autonomy Loop",
+      "category": "autonomous-agent-loop-runtime",
+      "priority": "P0",
+      "measured_at": "2026-06-20",
+      "updated_at": "2026-06-20",
+      "owner": "core/flowmind + core/eval + core/tmux-harness + community/examples",
+      "path": ".lev/pm/parity/autonomy-loop.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "build": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "autonomy-loop-01",
+          "name": "Presence-driven role topology",
+          "status": "partial",
+          "lev_equivalent": "FlowMind role nodes + tmux/session lifecycle + workstream state",
+          "action": "extract",
+          "notes": "Autonomy-loop composes researcher, planner, builder, and reviewer by live role presence. Lev should express this as FlowMind topology and tmux/session leases, not as Claude terminal commands.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/README.md",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/role-registry.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/turn-scheduler.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-02",
+          "name": "Git-backed baton and epoch fencing",
+          "status": "partial",
+          "lev_equivalent": "workstream state + execution-ledger run state + tmux session leases",
+          "action": "extract",
+          "notes": "The baton is a useful comparison target for Lev's session/workstream continuity. In Lev, baton state should be typed runtime state and ledger evidence, not an unrestricted markdown authority file.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/README.md",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/turn-scheduler.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/templates/LOOP-STATE.md"
+          ]
+        },
+        {
+          "id": "autonomy-loop-03",
+          "name": "Independent reviewer safety floor",
+          "status": "partial",
+          "lev_equivalent": "core/eval policy admission + AgentGuard-style authority + human gate escalation",
+          "action": "extract",
+          "notes": "The rule is strong: promotion needs an independent verifier. Lev should map this to evaluator policy and gate routing, not to a caller-owned plugin hook.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/safety-floor.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/promotion-guard.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-04",
+          "name": "Verify-gate routing between regression and greenfield proof",
+          "status": "missing",
+          "lev_equivalent": "core/eval EvalDecision over measurements from exec/effect evidence",
+          "action": "build",
+          "notes": "Autonomy-loop's route between golden-revert bite and mutation bite is a concrete target for Lev's evaluator policy. Lev should keep LLM witness observations separate from deterministic discharge.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/verify-gate.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/classify-bite.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/mutation-bite.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-05",
+          "name": "Convergence terminator for productive-looking non-convergence",
+          "status": "partial",
+          "lev_equivalent": "semantic control adaptation policy + loop budget exhaustion",
+          "action": "extract",
+          "notes": "Detecting repeated gate-failure signatures maps cleanly to semantic control. Lev should use this as a pressure test for adapt-policy routing and parking behavior.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/convergence-core.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-06",
+          "name": "Preflight trust tiers and provision-or-refuse posture",
+          "status": "partial",
+          "lev_equivalent": "environment profiles + exec profiles + AgentGuard leases",
+          "action": "extract",
+          "notes": "The trust-tier model is useful for Lev environment profiles. It should become typed runtime readiness evidence, not model-facing self-report.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/README.md",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/preflight.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/preflight-run.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-07",
+          "name": "Researcher quarantine and untrusted-source taint",
+          "status": "partial",
+          "lev_equivalent": "workshop intake source policy + core/eval source_policy discharge",
+          "action": "extract",
+          "notes": "This maps to Lev's source-policy problem: external content can become evidence or context, but not executable authority without discharge.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/README.md",
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/researcher-quarantine-io.mjs",
+            "workshop/intake/autonomy-loop/autonomy-loop/redteam/run.mjs"
+          ]
+        },
+        {
+          "id": "autonomy-loop-08",
+          "name": "Protected control-plane guard",
+          "status": "not-applicable",
+          "lev_equivalent": "core/exec effect boundary + AgentGuard + repository guardrails",
+          "action": "reject",
+          "notes": "The guard is useful as a warning and defense-in-depth pattern, but Lev must not promote regex shell parsing into proof authority.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autonomy-loop/autonomy-loop/hooks/gate-guard.mjs",
+            "workshop/intake/autonomy-loop/README.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "decision_core_files_reviewed",
+          "value": 7,
+          "unit": "count",
+          "source": "workshop/intake/autonomy-loop/autonomy-loop/hooks"
+        },
+        {
+          "name": "hook_scripts",
+          "value": 39,
+          "unit": "count",
+          "source": "find workshop/intake/autonomy-loop/autonomy-loop/hooks -maxdepth 1 -name '*.mjs'"
+        },
+        {
+          "name": "test_files",
+          "value": 38,
+          "unit": "count",
+          "source": "find workshop/intake/autonomy-loop/autonomy-loop/test -maxdepth 1"
+        },
+        {
+          "name": "staged_source_tests_passed",
+          "value": 360,
+          "unit": "tests",
+          "source": "node --test autonomy-loop/test/*.test.mjs"
+        }
+      ],
+      "lineage": [
+        "workshop/analysis/autonomy-loop/analysis.md",
+        "workshop/intake/autonomy-loop/README.md",
+        "workshop/intake/autonomy-loop/autonomy-loop/.claude-plugin/plugin.json",
+        "workshop/intake/autonomy-loop/autonomy-loop/hooks/hooks.json",
+        "workshop/intake/autonomy-loop/autonomy-loop/autonomy.config.example.json",
+        ".lev/pm/plans/plan-migration-community-examples-product-bar.md",
+        ".lev/pm/plans/plan-community-field-proofs-and-examples-consolidation.md",
+        "docs/specs/spec-parity.md",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "autonomy-loop-08",
+          "name": "Protected control-plane guard",
           "action": "reject",
           "absorbed_into": null,
           "tribunal_note": null
