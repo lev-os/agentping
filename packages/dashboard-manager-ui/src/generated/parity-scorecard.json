@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-20T17:01:36.001351+00:00",
+  "generated_at": "2026-06-29T11:32:01.752768+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 25403,
+    "operation_count": 25908,
     "by_type": {
-      "upsert_entity": 5948,
-      "add_claim": 13620,
-      "add_link": 5835
+      "upsert_entity": 6069,
+      "add_claim": 13885,
+      "add_link": 5954
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 113,
-    "total_features": 1390,
-    "absorbed": 65,
-    "pending": 1002,
+    "parity_files": 115,
+    "total_features": 1416,
+    "absorbed": 73,
+    "pending": 1019,
     "deferred": 17,
     "rejected": 43,
-    "monitor": 121,
+    "monitor": 122,
     "unclassified": 0,
-    "absorbed_pct": 4.7,
+    "absorbed_pct": 5.2,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -4041,6 +4041,176 @@
       "rejected_items": []
     },
     {
+      "target": "case-harness",
+      "label": "Case",
+      "category": "functionality-target",
+      "priority": "P1",
+      "measured_at": "2026-05-31",
+      "updated_at": "2026-05-31",
+      "owner": "core/flowmind + core/harness + community/examples",
+      "path": ".lev/pm/parity/case-harness.yaml",
+      "verdict": "recreate",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "implemented": 8,
+        "build": 2
+      },
+      "features": [
+        {
+          "id": "case-01",
+          "name": "Enforce, don't instruct (state machine over prompts)",
+          "status": "implemented",
+          "lev_equivalent": "DNA constraints (enforcement: gate) compiled to gate nodes",
+          "action": "implemented",
+          "notes": "The talk's central lesson IS the FlowMind thesis. Each constraint becomes an executable gate, not a prompt instruction.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-02",
+          "name": "Replace trust with evidence (PR requires hard proof)",
+          "status": "implemented",
+          "lev_equivalent": "evidence_required safety gate in case.dna.yaml",
+          "action": "implemented",
+          "notes": "No PR without a non-code evidence artifact (test hash, Playwright video, trace).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-03",
+          "name": "Prove tests actually ran (cryptographic hash)",
+          "status": "implemented",
+          "lev_equivalent": "proof_of_test_execution gate on a recomputed test hash",
+          "action": "implemented",
+          "notes": "Counters the 'touched a test file, claimed it ran' failure mode.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-04",
+          "name": "Five-agent pipeline (implementer/verifier/reviewer/closer/retro)",
+          "status": "implemented",
+          "lev_equivalent": "5 DNA behaviors (agent/gate/action) compiled to graph nodes",
+          "action": "implemented",
+          "notes": "Roles are graph nodes; segregation_of_roles gate enforces implementer != reviewer.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-05",
+          "name": "Autonomous 'won't stop until done' loop",
+          "status": "implemented",
+          "lev_equivalent": "run_until_resolved behavior (kind: loop, until/max_iterations)",
+          "action": "implemented",
+          "notes": "Bounded persistence loop instead of an open-ended prompt 'keep going'.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-06",
+          "name": "Guide, don't prescribe (delete 95% of skills, keep gotchas)",
+          "status": "implemented",
+          "lev_equivalent": "guide_dont_prescribe gate on a context-token budget",
+          "action": "implemented",
+          "notes": "Exhaustive docs lowered success (97% -> 77%) and blew up runtime; the gate caps injected context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-07",
+          "name": "Measure everything (eval pass-rate gating)",
+          "status": "implemented",
+          "lev_equivalent": "measured_by_evals progress gate (no regression vs baseline)",
+          "action": "implemented",
+          "notes": "Trust is built on pass rates; the gate refuses ships that regress evals.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-08",
+          "name": "Failures are harness bugs (fix the harness, not the output)",
+          "status": "implemented",
+          "lev_equivalent": "harness_bug constraint gate + matching failure_mode handler",
+          "action": "implemented",
+          "notes": "The gate routes failures to environment repair + re-run, not a manual code patch.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-09",
+          "name": "Cross-source intake (GitHub issue or Slack thread as input)",
+          "status": "partial",
+          "lev_equivalent": "core/event-providers + adapters",
+          "action": "build",
+          "notes": "Issue/Slack ingestion adapters exist in pieces; the unified harness intake surface is a productization gap.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "case-10",
+          "name": "Evidence artifact capture (Playwright video / test-hash receipts)",
+          "status": "partial",
+          "lev_equivalent": "exec receipts + core/harness process proofs",
+          "action": "build",
+          "notes": "Lev has exec receipts and proof spines; standardized media-evidence attachment to a PR is not yet a turnkey surface.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [
+        {
+          "name": "case_governed_agents",
+          "value": 5,
+          "unit": "agents",
+          "source": "transcript: implementer, verifier, reviewer, closer, retro"
+        },
+        {
+          "name": "skills_deleted_for_better_results",
+          "value": 95,
+          "unit": "percent",
+          "source": "transcript: 553 lines of gotchas replaced ~10,000 lines of skills"
+        },
+        {
+          "name": "eval_pass_rate_after_deletion",
+          "value": 97,
+          "unit": "percent",
+          "source": "transcript: 77% (full skills) -> 97% (gotchas only)"
+        },
+        {
+          "name": "dna_compiled_gate_nodes",
+          "value": 7,
+          "unit": "gates",
+          "source": "community/examples/case-harness/case.dna.yaml"
+        }
+      ],
+      "lineage": [
+        "community/examples/case-harness/case.dna.yaml",
+        "community/examples/case-harness/README.md",
+        "plugins/dna/__tests__/dna-case-harness-parity.test.ts",
+        ".lev/pm/parity/gitagent.yaml",
+        ".lev/pm/proposals/20260323-gitagent-parity-examples-eval-bench.md"
+      ],
+      "absorbed": 8,
+      "pending": 2,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "cass",
       "label": "coding-agent-search",
       "category": "coding-agent-transcript-index",
@@ -4930,6 +5100,343 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "command-code",
+      "label": "Command Code",
+      "category": "agent-sdk-reference",
+      "priority": "P0",
+      "measured_at": "2026-06-29",
+      "updated_at": "2026-06-29",
+      "owner": "core/sdk + core/exec + core/tmux-harness + core/eval + core/flowmind + core/poly",
+      "path": ".lev/pm/parity/command-code.yaml",
+      "verdict": "extract-patterns",
+      "total_features": 16,
+      "classified": 16,
+      "unclassified": 0,
+      "counts": {
+        "merge": 3,
+        "build": 8,
+        "extract": 4,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "command-code-01",
+          "name": "CLI aliases, interactive mode, headless print mode, and plan mode",
+          "status": "partial",
+          "lev_equivalent": "core/poly bin/lev + core/exec handlers + FlowMind plan lanes",
+          "action": "merge",
+          "notes": "Command Code exposes command-code/cmd/cmdc/commandcode, --print, --plan, --max-turns, --trust, yolo/auto-accept style flags. Lev has stronger routed handlers but should make CLI and SDK entrypoints converge.",
+          "absorbed_into": "core/poly + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/reference/cli",
+            "core/poly/bin/lev",
+            "core/exec/src/index.ts"
+          ]
+        },
+        {
+          "id": "command-code-02",
+          "name": "Public JS app SDK over the same run/session surface",
+          "status": "missing",
+          "lev_equivalent": "core/sdk createClient().exec/session/agent APIs",
+          "action": "build",
+          "notes": "Command Code is distributed as a CLI package, not a clean public JS SDK. Lev should use this gap as pressure to make JS apps first-class: one RunHandle with typed stream, control, receipts, and resume.",
+          "absorbed_into": "core/sdk + core/exec",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/command-code-npm/unpacked/package/package.json",
+            "core/sdk/src/index.ts"
+          ]
+        },
+        {
+          "id": "command-code-03",
+          "name": "Durable session/run identity with resume, continue, and fork commands",
+          "status": "partial",
+          "lev_equivalent": "RunEnvelope + executionId + tmux session registry + workstream identity",
+          "action": "build",
+          "notes": "Command Code exposes resume/continue/fork at CLI level. Lev has durable concepts but needs a crisp two-tier Agent/Run/Session contract and SDK-level list/fork/replay controls.",
+          "absorbed_into": "core/exec + core/tmux-harness + core/sdk",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/reference/cli",
+            "core/sdk/src/index.ts",
+            "core/tmux-harness/src/index.ts"
+          ]
+        },
+        {
+          "id": "command-code-04",
+          "name": "Typed event stream for tools, assistant text, hooks, permissions, usage, and terminal result",
+          "status": "missing",
+          "lev_equivalent": "Exec events + EventBus + tmux transcript + eval/gate receipts",
+          "action": "build",
+          "notes": "The npm bundle has tool execution, hooks, MCP, and run/session logic, but Lev still needs a public typed event union instead of settled results plus pane text.",
+          "absorbed_into": "core/exec + core/sdk + core/event-bus + core/telemetry",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/command-code/decompiled/symbol-index.json",
+            "core/exec/src/index.ts",
+            "core/sdk/src/index.ts"
+          ]
+        },
+        {
+          "id": "command-code-05",
+          "name": "Permission modes and deterministic tool admission",
+          "status": "partial",
+          "lev_equivalent": "core/exec gate validation + command runners + policy contracts",
+          "action": "build",
+          "notes": "Command Code has default, yolo, auto-accept, trust, plan-mode constraints, and tool permission prompts. Lev must express this as deterministic admission with receipt-backed allow/deny and optional LLM recommendations.",
+          "absorbed_into": "core/exec + core/sdk + core/eval",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/reference/tools",
+            "https://commandcode.ai/docs/reference/cli",
+            "core/exec/src/handlers/gate.ts"
+          ]
+        },
+        {
+          "id": "command-code-06",
+          "name": "Hook system around tool use, stop, and lifecycle events",
+          "status": "partial",
+          "lev_equivalent": "FlowMind lanes + exec events + gate/eval policies",
+          "action": "extract",
+          "notes": "Command Code hooks can add context or block tool outcomes. Lev should make hooks data-declared and proof-aware; code enforces the contract, FlowMind/YAML selects event bindings.",
+          "absorbed_into": "core/exec + core/flowmind + core/eval",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/hooks",
+            "core/flowmind/src/exec-flow-validation.ts",
+            "core/eval/src/registry.ts"
+          ]
+        },
+        {
+          "id": "command-code-07",
+          "name": "Scoped MCP config, OAuth token storage, and server command surface",
+          "status": "partial",
+          "lev_equivalent": "plugin/tool adapter registry + XDG credential/runtime boundaries",
+          "action": "extract",
+          "notes": "Command Code has local/project/user MCP scopes and OAuth token isolation. Lev should keep token authority deterministic and XDG-routed while exposing the same SDK/CLI shape.",
+          "absorbed_into": "core/sdk + core/poly + plugins",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/mcp",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "command-code-08",
+          "name": "Skills and project memory discovery",
+          "status": "partial",
+          "lev_equivalent": "Codex/Lev skills + AGENTS.md + FlowMind/DNA packets",
+          "action": "merge",
+          "notes": "Command Code uses AGENTS.md and .commandcode skills/taste paths. Lev should keep skill discovery local-first and route executable behavior through FlowMind/DNA instead of hidden runtime prompts.",
+          "absorbed_into": "skills + plugins + .lev",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/core-concepts/memory",
+            "https://commandcode.ai/docs/skills",
+            "AGENTS.md"
+          ]
+        },
+        {
+          "id": "command-code-09",
+          "name": "Taste/preference learning from accepted, rejected, and edited changes",
+          "status": "missing",
+          "lev_equivalent": "Eval measurements + preference package + receipt-linked profile",
+          "action": "build",
+          "notes": "Command Code's taste-1 is opaque and cloud-backed. Lev should model preference learning as a versioned package fed by deterministic receipts/evals, with LLMs proposing inferences but code admitting updates.",
+          "absorbed_into": "core/eval + core/memory + core/flowmind",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/taste",
+            "core/eval/src/evaluation-context.ts",
+            "core/eval/src/registry.ts"
+          ]
+        },
+        {
+          "id": "command-code-10",
+          "name": "Session import from other coding agents",
+          "status": "missing",
+          "lev_equivalent": "Trace/receipt importers + workstream capture + graph projection",
+          "action": "build",
+          "notes": "Docs advertise import from Claude Code/Codex style sessions for learning taste. Lev should import external sessions only as tainted evidence until receipts and evaluator context are reconstructed.",
+          "absorbed_into": "core/telemetry + core/graph + core/memory",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/quickstart",
+            "docs/specs/spec-parity.md"
+          ]
+        },
+        {
+          "id": "command-code-11",
+          "name": "Automatic checkpoints and rewind",
+          "status": "partial",
+          "lev_equivalent": "run receipts + task.receipt + worktree-aware proof artifacts",
+          "action": "extract",
+          "notes": "Command Code creates file backups/checkpoints before edits. Lev's equivalent should be receipt-linked, worktree-aware checkpoints that can be proven and replayed without becoming a second source of truth.",
+          "absorbed_into": "core/exec + core/telemetry + core/tmux-harness",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/core-concepts/checkpoints",
+            "core/exec/src/index.ts"
+          ]
+        },
+        {
+          "id": "command-code-12",
+          "name": "IDE extension IPC for active file, selection, visible files, and diagnostics",
+          "status": "missing",
+          "lev_equivalent": "IDE context adapter feeding deterministic ContextEnvelope and evidence refs",
+          "action": "extract",
+          "notes": "The VSIX source map proves a local IPC server under ~/.commandcode/ide with active file/context/diagnostics. Lev should adapt the pattern with XDG paths, strict caps, and receipt-visible context refs.",
+          "absorbed_into": "core/sdk + core/context-graph + plugins",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/command-code/decompiled/vsix-sources/src/extension.ts",
+            "workshop/analysis/command-code/decompiled/vsix-sources/src/ipc-server.ts",
+            "workshop/analysis/command-code/decompiled/vsix-sources/src/context-provider.ts"
+          ]
+        },
+        {
+          "id": "command-code-13",
+          "name": "Cloud sandbox, auth, GitHub App, and share endpoints",
+          "status": "not-applicable",
+          "lev_equivalent": "remote substrate future only; not local-first core",
+          "action": "monitor",
+          "notes": "Command Code bundle exposes sandbox/share/auth/GitHub App endpoints. Lev should not copy the cloud dependency; only preserve a runtime-mode field shape if a remote substrate becomes real.",
+          "absorbed_into": "future remote substrate, if ever",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/command-code/decompiled/symbol-index.json",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "command-code-14",
+          "name": "Built-in tool catalog with plan-mode restrictions and workspace path validation",
+          "status": "partial",
+          "lev_equivalent": "core/sdk tool contracts + core/exec admission + FlowMind proof gates",
+          "action": "build",
+          "notes": "Command Code documents file/search/shell/planning/IDE/subagent/MCP tools and plan-mode restrictions. Lev should make the catalog typed, deterministic, and gate-visible.",
+          "absorbed_into": "core/sdk + core/exec + core/flowmind",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://commandcode.ai/docs/reference/tools",
+            "core/sdk/src/index.ts",
+            "core/flowmind/src/exec-flow-validation.ts"
+          ]
+        },
+        {
+          "id": "command-code-15",
+          "name": "No-split-brain proof gates over generated runs and evaluator measurements",
+          "status": "partial",
+          "lev_equivalent": "core/eval EvalDecision/GateProof + core/exec gate validate + FlowMind evaluator refs",
+          "action": "build",
+          "notes": "Command Code is weaker here. Lev should keep this as a differentiator: evaluator selection is declarative through FlowMind/YAML, while deterministic code admits measurements and rejects stale or historical-only evidence.",
+          "absorbed_into": "core/eval + core/exec + core/flowmind",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/registry.ts",
+            "core/eval/src/evaluation-context.ts",
+            "core/exec/src/handlers/gate.ts",
+            "core/flowmind/src/evaluator-flow-parser.ts"
+          ]
+        },
+        {
+          "id": "command-code-16",
+          "name": "Provider/model routing across Anthropic, OpenAI, Gemini, Kimi, DeepSeek, GLM, Qwen, and local-compatible models",
+          "status": "partial",
+          "lev_equivalent": "provider adapter registry + execution profiles + eval scorecards",
+          "action": "merge",
+          "notes": "The bundle contains broad provider/model identifiers. Lev should route providers through deterministic execution profiles and compare them through eval scorecards, not through opaque global defaults.",
+          "absorbed_into": "core/exec + core/sdk + .lev execution profiles",
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/command-code/decompiled/symbol-index.json",
+            ".lev/pm/parity/eval-frameworks.yaml"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "npm_package_version",
+          "value": "0.40.11",
+          "unit": "semver",
+          "source": "npm view command-code --json"
+        },
+        {
+          "name": "packed_files",
+          "value": 8,
+          "unit": "files",
+          "source": "npm pack command-code@latest --json"
+        },
+        {
+          "name": "dist_index_bytes",
+          "value": 1385208,
+          "unit": "bytes",
+          "source": "npm pack file list"
+        },
+        {
+          "name": "dist_source_maps",
+          "value": 0,
+          "unit": "files",
+          "source": "local bundle inspection"
+        },
+        {
+          "name": "recovered_vsix_sources",
+          "value": 6,
+          "unit": "source_files",
+          "source": "VSIX source map extraction"
+        },
+        {
+          "name": "recovered_semantic_names",
+          "value": 1846,
+          "unit": "symbols",
+          "source": "workshop/analysis/command-code/decompiled/symbol-index.json"
+        },
+        {
+          "name": "recovered_function_names",
+          "value": 1913,
+          "unit": "symbols",
+          "source": "workshop/analysis/command-code/decompiled/symbol-index.json"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/command-code/readme.md",
+        "workshop/intake/command-code-npm/command-code-0.40.11.tgz",
+        "workshop/intake/command-code-npm/unpacked/package/package.json",
+        "workshop/intake/command-code-npm/unpacked/package/dist/index.mjs",
+        "workshop/intake/command-code-npm/unpacked/package/vsix/commandcode-vscode.vsix",
+        "workshop/analysis/command-code/decompiled/index.pretty.mjs",
+        "workshop/analysis/command-code/decompiled/module-manifest.json",
+        "workshop/analysis/command-code/decompiled/symbol-index.json",
+        "workshop/analysis/command-code/decompiled/vsix-source-manifest.json",
+        "workshop/analysis/command-code/decompiled/vsix-sources/src/extension.ts",
+        "workshop/analysis/command-code/analysis.md",
+        "docs/specs/spec-parity.md",
+        "docs/specs/spec-eval.md",
+        "docs/specs/spec-semantic-control.md",
+        "docs/specs/spec-flowmind.md",
+        "docs/specs/spec-orchestration-loop.md",
+        "core/sdk/src/index.ts",
+        "core/exec/src/index.ts",
+        "core/exec/src/handlers/eval.ts",
+        "core/exec/src/handlers/gate.ts",
+        "core/eval/src/index.ts",
+        "core/eval/src/registry.ts",
+        "core/eval/src/evaluation-context.ts",
+        "core/flowmind/src/evaluator-flow-parser.ts",
+        "core/flowmind/src/exec-flow-validation.ts",
+        "core/tmux-harness/src/index.ts",
+        "core/tmux-harness/src/pentagon/flowmind-proof.ts"
+      ],
+      "absorbed": 0,
+      "pending": 15,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
