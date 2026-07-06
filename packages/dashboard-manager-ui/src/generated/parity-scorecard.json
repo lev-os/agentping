@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T11:32:01.752768+00:00",
+  "generated_at": "2026-07-06T10:20:14.624119+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 25908,
+    "operation_count": 26161,
     "by_type": {
-      "upsert_entity": 6069,
-      "add_claim": 13885,
-      "add_link": 5954
+      "upsert_entity": 6121,
+      "add_claim": 14036,
+      "add_link": 6004
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 115,
-    "total_features": 1416,
+    "parity_files": 117,
+    "total_features": 1433,
     "absorbed": 73,
-    "pending": 1019,
-    "deferred": 17,
-    "rejected": 43,
-    "monitor": 122,
+    "pending": 1028,
+    "deferred": 18,
+    "rejected": 44,
+    "monitor": 125,
     "unclassified": 0,
-    "absorbed_pct": 5.2,
+    "absorbed_pct": 5.1,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -4706,6 +4706,132 @@
       ]
     },
     {
+      "target": "cocoindex",
+      "label": "CocoIndex",
+      "category": "agent-memory-index-provider",
+      "priority": "P0",
+      "measured_at": "2026-07-05",
+      "updated_at": "2026-07-05",
+      "owner": "core/memory + core/index + plugin-provider-adapter",
+      "path": ".lev/pm/parity/cocoindex.yaml",
+      "verdict": "extract",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "extract": 2,
+        "build": 2,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "cocoindex-01",
+          "name": "Incremental target-state materialization",
+          "status": "partial",
+          "lev_equivalent": "core/index provider adapter + graph projection refresh",
+          "action": "extract",
+          "notes": "POC proved unchanged mounted components stay unchanged on a second run. Use this for fresh projections, not admission.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cocoindex/README.md",
+            "workshop/intake/cocoindex/skills/cocoindex/SKILL.md",
+            "workshop/pocs/world-entry-gates-poc/cocoindex_app.py",
+            "workshop/analysis/cocoindex/analysis.md"
+          ]
+        },
+        {
+          "id": "cocoindex-02",
+          "name": "Agent-memory provider boundary",
+          "status": "missing",
+          "lev_equivalent": "core/memory provider contracts + plugin-owned adapter",
+          "action": "build",
+          "notes": "CocoIndex can maintain memory/index targets after deterministic gates produce candidate entries. Provider output must remain non-authoritative.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/pocs/world-entry-gates-poc/fixtures/cocoindex.memory-source.json",
+            "workshop/pocs/world-entry-gates-poc/cocoindex-out/admitted/cocoindex.memory-source.projection.json",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "cocoindex-03",
+          "name": "Gate-first source envelope",
+          "status": "missing",
+          "lev_equivalent": "FlowMind policy + core/eval admission + graph/world-model projection",
+          "action": "build",
+          "notes": "POC envelope rejects truth-minting fields and only emits candidate projections with `requires_gate: true`.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/pocs/world-entry-gates-poc/gate_projection.py",
+            "workshop/pocs/world-entry-gates-poc/test_gate_projection.py",
+            "plugins/sim-witness/src/index.ts",
+            "core/eval/src/world-model-evidence-adapter.ts"
+          ]
+        },
+        {
+          "id": "cocoindex-04",
+          "name": "Object-permanence replay as world-model pressure",
+          "status": "partial",
+          "lev_equivalent": "world-model fixture lane + reconciler surprise seam",
+          "action": "extract",
+          "notes": "Clean-room replay generated hidden-interval and re-entry metrics without importing WorldDirector code.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/worlddirector/analysis.md",
+            "workshop/pocs/world-entry-gates-poc/object_permanence_replay.py",
+            "workshop/pocs/world-entry-gates-poc/out/object-permanence/projection.json",
+            "core/reconciler/src/surprise.ts"
+          ]
+        },
+        {
+          "id": "cocoindex-05",
+          "name": "Official memory dependency readiness",
+          "status": "missing",
+          "lev_equivalent": "XDG storage policy + failure modes + provider lifecycle",
+          "action": "deferred",
+          "notes": "Install works, but official adoption needs XDG paths, DB lifecycle, failure semantics, and provider capability checks.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cocoindex/pyproject.toml",
+            "workshop/intake/cocoindex-installation/article.md",
+            "docs/ARCHITECTURE.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/cocoindex",
+        "workshop/intake/cocoindex-installation/article.md",
+        "workshop/analysis/cocoindex/analysis.md",
+        "workshop/pocs/world-entry-gates-poc",
+        "docs/NORTH_STAR.md",
+        "docs/ARCHITECTURE.md",
+        "plugins/sim-witness/src/index.ts",
+        "core/reconciler/src/surprise.ts",
+        "core/world-model/src/wiring/world-model-predictor.ts"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [
+        {
+          "id": "cocoindex-05",
+          "name": "Official memory dependency readiness",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
       "target": "codegraph",
       "label": "CodeGraph",
       "category": "code-intelligence-graph",
@@ -5100,343 +5226,6 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
-      "deferred_items": [],
-      "rejected_items": []
-    },
-    {
-      "target": "command-code",
-      "label": "Command Code",
-      "category": "agent-sdk-reference",
-      "priority": "P0",
-      "measured_at": "2026-06-29",
-      "updated_at": "2026-06-29",
-      "owner": "core/sdk + core/exec + core/tmux-harness + core/eval + core/flowmind + core/poly",
-      "path": ".lev/pm/parity/command-code.yaml",
-      "verdict": "extract-patterns",
-      "total_features": 16,
-      "classified": 16,
-      "unclassified": 0,
-      "counts": {
-        "merge": 3,
-        "build": 8,
-        "extract": 4,
-        "monitor": 1
-      },
-      "features": [
-        {
-          "id": "command-code-01",
-          "name": "CLI aliases, interactive mode, headless print mode, and plan mode",
-          "status": "partial",
-          "lev_equivalent": "core/poly bin/lev + core/exec handlers + FlowMind plan lanes",
-          "action": "merge",
-          "notes": "Command Code exposes command-code/cmd/cmdc/commandcode, --print, --plan, --max-turns, --trust, yolo/auto-accept style flags. Lev has stronger routed handlers but should make CLI and SDK entrypoints converge.",
-          "absorbed_into": "core/poly + core/exec",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/reference/cli",
-            "core/poly/bin/lev",
-            "core/exec/src/index.ts"
-          ]
-        },
-        {
-          "id": "command-code-02",
-          "name": "Public JS app SDK over the same run/session surface",
-          "status": "missing",
-          "lev_equivalent": "core/sdk createClient().exec/session/agent APIs",
-          "action": "build",
-          "notes": "Command Code is distributed as a CLI package, not a clean public JS SDK. Lev should use this gap as pressure to make JS apps first-class: one RunHandle with typed stream, control, receipts, and resume.",
-          "absorbed_into": "core/sdk + core/exec",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/intake/command-code-npm/unpacked/package/package.json",
-            "core/sdk/src/index.ts"
-          ]
-        },
-        {
-          "id": "command-code-03",
-          "name": "Durable session/run identity with resume, continue, and fork commands",
-          "status": "partial",
-          "lev_equivalent": "RunEnvelope + executionId + tmux session registry + workstream identity",
-          "action": "build",
-          "notes": "Command Code exposes resume/continue/fork at CLI level. Lev has durable concepts but needs a crisp two-tier Agent/Run/Session contract and SDK-level list/fork/replay controls.",
-          "absorbed_into": "core/exec + core/tmux-harness + core/sdk",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/reference/cli",
-            "core/sdk/src/index.ts",
-            "core/tmux-harness/src/index.ts"
-          ]
-        },
-        {
-          "id": "command-code-04",
-          "name": "Typed event stream for tools, assistant text, hooks, permissions, usage, and terminal result",
-          "status": "missing",
-          "lev_equivalent": "Exec events + EventBus + tmux transcript + eval/gate receipts",
-          "action": "build",
-          "notes": "The npm bundle has tool execution, hooks, MCP, and run/session logic, but Lev still needs a public typed event union instead of settled results plus pane text.",
-          "absorbed_into": "core/exec + core/sdk + core/event-bus + core/telemetry",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/analysis/command-code/decompiled/symbol-index.json",
-            "core/exec/src/index.ts",
-            "core/sdk/src/index.ts"
-          ]
-        },
-        {
-          "id": "command-code-05",
-          "name": "Permission modes and deterministic tool admission",
-          "status": "partial",
-          "lev_equivalent": "core/exec gate validation + command runners + policy contracts",
-          "action": "build",
-          "notes": "Command Code has default, yolo, auto-accept, trust, plan-mode constraints, and tool permission prompts. Lev must express this as deterministic admission with receipt-backed allow/deny and optional LLM recommendations.",
-          "absorbed_into": "core/exec + core/sdk + core/eval",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/reference/tools",
-            "https://commandcode.ai/docs/reference/cli",
-            "core/exec/src/handlers/gate.ts"
-          ]
-        },
-        {
-          "id": "command-code-06",
-          "name": "Hook system around tool use, stop, and lifecycle events",
-          "status": "partial",
-          "lev_equivalent": "FlowMind lanes + exec events + gate/eval policies",
-          "action": "extract",
-          "notes": "Command Code hooks can add context or block tool outcomes. Lev should make hooks data-declared and proof-aware; code enforces the contract, FlowMind/YAML selects event bindings.",
-          "absorbed_into": "core/exec + core/flowmind + core/eval",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/hooks",
-            "core/flowmind/src/exec-flow-validation.ts",
-            "core/eval/src/registry.ts"
-          ]
-        },
-        {
-          "id": "command-code-07",
-          "name": "Scoped MCP config, OAuth token storage, and server command surface",
-          "status": "partial",
-          "lev_equivalent": "plugin/tool adapter registry + XDG credential/runtime boundaries",
-          "action": "extract",
-          "notes": "Command Code has local/project/user MCP scopes and OAuth token isolation. Lev should keep token authority deterministic and XDG-routed while exposing the same SDK/CLI shape.",
-          "absorbed_into": "core/sdk + core/poly + plugins",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/mcp",
-            "docs/ARCHITECTURE.md"
-          ]
-        },
-        {
-          "id": "command-code-08",
-          "name": "Skills and project memory discovery",
-          "status": "partial",
-          "lev_equivalent": "Codex/Lev skills + AGENTS.md + FlowMind/DNA packets",
-          "action": "merge",
-          "notes": "Command Code uses AGENTS.md and .commandcode skills/taste paths. Lev should keep skill discovery local-first and route executable behavior through FlowMind/DNA instead of hidden runtime prompts.",
-          "absorbed_into": "skills + plugins + .lev",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/core-concepts/memory",
-            "https://commandcode.ai/docs/skills",
-            "AGENTS.md"
-          ]
-        },
-        {
-          "id": "command-code-09",
-          "name": "Taste/preference learning from accepted, rejected, and edited changes",
-          "status": "missing",
-          "lev_equivalent": "Eval measurements + preference package + receipt-linked profile",
-          "action": "build",
-          "notes": "Command Code's taste-1 is opaque and cloud-backed. Lev should model preference learning as a versioned package fed by deterministic receipts/evals, with LLMs proposing inferences but code admitting updates.",
-          "absorbed_into": "core/eval + core/memory + core/flowmind",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/taste",
-            "core/eval/src/evaluation-context.ts",
-            "core/eval/src/registry.ts"
-          ]
-        },
-        {
-          "id": "command-code-10",
-          "name": "Session import from other coding agents",
-          "status": "missing",
-          "lev_equivalent": "Trace/receipt importers + workstream capture + graph projection",
-          "action": "build",
-          "notes": "Docs advertise import from Claude Code/Codex style sessions for learning taste. Lev should import external sessions only as tainted evidence until receipts and evaluator context are reconstructed.",
-          "absorbed_into": "core/telemetry + core/graph + core/memory",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/quickstart",
-            "docs/specs/spec-parity.md"
-          ]
-        },
-        {
-          "id": "command-code-11",
-          "name": "Automatic checkpoints and rewind",
-          "status": "partial",
-          "lev_equivalent": "run receipts + task.receipt + worktree-aware proof artifacts",
-          "action": "extract",
-          "notes": "Command Code creates file backups/checkpoints before edits. Lev's equivalent should be receipt-linked, worktree-aware checkpoints that can be proven and replayed without becoming a second source of truth.",
-          "absorbed_into": "core/exec + core/telemetry + core/tmux-harness",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/core-concepts/checkpoints",
-            "core/exec/src/index.ts"
-          ]
-        },
-        {
-          "id": "command-code-12",
-          "name": "IDE extension IPC for active file, selection, visible files, and diagnostics",
-          "status": "missing",
-          "lev_equivalent": "IDE context adapter feeding deterministic ContextEnvelope and evidence refs",
-          "action": "extract",
-          "notes": "The VSIX source map proves a local IPC server under ~/.commandcode/ide with active file/context/diagnostics. Lev should adapt the pattern with XDG paths, strict caps, and receipt-visible context refs.",
-          "absorbed_into": "core/sdk + core/context-graph + plugins",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/analysis/command-code/decompiled/vsix-sources/src/extension.ts",
-            "workshop/analysis/command-code/decompiled/vsix-sources/src/ipc-server.ts",
-            "workshop/analysis/command-code/decompiled/vsix-sources/src/context-provider.ts"
-          ]
-        },
-        {
-          "id": "command-code-13",
-          "name": "Cloud sandbox, auth, GitHub App, and share endpoints",
-          "status": "not-applicable",
-          "lev_equivalent": "remote substrate future only; not local-first core",
-          "action": "monitor",
-          "notes": "Command Code bundle exposes sandbox/share/auth/GitHub App endpoints. Lev should not copy the cloud dependency; only preserve a runtime-mode field shape if a remote substrate becomes real.",
-          "absorbed_into": "future remote substrate, if ever",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/analysis/command-code/decompiled/symbol-index.json",
-            "docs/NORTH_STAR.md"
-          ]
-        },
-        {
-          "id": "command-code-14",
-          "name": "Built-in tool catalog with plan-mode restrictions and workspace path validation",
-          "status": "partial",
-          "lev_equivalent": "core/sdk tool contracts + core/exec admission + FlowMind proof gates",
-          "action": "build",
-          "notes": "Command Code documents file/search/shell/planning/IDE/subagent/MCP tools and plan-mode restrictions. Lev should make the catalog typed, deterministic, and gate-visible.",
-          "absorbed_into": "core/sdk + core/exec + core/flowmind",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "https://commandcode.ai/docs/reference/tools",
-            "core/sdk/src/index.ts",
-            "core/flowmind/src/exec-flow-validation.ts"
-          ]
-        },
-        {
-          "id": "command-code-15",
-          "name": "No-split-brain proof gates over generated runs and evaluator measurements",
-          "status": "partial",
-          "lev_equivalent": "core/eval EvalDecision/GateProof + core/exec gate validate + FlowMind evaluator refs",
-          "action": "build",
-          "notes": "Command Code is weaker here. Lev should keep this as a differentiator: evaluator selection is declarative through FlowMind/YAML, while deterministic code admits measurements and rejects stale or historical-only evidence.",
-          "absorbed_into": "core/eval + core/exec + core/flowmind",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "core/eval/src/registry.ts",
-            "core/eval/src/evaluation-context.ts",
-            "core/exec/src/handlers/gate.ts",
-            "core/flowmind/src/evaluator-flow-parser.ts"
-          ]
-        },
-        {
-          "id": "command-code-16",
-          "name": "Provider/model routing across Anthropic, OpenAI, Gemini, Kimi, DeepSeek, GLM, Qwen, and local-compatible models",
-          "status": "partial",
-          "lev_equivalent": "provider adapter registry + execution profiles + eval scorecards",
-          "action": "merge",
-          "notes": "The bundle contains broad provider/model identifiers. Lev should route providers through deterministic execution profiles and compare them through eval scorecards, not through opaque global defaults.",
-          "absorbed_into": "core/exec + core/sdk + .lev execution profiles",
-          "tribunal_note": null,
-          "evidence_refs": [
-            "workshop/analysis/command-code/decompiled/symbol-index.json",
-            ".lev/pm/parity/eval-frameworks.yaml"
-          ]
-        }
-      ],
-      "metrics": [
-        {
-          "name": "npm_package_version",
-          "value": "0.40.11",
-          "unit": "semver",
-          "source": "npm view command-code --json"
-        },
-        {
-          "name": "packed_files",
-          "value": 8,
-          "unit": "files",
-          "source": "npm pack command-code@latest --json"
-        },
-        {
-          "name": "dist_index_bytes",
-          "value": 1385208,
-          "unit": "bytes",
-          "source": "npm pack file list"
-        },
-        {
-          "name": "dist_source_maps",
-          "value": 0,
-          "unit": "files",
-          "source": "local bundle inspection"
-        },
-        {
-          "name": "recovered_vsix_sources",
-          "value": 6,
-          "unit": "source_files",
-          "source": "VSIX source map extraction"
-        },
-        {
-          "name": "recovered_semantic_names",
-          "value": 1846,
-          "unit": "symbols",
-          "source": "workshop/analysis/command-code/decompiled/symbol-index.json"
-        },
-        {
-          "name": "recovered_function_names",
-          "value": 1913,
-          "unit": "symbols",
-          "source": "workshop/analysis/command-code/decompiled/symbol-index.json"
-        }
-      ],
-      "lineage": [
-        "workshop/intake/command-code/readme.md",
-        "workshop/intake/command-code-npm/command-code-0.40.11.tgz",
-        "workshop/intake/command-code-npm/unpacked/package/package.json",
-        "workshop/intake/command-code-npm/unpacked/package/dist/index.mjs",
-        "workshop/intake/command-code-npm/unpacked/package/vsix/commandcode-vscode.vsix",
-        "workshop/analysis/command-code/decompiled/index.pretty.mjs",
-        "workshop/analysis/command-code/decompiled/module-manifest.json",
-        "workshop/analysis/command-code/decompiled/symbol-index.json",
-        "workshop/analysis/command-code/decompiled/vsix-source-manifest.json",
-        "workshop/analysis/command-code/decompiled/vsix-sources/src/extension.ts",
-        "workshop/analysis/command-code/analysis.md",
-        "docs/specs/spec-parity.md",
-        "docs/specs/spec-eval.md",
-        "docs/specs/spec-semantic-control.md",
-        "docs/specs/spec-flowmind.md",
-        "docs/specs/spec-orchestration-loop.md",
-        "core/sdk/src/index.ts",
-        "core/exec/src/index.ts",
-        "core/exec/src/handlers/eval.ts",
-        "core/exec/src/handlers/gate.ts",
-        "core/eval/src/index.ts",
-        "core/eval/src/registry.ts",
-        "core/eval/src/evaluation-context.ts",
-        "core/flowmind/src/evaluator-flow-parser.ts",
-        "core/flowmind/src/exec-flow-validation.ts",
-        "core/tmux-harness/src/index.ts",
-        "core/tmux-harness/src/pentagon/flowmind-proof.ts"
-      ],
-      "absorbed": 0,
-      "pending": 15,
-      "deferred": 0,
-      "rejected": 0,
-      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -13847,6 +13636,284 @@
       ]
     },
     {
+      "target": "learn-harness-engineering",
+      "label": "Learn Harness Engineering",
+      "category": "agent-harness-engineering-course",
+      "priority": "P1",
+      "measured_at": "2026-07-06",
+      "updated_at": "2026-07-06",
+      "owner": "plugins/sdlc + core/eval",
+      "path": ".lev/pm/parity/learn-harness-engineering.yaml",
+      "verdict": "extract",
+      "total_features": 14,
+      "classified": 14,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "spike": 1,
+        "build": 3,
+        "merge": 1,
+        "reference": 2,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "lhe-01",
+          "name": "Five-subsystem harness model",
+          "status": "partial",
+          "lev_equivalent": "Lev task DNA, workstream state, EvalDecision diagnostics, execution scope, and lifecycle receipts",
+          "action": "extract",
+          "notes": "Use the taxonomy as eval criteria, not as a new authority layer.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/README.md",
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/SKILL.md"
+          ]
+        },
+        {
+          "id": "lhe-02",
+          "name": "harness-creator skill",
+          "status": "missing",
+          "lev_equivalent": "future SDLC harness-assessment helper",
+          "action": "spike",
+          "notes": "Useful shape, but install only after Lev-owned adapter and owner-local workflow prove out.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/SKILL.md",
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/README.md"
+          ]
+        },
+        {
+          "id": "lhe-03",
+          "name": "create-harness scaffolder",
+          "status": "partial",
+          "lev_equivalent": "owner-local task/workstream eval-pack generator",
+          "action": "extract",
+          "notes": "Translate generated artifact intent to .lev/pm, execution YAML, and receipts; do not adopt root feature_list authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/scripts/create-harness.mjs"
+          ]
+        },
+        {
+          "id": "lhe-04",
+          "name": "validate-harness structural scorer",
+          "status": "missing",
+          "lev_equivalent": "core/eval diagnostic adapter input",
+          "action": "build",
+          "notes": "Map subsystem failures to typed observations, diagnostics, measurements, and evidence refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/scripts/validate-harness.mjs"
+          ]
+        },
+        {
+          "id": "lhe-05",
+          "name": "run-benchmark self-check and eval coverage",
+          "status": "missing",
+          "lev_equivalent": "EvalDecision measurement projection with preflight self-check",
+          "action": "build",
+          "notes": "Preserve self-check and eval coverage, but keep score non-authoritative until core/eval admits it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/scripts/run-benchmark.mjs",
+            "/tmp/learn-harness-engineering-project06-benchmark.json"
+          ]
+        },
+        {
+          "id": "lhe-06",
+          "name": "harness utility detector layer",
+          "status": "partial",
+          "lev_equivalent": "Lev-owned detector implementation if the spike validates it",
+          "action": "extract",
+          "notes": "Reuse detector ideas, not source code, unless license and ownership are reviewed for a real implementation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/scripts/lib/harness-utils.mjs"
+          ]
+        },
+        {
+          "id": "lhe-07",
+          "name": "ten-case eval corpus",
+          "status": "partial",
+          "lev_equivalent": "proposal-readiness and eval-design fixture corpus",
+          "action": "merge",
+          "notes": "Port cases for subsystem coverage and negative controls.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/evals/evals.json"
+          ]
+        },
+        {
+          "id": "lhe-08",
+          "name": "shell audit fallback",
+          "status": "partial",
+          "lev_equivalent": "optional command-case fallback",
+          "action": "extract",
+          "notes": "Useful as a portable audit reference; typed adapter should be the primary Lev path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/tools/audit-harness.sh"
+          ]
+        },
+        {
+          "id": "lhe-09",
+          "name": "markdown and JSON templates",
+          "status": "partial",
+          "lev_equivalent": "task DNA, workstream, execution YAML, and handoff templates",
+          "action": "extract",
+          "notes": "Translate semantics into existing Lev PM surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/templates/agents.md",
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/templates/feature-list.json"
+          ]
+        },
+        {
+          "id": "lhe-10",
+          "name": "twelve-lecture course",
+          "status": "not-applicable",
+          "lev_equivalent": "background rationale for lifecycle playbook",
+          "action": "reference",
+          "notes": "Reference only; no direct implementation path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/docs/en/lectures"
+          ]
+        },
+        {
+          "id": "lhe-11",
+          "name": "six teaching projects",
+          "status": "partial",
+          "lev_equivalent": "workshop fixture corpus",
+          "action": "extract",
+          "notes": "Use project 06 starter and solution as first negative/positive regression pair.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/projects/project-06"
+          ]
+        },
+        {
+          "id": "lhe-12",
+          "name": "multilingual course documentation",
+          "status": "not-applicable",
+          "lev_equivalent": "documentation reference only",
+          "action": "reference",
+          "notes": "No current Lev implementation action.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/docs"
+          ]
+        },
+        {
+          "id": "lhe-13",
+          "name": "VitePress and PDF publishing",
+          "status": "not-applicable",
+          "lev_equivalent": "lev.now/report projection reference only",
+          "action": "monitor",
+          "notes": "Do not adopt publishing stack; docs build was only used to verify source health.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/package.json",
+            "workshop/intake/learn-harness-engineering/docs/.vitepress"
+          ]
+        },
+        {
+          "id": "lhe-14",
+          "name": "real before/after agent replay",
+          "status": "missing",
+          "lev_equivalent": "future harness effectiveness field proof",
+          "action": "build",
+          "notes": "Required before the scorer can become anything stronger than a diagnostic.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/learn-harness-engineering/skills/harness-creator/README.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "lectures_count",
+          "value": 12,
+          "unit": "count",
+          "source": "README.md"
+        },
+        {
+          "name": "projects_count",
+          "value": 6,
+          "unit": "count",
+          "source": "README.md"
+        },
+        {
+          "name": "language_count",
+          "value": 15,
+          "unit": "count",
+          "source": "README.md"
+        },
+        {
+          "name": "harness_creator_eval_cases",
+          "value": 10,
+          "unit": "count",
+          "source": "skills/harness-creator/evals/evals.json"
+        },
+        {
+          "name": "self_check_score",
+          "value": 100,
+          "unit": "score",
+          "source": "/tmp/learn-harness-engineering-project06-benchmark.json"
+        },
+        {
+          "name": "project06_solution_score",
+          "value": 68,
+          "unit": "score",
+          "source": "/tmp/learn-harness-engineering-project06-benchmark.json"
+        },
+        {
+          "name": "project06_starter_score",
+          "value": 28,
+          "unit": "score",
+          "source": "validate-harness command output"
+        },
+        {
+          "name": "npm_audit_vulnerabilities",
+          "value": 14,
+          "unit": "count",
+          "source": "npm ci output"
+        }
+      ],
+      "lineage": [
+        "workshop/analysis/learn-harness-engineering/analysis.md",
+        "workshop/intake/learn-harness-engineering",
+        "workshop/analysis/openai-harness-engineering-intake.md",
+        "workshop/analysis/2603.25723-natural-language-agent-harnesses/analysis.md",
+        "workshop/analysis/loss-function-driven-agentic-loops/analysis.md",
+        ".lev/pm/workstreams/lfd-lifecycle-playbook/captures/20260705-capture-lfd-operationalization-now-projection.yaml",
+        "core/eval/src/eval-decision.ts",
+        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 3,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "lev-self-parity",
       "label": "Lev Self-Parity (DNA vs OS naming)",
       "category": "architecture-proof",
@@ -14333,6 +14400,289 @@
         }
       ],
       "rejected_items": []
+    },
+    {
+      "target": "loss-function-driven-agentic-loops",
+      "label": "Loss Function Driven Agentic Loops",
+      "category": "eval-harness-agentic-loop",
+      "priority": "P0",
+      "measured_at": "2026-07-05",
+      "updated_at": "2026-07-05",
+      "owner": "core/eval + plugins/sdlc",
+      "path": ".lev/pm/parity/loss-function-driven-agentic-loops.yaml",
+      "verdict": "extract",
+      "total_features": 14,
+      "classified": 14,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "spike": 2,
+        "build": 3,
+        "merge": 2,
+        "reject": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "lfd-01",
+          "name": "Four-piece loss function contract",
+          "status": "partial",
+          "lev_equivalent": "eval-design contract in core/eval design and LFD prior-art runs",
+          "action": "extract",
+          "notes": "Lev already absorbed the concept; extract the packaged vocabulary and completeness checklist, not a separate primitive.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loss-function-design/SKILL.md",
+            ".lev/pm/designs/design-core-eval-poly-bound-sdk.md",
+            "workshop/intake/lfd-design-runs/20260614-three-source-synthesis/output.yaml"
+          ]
+        },
+        {
+          "id": "lfd-02",
+          "name": "Harness scaffold from goal prompt",
+          "status": "missing",
+          "lev_equivalent": "owner-local EvalSuiteManifest and task eval binding authoring",
+          "action": "spike",
+          "notes": "Useful as a proposal/eval-design helper if it emits owner-local eval packs instead of project-local proof authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/skills/harness-scaffold/SKILL.md",
+            "workshop/intake/lfd-design-runs/20260614-eval-design-iter-20-final-consolidation-audit/output/settled_eval_design_contract.yaml"
+          ]
+        },
+        {
+          "id": "lfd-03",
+          "name": "Runtime-agnostic adapter wrapper contract",
+          "status": "partial",
+          "lev_equivalent": "Poly/exec provider bindings plus proposal/eval worker contracts",
+          "action": "extract",
+          "notes": "The shared eight-key parser shape is a useful boundary for bounded subagent loops, but transport remains Lev-owned.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/compatibility.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/codex-orchestration/SKILL.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/claude-code-orchestration/SKILL.md"
+          ]
+        },
+        {
+          "id": "lfd-04",
+          "name": "Fake-agent deterministic dogfood verifier",
+          "status": "missing",
+          "lev_equivalent": "core/eval command cases and proposal_readiness regression fixtures",
+          "action": "build",
+          "notes": "High-value spike fixture. It can become a deterministic command-case input for EvalDecision after mapping.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/run-verification.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verification-report.json"
+          ]
+        },
+        {
+          "id": "lfd-05",
+          "name": "Hidden holdouts, integrity guard, and anti-cheat posture",
+          "status": "partial",
+          "lev_equivalent": "eval-design public/private split, cheap-path registry, proposal-readiness negative cases",
+          "action": "merge",
+          "notes": "Concept is already Lev canon; merge concrete guard categories where proposal_readiness lacks tests.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/BUILDING-A-GREAT-HARNESS.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loop-driver/scripts/cycle.sh",
+            "workshop/intake/lfd-design-runs/20260614-eval-design-iter-20-final-consolidation-audit/output/settled_eval_design_contract.yaml"
+          ]
+        },
+        {
+          "id": "lfd-06",
+          "name": "Local weighted score as final verdict",
+          "status": "not-applicable",
+          "lev_equivalent": "core/eval EvalDecision",
+          "action": "reject",
+          "notes": "The external score is an observation/projection. Lev final verdicts must stay in EvalDecision over typed evidence refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loop-driver/scripts/score-cycle.py",
+            "core/eval/src/eval-decision.ts"
+          ]
+        },
+        {
+          "id": "lfd-07",
+          "name": "Real-agent adapter verification matrix",
+          "status": "missing",
+          "lev_equivalent": "future provider/model eval matrix",
+          "action": "monitor",
+          "notes": "The local clone did not contain a committed verification-report-real.json. Treat real-agent adapter claims as unverified until rerun.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/README.md",
+            "workshop/approved/loss-function-driven-agentic-loops/compatibility.md"
+          ]
+        },
+        {
+          "id": "lfd-08",
+          "name": "Complete upstream feature map",
+          "status": "partial",
+          "lev_equivalent": "analysis-owned operationalization matrix",
+          "action": "extract",
+          "notes": "The analysis now maps distribution files, all 11 skills, all 6 adapters, runtime scripts, verifier assets, examples, and instruments to Lev landing zones.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/loss-function-driven-agentic-loops/analysis.md",
+            "workshop/approved/loss-function-driven-agentic-loops/bundle.json"
+          ]
+        },
+        {
+          "id": "lfd-09",
+          "name": "Distribution and governance surfaces",
+          "status": "partial",
+          "lev_equivalent": "skill lifecycle metadata plus intake provenance",
+          "action": "extract",
+          "notes": "Keep install/uninstall and contribution checks as sandboxed verification inputs; do not mutate global agent stores.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/install.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/uninstall.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/compatibility.md",
+            "workshop/approved/loss-function-driven-agentic-loops/CONTRIBUTING.md"
+          ]
+        },
+        {
+          "id": "lfd-10",
+          "name": "Goal prompt and scaffold examples",
+          "status": "partial",
+          "lev_equivalent": "eval-design fixture corpus",
+          "action": "extract",
+          "notes": "Use examples as fixture corpus for translating /goal prompt sections into Lev eval YAML.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/examples/goal-prompts/README.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/meta-loss-function-development/templates/goal-prompt.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/harness-scaffold/templates/README.md"
+          ]
+        },
+        {
+          "id": "lfd-11",
+          "name": "Runtime script suite",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/orchestration attempt runner plus core/eval measurement projection",
+          "action": "spike",
+          "notes": "Represent shell behavior as fixtures first; implement Lev-native runner only after report-to-EvalDecision mapping passes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loop-driver/scripts/cycle.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loop-driver/scripts/run-loop.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/loop-driver/scripts/score-cycle.py",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/harness-scaffold/scripts/scaffold.py"
+          ]
+        },
+        {
+          "id": "lfd-12",
+          "name": "Adapter parser and wrapper contract suite",
+          "status": "partial",
+          "lev_equivalent": "AgentCycleSummary schema plus Poly/core-exec adapter contract",
+          "action": "build",
+          "notes": "All adapters should normalize into one observation schema before any runtime integration.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/compatibility.md",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/claude-code-orchestration/scripts/parse_claude_output.py",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/codex-orchestration/scripts/parse_codex_output.py",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/hermes-agent-orchestration/scripts/parse_hermes_output.py",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/opencode-orchestration/scripts/parse_opencode_output.py"
+          ]
+        },
+        {
+          "id": "lfd-13",
+          "name": "Verifier instruments taxonomy",
+          "status": "missing",
+          "lev_equivalent": "core/eval measurement lane taxonomy",
+          "action": "build",
+          "notes": "The analysis maps each instrument file to a Lev measurement lane and next step; implementation should add a static coverage test for this map.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/loss-function-driven-agentic-loops/analysis.md",
+            "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verifiers/instruments"
+          ]
+        },
+        {
+          "id": "lfd-14",
+          "name": "Public/private holdout split",
+          "status": "partial",
+          "lev_equivalent": "private holdout refs plus aggregate-only reporting in eval-design",
+          "action": "merge",
+          "notes": "Keep private oracle hidden; expose checksums, aggregate result, and evidence refs only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verifiers/private/grader.sh",
+            "workshop/approved/loss-function-driven-agentic-loops/skills/meta-loss-function-development/references/harness-completeness-checklist.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "bundle_version",
+          "value": "2.2.0",
+          "unit": "count",
+          "source": "workshop/approved/loss-function-driven-agentic-loops/bundle.json"
+        },
+        {
+          "name": "skills_count",
+          "value": 11,
+          "unit": "count",
+          "source": "workshop/approved/loss-function-driven-agentic-loops/bundle.json"
+        },
+        {
+          "name": "fake_verifier_overall",
+          "value": "PASS",
+          "unit": "count",
+          "source": "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verification-report.json"
+        },
+        {
+          "name": "fake_verifier_design_pass_rate",
+          "value": 1.0,
+          "unit": "count",
+          "source": "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verification-report.json"
+        }
+      ],
+      "lineage": [
+        "workshop/analysis/loss-function-driven-agentic-loops/analysis.md",
+        "workshop/approved/loss-function-driven-agentic-loops",
+        "workshop/intake/lfd-design-runs/20260613-core-eval-propose/spec.md",
+        "workshop/intake/lfd-design-runs/20260614-three-source-synthesis/output.yaml",
+        "workshop/intake/lfd-design-runs/20260614-eval-design-iter-20-final-consolidation-audit/output/settled_eval_design_contract.yaml",
+        ".lev/pm/designs/design-core-eval-poly-bound-sdk.md",
+        "plugins/sdlc/flows/propose-adversarial-contract.flow.yaml",
+        "core/eval/src/eval-decision.ts",
+        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "lfd-06",
+          "name": "Local weighted score as final verdict",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "ml-agents",
