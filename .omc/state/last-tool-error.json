@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"rid=$(tail -1 ~/.local/share/lev/execution-ledger/runs.jsonl | python3 -c \\\"import json,sys; print(json.load(sys.stdin).get('run_id') or json.load(sys.stdin).get('id',''))\\\" 2>/dev/null); ...",
+  "error": "Exit code 1\nrun:",
+  "timestamp": "2026-07-07T00:12:58.992Z",
+  "retry_count": 2
+}
