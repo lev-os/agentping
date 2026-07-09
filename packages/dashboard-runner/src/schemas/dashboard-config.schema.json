@@ -94,6 +94,10 @@
             "runnable": {
               "type": "boolean",
               "description": "Whether this project has a runnable dev server"
+            },
+            "host_workspace": {
+              "type": "boolean",
+              "description": "Whether this dashboard belongs to an optional host workspace outside AgentPing"
             }
           },
           "required": ["lane", "openMode", "description"]

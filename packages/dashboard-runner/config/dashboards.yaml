@@ -6,7 +6,7 @@ dashboards:
       - 6007
       - 6011
     command: pnpm exec storybook dev -p {port} --no-open
-    cwd: ~/digital/leviathan/community/agentping/packages/ui
+    cwd: "{project_root}/packages/ui"
     health_check:
       type: http
       path: /
@@ -33,7 +33,7 @@ dashboards:
       - 5173
       - 5178
     command: pnpm exec vite --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/adapters/web-ui
+    cwd: "{project_root}/packages/adapters/web-ui"
     health_check:
       type: http
       path: /
@@ -60,7 +60,7 @@ dashboards:
       - 5175
       - 5182
     command: pnpm exec vite --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/dashboard-manager-ui
+    cwd: "{project_root}/packages/dashboard-manager-ui"
     health_check:
       type: http
       path: /
@@ -87,7 +87,7 @@ dashboards:
       - 5180
       - 5184
     command: pnpm exec vite --port {port}
-    cwd: ~/digital/leviathan/community/agentping/packages/studio
+    cwd: "{project_root}/packages/studio"
     health_check:
       type: http
       path: /
@@ -114,7 +114,7 @@ dashboards:
       - 0
       - 0
     command: pnpm start
-    cwd: ~/digital/leviathan/community/agentping
+    cwd: "{project_root}"
     health_check:
       type: build-and-exit
       timeout_ms: 60000
@@ -128,6 +128,8 @@ dashboards:
       lane: apps
       openMode: external
       description: AgentPing Studio Electron app (the canonical desktop GUI)
+  # Host-workspace dashboards are optional integrations outside this AgentPing
+  # repo. Set AGENTPING_HOST_ROOT to the host workspace root to enable them.
   - name: Dashboard
     id: dashboard
     port: 5185
@@ -135,7 +137,7 @@ dashboards:
       - 5185
       - 5189
     command: pnpm run build && pnpm exec vite preview --host 127.0.0.1 --strictPort --port {port}
-    cwd: ~/digital/leviathan/plugins/dashboard
+    cwd: "{host_root}/plugins/dashboard"
     health_check:
       type: http
       path: /
@@ -156,6 +158,7 @@ dashboards:
       openMode: embed
       description: Primary Leviathan ops command-center surface
       primary: true
+      host_workspace: true
   - name: Frey Market
     id: frey-market
     port: 3100
@@ -163,7 +166,7 @@ dashboards:
       - 3100
       - 3104
     command: pnpm dev --port {port}
-    cwd: ~/digital/leviathan/apps/frey-market
+    cwd: "{host_root}/apps/frey-market"
     health_check:
       type: http
       path: /
@@ -183,6 +186,7 @@ dashboards:
       framework: nextjs
       lifecycle: detected
       packageManager: pnpm
+      host_workspace: true
   - name: Ai Devs
     id: ai-devs
     port: 0
@@ -190,7 +194,7 @@ dashboards:
       - 0
       - 0
     command: xcodebuild -project AIDevs.xcodeproj -scheme AIDevs -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
-    cwd: ~/digital/leviathan/apps/ai-devs
+    cwd: "{host_root}/apps/ai-devs"
     health_check:
       type: build-and-exit
       timeout_ms: 300000
@@ -208,6 +212,7 @@ dashboards:
       framework: xcodegen
       packageManager: xcode
       lifecycle: detected
+      host_workspace: true
   - name: Claw Tok
     id: claw-tok
     port: 0
@@ -215,7 +220,7 @@ dashboards:
       - 0
       - 0
     command: xcodebuild -project ClawTok.xcodeproj -scheme ClawTok -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
-    cwd: ~/digital/leviathan/apps/claw-tok
+    cwd: "{host_root}/apps/claw-tok"
     health_check:
       type: build-and-exit
       timeout_ms: 300000
@@ -233,6 +238,7 @@ dashboards:
       framework: xcodegen
       packageManager: xcode
       lifecycle: detected
+      host_workspace: true
   - name: Context Pack Viewer
     id: context-pack-viewer
     port: 0
@@ -240,7 +246,7 @@ dashboards:
       - 0
       - 0
     command: echo "external here.now page — open via URL"
-    cwd: ~/digital/leviathan
+    cwd: "{host_root}"
     health_check:
       type: process
       timeout_ms: 5000
@@ -260,3 +266,4 @@ dashboards:
       framework: lev-now
       packageManager: none
       lifecycle: ready
+      host_workspace: true

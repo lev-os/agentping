@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { homedir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { parse, stringify } from 'yaml';
 import type { DashboardConfig } from '@lev-os/dashboard-runner';
 
@@ -22,16 +23,29 @@ function resolveConfigPath(configPath?: string): string {
   }
 
   // Check env variable first
-  const envPath = process.env.DASHBOARD_CONFIG_PATH;
+  const envPath = process.env.AGENTPING_DASHBOARDS_CONFIG;
   if (envPath) {
     return resolve(envPath.replace('~', homedir()));
   }
 
-  // Default path
-  return resolve(
-    homedir(),
-    'digital/leviathan/community/agentping/packages/dashboard-runner/config/dashboards.yaml'
-  );
+  const projectRoot = findProjectRoot(dirname(fileURLToPath(import.meta.url)));
+  return resolve(projectRoot, 'packages/dashboard-runner/config/dashboards.yaml');
+}
+
+function findProjectRoot(startDir: string): string {
+  let current = startDir;
+
+  while (true) {
+    if (existsSync(resolve(current, 'pnpm-workspace.yaml')) && existsSync(resolve(current, 'package.json'))) {
+      return current;
+    }
+
+    const parent = dirname(current);
+    if (parent === current) {
+      return process.cwd();
+    }
+    current = parent;
+  }
 }
 
 // ============================================================================
@@ -256,8 +270,8 @@ Commands:
     List all dashboards in the configuration
 
 Environment Variables:
-  DASHBOARD_CONFIG_PATH - Override default config path
-  DASHBOARD_SERVER_URL  - Override default server URL (http://127.0.0.1:3030)
+  AGENTPING_DASHBOARDS_CONFIG - Override default config path
+  DASHBOARD_SERVER_URL        - Override default server URL (http://127.0.0.1:3030)
 
 Examples:
   dashboard-cli add-dashboard my-app "My App" 3000 3000 3004 "npm run dev" ~/my-app

@@ -14,6 +14,7 @@ export interface DashboardMetadata {
   packageManager?: string;
   lifecycle?: 'detected' | 'ready';
   runnable?: boolean;
+  host_workspace?: boolean;
 }
 
 export interface DashboardConfig {
