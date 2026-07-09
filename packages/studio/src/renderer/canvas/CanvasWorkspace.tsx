@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback, forwardRef, useImperativeHandle, MouseEvent, useState } from 'react';
 import { Canvas, Rect, Ellipse, IText, FabricObject, Group, Point, util } from 'fabric';
 import { createEmptyDocument, ApenDocument, ApenObject } from '../../shared/ApenFormat';
+import type { LayerItem, LayerType } from '@/renderer/components/Layers';
 import './CanvasWorkspace.css';
 
 // Helper to create visually distinct component representations
@@ -82,13 +83,35 @@ export interface CanvasRef {
     resetZoom: () => void;
     fitToContent: () => void;
     // Layer management
-    getLayers: () => Array<{ id: string; name: string; type: string; visible: boolean; locked: boolean }>;
+    getLayers: () => LayerItem[];
     setLayerVisibility: (id: string, visible: boolean) => void;
     setLayerLock: (id: string, locked: boolean) => void;
     deleteLayer: (id: string) => void;
     selectLayer: (id: string) => void;
     reorderLayers: (orderedIds: string[]) => void;
 }
+
+const toLayerType = (type: string | undefined): LayerType => {
+    switch (type) {
+        case 'rectangle':
+        case 'rect':
+            return 'rectangle';
+        case 'ellipse':
+        case 'circle':
+            return 'ellipse';
+        case 'text':
+        case 'i-text':
+        case 'textbox':
+            return 'text';
+        case 'image':
+            return 'image';
+        case 'frame':
+            return 'frame';
+        case 'group':
+        default:
+            return 'group';
+    }
+};
 
 export const CanvasWorkspace = forwardRef<CanvasRef, CanvasWorkspaceProps>(({ activeTool, onObjectSelected }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -305,10 +328,10 @@ export const CanvasWorkspace = forwardRef<CanvasRef, CanvasWorkspaceProps>(({ ac
         getLayers: () => {
             if (!fabricRef.current) return [];
             const objects = fabricRef.current.getObjects();
-            return objects.map((obj: any) => ({
+            return objects.map((obj: any): LayerItem => ({
                 id: obj.id || 'unknown',
                 name: obj.name || '',
-                type: obj.type || 'unknown',
+                type: toLayerType(obj.type),
                 visible: obj.visible !== false,
                 locked: obj.lockMovementX === true && obj.lockMovementY === true
             })).reverse(); // Reverse so top layers appear first

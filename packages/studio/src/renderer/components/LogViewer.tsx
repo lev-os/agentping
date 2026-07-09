@@ -61,13 +61,14 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
 
     // Start log streaming (Electron IPC - local runtime coupling)
     useEffect(() => {
-        if (!dashboardId || !window.electron) return;
+        if (!dashboardId || !window.dashboardManager) return;
 
         let isMounted = true;
+        const dashboardManager = window.dashboardManager;
 
         const startStream = async () => {
             setIsStreaming(true);
-            await window.electron.invoke('dashboard:stream-logs', {
+            await dashboardManager.streamLogs({
                 dashboardId,
                 lines: 100,
                 follow: true
@@ -101,21 +102,19 @@ export function LogViewer({ dashboardId, maxLines = 500 }: LogViewerProps) {
             }
         };
 
-        window.electron.on('dashboard:log-line', handleLogLine);
-        window.electron.on('dashboard:log-stream-end', handleStreamEnd);
-        window.electron.on('dashboard:log-stream-error', handleStreamError);
+        const removeLogLineListener = dashboardManager.onLogLine(handleLogLine);
+        const removeStreamEndListener = dashboardManager.onLogStreamEnd(handleStreamEnd);
+        const removeStreamErrorListener = dashboardManager.onLogStreamError(handleStreamError);
 
         startStream();
 
         return () => {
             isMounted = false;
-            window.electron.removeListener('dashboard:log-line', handleLogLine);
-            window.electron.removeListener('dashboard:log-stream-end', handleStreamEnd);
-            window.electron.removeListener('dashboard:log-stream-error', handleStreamError);
+            removeLogLineListener();
+            removeStreamEndListener();
+            removeStreamErrorListener();
 
-            if (window.electron) {
-                window.electron.invoke('dashboard:stop-stream-logs', { dashboardId });
-            }
+            void dashboardManager.stopStreamLogs({ dashboardId });
         };
     }, [dashboardId, maxLines]);
 

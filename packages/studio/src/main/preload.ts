@@ -4,7 +4,25 @@
  * Exposes a safe API to the renderer process via contextBridge.
  */
 
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
+
+type DashboardLogLineEvent = {
+    dashboardId: string;
+    timestamp: string;
+    level: 'info' | 'warn' | 'error' | 'debug';
+    message: string;
+    line: number;
+};
+
+type DashboardLogStreamEndEvent = {
+    dashboardId: string;
+    totalLines: number;
+};
+
+type DashboardLogStreamErrorEvent = {
+    dashboardId: string;
+    error: string;
+};
 
 // Expose Claude Code Bridge API
 contextBridge.exposeInMainWorld('claudeCode', {
@@ -245,6 +263,25 @@ contextBridge.exposeInMainWorld('dashboardManager', {
         ipcRenderer.invoke('dashboard:restart', dashboardId),
     getStatus: () =>
         ipcRenderer.invoke('dashboard:getStatus'),
+    streamLogs: (options: { dashboardId: string; lines?: number; follow?: boolean }) =>
+        ipcRenderer.invoke('dashboard:stream-logs', options),
+    stopStreamLogs: (options: { dashboardId: string }) =>
+        ipcRenderer.invoke('dashboard:stop-stream-logs', options),
+    onLogLine: (callback: (data: DashboardLogLineEvent) => void) => {
+        const handler = (_: IpcRendererEvent, data: DashboardLogLineEvent) => callback(data);
+        ipcRenderer.on('dashboard:log-line', handler);
+        return () => ipcRenderer.removeListener('dashboard:log-line', handler);
+    },
+    onLogStreamEnd: (callback: (data: DashboardLogStreamEndEvent) => void) => {
+        const handler = (_: IpcRendererEvent, data: DashboardLogStreamEndEvent) => callback(data);
+        ipcRenderer.on('dashboard:log-stream-end', handler);
+        return () => ipcRenderer.removeListener('dashboard:log-stream-end', handler);
+    },
+    onLogStreamError: (callback: (data: DashboardLogStreamErrorEvent) => void) => {
+        const handler = (_: IpcRendererEvent, data: DashboardLogStreamErrorEvent) => callback(data);
+        ipcRenderer.on('dashboard:log-stream-error', handler);
+        return () => ipcRenderer.removeListener('dashboard:log-stream-error', handler);
+    },
     onProcessStarted: (callback: (data: any) => void) => {
         const handler = (_: any, data: any) => callback(data);
         ipcRenderer.on('dashboard:process_started', handler);
