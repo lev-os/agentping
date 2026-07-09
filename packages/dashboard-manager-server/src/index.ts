@@ -16,7 +16,7 @@ import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createLevObservabilityRoutes } from './routes/lev-observability.js';
-import { createHeartbeatRoutes } from './routes/heartbeat.js';
+import { createHeartbeatRoutes, warmHeartbeatResearchCache } from './routes/heartbeat.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -145,6 +145,10 @@ export function createServer(config: ServerConfig) {
         if (enableWebSocket) {
           console.log(`[DashboardServer] WebSocket available at ws://${host}:${port}/socket.io`);
         }
+        void warmHeartbeatResearchCache().catch((error: unknown) => {
+          const message = error instanceof Error ? error.message : String(error);
+          console.warn(`[DashboardServer] Heartbeat research cache warmup failed: ${message}`);
+        });
       });
 
       return {

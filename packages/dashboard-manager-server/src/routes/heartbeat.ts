@@ -279,6 +279,15 @@ async function readResearchAdapters(levRoot: string, exec: HeartbeatExec, nowMs:
   }
 }
 
+export async function warmHeartbeatResearchCache(config: HeartbeatRoutesConfig = {}): Promise<void> {
+  const levRoot = await resolveLevRoot(config.levRoot);
+  if (!levRoot) return;
+
+  const exec = config.exec ?? defaultExec;
+  const nowMs = (config.now?.() ?? new Date()).getTime();
+  await readResearchAdapters(levRoot, exec, nowMs);
+}
+
 export function createHeartbeatRoutes(config: HeartbeatRoutesConfig = {}) {
   const app = new Hono();
   const exec = config.exec ?? defaultExec;
