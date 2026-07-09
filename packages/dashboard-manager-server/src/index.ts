@@ -16,6 +16,7 @@ import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createLevObservabilityRoutes } from './routes/lev-observability.js';
+import { createHeartbeatRoutes } from './routes/heartbeat.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -82,6 +83,9 @@ export function createServer(config: ServerConfig) {
 
   const levObservabilityRoutes = createLevObservabilityRoutes();
   app.route('/api/lev', levObservabilityRoutes);
+
+  const heartbeatRoutes = createHeartbeatRoutes();
+  app.route('/api/heartbeat', heartbeatRoutes);
 
   // =========================================================================
   // Start Server with Optional WebSocket Support
@@ -158,4 +162,4 @@ export function createServer(config: ServerConfig) {
   };
 }
 
-export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createWebSocketServer };
+export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createHeartbeatRoutes, createWebSocketServer };
