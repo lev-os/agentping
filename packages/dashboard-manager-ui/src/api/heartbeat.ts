@@ -89,3 +89,44 @@ export async function fetchHeartbeatTimeline(): Promise<HeartbeatTimeline> {
   }
   return response.json();
 }
+
+export interface ResearchAdapter {
+  name: string;
+  available: boolean;
+  capabilities?: string[];
+  degradedReason?: string;
+}
+
+export interface ResearchAdaptersOk {
+  adapters: ResearchAdapter[];
+  counts: { available: number; total: number };
+  error?: undefined;
+}
+
+export interface ResearchAdaptersError {
+  error: string;
+  adapters?: undefined;
+  counts?: undefined;
+}
+
+export type ResearchStatus = ResearchAdaptersOk | ResearchAdaptersError;
+
+export interface PluginInventoryItem {
+  name: string;
+  version: string | null;
+  dir: string;
+}
+
+export interface PluginHealth {
+  generatedAt: string;
+  research: ResearchStatus;
+  plugins: PluginInventoryItem[];
+}
+
+export async function fetchPluginHealth(): Promise<PluginHealth> {
+  const response = await fetch(`${API_BASE}/heartbeat/plugins`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch plugin health: ${response.statusText}`);
+  }
+  return response.json();
+}

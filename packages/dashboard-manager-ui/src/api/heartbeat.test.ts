@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { fetchHeartbeat, fetchHeartbeatTimeline } from "./heartbeat";
+import { fetchHeartbeat, fetchHeartbeatTimeline, fetchPluginHealth } from "./heartbeat";
 
 const snapshotFixture = {
   generatedAt: "2026-07-09T12:00:00.000Z",
@@ -44,6 +44,27 @@ const timelineFixture = {
     },
   ],
   evolution: [{ timestamp: "2026-07-01T00:00:00.000Z", summary: "boot" }],
+};
+
+const pluginHealthFixture = {
+  generatedAt: "2026-07-09T12:00:00.000Z",
+  research: {
+    adapters: [
+      { name: "brave", available: true, capabilities: ["search"] },
+      {
+        name: "exa",
+        available: true,
+        capabilities: ["search"],
+        degradedReason: "rate limited",
+      },
+      { name: "offline", available: false },
+    ],
+    counts: { available: 2, total: 3 },
+  },
+  plugins: [
+    { name: "@lev-os/apptestr", version: "0.1.0", dir: "apptestr" },
+    { name: "@lev-os/orphan", version: null, dir: "orphan" },
+  ],
 };
 
 afterEach(() => {
@@ -116,6 +137,55 @@ describe("fetchHeartbeatTimeline", () => {
 
     await expect(fetchHeartbeatTimeline()).rejects.toThrow(
       "Failed to fetch heartbeat timeline: Service Unavailable",
+    );
+  });
+});
+
+describe("fetchPluginHealth", () => {
+  it("returns the plugin health payload on ok responses", async () => {
+    const fetcher = vi.fn(async () =>
+      new Response(JSON.stringify(pluginHealthFixture), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetcher);
+
+    await expect(fetchPluginHealth()).resolves.toEqual(pluginHealthFixture);
+    expect(fetcher).toHaveBeenCalledWith("/api/heartbeat/plugins");
+  });
+
+  it("returns research error shape and plugins when research CLI is down", async () => {
+    const researchErrorFixture = {
+      generatedAt: "2026-07-09T12:00:00.000Z",
+      research: { error: "cli down" },
+      plugins: [{ name: "@lev-os/apptestr", version: "0.1.0", dir: "apptestr" }],
+    };
+    const fetcher = vi.fn(async () =>
+      new Response(JSON.stringify(researchErrorFixture), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetcher);
+
+    const result = await fetchPluginHealth();
+    expect(result.research).toEqual({ error: "cli down" });
+    expect(result.plugins).toEqual([{ name: "@lev-os/apptestr", version: "0.1.0", dir: "apptestr" }]);
+  });
+
+  it("throws when the response is not ok", async () => {
+    const fetcher = vi.fn(async () =>
+      new Response(JSON.stringify({ error: "leviathan root not found" }), {
+        status: 503,
+        statusText: "Service Unavailable",
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetcher);
+
+    await expect(fetchPluginHealth()).rejects.toThrow(
+      "Failed to fetch plugin health: Service Unavailable",
     );
   });
 });
