@@ -271,6 +271,9 @@ export function DashboardList() {
           <Link to="/projects" className="command-center-button">
             Projects →
           </Link>
+          <Link to="/heartbeat" className="command-center-button">
+            Heartbeat →
+          </Link>
         </section>
 
         <section className="command-center-stats">

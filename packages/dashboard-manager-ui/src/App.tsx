@@ -6,6 +6,7 @@ import { ParityDetail } from './components/ParityDetail'
 import { WorkflowDetail } from './components/WorkflowDetail'
 import { ExecTraceDebug } from './components/ExecTraceDebug'
 import { ProjectsView } from './components/ProjectsView'
+import { HeartbeatView } from './components/HeartbeatView'
 import { ComponentRegistry } from './components/ComponentRegistry'
 import { ComponentDetail } from './components/ComponentDetail'
 import { ClusterList } from './components/ClusterList'
@@ -23,6 +24,7 @@ export function App() {
         <Route path="/workflow/:id" element={<WorkflowDetail />} />
         <Route path="/debug/:execId" element={<ExecTraceDebug />} />
         <Route path="/projects" element={<ProjectsView />} />
+        <Route path="/heartbeat" element={<HeartbeatView />} />
         <Route path="/registry" element={<ComponentRegistry />} />
         {/* Stage 3: batch review — per-component queue redirects to cluster list */}
         <Route path="/registry/queue" element={<Navigate to="/registry/clusters" replace />} />
