@@ -10,7 +10,12 @@ import {
   type HeartbeatTimelineTick,
   type HeartbeatWorkItem,
 } from "../api/heartbeat";
-import { DnaThesisSection, OpenQuestionsSection } from "./heartbeat-static";
+import {
+  BreakthroughCardsGrid,
+  DnaThesisSection,
+  OpenQuestionsSection,
+  PrimitivesSection,
+} from "./heartbeat-static";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -25,6 +30,17 @@ function isSnapshotStale(ts: string | null, generatedAt: string): boolean {
   const snap = new Date(ts).getTime();
   const gen = new Date(generatedAt).getTime();
   return !Number.isNaN(snap) && !Number.isNaN(gen) && gen - snap > DAY_MS;
+}
+
+interface EvolutionEntry {
+  change: string;
+  type?: unknown;
+  timestamp?: unknown;
+  validated?: unknown;
+}
+
+function isEvolutionEntry(r: unknown): r is EvolutionEntry {
+  return typeof r === "object" && r !== null && typeof (r as Record<string, unknown>).change === "string";
 }
 
 function priorityColor(priority: string): string {
@@ -306,21 +322,63 @@ export function HeartbeatView() {
             </section>
 
             <section className="command-center-section">
-              <SectionHeader title="Breakthroughs & CDO" />
-              {snapshot ? (
-                snapshot.cdoRounds.length === 0
-                  ? <div className="command-center-section__meta">No CDO rounds recorded</div>
-                  : (
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                      {snapshot.cdoRounds.map((round) => (
-                        <span key={round} style={{
-                          fontSize: 12, padding: "4px 10px", borderRadius: 999,
-                          border: "1px solid rgba(167,139,250,0.35)", background: "rgba(167,139,250,0.12)",
-                          color: "#c4b5fd",
-                        }}>{round}</span>
-                      ))}
+              <SectionHeader title="Evolution" meta={timelineError} />
+              {timeline ? (() => {
+                const entries = timeline.evolution
+                  .filter(isEvolutionEntry)
+                  .slice(-10)
+                  .reverse();
+                return entries.length === 0
+                  ? <div className="command-center-section__meta">No evolution entries</div>
+                  : entries.map((entry) => (
+                    <div key={`${typeof entry.timestamp === "string" ? entry.timestamp : ""}|${entry.change}`} style={{
+                      display: "flex", gap: 10, alignItems: "baseline", padding: "5px 0",
+                      borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 12,
+                    }}>
+                      {typeof entry.type === "string" && (
+                        <code style={{
+                          fontSize: 10, color: "#93c5fd", padding: "1px 5px", borderRadius: 3,
+                          background: "rgba(147,197,253,0.10)", border: "1px solid rgba(147,197,253,0.2)",
+                          flexShrink: 0,
+                        }}>{entry.type}</code>
+                      )}
+                      <span style={{
+                        color: "var(--kingly-text, #e5e7eb)", flexGrow: 1, overflow: "hidden",
+                        textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0,
+                      }} title={entry.change}>{entry.change}</span>
+                      {typeof entry.timestamp === "string" && (
+                        <span className="command-center-section__meta" style={{ margin: 0, flexShrink: 0 }}>
+                          {formatDate(entry.timestamp)}
+                        </span>
+                      )}
+                      {entry.validated === true && (
+                        <span style={{ color: "#22c55e", flexShrink: 0 }} title="validated">✓</span>
+                      )}
                     </div>
-                  )
+                  ));
+              })() : <SourceError label="Evolution unavailable" error={timelineError} />}
+            </section>
+
+            <section className="command-center-section">
+              <SectionHeader title="Breakthroughs & CDO" />
+              <BreakthroughCardsGrid />
+              {snapshot ? (
+                <>
+                  <div className="command-center-section__meta" style={{ marginBottom: 8 }}>CDO rounds</div>
+                  {snapshot.cdoRounds.length === 0
+                    ? <div className="command-center-section__meta">No CDO rounds recorded</div>
+                    : (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                        {snapshot.cdoRounds.map((round) => (
+                          <span key={round} style={{
+                            fontSize: 12, padding: "4px 10px", borderRadius: 999,
+                            border: "1px solid rgba(167,139,250,0.35)", background: "rgba(167,139,250,0.12)",
+                            color: "#c4b5fd",
+                          }}>{round}</span>
+                        ))}
+                      </div>
+                    )}
+                </>
               ) : <SourceError label="CDO data unavailable" error={snapshotError} />}
             </section>
 
@@ -362,6 +420,7 @@ export function HeartbeatView() {
 
             <DnaThesisSection />
             <OpenQuestionsSection />
+            <PrimitivesSection />
           </>
         )}
       </div>

@@ -1,3 +1,82 @@
+const TONE_COLORS: Record<string, { color: string; bg: string; border: string }> = {
+  teal:  { color: "#2dd4bf", bg: "rgba(45,212,191,0.12)", border: "rgba(45,212,191,0.35)" },
+  amber: { color: "#fbbf24", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.35)" },
+  rose:  { color: "#fb7185", bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.35)" },
+};
+
+const PRIMITIVES_DATA = [
+  { name: "Node",    icon: "◉", status: "fragmented",     tone: "amber", note: "4 competing interfaces. GraphNode (FlowMind) is richest." },
+  { name: "Edge",    icon: "⟶", status: "under-specified", tone: "rose",  note: "Carries 5 conflated concerns. B4 breakthrough flagged this." },
+  { name: "Loop",    icon: "↻", status: "most mature",     tone: "teal",  note: "heartbeat.ts + until.ts in core/orchestration. 3 topologies." },
+  { name: "Eval",    icon: "⊘", status: "converging",      tone: "amber", note: "6 systems → converging on autoresearch as THE engine." },
+  { name: "Session", icon: "◧", status: "3 types",         tone: "amber", note: "process-harness, flowmind, session-writer. Need merge." },
+  { name: "Effect",  icon: "⚡", status: "missing",         tone: "rose",  note: "No first-class type. Implicit in adapters. Needs extraction." },
+];
+
+export function PrimitivesSection() {
+  return (
+    <section className="command-center-section">
+      <div className="command-center-section__header">
+        <div>
+          <div className="command-center-hero__eyebrow">Graph Algebra</div>
+          <h2 className="command-center-section__title">Primitives</h2>
+        </div>
+        <span className="command-center-section__meta">The graph algebra — 6 primitives</span>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
+        {PRIMITIVES_DATA.map((p) => {
+          const tc = TONE_COLORS[p.tone] ?? TONE_COLORS.amber!;
+          return (
+            <div key={p.name} className="command-center-frame" style={{ padding: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                <span style={{ fontSize: 20, lineHeight: 1 }}>{p.icon}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: "var(--kingly-text, #e5e7eb)" }}>{p.name}</span>
+                <span style={{
+                  marginLeft: "auto", fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase",
+                  fontWeight: 600, color: tc.color, padding: "2px 7px", borderRadius: 4,
+                  border: `1px solid ${tc.border}`, background: tc.bg, flexShrink: 0,
+                }}>{p.status}</span>
+              </div>
+              <div className="command-center-section__meta" style={{ margin: 0, lineHeight: 1.45, fontSize: 12 }}>
+                {p.note}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+export const BREAKTHROUGHS = [
+  { id: "B1", score: 9, title: "Gates = Loss Function",    body: "Gate design IS reward signal design. Whoever controls gates controls what the graph learns." },
+  { id: "B2", score: 8, title: "Graph = Policy",           body: "Every accepted patch is a policy gradient step. The policy IS the environment." },
+  { id: "B3", score: 8, title: "Bounded Speculation = GPI",body: "All three codebases implement Generalized Policy Iteration without naming it." },
+  { id: "B4", score: 8, title: "Edge Under-Specified",     body: "Carries 5 conflated concerns. Will fracture the shared algebra if not resolved." },
+  { id: "B5", score: 8, title: "Three Clocks Drift",       body: "Tick/wall/graph time that drift in production. Graph-time is a DAG, not a line." },
+  { id: "B6", score: 8, title: "Intent Validated",         body: "Validated by every formalism's governance gap. May conflate governance + constraint + scope." },
+];
+
+export function BreakthroughCardsGrid() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 10, marginBottom: 16 }}>
+      {BREAKTHROUGHS.map((b) => (
+        <div key={b.id} className="command-center-frame" style={{ padding: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <span style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", padding: "2px 7px",
+              borderRadius: 4, background: "rgba(167,139,250,0.14)", color: "#c4b5fd",
+              border: "1px solid rgba(167,139,250,0.35)", flexShrink: 0,
+            }}>{b.id} · {b.score}</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--kingly-text, #e5e7eb)", minWidth: 0 }}>{b.title}</span>
+          </div>
+          <div className="command-center-section__meta" style={{ margin: 0, lineHeight: 1.45, fontSize: 12 }}>{b.body}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function DnaThesisSection() {
   return (
     <section className="command-center-section">
