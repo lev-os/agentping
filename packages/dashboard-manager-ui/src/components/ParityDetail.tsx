@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import {
-  getParityEntries,
+  fetchParityEntries,
   paritySlug,
   type ParityEntry,
   type ParityFeature,
@@ -72,8 +72,35 @@ function statusColor(status: ParityFeature["status"]): string {
 export function ParityDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [entries, setEntries] = useState<ParityEntry[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const entries = useMemo(() => getParityEntries(), []);
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const nextEntries = await fetchParityEntries();
+        if (cancelled) return;
+        setEntries(nextEntries);
+      } catch (err) {
+        if (cancelled) return;
+        setEntries([]);
+        setError(err instanceof Error ? err.message : "Failed to load parity registry");
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const entry = useMemo(
     () =>
       entries.find(
@@ -81,6 +108,62 @@ export function ParityDetail() {
       ),
     [entries, id],
   );
+
+  if (isLoading || error) {
+    return (
+      <div className="command-center-page">
+        <div
+          style={{
+            maxWidth: 720,
+            margin: "80px auto",
+            padding: 32,
+            border: "1px solid var(--kingly-border-default)",
+            borderRadius: 12,
+            background:
+              "linear-gradient(180deg, rgba(12,16,20,0.95), rgba(8,11,14,0.92))",
+            textAlign: "center",
+          }}
+        >
+          <h1
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 28,
+              marginBottom: 8,
+            }}
+          >
+            {isLoading ? "Loading parity entry" : "Parity registry unavailable"}
+          </h1>
+          {error ? (
+            <p
+              style={{
+                color: "var(--kingly-text-muted)",
+                marginBottom: 24,
+              }}
+            >
+              {error}
+            </p>
+          ) : null}
+          {error ? (
+            <button
+              onClick={() => navigate("/")}
+              style={{
+                padding: "10px 18px",
+                fontSize: 13,
+                fontFamily: "var(--font-mono)",
+                border: "1px solid rgba(34,197,94,0.4)",
+                borderRadius: 6,
+                background: "rgba(34,197,94,0.12)",
+                color: "#22c55e",
+                cursor: "pointer",
+              }}
+            >
+              ← Back to dashboard
+            </button>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 
   if (!entry) {
     return (

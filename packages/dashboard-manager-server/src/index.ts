@@ -14,6 +14,7 @@ import type { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createDashboardRoutes } from './routes/dashboards.js';
 import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
+import { createParityRoutes } from './routes/parity.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createLevObservabilityRoutes } from './routes/lev-observability.js';
 import { createHeartbeatRoutes, warmHeartbeatResearchCache } from './routes/heartbeat.js';
@@ -77,6 +78,8 @@ export function createServer(config: ServerConfig) {
 
   const componentsRoutes = createComponentsRoutes();
   app.route('/api/components', componentsRoutes);
+
+  app.route('/api/parity', createParityRoutes());
 
   const execTraceRoutes = createExecTraceRoutes();
   app.route('/api/exec-traces', execTraceRoutes);
