@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "node --test tests/**/*.test.js",
+    "test": "vitest --config vitest.config.ts",
     "clean": "rm -rf dist"
   },
   "dependencies": {
