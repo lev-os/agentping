@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -33,8 +33,27 @@ function shortenPath(path: string): string {
 }
 
 export function WorkflowSection() {
-  const entries = useMemo(() => getWorkflowEntries(), []);
+  const [entries, setEntries] = useState<WorkflowEntry[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [filter, setFilter] = useState<WorkflowGroup | "all">("system");
+
+  useEffect(() => {
+    let active = true;
+    getWorkflowEntries()
+      .then((workflowEntries) => {
+        if (!active) return;
+        setEntries(workflowEntries);
+        setLoadError(null);
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        setEntries([]);
+        setLoadError(error instanceof Error ? error.message : String(error));
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filtered = useMemo(
     () => (filter === "all" ? entries : entries.filter((entry) => entry.group === filter)),
@@ -47,7 +66,8 @@ export function WorkflowSection() {
         <div>
           <h2 className="command-center-section__title">FlowMind + Workflows</h2>
           <p className="command-center-section__meta">
-            {entries.length} flow{entries.length === 1 ? "" : "s"} discovered from live YAML
+            {loadError ??
+              `${entries.length} flow${entries.length === 1 ? "" : "s"} discovered from live YAML`}
           </p>
         </div>
       </div>

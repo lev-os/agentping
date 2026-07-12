@@ -18,6 +18,7 @@ import { createParityRoutes } from './routes/parity.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createLevObservabilityRoutes } from './routes/lev-observability.js';
 import { createHeartbeatRoutes, warmHeartbeatResearchCache } from './routes/heartbeat.js';
+import { createWorkflowRoutes } from './routes/workflows.js';
 import { createWebSocketServer } from './websocket.js';
 
 // ============================================================================
@@ -89,6 +90,8 @@ export function createServer(config: ServerConfig) {
 
   const heartbeatRoutes = createHeartbeatRoutes();
   app.route('/api/heartbeat', heartbeatRoutes);
+
+  app.route('/api/workflows', createWorkflowRoutes());
 
   // =========================================================================
   // Start Server with Optional WebSocket Support
@@ -169,4 +172,4 @@ export function createServer(config: ServerConfig) {
   };
 }
 
-export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createHeartbeatRoutes, createWebSocketServer };
+export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createHeartbeatRoutes, createWorkflowRoutes, createWebSocketServer };

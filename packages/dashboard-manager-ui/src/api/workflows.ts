@@ -1,5 +1,7 @@
 import { parse } from "yaml";
 
+const API_BASE = "/api";
+
 export type WorkflowGroup = "system" | "plugin" | "example" | "project";
 
 export interface WorkflowNode {
@@ -46,24 +48,15 @@ interface NormalizedNode {
 
 type RawRecord = Record<string, unknown>;
 
-const RAW_WORKFLOW_MODULES = {
-  ...import.meta.glob(
-    "../../../../../../core/flowmind/system/*.flow.yaml",
-    { eager: true, query: "?raw", import: "default" },
-  ),
-  ...import.meta.glob(
-    "../../../../../../core/flowmind/examples/**/*.flow.yaml",
-    { eager: true, query: "?raw", import: "default" },
-  ),
-  ...import.meta.glob(
-    "../../../../../../plugins/*/flows/**/*.flow.yaml",
-    { eager: true, query: "?raw", import: "default" },
-  ),
-  ...import.meta.glob(
-    "../../../../../../.lev/flows/**/*.flow.yaml",
-    { eager: true, query: "?raw", import: "default" },
-  ),
-} as Record<string, string>;
+interface WorkflowIndexItem {
+  readonly id: string;
+  readonly path: string;
+  readonly category: WorkflowGroup;
+}
+
+interface WorkflowDetailItem extends WorkflowIndexItem {
+  readonly raw: string;
+}
 
 function isObject(value: unknown): value is RawRecord {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -71,6 +64,54 @@ function isObject(value: unknown): value is RawRecord {
 
 function asString(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function isWorkflowGroup(value: unknown): value is WorkflowGroup {
+  return (
+    value === "system" ||
+    value === "plugin" ||
+    value === "example" ||
+    value === "project"
+  );
+}
+
+function workflowIndexItem(value: unknown): WorkflowIndexItem | null {
+  if (!isObject(value)) return null;
+  const id = asString(value.id);
+  const path = asString(value.path);
+  if (!id || !path || !isWorkflowGroup(value.category)) return null;
+  return { id, path, category: value.category };
+}
+
+function workflowDetailItem(value: unknown): WorkflowDetailItem | null {
+  if (!isObject(value)) return null;
+  const item = workflowIndexItem(value);
+  const raw = asString(value.raw);
+  return item && raw ? { ...item, raw } : null;
+}
+
+async function fetchJson(path: string): Promise<unknown> {
+  const response = await fetch(`${API_BASE}${path}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch workflows: ${response.statusText}`);
+  }
+  return await response.json();
+}
+
+async function fetchWorkflowIndex(): Promise<WorkflowIndexItem[]> {
+  const payload = await fetchJson("/workflows");
+  if (!isObject(payload) || payload.hostAvailable !== true || !Array.isArray(payload.workflows)) {
+    return [];
+  }
+  return payload.workflows
+    .map((item) => workflowIndexItem(item))
+    .filter((item): item is WorkflowIndexItem => item !== null);
+}
+
+async function fetchWorkflowDetail(id: string): Promise<WorkflowDetailItem | null> {
+  const payload = await fetchJson(`/workflows/${encodeURIComponent(id)}`);
+  if (!isObject(payload) || payload.hostAvailable !== true) return null;
+  return workflowDetailItem(payload.workflow);
 }
 
 function humanize(value: string): string {
@@ -321,7 +362,7 @@ function assignLevels(
   }));
 }
 
-function normalizeEntry(path: string, raw: string): WorkflowEntry | null {
+function normalizeEntry(path: string, raw: string, groupOverride?: WorkflowGroup): WorkflowEntry | null {
   let parsed: unknown;
   try {
     parsed = parse(raw);
@@ -331,7 +372,7 @@ function normalizeEntry(path: string, raw: string): WorkflowEntry | null {
   if (!isObject(parsed)) return null;
 
   const normalizedPath = normalizePath(path);
-  const group = groupForPath(normalizedPath);
+  const group = groupOverride ?? groupForPath(normalizedPath);
   const meta = isObject(parsed.meta) ? parsed.meta : undefined;
 
   let nodes: NormalizedNode[] = [];
@@ -411,9 +452,11 @@ function groupRank(group: WorkflowGroup): number {
   }
 }
 
-export function getWorkflowEntries(): WorkflowEntry[] {
-  return Object.entries(RAW_WORKFLOW_MODULES)
-    .map(([path, raw]) => normalizeEntry(path, raw))
+export async function getWorkflowEntries(): Promise<WorkflowEntry[]> {
+  const index = await fetchWorkflowIndex();
+  const details = await Promise.all(index.map((item) => fetchWorkflowDetail(item.id)));
+  return details
+    .map((detail) => detail ? normalizeEntry(detail.path, detail.raw, detail.category) : null)
     .filter((entry): entry is WorkflowEntry => entry !== null)
     .sort((a, b) => {
       const groupDelta = groupRank(a.group) - groupRank(b.group);

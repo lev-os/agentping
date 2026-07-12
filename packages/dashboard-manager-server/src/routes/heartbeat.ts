@@ -2,9 +2,10 @@
 
 import { execFile } from 'node:child_process';
 import { open, readdir, readFile, stat as statFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { Hono } from 'hono';
 import { parse as parseYaml } from 'yaml';
+import { resolveLevRoot } from '../host-root.js';
 
 export type HeartbeatExec = (
   file: string,
@@ -67,33 +68,6 @@ function str(value: unknown): string | null {
 
 function errMsg(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
-}
-
-async function isLevRoot(root: string): Promise<boolean> {
-  try {
-    await Promise.all([readdir(join(root, '.lev', 'pm')), readdir(join(root, 'plugins'))]);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function resolveLevRoot(explicit?: string): Promise<string | null> {
-  if (explicit !== undefined) {
-    const root = resolve(explicit);
-    return (await isLevRoot(root)) ? root : null;
-  }
-  if (process.env.LEV_ROOT) {
-    const root = resolve(process.env.LEV_ROOT);
-    return (await isLevRoot(root)) ? root : null;
-  }
-  let current = resolve(process.cwd());
-  while (true) {
-    if (await isLevRoot(current)) return current;
-    const parent = dirname(current);
-    if (parent === current) return null;
-    current = parent;
-  }
 }
 
 async function readJson(path: string): Promise<unknown | null> {
