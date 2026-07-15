@@ -8,9 +8,9 @@
 
 import { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createServer } from './index.js';
+import { ensurePortAvailable, formatAddressInUseError } from './port-guard.js';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { homedir } from 'os';
 
 // ============================================================================
 // Parse CLI Arguments
@@ -22,6 +22,7 @@ function parseArgs() {
     configPath: join(process.cwd(), 'dashboards.yaml'),
     port: 3030,
     host: '127.0.0.1',
+    takeover: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -33,6 +34,8 @@ function parseArgs() {
       config.port = parseInt(args[++i], 10);
     } else if (arg === '--host' || arg === '-h') {
       config.host = args[++i];
+    } else if (arg === '--takeover') {
+      config.takeover = true;
     } else if (arg === '--help') {
       console.log(`
 Dashboard Manager Server
@@ -44,11 +47,13 @@ Options:
   --config, -c <path>    Path to dashboards.yaml config file (default: ./dashboards.yaml)
   --port, -p <number>    HTTP server port (default: 3030)
   --host, -h <address>   Bind address (default: 127.0.0.1)
+  --takeover             If the port is occupied, SIGTERM the listener and bind
   --help                 Show this help message
 
 Examples:
   dashboard-manager-server --config ~/dashboards.yaml
   dashboard-manager-server --port 8080 --host 0.0.0.0
+  dashboard-manager-server --takeover
       `);
       process.exit(0);
     }
@@ -91,6 +96,16 @@ async function main() {
   }
 
   try {
+    const portCheck = await ensurePortAvailable({
+      host: config.host,
+      port: config.port,
+      takeover: config.takeover,
+    });
+    if (!portCheck.ok) {
+      console.error(portCheck.message);
+      process.exit(1);
+    }
+
     // Initialize DashboardRunner
     console.log('[CLI] Initializing DashboardRunner...');
     const runner = new DashboardRunner({
@@ -111,6 +126,14 @@ async function main() {
 
     // Start server
     const instance = server.start();
+    instance.httpServer.on('error', (error: NodeJS.ErrnoException) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(formatAddressInUseError(config.host, config.port));
+        process.exit(1);
+      }
+      console.error('[CLI] Server error:', error);
+      process.exit(1);
+    });
 
     // Graceful shutdown
     const shutdown = async () => {
@@ -126,6 +149,11 @@ async function main() {
 
     console.log('[CLI] Server ready. Press Ctrl+C to stop.');
   } catch (error) {
+    const err = error as NodeJS.ErrnoException;
+    if (err.code === 'EADDRINUSE') {
+      console.error(formatAddressInUseError(config.host, config.port));
+      process.exit(1);
+    }
     console.error('[CLI] Fatal error:', error);
     process.exit(1);
   }
