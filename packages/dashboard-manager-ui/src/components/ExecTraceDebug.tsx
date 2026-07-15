@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { GraphView } from "@kingly/ui/components";
@@ -10,6 +10,7 @@ import {
   type ExecTrace,
 } from "../api/exec-traces";
 import { FlowMindDebugGraph } from "./FlowMindDebugGraph";
+import { INITIAL_POLLING_STATE, pollingFsmReducer } from "./pollingFsm";
 
 function asNumber(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
@@ -84,33 +85,55 @@ function renderRefs(label: string, refs: string[]) {
 export function ExecTraceDebug() {
   const { execId } = useParams<{ execId: string }>();
   const navigate = useNavigate();
-  const [payload, setPayload] = useState<AgentPingExecDebugPayload | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [fsmState, dispatch] = useReducer(pollingFsmReducer, INITIAL_POLLING_STATE);
+  const { payload, error, notFound, autoRefresh, refreshPaused } = fsmState;
   const [loading, setLoading] = useState(true);
-  const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshNonce, setRefreshNonce] = useState(0);
+  const fetchInFlightRef = useRef(false);
 
   useEffect(() => {
-    if (!execId) return;
+    dispatch({ type: "execid_changed" });
+    setLoading(true);
+  }, [execId]);
+
+  useEffect(() => {
+    if (!execId || notFound) return;
     const resolvedExecId = execId;
     let cancelled = false;
+    const shouldPoll = autoRefresh && !refreshPaused;
 
     async function load() {
+      if (fetchInFlightRef.current) return;
+      fetchInFlightRef.current = true;
       try {
-        setError(null);
-        const nextPayload = await getExecTraceDebug(resolvedExecId);
-        if (!cancelled) setPayload(nextPayload);
-      } catch (caught) {
-        if (!cancelled) {
-          setError(caught instanceof Error ? caught.message : "Failed to load exec trace");
+        const result = await getExecTraceDebug(resolvedExecId);
+        if (cancelled) return;
+
+        if (result.ok) {
+          dispatch({ type: "fetched_ok", data: result.data });
+          return;
         }
+
+        if (result.status === 404) {
+          dispatch({ type: "fetched_404" });
+          return;
+        }
+
+        dispatch({ type: "fetched_error", error: result.error });
+      } catch (caught) {
+        if (cancelled) return;
+        dispatch({
+          type: "fetched_error",
+          error: caught instanceof Error ? caught.message : "Failed to load exec trace",
+        });
       } finally {
+        fetchInFlightRef.current = false;
         if (!cancelled) setLoading(false);
       }
     }
 
     void load();
-    if (!autoRefresh) {
+    if (!shouldPoll) {
       return () => {
         cancelled = true;
       };
@@ -121,7 +144,7 @@ export function ExecTraceDebug() {
       cancelled = true;
       window.clearInterval(interval);
     };
-  }, [autoRefresh, execId, refreshNonce]);
+  }, [autoRefresh, execId, notFound, refreshNonce, refreshPaused]);
 
   const summary = useMemo(() => {
     if (!payload) return null;
@@ -151,6 +174,22 @@ export function ExecTraceDebug() {
     );
   }
 
+  if (notFound) {
+    return (
+      <div className="command-center-page">
+        <div className="workflow-empty">
+          <h1>Trace not found</h1>
+          <p>
+            No exec trace exists for <code>{execId}</code>.
+          </p>
+          <button className="command-center-button" onClick={() => navigate("/")}>
+            Back to dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="command-center-page">
       <div className="command-center-detail">
@@ -169,11 +208,23 @@ export function ExecTraceDebug() {
 
           <div className="exec-debug-actions">
             <button
-              className={`command-center-button${autoRefresh ? " command-center-button--primary" : ""}`}
+              className={`command-center-button${autoRefresh && !refreshPaused ? " command-center-button--primary" : ""}`}
               type="button"
-              onClick={() => setAutoRefresh((value) => !value)}
+              onClick={() => {
+                if (refreshPaused) {
+                  dispatch({ type: "resume" });
+                  setLoading(true);
+                  setRefreshNonce((value) => value + 1);
+                  return;
+                }
+                dispatch({ type: "toggle_refresh" });
+              }}
             >
-              {autoRefresh ? "Live refresh on" : "Live refresh off"}
+              {refreshPaused
+                ? "paused after repeated errors — Resume"
+                : autoRefresh
+                  ? "Live refresh on"
+                  : "Live refresh off"}
             </button>
             <button
               className="command-center-button"
@@ -198,6 +249,11 @@ export function ExecTraceDebug() {
           <section className="command-center-frame exec-debug-error">
             <h2 className="command-center-section__title">Trace unavailable</h2>
             <p>{error}</p>
+            {refreshPaused ? (
+              <p className="command-center-section__meta">
+                Auto-refresh paused after repeated errors.
+              </p>
+            ) : null}
           </section>
         ) : null}
 
