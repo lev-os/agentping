@@ -34,7 +34,11 @@ export class DashboardRunner extends EventEmitter {
     this.registry = registry;
 
     // Initialize directories
-    this.stateDir = config.stateDir || join(homedir(), '.local/share/lev/dashboard-runner');
+    this.stateDir = config.stateDir || join(
+      process.env.XDG_DATA_HOME || join(homedir(), '.local/share'),
+      'agentping',
+      'dashboard-runner',
+    );
     this.pidFile = join(this.stateDir, 'runner.pid');
     this.stateFile = join(this.stateDir, 'state.json');
 

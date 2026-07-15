@@ -13,6 +13,7 @@ type FixturePaths = {
 };
 
 const originalHostRoot = process.env.AGENTPING_HOST_ROOT;
+const originalXdgDataHome = process.env.XDG_DATA_HOME;
 const tempRoots: string[] = [];
 
 async function createFixture(dashboardsYaml: string): Promise<FixturePaths> {
@@ -28,7 +29,7 @@ async function createFixture(dashboardsYaml: string): Promise<FixturePaths> {
   await mkdir(configDir, { recursive: true });
 
   const configPath = join(configDir, 'dashboards.yaml');
-  await writeFile(configPath, `dashboards:\n${dashboardsYaml}`);
+  await writeFile(configPath, dashboardsYaml ? `dashboards:\n${dashboardsYaml}` : 'dashboards: []\n');
 
   return { configPath, logDir, projectRoot, stateDir };
 }
@@ -65,6 +66,7 @@ describe('DashboardRunner cwd substitution', () => {
   beforeEach(() => {
     registry.clear();
     delete process.env.AGENTPING_HOST_ROOT;
+    delete process.env.XDG_DATA_HOME;
   });
 
   afterEach(async () => {
@@ -73,6 +75,11 @@ describe('DashboardRunner cwd substitution', () => {
       delete process.env.AGENTPING_HOST_ROOT;
     } else {
       process.env.AGENTPING_HOST_ROOT = originalHostRoot;
+    }
+    if (originalXdgDataHome === undefined) {
+      delete process.env.XDG_DATA_HOME;
+    } else {
+      process.env.XDG_DATA_HOME = originalXdgDataHome;
     }
 
     await Promise.all(tempRoots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
@@ -137,5 +144,43 @@ describe('DashboardRunner cwd substitution', () => {
 
     // Then: the absolute cwd is preserved exactly.
     expect(runner.getConfig('absolute-dashboard')?.cwd).toBe(absoluteCwd);
+  });
+
+  it('stores state beneath XDG_DATA_HOME when stateDir is omitted', async () => {
+    // Given: an isolated XDG data home and a dashboard-free runner config.
+    const xdgDataHome = await mkdtemp(join(tmpdir(), 'dashboard-runner-xdg-'));
+    tempRoots.push(xdgDataHome);
+    process.env.XDG_DATA_HOME = xdgDataHome;
+    const fixture = await createFixture('');
+    const runner = new DashboardRunner({
+      configPath: fixture.configPath,
+      logDir: fixture.logDir,
+    });
+
+    // When: the runner initializes without an explicit state directory.
+    const stateDir = runner['stateDir'];
+
+    // Then: it selects AgentPing's XDG-scoped state path.
+    expect(stateDir).toBe(join(xdgDataHome, 'agentping', 'dashboard-runner'));
+  });
+
+  it('keeps an explicit stateDir ahead of the XDG default', async () => {
+    // Given: distinct explicit and XDG state directories.
+    const xdgDataHome = await mkdtemp(join(tmpdir(), 'dashboard-runner-xdg-'));
+    tempRoots.push(xdgDataHome);
+    process.env.XDG_DATA_HOME = xdgDataHome;
+    const fixture = await createFixture('');
+    const explicitStateDir = join(fixture.projectRoot, 'explicit-state');
+    const runner = new DashboardRunner({
+      configPath: fixture.configPath,
+      logDir: fixture.logDir,
+      stateDir: explicitStateDir,
+    });
+
+    // When: the runner initializes with a configured state directory.
+    const stateDir = runner['stateDir'];
+
+    // Then: the explicit state directory takes precedence over the fallback.
+    expect(stateDir).toBe(explicitStateDir);
   });
 });

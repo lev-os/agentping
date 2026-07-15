@@ -11,14 +11,22 @@ import { createServer } from './index.js';
 import { ensurePortAvailable, formatAddressInUseError } from './port-guard.js';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { fileURLToPath } from 'node:url';
 
 // ============================================================================
 // Parse CLI Arguments
 // ============================================================================
 
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const config = {
+export interface CliConfig {
+  configPath: string;
+  port: number;
+  host: string;
+  takeover: boolean;
+  stateDir?: string;
+}
+
+export function parseArgs(args: string[] = process.argv.slice(2)): CliConfig {
+  const config: CliConfig = {
     configPath: join(process.cwd(), 'dashboards.yaml'),
     port: 3030,
     host: '127.0.0.1',
@@ -34,6 +42,8 @@ function parseArgs() {
       config.port = parseInt(args[++i], 10);
     } else if (arg === '--host' || arg === '-h') {
       config.host = args[++i];
+    } else if (arg === '--state-dir') {
+      config.stateDir = args[++i];
     } else if (arg === '--takeover') {
       config.takeover = true;
     } else if (arg === '--help') {
@@ -47,12 +57,14 @@ Options:
   --config, -c <path>    Path to dashboards.yaml config file (default: ./dashboards.yaml)
   --port, -p <number>    HTTP server port (default: 3030)
   --host, -h <address>   Bind address (default: 127.0.0.1)
+  --state-dir <path>     DashboardRunner state directory
   --takeover             If the port is occupied, SIGTERM the listener and bind
   --help                 Show this help message
 
 Examples:
   dashboard-manager-server --config ~/dashboards.yaml
   dashboard-manager-server --port 8080 --host 0.0.0.0
+  dashboard-manager-server --state-dir ~/.local/share/agentping/dashboard-runner
   dashboard-manager-server --takeover
       `);
       process.exit(0);
@@ -110,6 +122,7 @@ async function main() {
     console.log('[CLI] Initializing DashboardRunner...');
     const runner = new DashboardRunner({
       configPath: config.configPath,
+      stateDir: config.stateDir,
     });
 
     // Start runner
@@ -159,4 +172,6 @@ async function main() {
   }
 }
 
-main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  void main();
+}
