@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "pnpm --dir ../dashboard-runner build && tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
     "test": "vitest",
