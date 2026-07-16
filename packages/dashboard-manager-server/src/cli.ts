@@ -8,6 +8,8 @@
 
 import { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createServer } from './index.js';
+import { resolveLevRoot } from './host-root.js';
+import type { LevAdapter } from './adapter.js';
 import { ensurePortAvailable, formatAddressInUseError } from './port-guard.js';
 import { join } from 'path';
 import { existsSync } from 'fs';
@@ -23,6 +25,32 @@ export interface CliConfig {
   host: string;
   takeover: boolean;
   stateDir?: string;
+}
+
+function isLevAdapterFactoryModule(value: unknown): value is {
+  readonly createLevAdapter: (opts: { readonly levRoot: string }) => LevAdapter;
+} {
+  return (
+    value !== null
+    && typeof value === 'object'
+    && 'createLevAdapter' in value
+    && typeof value.createLevAdapter === 'function'
+  );
+}
+
+async function createConfiguredLevAdapter(levRoot: string): Promise<LevAdapter | undefined> {
+  const adapterPackage = '@agentping/adapter-lev';
+  let adapterModule: unknown;
+  try {
+    adapterModule = await import(adapterPackage);
+  } catch {
+    console.warn(`[CLI] ${adapterPackage} is not installed; continuing headless`);
+    return undefined;
+  }
+  if (!isLevAdapterFactoryModule(adapterModule)) {
+    throw new TypeError('The configured Lev adapter package does not export createLevAdapter');
+  }
+  return adapterModule.createLevAdapter({ levRoot });
 }
 
 export function parseArgs(args: string[] = process.argv.slice(2)): CliConfig {
@@ -107,6 +135,15 @@ async function main() {
     process.exit(1);
   }
 
+  const configuredHostRoot = process.env.AGENTPING_HOST_ROOT?.trim();
+  const levRoot = configuredHostRoot ? await resolveLevRoot(configuredHostRoot) : null;
+  const levAdapter = levRoot ? await createConfiguredLevAdapter(levRoot) : undefined;
+  if (levAdapter) {
+    console.log(`[CLI] Lev projection adapter enabled for ${levRoot}`);
+  } else {
+    console.log('[CLI] Lev projection adapter disabled: set AGENTPING_HOST_ROOT to a Lev host root');
+  }
+
   try {
     const portCheck = await ensurePortAvailable({
       host: config.host,
@@ -135,6 +172,7 @@ async function main() {
       port: config.port,
       host: config.host,
       enableWebSocket: true,
+      levAdapter,
     });
 
     // Start server

@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import { DashboardRunner } from '@lev-os/dashboard-runner';
 
+import { createServer } from '../src/index';
 import { createLevObservabilityRoutes } from '../src/routes/lev-observability';
 import type { LevProjection, LevProjectionReader } from '../src/routes/lev-observability-projection';
 
 const NOW = new Date('2026-06-01T20:30:00.000Z');
+const DASHBOARD_CONFIG_PATH = fileURLToPath(new URL('../../dashboard-runner/config/dashboards.yaml', import.meta.url));
 
 const evidence = {
   receipt_refs: ['rcpt-run-1'],
@@ -60,6 +64,49 @@ function decisionBody(overrides: Record<string, unknown> = {}) {
 }
 
 describe('createLevObservabilityRoutes', () => {
+  it('serves an injected Lev adapter projection through the server API', async () => {
+    // Given: a server with a proof-backed Lev projection adapter.
+    const projectionReader = vi.fn<LevProjectionReader>(async () => ({
+      ok: true,
+      projection: projection(),
+    }));
+    const server = createServer({
+      runner: new DashboardRunner({ configPath: DASHBOARD_CONFIG_PATH }),
+      enableLogger: false,
+      enableWebSocket: false,
+      levAdapter: { projectionReader },
+    });
+
+    // When: a consumer reads a run projection through the server mount.
+    const response = await server.app.request('/api/lev/runs/run-1');
+    const payload = await response.json();
+
+    // Then: the server delegates to the injected adapter reader.
+    expect(response.status).toBe(200);
+    expect(payload).toMatchObject({ id: 'run-1', kind: 'runs' });
+    expect(projectionReader).toHaveBeenCalledWith({ kind: 'runs', id: 'run-1' });
+  });
+
+  it('keeps the server Lev API unavailable when no adapter is configured', async () => {
+    // Given: a headless server with no Lev adapter.
+    const server = createServer({
+      runner: new DashboardRunner({ configPath: DASHBOARD_CONFIG_PATH }),
+      enableLogger: false,
+      enableWebSocket: false,
+    });
+
+    // When: a consumer reads a run projection through the server mount.
+    const response = await server.app.request('/api/lev/runs/run-1');
+    const payload = await response.json();
+
+    // Then: the existing unavailable-reader response remains intact.
+    expect(response.status).toBe(503);
+    expect(payload).toMatchObject({
+      error: 'Lev graph/API projection reader is not configured',
+      diagnostics: [expect.objectContaining({ code: 'LEV_PROJECTION_READER_UNAVAILABLE' })],
+    });
+  });
+
   it('returns proof-backed graph/API projections without becoming truth', async () => {
     const projectionReader = vi.fn<LevProjectionReader>(async () => ({
       ok: true,
