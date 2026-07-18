@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T07:50:53.631903+00:00",
+  "generated_at": "2026-07-18T01:25:42.585823+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 27984,
+    "operation_count": 28549,
     "by_type": {
-      "upsert_entity": 6510,
-      "add_claim": 15092,
-      "add_link": 6382
+      "upsert_entity": 6639,
+      "add_claim": 15402,
+      "add_link": 6508
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 128,
-    "total_features": 1551,
+    "parity_files": 131,
+    "total_features": 1583,
     "absorbed": 73,
-    "pending": 1076,
-    "deferred": 27,
+    "pending": 1098,
+    "deferred": 28,
     "rejected": 68,
     "monitor": 162,
     "unclassified": 0,
-    "absorbed_pct": 4.7,
+    "absorbed_pct": 4.6,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -9906,17 +9906,18 @@
       "category": "eval-framework",
       "priority": "P0",
       "measured_at": "2026-06-02",
-      "updated_at": "2026-06-02",
-      "owner": "core/domain + core/orchestration + core/exec + core/graph + plugins/bench + plugins/sdlc + skills/pentagon",
+      "updated_at": "2026-07-17",
+      "owner": "core/domain + core/config + core/flowmind + core/exec + core/eval + core/execution-ledger + plugins/sdlc",
       "path": ".lev/pm/parity/eval-frameworks.yaml",
       "verdict": "extract-heavy",
       "total_features": 17,
       "classified": 17,
       "unclassified": 0,
       "counts": {
-        "build": 14,
+        "build": 13,
         "merge": 1,
-        "extract": 2
+        "extract": 2,
+        "implement-runtime": 1
       },
       "features": [
         {
@@ -9949,10 +9950,10 @@
           "id": "eval-fw-03",
           "name": "FlowMind lane assembly from eval specs",
           "status": "partial",
-          "lev_equivalent": "plugins/sdlc/flows/eval-harness.flow.yaml + EvalJob scheduling",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml + plugins/sdlc/flows/eval-harness.flow.yaml",
           "action": "build",
-          "notes": "The existing eval-harness flow has produce/judge/compare/keep-discard. It needs a compiler from EvalSuite into setup/run/collect/score/compare/receipt/admit lanes.",
-          "absorbed_into": "core/orchestration",
+          "notes": "Eval-design now authors/calibrates evaluator candidates and eval-harness runs admitted product evaluation. Generic candidate admission and execution lowering remain incomplete.",
+          "absorbed_into": "plugins/sdlc + core/flowmind + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "plugins/sdlc/flows/eval-harness.flow.yaml; core/orchestration/src/proof/eval-job-executor.ts"
@@ -9975,10 +9976,10 @@
           "id": "eval-fw-05",
           "name": "Typed scorer catalog",
           "status": "partial",
-          "lev_equivalent": "EvalScorerKind gate-based | metric-based | llm-as-judge | adversarial",
+          "lev_equivalent": "Sensor methodology deterministic | stochastic | llm_observer | hybrid | hitl plus code-companion Measurements",
           "action": "merge",
-          "notes": "DeepEval, Mastra, AgentEvals, and Phoenix show useful scorer categories. Lev already has four strategy kinds but not a suite-owned scorer catalog.",
-          "absorbed_into": "core/domain + core/exec",
+          "notes": "Scorer categories are evaluator-owned Sensor bindings; agent prose never bypasses typed observations, deterministic measurement, and source-policy discharge.",
+          "absorbed_into": "core/domain + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "core/orchestration/src/eval/types.ts; core/exec/src/eval/registry.ts; https://deepeval.com/docs/metrics-introduction"
@@ -9999,12 +10000,12 @@
         },
         {
           "id": "eval-fw-07",
-          "name": "Trace, artifact, receipt, and GateProof linked evidence",
+          "name": "Trace, artifact, receipt, and EvalDecision-linked evidence",
           "status": "partial",
-          "lev_equivalent": "EvalScorecard receipt_refs, trace_refs, gate_proof_refs, evidence_refs",
+          "lev_equivalent": "EvalRun observations, Measurements, receipt_refs, trace_refs, evidence_refs, EvalDecision, and RunSeal",
           "action": "build",
-          "notes": "Lev already validates refs for passing scorecards; EvalSuite should make those evidence obligations part of every promotion gate.",
-          "absorbed_into": "core/exec + core/orchestration proof",
+          "notes": "Scorecards and GateProof are migration residue. Current generation and resolvable causal refs must satisfy suite policy before EvalDecision can qualify.",
+          "absorbed_into": "core/eval + core/execution-ledger",
           "tribunal_note": null,
           "evidence_refs": [
             "core/exec/src/eval/registry.ts; docs/design/design-proof-eval-fabric.md"
@@ -10092,10 +10093,10 @@
           "id": "eval-fw-14",
           "name": "Red-team and adversarial negative cases",
           "status": "partial",
-          "lev_equivalent": "Pentagon/UltraQA negative-case suites compiled into EvalSuite",
+          "lev_equivalent": "eval-design LFD/UltraQA attack inputs compiled into Owner Eval Suite or Task Eval Instance candidates",
           "action": "extract",
-          "notes": "Promptfoo red-team configs and Lev Pentagon intent align here. Negative cases should be first-class cases, not receipt theater.",
-          "absorbed_into": "skills/pentagon + plugins/sdlc + plugins/bench",
+          "notes": "Negative cases, hostile runtime scenarios, cheap paths, and mutations test evaluator fitness; deterministic admission decides whether they become durable source.",
+          "absorbed_into": "plugins/sdlc + evaluator-owner eval roots",
           "tribunal_note": null,
           "evidence_refs": [
             "https://www.promptfoo.dev/docs/intro/; .lev/pm/specs/skill-eval-design.md"
@@ -10117,11 +10118,11 @@
         {
           "id": "eval-fw-16",
           "name": "Judge-the-judge and scorer calibration",
-          "status": "missing",
-          "lev_equivalent": "Meta-eval suites for scorer validity",
-          "action": "build",
-          "notes": "Mastra experiments can target a scorer; local prior art includes judge-the-judge analysis. Lev needs scorer calibration suites before trusting LLM judges.",
-          "absorbed_into": "plugins/bench + core/orchestration eval",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml plus the required plugins/sdlc evaluator-candidate fitness suite",
+          "action": "implement-runtime",
+          "notes": "Known-good/bad separation, hidden holdouts, leak/cheap-path/mutation probes, sample disagreement, and generation rollover are contract. The ordinary EvalDecision-backed evaluator-candidate fitness suite and deterministic runtime proof remain missing.",
+          "absorbed_into": "plugins/sdlc + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "workshop/analysis/judge-the-judge-building-llm-evaluators-that-actually-work/analysis.md; https://mastra.ai/docs/evals/datasets/running-experiments"
@@ -10161,10 +10162,13 @@
         "core/exec/src/eval/registry.ts",
         "core/exec/src/eval/benchmark.ts",
         "plugins/sdlc/flows/eval-harness.flow.yaml",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/skills/eval-builder/SKILL.md",
+        "docs/specs/spec-eval.md",
         "plugins/bench"
       ],
       "absorbed": 0,
-      "pending": 17,
+      "pending": 16,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -16591,12 +16595,12 @@
       "category": "eval-harness-agentic-loop",
       "priority": "P0",
       "measured_at": "2026-07-05",
-      "updated_at": "2026-07-16",
+      "updated_at": "2026-07-17",
       "owner": "core/eval + plugins/sdlc",
       "path": ".lev/pm/parity/loss-function-driven-agentic-loops.yaml",
       "verdict": "extract",
-      "total_features": 14,
-      "classified": 14,
+      "total_features": 15,
+      "classified": 15,
       "unclassified": 0,
       "counts": {
         "extract": 5,
@@ -16605,7 +16609,8 @@
         "merge": 2,
         "reject": 1,
         "monitor": 1,
-        "spike": 1
+        "spike": 1,
+        "implement-runtime": 1
       },
       "features": [
         {
@@ -16655,10 +16660,10 @@
         {
           "id": "lfd-04",
           "name": "Fake-agent deterministic dogfood verifier",
-          "status": "missing",
+          "status": "partial",
           "lev_equivalent": "core/eval command cases and proposal_readiness regression fixtures",
           "action": "build",
-          "notes": "High-value spike fixture. It can become a deterministic command-case input for EvalDecision after mapping.",
+          "notes": "High-value known-good/known-bad and adapter fixture for eval-design. It must map into typed observations and measurements; it is not a prerequisite for the authoring lifecycle or a verdict authority.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -16814,6 +16819,22 @@
             "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verifiers/private/grader.sh",
             "workshop/approved/loss-function-driven-agentic-loops/skills/meta-loss-function-development/references/harness-completeness-checklist.md"
           ]
+        },
+        {
+          "id": "lfd-15",
+          "name": "Iterative evaluator meta-evaluation and repair",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml plus generated eval-builder skill projection",
+          "action": "implement-runtime",
+          "notes": "The flow now freezes candidate generations, calibrates known-good/bad, attacks leakage/cheap paths/mutations, checks generated product attacks against calibration defects, repairs evaluator-only failures, and emits admission-ready or hold. The owner-local evaluator-candidate fitness suite, deterministic candidate admission, and dogfood fixtures remain missing. Holdout secrecy and generated-probe freshness are separate policies.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/sdlc/flows/eval-design.flow.yaml",
+            "plugins/sdlc/skills/eval-builder/SKILL.md",
+            "docs/specs/spec-eval.md",
+            "dna/core/eval.dna.yaml"
+          ]
         }
       ],
       "metrics": [
@@ -16851,7 +16872,10 @@
         ".lev/pm/designs/design-core-eval-poly-bound-sdk.md",
         "plugins/sdlc/flows/propose-adversarial-contract.flow.yaml",
         "core/eval/src/eval-decision.ts",
-        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml"
+        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/skills/eval-builder/SKILL.md",
+        ".lev/pm/workstreams/lfd-lifecycle-playbook/captures/20260717-capture-universal-eval-design-lifecycle.yaml"
       ],
       "absorbed": 0,
       "pending": 10,
@@ -19107,6 +19131,124 @@
       ],
       "absorbed": 0,
       "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "oh-my-codex",
+      "label": "Oh My Codex",
+      "category": "agent-framework",
+      "priority": "P0",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "plugins/sdlc",
+      "path": ".lev/pm/parity/oh-my-codex.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "prove-runtime": 2,
+        "implement-admission": 1,
+        "prove-generation-separation": 1,
+        "replace-prose-authority": 1,
+        "reject-authority": 1,
+        "keep-separate": 1
+      },
+      "features": [
+        {
+          "id": "omx-uq-01",
+          "name": "Required hostile scenario matrix",
+          "status": "partial",
+          "lev_equivalent": "eval-design authors and calibration-checks cases; eval-harness executes admitted cases against the product",
+          "action": "prove-runtime",
+          "notes": "Malformed input, interruption, injection, cancel/resume, stale state, dirty worktree, hung command, flaky retry, misleading success, and cleanup are policy-selected product attack classes. LFD leak/cheap-path/mutation probes attack the evaluator; the targets are not conflated.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-02",
+          "name": "Temporary project-native harness generation",
+          "status": "partial",
+          "lev_equivalent": "generated Task Eval Instance and Executable Check Projection",
+          "action": "implement-admission",
+          "notes": "Generated files stay inside declared capabilities, are frozen/digested before execution, and are cleaned after XDG evidence persistence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-03",
+          "name": "Bounded diagnose-fix-retest loop",
+          "status": "partial",
+          "lev_equivalent": "eval-design evaluator-repair loop and Semantic Control product ADAPT loop",
+          "action": "prove-generation-separation",
+          "notes": "Lev separates evaluator repair from product repair; one attempt cannot change both and self-grade.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-04",
+          "name": "Evidence-rich structured report",
+          "status": "partial",
+          "lev_equivalent": "typed observations, measurements, evidence refs, execution ledger, and trace projection",
+          "action": "replace-prose-authority",
+          "notes": "OMX markdown/report fields are useful UX but must normalize into typed payloads and content-addressed refs before blocking.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-05",
+          "name": "Autopilot UltraQA completion gate",
+          "status": "partial",
+          "lev_equivalent": "core/eval EvalDecision plus FlowMind lifecycle routing",
+          "action": "reject-authority",
+          "notes": "A qa_verdict.clean state field is not enough for Lev completion; current evaluator generation, measurements, effects, and terminal seal must resolve.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-06",
+          "name": "Cleanup and dirty-worktree discipline",
+          "status": "partial",
+          "lev_equivalent": "admitted cleanup plan, cleanup observation, and pre/post worktree evidence",
+          "action": "prove-runtime",
+          "notes": "Cleanup failure is typed evidence failure, not a warning hidden in the final report.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-07",
+          "name": "Automatic reusable harness promotion",
+          "status": "partial",
+          "lev_equivalent": "explicit reviewed source promotion into Owner Eval Suite",
+          "action": "keep-separate",
+          "notes": "UltraQA normally cleans scratch harnesses; one passing run never promotes generated files into durable Lev source.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/oh-my-codex/plugins/oh-my-codex/skills/ultraqa/SKILL.md",
+        "workshop/intake/oh-my-codex/plugins/oh-my-codex/skills/autopilot/SKILL.md",
+        "workshop/intake/oh-my-codex/src/pipeline/stages/ultraqa.ts",
+        "workshop/intake/oh-my-codex/src/pipeline/orchestrator.ts",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/flows/eval-harness.flow.yaml",
+        "docs/design/design-eval-framework-1-0.md"
+      ],
+      "absorbed": 0,
+      "pending": 0,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -22152,9 +22294,9 @@
       "label": "Ouroboros",
       "category": "agent-framework",
       "priority": "P0",
-      "measured_at": "2026-04-10",
-      "updated_at": "2026-04-10",
-      "owner": "plugins/sdlc + core/orchestration",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "plugins/sdlc + core/orchestration + core/eval",
       "path": ".lev/pm/parity/ouroboros.yaml",
       "verdict": "extract",
       "total_features": 12,
@@ -22200,10 +22342,10 @@
         {
           "id": "ooo-04",
           "name": "3-stage eval gate (Mechanical→Semantic→Multi-Model)",
-          "status": "implemented",
-          "lev_equivalent": "core/orchestration/src/eval/types.ts",
+          "status": "partial",
+          "lev_equivalent": "core/eval evaluator packs + plugins/sdlc/flows/eval-design.flow.yaml + plugins/sdlc/flows/eval-harness.flow.yaml",
           "action": "unclassified",
-          "notes": "EvalStrategy has 4 kinds: gate-based (mechanical), metric-based (semantic), llm-as-judge, adversarial. Eval harness flow implements the gating.",
+          "notes": "Lev canon supports deterministic, stochastic, LLM-observer, hybrid, and HITL sensors with one EvalDecision authority. The authoring flows exist; generic runtime admission and blocking remain incomplete.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -22212,9 +22354,9 @@
           "id": "ooo-05",
           "name": "Evolutionary loop with ontology convergence",
           "status": "partial",
-          "lev_equivalent": "plugins/sdlc/flows/eval-harness.flow.yaml",
+          "lev_equivalent": "docs/specs/spec-semantic-control.md ADAPT plus plugins/sdlc/flows/eval-design.flow.yaml",
           "action": "unclassified",
-          "notes": "eval-harness produce→judge→compare→keep_or_discard is the same pattern. HOLD state = collect more samples. But no ontology similarity metric.",
+          "notes": "Wonder maps to an evidence/probe-seeking next intent and Reflect maps to evaluator plus lineage synthesis. They share one bounded strategy-mutation policy shape with LFD forced entropy and product ADAPT. Eval-design applies it only to evaluator generations; product ADAPT applies it only to product generations. Neither overrides EvalDecision.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -22234,9 +22376,9 @@
           "id": "ooo-07",
           "name": "PAL Router (3-tier cost optimization 1x/10x/30x)",
           "status": "implemented",
-          "lev_equivalent": "core/harness/src/ (adapter selection)",
+          "lev_equivalent": "FlowMind per-node adapter/model profiles over core/exec and Poly",
           "action": "unclassified",
-          "notes": "Lev has adapter + model selection per node. lev-ralph uses haiku for triage, sonnet for work, opus for review. Same pattern.",
+          "notes": "Lev already supports adapter and model selection per node without the deleted core/harness owner. Cost-tier policy remains authoring configuration, not proof authority.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -22267,9 +22409,9 @@
           "id": "ooo-10",
           "name": "Drift measurement (goal 50% + constraint 30% + ontology 20%)",
           "status": "partial",
-          "lev_equivalent": "plugins/validator/ + dna/gates.yaml",
+          "lev_equivalent": "intent-conservation Sensor measurements plus Semantic Control ADAPT",
           "action": "unclassified",
-          "notes": "ValidatorChain detects constraint drift. No composite drift score with weighted dimensions yet.",
+          "notes": "Lev models goal, constraint, ontology, trace, and evidence drift as evaluator-local measurements. A hardcoded universal weighted composite is not required; owner policy declares aggregation.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -22278,9 +22420,9 @@
           "id": "ooo-11",
           "name": "Brownfield auto-detection (scan existing repo patterns)",
           "status": "partial",
-          "lev_equivalent": "core/config/ (fractal resolver)",
+          "lev_equivalent": "core/config SourceCatalog and fractal root resolution plus eval-design discovery",
           "action": "unclassified",
-          "notes": "Fractal config resolver discovers project structure. No explicit brownfield scanner.",
+          "notes": "lev init binds one config-owned SourceCatalog proof inventory; coverage analysis, eval-design, and runtime execution consume the same ref. Runtime owners must not add a second brownfield scanner.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -22700,6 +22842,273 @@
       ],
       "absorbed": 0,
       "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "port",
+      "label": "Port",
+      "category": "internal-developer-portal-agentic-sdlc",
+      "priority": "P0",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "parity / AgentPing dashboard projection lane",
+      "path": ".lev/pm/parity/port.yaml",
+      "verdict": "extract",
+      "total_features": 17,
+      "classified": 17,
+      "unclassified": 0,
+      "counts": {
+        "extract": 12,
+        "build": 5
+      },
+      "features": [
+        {
+          "id": "context-lake-software-catalog",
+          "name": "Context lake / software catalog",
+          "status": "partial",
+          "lev_equivalent": "context graph direction, entity lifecycle, source catalogs, parity registry",
+          "action": "extract",
+          "notes": "Port validates Lev's need for a productized catalog projection over existing graph/workstream/plugin facts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/context-lake/overview/",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "native-integrations-ingestion",
+          "name": "Native integrations and ingestion mappings",
+          "status": "partial",
+          "lev_equivalent": "plugin/provider adapters, intake/parity registry, source-catalog descriptors",
+          "action": "extract",
+          "notes": "Extract integration descriptor and mapping UX; do not add managed SaaS connector assumptions to core.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/integrations-index/",
+            "https://docs.port.io/context-lake/ingestion/ingest-data-into-port/native-integrations/git/github-ocean/"
+          ]
+        },
+        {
+          "id": "workflows-as-tools",
+          "name": "Workflows as governed tools for humans, automation, and AI/MCP",
+          "status": "partial",
+          "lev_equivalent": "FlowMind + Exec + PolyOp-generated CLI/MCP/HTTP/SDK surfaces",
+          "action": "extract",
+          "notes": "Strong validation for PolyOp-first semantics with generated surfaces and shared audit.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/workflows/overview/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "self-service-actions",
+          "name": "Self-service actions with approvals, progress, logs, and audit",
+          "status": "partial",
+          "lev_equivalent": "Exec profiles, prompt-stack runtime, leases, receipts",
+          "action": "build",
+          "notes": "Build as a projection over existing operations rather than as a parallel action engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/workflows/actions-and-automations/create-self-service-experiences/"
+          ]
+        },
+        {
+          "id": "event-automations",
+          "name": "Event-triggered automations",
+          "status": "partial",
+          "lev_equivalent": "event bus, daemon runtime, reconciler, FlowMind declarations",
+          "action": "extract",
+          "notes": "Port's shared backend/progress model pressures Lev to keep action and automation receipts unified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/actions-and-automations/overview"
+          ]
+        },
+        {
+          "id": "scorecards-standards",
+          "name": "Scorecards, standards, DORA, security, compliance",
+          "status": "partial",
+          "lev_equivalent": "parity scorecards, DNA gates, eval proposals, static checkers",
+          "action": "extract",
+          "notes": "Generalize scorecard UX without weakening deterministic DNA gates.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/guides/all/setup-dora-scorecards/",
+            "docs/specs/spec-parity.md"
+          ]
+        },
+        {
+          "id": "rbac-dynamic-permissions",
+          "name": "RBAC and dynamic catalog-aware permissions",
+          "status": "missing",
+          "lev_equivalent": "lease/trust/fail-closed policy direction",
+          "action": "build",
+          "notes": "Requires deterministic policy/DNA before UI or LLM planning can safely invoke actions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/platform-administration/users-and-teams/manage-users-teams/",
+            "https://docs.port.io/actions-and-automations/create-self-service-experiences/set-self-service-actions-rbac/dynamic-permissions/"
+          ]
+        },
+        {
+          "id": "port-ai-natural-language",
+          "name": "Natural-language catalog Q&A and action invocation",
+          "status": "partial",
+          "lev_equivalent": "conversational router/dispatcher vision and proposal-first agent loop",
+          "action": "extract",
+          "notes": "LLM should classify and propose; deterministic code must admit, execute, and receipt.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "custom-agent-registry",
+          "name": "Custom AI agents and agent registry",
+          "status": "partial",
+          "lev_equivalent": "skills, prompt-stack, exec profiles, AgentPing surfaces",
+          "action": "extract",
+          "notes": "Extract metadata and registry UX before introducing durable core registry fields.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/agent-management/custom-agents/overview/"
+          ]
+        },
+        {
+          "id": "mcp-connectors",
+          "name": "MCP connectors with per-user auth, RBAC, and audit logging",
+          "status": "partial",
+          "lev_equivalent": "Poly-generated MCP surfaces; MCP as tool/context plane",
+          "action": "extract",
+          "notes": "Generated MCP connectors should inherit PolyOp permissions and receipts, not become semantic authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/agent-management/ai-registry/mcp-connectors/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "interface-builder-dashboards",
+          "name": "Interface builder, catalog views, dashboards, approvals, notifications",
+          "status": "partial",
+          "lev_equivalent": "AgentPing surfaces, parity dashboard, GenUI projection plans",
+          "action": "build",
+          "notes": "Extract card/table/action schema patterns into generated GenUI contracts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/",
+            "docs/specs/spec-parity.md"
+          ]
+        },
+        {
+          "id": "security-audit-admin",
+          "name": "SSO/RBAC admin, audit logs, and retention policy",
+          "status": "missing",
+          "lev_equivalent": "append-only receipts, ratchet goals, OTel/daemon observability",
+          "action": "build",
+          "notes": "Define retention and audit policy as DNA before enterprise admin surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/security/"
+          ]
+        },
+        {
+          "id": "business-context-enrichment",
+          "name": "Business context and catalog enrichment",
+          "status": "partial",
+          "lev_equivalent": "domain plugin schemas, graph/entity overlays, workstream/task metadata",
+          "action": "extract",
+          "notes": "Keep organizational/business overlays provenance-bearing and domain-owned instead of hardcoding them into core.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/context-lake/business-context/",
+            "https://docs.port.io/context-lake/extend-the-context-lake/"
+          ]
+        },
+        {
+          "id": "ai-runtime-controls",
+          "name": "AI provider, memory, quota, feedback, and data controls",
+          "status": "partial",
+          "lev_equivalent": "provider catalogs, exec profiles, memory decay, budget posture, eval plans",
+          "action": "extract",
+          "notes": "Productize AI runtime controls as deterministic policy and scorecard surfaces, not prompt-only guidance.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/port-ai/llm-provider-management/",
+            "https://docs.port.io/port-ai/memory/",
+            "https://docs.port.io/port-ai/ai-security-and-data-controls/"
+          ]
+        },
+        {
+          "id": "notifications-collaboration",
+          "name": "Notifications and collaboration workflows",
+          "status": "missing",
+          "lev_equivalent": "event streams and AgentPing surfaces",
+          "action": "build",
+          "notes": "Build as receipt-backed event subscribers with explicit delivery policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/interface-builder/notifications/",
+            "https://docs.port.io/guides/all/send-slack-messages-using-port-slack-app-and-automations/"
+          ]
+        },
+        {
+          "id": "api-extensibility",
+          "name": "API and extensibility surface",
+          "status": "partial",
+          "lev_equivalent": "SDK-first Poly pipeline with generated CLI/MCP/HTTP/SDK targets",
+          "action": "extract",
+          "notes": "Preserve SDK/PolyOp as semantic source and generate wire surfaces from it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/api-reference/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "packaged-solution-patterns",
+          "name": "Packaged solution guides and use-case patterns",
+          "status": "partial",
+          "lev_equivalent": "workshop intake, skills, plugin POCs, parity registry",
+          "action": "extract",
+          "notes": "Promote only proven workflows into plugin-owned solution packs after receipts/evals pass.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/solutions/",
+            "https://docs.port.io/guides/all/"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/port/analysis.md",
+        "docs/specs/spec-parity.md"
+      ],
+      "absorbed": 0,
+      "pending": 17,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -27035,6 +27444,141 @@
         {
           "id": "uai-12",
           "name": "Figma-to-Unity UI generation",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "whathappened",
+      "label": "whathappened",
+      "category": "research-context-engineering",
+      "priority": "P1",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "core/research + plugins/timetravel",
+      "path": ".lev/pm/parity/whathappened.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "wh-01",
+          "name": "Capability-gated native-tool contract",
+          "status": "missing",
+          "lev_equivalent": "Current research adapter availability checks without typed capability outcomes",
+          "action": "extract",
+          "notes": "Required X tools are explicit and the skill refuses when they are unavailable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-02",
+          "name": "Typed unavailable/empty/failure semantics",
+          "status": "missing",
+          "lev_equivalent": "Current adapter contract and merged research result",
+          "action": "extract",
+          "notes": "Prevents unavailable providers from becoming silent empty successes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "core/research/src/adapter.ts"
+          ]
+        },
+        {
+          "id": "wh-03",
+          "name": "Adaptive pulse and shortest-sufficient recency window",
+          "status": "missing",
+          "lev_equivalent": "Research strategy prompt guidance only",
+          "action": "extract",
+          "notes": "Promote as a FlowMind policy stage, not provider-specific core code.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-04",
+          "name": "Purpose-specific search lattice",
+          "status": "partial",
+          "lev_equivalent": "Parallel research adapters without lane-level evidence requirements",
+          "action": "extract",
+          "notes": "Top, Latest, Semantic, First-party, and Debate are a reusable policy shape; X query syntax remains provider-owned.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "workshop/intake/whathappened/skills/whathappened/references/query-patterns.md"
+          ]
+        },
+        {
+          "id": "wh-05",
+          "name": "Bounded origin/official/counterargument thread enrichment",
+          "status": "missing",
+          "lev_equivalent": "No unified research extraction/enrichment stage",
+          "action": "extract",
+          "notes": "Requires source-bearing adapter capabilities and receipt links before synthesis.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-06",
+          "name": "Provenance-aware ranking, clustering, and honest gaps",
+          "status": "partial",
+          "lev_equivalent": "Research synthesis/output contracts without complete adapter receipts",
+          "action": "extract",
+          "notes": "Freshness, authority, entity match, disagreement, sample size, and gaps should remain visible in the result envelope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "workshop/intake/whathappened/skills/whathappened/references/failure-modes.md"
+          ]
+        },
+        {
+          "id": "wh-07",
+          "name": "Portable Lev-wide whathappened routine",
+          "status": "not-applicable",
+          "lev_equivalent": "No X-native capability on the current host",
+          "action": "deferred",
+          "notes": "Do not ship until the four native X capabilities can be satisfied through a stable adapter.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/README.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/whathappened/analysis.md",
+        ".lev/pm/designs/design-index-retrieval-plane.md",
+        ".lev/pm/workstreams/timetravel-research/state/workstream.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [
+        {
+          "id": "wh-07",
+          "name": "Portable Lev-wide whathappened routine",
           "action": "deferred",
           "absorbed_into": null,
           "tribunal_note": null
