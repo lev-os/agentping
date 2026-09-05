@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { deriveProofBackedStatus, type ExecTrace } from "./exec-traces";
+import { deriveProofBackedStatus, getExecTraceDebug, type ExecTrace } from "./exec-traces";
 
 const NOW = new Date("2026-05-22T20:00:00.000Z");
 
@@ -82,5 +82,55 @@ describe("proof-backed exec trace status", () => {
       status: "blocked",
       reason: "missing-audit-refs",
     });
+  });
+});
+
+
+describe("getExecTraceDebug", () => {
+  it("narrows 404 into a typed not-found result without throwing", async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () =>
+      new Response(JSON.stringify({ error: "trace not found", execId: "missing-run" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+
+    try {
+      const result = await getExecTraceDebug("missing-run");
+      expect(result).toEqual({
+        ok: false,
+        status: 404,
+        error: "trace not found",
+        execId: "missing-run",
+      });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it("returns ok payload on 200", async () => {
+    const payload = {
+      type: "AgentPingExecDebug",
+      specVersion: "0.1.0",
+      execId: "run-1",
+      projectRoot: "/repo",
+      trace: { events: [] },
+      graph: null,
+      commands: { trace: "lev", flowmind: "lev" },
+      diagnostics: { warnings: [] },
+    };
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () =>
+      new Response(JSON.stringify(payload), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+
+    try {
+      const result = await getExecTraceDebug("run-1");
+      expect(result).toEqual({ ok: true, data: payload });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

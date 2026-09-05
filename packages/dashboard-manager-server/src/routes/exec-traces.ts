@@ -142,14 +142,8 @@ export function createExecTraceRoutes(config: ExecTraceRoutesConfig = {}) {
       if (isMissingTrace(traceResult)) {
         return c.json(
           {
-            error: 'Exec trace not found',
-            diagnostics: [
-              {
-                level: 'error',
-                code: 'TRACE_NOT_FOUND',
-                message: errorMessage(traceResult),
-              },
-            ],
+            error: 'trace not found',
+            execId,
           },
           404,
         );

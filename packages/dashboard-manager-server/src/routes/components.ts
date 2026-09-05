@@ -43,35 +43,33 @@ interface Manifest {
   components: ManifestComponent[];
 }
 
-function resolveManifestPath(): string {
-  // CWD when launched is community/agentping/
-  // The manifest is at packages/ui/src/components/migrations/_manifest.json
-  return path.resolve(
-    process.cwd(),
-    'packages', 'ui', 'src', 'components', 'migrations', '_manifest.json',
-  );
+export const CATALOG_COMPONENTS_DIR = path.resolve(
+  process.cwd(),
+  'packages', 'ui', 'src', 'components', 'catalog',
+);
+
+export interface ComponentsRoutesConfig {
+  catalogDir?: string;
+  fileReader?: (filePath: string, encoding: BufferEncoding) => Promise<string>;
 }
 
-function resolveSidecarPath(componentId: string): string {
-  return path.resolve(
-    process.cwd(),
-    'packages', 'ui', 'src', 'components', 'migrations',
-    `${componentId}.manifest.json`,
-  );
+function catalogPaths(catalogDir: string) {
+  return {
+    dir: catalogDir,
+    manifest: path.join(catalogDir, '_manifest.json'),
+    clusters: path.join(catalogDir, 'clusters.json'),
+    decisionLog: path.join(catalogDir, 'decision-log.jsonl'),
+    sidecar: (componentId: string) => path.join(catalogDir, `${componentId}.manifest.json`),
+  };
 }
 
-function resolveClustersPath(): string {
-  return path.resolve(
-    process.cwd(),
-    'packages', 'ui', 'src', 'components', 'migrations', 'clusters.json',
-  );
-}
-
-function resolveDecisionLogPath(): string {
-  return path.resolve(
-    process.cwd(),
-    'packages', 'ui', 'src', 'components', 'migrations', 'decision-log.jsonl',
-  );
+class CatalogFileMissingError extends Error {
+  readonly path: string;
+  constructor(kind: string, filePath: string) {
+    super(`${kind} not found`);
+    this.name = 'CatalogFileMissingError';
+    this.path = filePath;
+  }
 }
 
 interface Cluster {
@@ -95,12 +93,19 @@ interface ClustersFile {
   clusters: Cluster[];
 }
 
-async function loadClusters(): Promise<ClustersFile> {
-  const filePath = resolveClustersPath();
+async function loadClusters(paths: ReturnType<typeof catalogPaths>, fileReader: (p: string, enc: BufferEncoding) => Promise<string>): Promise<ClustersFile> {
+  const filePath = paths.clusters;
   if (!existsSync(filePath)) {
-    throw new Error(`Clusters file not found at ${filePath}`);
+    throw new CatalogFileMissingError('Clusters file', filePath);
   }
-  const content = await readFile(filePath, 'utf-8');
+  let content: string;
+  try {
+    content = await fileReader(filePath, 'utf-8');
+  } catch (err) {
+    const e = err as NodeJS.ErrnoException;
+    if (e.code === 'ENOENT') throw new CatalogFileMissingError('Clusters file', filePath);
+    throw err;
+  }
   return JSON.parse(content) as ClustersFile;
 }
 
@@ -110,25 +115,49 @@ const DECISION_TO_REVIEW_STATUS: Record<string, string> = {
   deprecate: 'deprecated',
 };
 
-async function loadManifest(): Promise<Manifest> {
-  const filePath = resolveManifestPath();
+async function loadManifest(paths: ReturnType<typeof catalogPaths>, fileReader: (p: string, enc: BufferEncoding) => Promise<string>): Promise<Manifest> {
+  const filePath = paths.manifest;
   if (!existsSync(filePath)) {
-    throw new Error(`Manifest not found at ${filePath}`);
+    throw new CatalogFileMissingError('Manifest', filePath);
   }
-  const content = await readFile(filePath, 'utf-8');
+  let content: string;
+  try {
+    content = await fileReader(filePath, 'utf-8');
+  } catch (err) {
+    const e = err as NodeJS.ErrnoException;
+    if (e.code === 'ENOENT') throw new CatalogFileMissingError('Manifest', filePath);
+    throw err;
+  }
   return JSON.parse(content) as Manifest;
 }
 
-export function createComponentsRoutes() {
+function catalogMissingResponse(c: { json: (body: unknown, status: number) => Response }, error: unknown) {
+  if (error instanceof CatalogFileMissingError) {
+    return c.json(
+      {
+        error: error.message,
+        hint: error.path,
+      },
+      503,
+    );
+  }
+  return null;
+}
+
+export function createComponentsRoutes(config: ComponentsRoutesConfig = {}) {
   const app = new Hono();
+  const paths = catalogPaths(config.catalogDir ?? CATALOG_COMPONENTS_DIR);
+  const fileReader = config.fileReader ?? ((p: string, enc: BufferEncoding) => readFile(p, enc));
 
   // GET /api/components — full manifest
   app.get('/', async (c) => {
     try {
-      const manifest = await loadManifest();
+      const manifest = await loadManifest(paths, fileReader);
       return c.json(manifest);
     } catch (error) {
       console.error('[components] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -136,13 +165,15 @@ export function createComponentsRoutes() {
   // GET /api/components/conflicts — unresolved conflict components
   app.get('/conflicts', async (c) => {
     try {
-      const manifest = await loadManifest();
+      const manifest = await loadManifest(paths, fileReader);
       const conflicts = manifest.components.filter(
         (comp) => comp.id.includes('conflict') && !comp.reviewStatus,
       );
       return c.json({ count: conflicts.length, components: conflicts });
     } catch (error) {
       console.error('[components/conflicts] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -150,7 +181,7 @@ export function createComponentsRoutes() {
   // GET /api/components/stats — aggregated stats
   app.get('/stats', async (c) => {
     try {
-      const manifest = await loadManifest();
+      const manifest = await loadManifest(paths, fileReader);
 
       const byClassification: Record<string, number> = {};
       const byFamily: Record<string, number> = {};
@@ -201,6 +232,8 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/stats] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -208,7 +241,7 @@ export function createComponentsRoutes() {
   // GET /api/components/queue — components awaiting human review
   app.get('/queue', async (c) => {
     try {
-      const manifest = await loadManifest();
+      const manifest = await loadManifest(paths, fileReader);
       const pending = manifest.components.filter(
         (comp) => !comp.humanDecision && comp.reviewStatus !== 'reviewed' && comp.reviewStatus !== 'absorbed' && comp.reviewStatus !== 'deprecated',
       );
@@ -219,6 +252,8 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/queue] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -237,7 +272,7 @@ export function createComponentsRoutes() {
         );
       }
 
-      const sidecarPath = resolveSidecarPath(componentId);
+      const sidecarPath = paths.sidecar(componentId);
       if (!existsSync(sidecarPath)) {
         return c.json({ error: `Sidecar not found for component "${componentId}" at ${sidecarPath}` }, 404);
       }
@@ -261,6 +296,8 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/:id/decision] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -272,10 +309,12 @@ export function createComponentsRoutes() {
   // GET /api/components/clusters — full cluster list
   app.get('/clusters', async (c) => {
     try {
-      const clusters = await loadClusters();
+      const clusters = await loadClusters(paths, fileReader);
       return c.json(clusters);
     } catch (error) {
       console.error('[components/clusters] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -285,8 +324,8 @@ export function createComponentsRoutes() {
     try {
       const clusterId = c.req.param('id');
       const [clusters, manifest] = await Promise.all([
-        loadClusters(),
-        loadManifest(),
+        loadClusters(paths, fileReader),
+        loadManifest(paths, fileReader),
       ]);
       const cluster = clusters.clusters.find((cl) => cl.id === clusterId);
       if (!cluster) {
@@ -305,6 +344,8 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/clusters/:id] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });
@@ -329,7 +370,7 @@ export function createComponentsRoutes() {
         return c.json({ error: 'canonical_id is required' }, 400);
       }
 
-      const clusters = await loadClusters();
+      const clusters = await loadClusters(paths, fileReader);
       const cluster = clusters.clusters.find((cl) => cl.id === clusterId);
       if (!cluster) {
         return c.json({ error: `Cluster "${clusterId}" not found` }, 404);
@@ -350,7 +391,7 @@ export function createComponentsRoutes() {
         memberId: string,
         fields: Record<string, unknown>,
       ) => {
-        const sidecarPath = resolveSidecarPath(memberId);
+        const sidecarPath = paths.sidecar(memberId);
         if (!existsSync(sidecarPath)) {
           console.warn(`[components/clusters/:id/decision] sidecar missing for ${memberId}`);
           return;
@@ -370,7 +411,7 @@ export function createComponentsRoutes() {
       });
       updates.push({
         id: canonicalId,
-        sidecarPath: resolveSidecarPath(canonicalId),
+        sidecarPath: paths.sidecar(canonicalId),
         decision: 'keep',
         reviewStatus: 'reviewed',
       });
@@ -385,7 +426,7 @@ export function createComponentsRoutes() {
         });
         updates.push({
           id: rid,
-          sidecarPath: resolveSidecarPath(rid),
+          sidecarPath: paths.sidecar(rid),
           decision: 'deprecate',
           reviewStatus: 'deprecated',
         });
@@ -401,7 +442,7 @@ export function createComponentsRoutes() {
         });
         updates.push({
           id: mid,
-          sidecarPath: resolveSidecarPath(mid),
+          sidecarPath: paths.sidecar(mid),
           decision: 'merge',
           reviewStatus: 'absorbed',
         });
@@ -417,7 +458,7 @@ export function createComponentsRoutes() {
         reason,
         reviewedAt,
       }) + '\n';
-      await appendFile(resolveDecisionLogPath(), logLine, 'utf-8');
+      await appendFile(paths.decisionLog, logLine, 'utf-8');
 
       return c.json({
         cluster_id: clusterId,
@@ -427,6 +468,8 @@ export function createComponentsRoutes() {
       });
     } catch (error) {
       console.error('[components/clusters/:id/decision] error:', error);
+      const missing = catalogMissingResponse(c, error);
+      if (missing) return missing;
       return c.json({ error: (error as Error).message || 'Internal server error' }, 500);
     }
   });

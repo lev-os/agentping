@@ -261,10 +261,30 @@ export interface AgentPingExecDebugPayload {
   diagnostics: { warnings: string[] };
 }
 
-export async function getExecTraceDebug(execId: string): Promise<AgentPingExecDebugPayload> {
+export type ExecTraceDebugResult =
+  | { ok: true; data: AgentPingExecDebugPayload }
+  | { ok: false; status: 404; error: string; execId: string }
+  | { ok: false; status: number; error: string };
+
+export async function getExecTraceDebug(execId: string): Promise<ExecTraceDebugResult> {
   const response = await fetch(`${API_BASE}/exec-traces/${encodeURIComponent(execId)}`);
-  if (!response.ok) {
-    throw new Error(`Failed to get exec trace: ${response.status} ${response.statusText}`);
+  if (response.status === 404) {
+    let error = "trace not found";
+    try {
+      const body = await response.json() as { error?: string; execId?: string };
+      if (typeof body.error === "string" && body.error.trim()) error = body.error;
+    } catch {
+      // keep default
+    }
+    return { ok: false, status: 404, error, execId };
   }
-  return response.json();
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      error: `Failed to get exec trace: ${response.status} ${response.statusText}`,
+    };
+  }
+  const data = await response.json() as AgentPingExecDebugPayload;
+  return { ok: true, data };
 }

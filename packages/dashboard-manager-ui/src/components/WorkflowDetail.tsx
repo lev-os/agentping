@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { GraphView } from "@kingly/ui/components";
@@ -22,11 +22,44 @@ function labelForGroup(group: WorkflowEntry["group"]): string {
 export function WorkflowDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const entries = useMemo(() => getWorkflowEntries(), []);
+  const [entries, setEntries] = useState<WorkflowEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const entry = useMemo(
     () => entries.find((candidate) => candidate.slug === (id ?? "").toLowerCase()),
     [entries, id],
   );
+
+  useEffect(() => {
+    let active = true;
+    getWorkflowEntries()
+      .then((workflowEntries) => {
+        if (!active) return;
+        setEntries(workflowEntries);
+        setLoadError(null);
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        setEntries([]);
+        setLoadError(error instanceof Error ? error.message : String(error));
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="command-center-page">
+        <div className="workflow-empty">
+          <h1>Loading workflow</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!entry) {
     return (
@@ -34,7 +67,11 @@ export function WorkflowDetail() {
         <div className="workflow-empty">
           <h1>Workflow not found</h1>
           <p>
-            No workflow entry matches <code>{id}</code>.
+            {loadError ?? (
+              <>
+                No workflow entry matches <code>{id}</code>.
+              </>
+            )}
           </p>
           <button className="command-center-button" onClick={() => navigate("/")}>
             ← Back to dashboard

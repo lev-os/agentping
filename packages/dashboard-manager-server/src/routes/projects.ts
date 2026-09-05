@@ -11,8 +11,9 @@
 import { Hono } from 'hono';
 import { readFile } from 'node:fs/promises';
 import { existsSync, statSync } from 'node:fs';
-import * as path from 'node:path';
+import { join } from 'node:path';
 import * as os from 'node:os';
+import { resolveLevRoot } from '../host-root.js';
 
 interface DashboardEntryMetadata {
   lane?: string;
@@ -29,16 +30,13 @@ interface ScannedEntry {
   metadata?: DashboardEntryMetadata;
 }
 
-function resolveDetectedProjectsPath(): string {
-  // Walk up from this module to find the repo root (.lev/)
-  // dashboard-manager-server lives at:
-  //   community/agentping/packages/dashboard-manager-server/dist/routes/projects.js
-  // Repo root is 5 levels up from there.
-  const start = path.resolve(
-    path.dirname(new URL(import.meta.url).pathname),
-    '..', '..', '..', '..', '..', '..',
-  );
-  return path.join(start, '.lev', 'detected-projects.yaml');
+export interface ProjectsRoutesConfig {
+  readonly levRoot?: string;
+}
+
+async function resolveDetectedProjectsPath(levRoot?: string): Promise<string | null> {
+  const root = await resolveLevRoot(levRoot);
+  return root ? join(root, '.lev', 'detected-projects.yaml') : null;
 }
 
 function parseDetectedProjectsYaml(content: string): ScannedEntry[] {
@@ -86,7 +84,7 @@ function parseDetectedProjectsYaml(content: string): ScannedEntry[] {
   return entries;
 }
 
-function aggregate(entries: ScannedEntry[]) {
+function aggregate(entries: ScannedEntry[], repoPrefix: string) {
   const runtimes: Record<string, number> = {};
   const frameworks: Record<string, number> = {};
   const packageManagers: Record<string, number> = {};
@@ -97,7 +95,6 @@ function aggregate(entries: ScannedEntry[]) {
   let self = 0;
 
   const home = os.homedir();
-  const repoPrefix = path.join(home, 'digital', 'leviathan');
 
   for (const entry of entries) {
     const meta = entry.metadata || {};
@@ -130,12 +127,32 @@ function aggregate(entries: ScannedEntry[]) {
   };
 }
 
-export function createProjectsRoutes() {
+export function createProjectsRoutes(config: ProjectsRoutesConfig = {}) {
   const app = new Hono();
+
+  app.get('/', async (c) => {
+    const filePath = await resolveDetectedProjectsPath(config.levRoot);
+    if (!filePath) return c.json({ hostAvailable: false, projects: [] });
+    if (!existsSync(filePath)) {
+      return c.json({
+        error: 'detected-projects.yaml not found',
+        hint: 'Run `lev init` to generate it',
+        expected_path: filePath,
+      }, 404);
+    }
+
+    const content = await readFile(filePath, 'utf-8');
+    return c.json({
+      hostAvailable: true,
+      projects: parseDetectedProjectsYaml(content),
+    });
+  });
 
   app.get('/stats', async (c) => {
     try {
-      const filePath = resolveDetectedProjectsPath();
+      const root = await resolveLevRoot(config.levRoot);
+      if (!root) return c.json({ hostAvailable: false, projects: [] });
+      const filePath = join(root, '.lev', 'detected-projects.yaml');
       if (!existsSync(filePath)) {
         return c.json({
           error: 'detected-projects.yaml not found',
@@ -146,7 +163,7 @@ export function createProjectsRoutes() {
 
       const content = await readFile(filePath, 'utf-8');
       const entries = parseDetectedProjectsYaml(content);
-      const stats = aggregate(entries);
+      const stats = aggregate(entries, root);
       const { mtime } = statSync(filePath);
 
       return c.json({
@@ -162,7 +179,8 @@ export function createProjectsRoutes() {
 
   app.get('/raw', async (c) => {
     try {
-      const filePath = resolveDetectedProjectsPath();
+      const filePath = await resolveDetectedProjectsPath(config.levRoot);
+      if (!filePath) return c.json({ hostAvailable: false, projects: [] });
       if (!existsSync(filePath)) {
         return c.json({ error: 'detected-projects.yaml not found', expected_path: filePath }, 404);
       }

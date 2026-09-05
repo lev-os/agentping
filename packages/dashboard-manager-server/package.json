@@ -24,13 +24,14 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "pnpm --dir ../adapters/lev build && pnpm --dir ../dashboard-runner build && tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
     "test": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@agentping/adapter-lev": "workspace:*",
     "@lev-os/dashboard-runner": "workspace:*",
     "hono": "^4.0.0",
     "@hono/node-server": "^1.4.0",

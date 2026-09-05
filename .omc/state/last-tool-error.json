@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"git add packages/dashboard-runner/src/runner.ts packages/dashboard-runner/tests/runner-cwd-substitution.test.ts packages/dashboard-manager-server/src/cli.ts packages/dashboard-manager-serv...",
+  "error": "Exit code 1\nOn branch main\nYour branch is up to date with 'origin/main'.\n\nnothing to commit, working tree clean",
+  "timestamp": "2026-07-15T12:57:17.290Z",
+  "retry_count": 1
+}

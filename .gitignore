@@ -41,3 +41,4 @@ storybook-static
 
 # Lev cascading context (ephemeral, per-machine)
 .lev/
+.codegraph/

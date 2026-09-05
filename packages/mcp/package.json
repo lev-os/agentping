@@ -1,5 +1,5 @@
 {
-  "name": "@agentping/mcp",
+  "name": "@agentping/mcp-core",
   "version": "0.1.0",
   "description": "AgentPing MCP Server - Model Context Protocol tools for agent-human interaction",
   "type": "module",

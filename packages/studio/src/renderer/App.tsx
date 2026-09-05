@@ -14,15 +14,18 @@ import {
     type DashboardHealthStatus,
     type DashboardItem,
 } from '@/renderer/components/NavigatorWithDashboards';
-import { Layers } from '@/renderer/components/Layers';
+import { Layers, type LayerItem } from '@/renderer/components/Layers';
 import { ComponentGallery, type ComponentPrimitive } from '@/renderer/components/ComponentGallery';
 import { FileViewer } from '@/renderer/components/FileViewer';
 import { Preview } from '@/renderer/components/Preview';
+import type { LayoutMode } from '@/renderer/components/Toolbar';
 import { LayoutDashboard, Palette, Layers as LayersIcon, Eye } from 'lucide-react';
 import { serializeDocument, parseDocument } from '@/shared/ApenFormat';
 import '@/renderer/styles/App.css';
 
 export default function App() {
+    type StudioLayoutMode = LayoutMode | 'dashboards';
+
     type DashboardStatusRecord = {
         id: string;
         config?: {
@@ -38,7 +41,7 @@ export default function App() {
     };
 
     // Detect route from URL path
-    const getInitialLayoutMode = (): 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards' => {
+    const getInitialLayoutMode = (): StudioLayoutMode => {
         const path = window.location.pathname;
         if (path.includes('/dashboards')) return 'dashboards';
         if (path.includes('/navigator')) return 'dashboards';
@@ -59,7 +62,7 @@ export default function App() {
     const [selectedPreviewElement, setSelectedPreviewElement] = useState<any>(null);
     const [activeTool, setActiveTool] = useState<'select' | 'rectangle' | 'ellipse' | 'text'>('select');
     const [activeSidebar, setActiveSidebar] = useState<'chat' | 'components' | 'files' | 'layers'>('chat');
-    const [layoutMode, setLayoutMode] = useState<'design' | 'dashboard' | 'code' | 'preview' | 'dashboards'>(getInitialLayoutMode());
+    const [layoutMode, setLayoutMode] = useState<StudioLayoutMode>(getInitialLayoutMode());
     const [isSyncing, setIsSyncing] = useState(false);
     const [workspacePath, setWorkspacePath] = useState<string | null>(null);
     const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
@@ -69,7 +72,7 @@ export default function App() {
     const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
     const [currentFileName, setCurrentFileName] = useState<string>('Untitled.apen');
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-    const [canvasLayers, setCanvasLayers] = useState<Array<{ id: string; name: string; type: string; visible: boolean; locked: boolean }>>([]);
+    const [canvasLayers, setCanvasLayers] = useState<LayerItem[]>([]);
     const [previewUrl, setPreviewUrl] = useState<string>('http://localhost:5173');
     const [dashboards, setDashboards] = useState<DashboardItem[]>([]);
     const [dashboardsLoading, setDashboardsLoading] = useState(false);
@@ -84,6 +87,7 @@ export default function App() {
     const [footerHeight, setFooterHeight] = useState(250);
     const [isFooterExpanded, setIsFooterExpanded] = useState(true);
     const [resizing, setResizing] = useState<'left' | 'right' | 'footer' | null>(null);
+    const toolbarLayoutMode: LayoutMode = layoutMode === 'dashboards' ? 'dashboard' : layoutMode;
 
     useEffect(() => {
         if (!resizing) return;
@@ -236,7 +240,7 @@ export default function App() {
 
         const unsubLayout = window.studioControl.onLayoutModeChange((mode) => {
             console.log('[StudioControl] Layout mode change:', mode);
-            setLayoutMode(mode as 'design' | 'dashboard' | 'code' | 'preview' | 'dashboards');
+            setLayoutMode(mode);
         });
 
         const unsubOpenFile = window.studioControl.onOpenFile((filePath) => {
@@ -674,8 +678,8 @@ export default function App() {
                     onOpen={handleOpen}
                     onToggleSidebar={setActiveSidebar}
                     activeSidebar={activeSidebar}
-                    layoutMode={layoutMode}
-                    onLayoutModeChange={setLayoutMode}
+                    layoutMode={toolbarLayoutMode}
+                    onLayoutModeChange={(mode) => setLayoutMode(mode)}
                     onToggleTerminal={() => setIsFooterExpanded(!isFooterExpanded)}
                     isTerminalOpen={isFooterExpanded}
                     fileName={currentFileName}
@@ -700,7 +704,7 @@ export default function App() {
                             ref={chatPanelRef}
                             isBridgeReady={isBridgeReady}
                             isDaemonConnected={isDaemonConnected}
-                            workspacePath={workspacePath}
+                            workspacePath={workspacePath ?? undefined}
                             onGetCanvasState={() => canvasRef.current?.toJSON()}
                             onWorkspaceChange={(path) => {
                                 setWorkspacePath(path);
@@ -712,24 +716,28 @@ export default function App() {
                         <ComponentGallery onAddComponent={handleAddComponent} />
                     ) : activeSidebar === 'files' ? (
                         <FileExplorer
+                            files={[]}
                             onFileSelect={handleFileSelect}
-                            workspacePath={workspacePath}
-                            onToggleSidebar={setActiveSidebar}
-                            activeSidebar={activeSidebar}
+                            workspacePath={workspacePath ?? undefined}
+                            selectedPath={selectedFilePath ?? undefined}
                         />
                     ) : (
                         <Layers
                             canvasObjects={canvasLayers}
-                            selectedLayerId={selectedObject?.id}
+                            selectedLayerId={selectedObject?.id ?? undefined}
                             onSelectLayer={(id) => {
                                 canvasRef.current?.selectLayer(id);
                             }}
-                            onToggleVisibility={(id, visible) => {
-                                canvasRef.current?.setLayerVisibility(id, visible);
+                            onToggleVisibility={(id) => {
+                                const layer = canvasLayers.find((item) => item.id === id);
+                                if (!layer) return;
+                                canvasRef.current?.setLayerVisibility(id, !layer.visible);
                                 setCanvasLayers(canvasRef.current?.getLayers() || []);
                             }}
-                            onToggleLock={(id, locked) => {
-                                canvasRef.current?.setLayerLock(id, locked);
+                            onToggleLock={(id) => {
+                                const layer = canvasLayers.find((item) => item.id === id);
+                                if (!layer) return;
+                                canvasRef.current?.setLayerLock(id, !layer.locked);
                                 setCanvasLayers(canvasRef.current?.getLayers() || []);
                             }}
                             onDeleteLayer={(id) => {
@@ -737,8 +745,12 @@ export default function App() {
                                 setCanvasLayers(canvasRef.current?.getLayers() || []);
                                 setHasUnsavedChanges(true);
                             }}
-                            onReorderLayers={(layers) => {
-                                canvasRef.current?.reorderLayers(layers.map(l => l.id));
+                            onReorderLayers={(fromIndex, toIndex) => {
+                                const reorderedLayers = [...canvasLayers];
+                                const [movedLayer] = reorderedLayers.splice(fromIndex, 1);
+                                if (!movedLayer) return;
+                                reorderedLayers.splice(toIndex, 0, movedLayer);
+                                canvasRef.current?.reorderLayers(reorderedLayers.map((layer) => layer.id));
                                 setCanvasLayers(canvasRef.current?.getLayers() || []);
                                 setHasUnsavedChanges(true);
                             }}
@@ -793,9 +805,8 @@ export default function App() {
                         />
                     ) : layoutMode === 'code' ? (
                         <FileViewer
-                            filePath={selectedFilePath}
+                            filePath={selectedFilePath ?? 'No file selected'}
                             onClose={handleCloseFileViewer}
-                            revision={fileRevision}
                         />
                     ) : (
                         <CanvasWorkspace
@@ -816,21 +827,7 @@ export default function App() {
                 {/* Right: Properties Panel */}
                 <aside className="studio-sidebar studio-sidebar-right" style={{ width: rightWidth }}>
                     <PropertiesPanel
-                        selectedObject={selectedObject}
-                        selectedPreviewElement={selectedPreviewElement}
-                        onRefactor={(el) => {
-                            if (window.coordinator) {
-                                window.coordinator.createTask(`Refactor requested for <${el.tagName.toLowerCase()}> with class "${el.className}". User intent: Modify this component.`, []);
-                            }
-                        }}
-                        onEditWithChat={(element, instruction) => {
-                            // Switch to chat sidebar if not already there
-                            setActiveSidebar('chat');
-                            // Use setTimeout to ensure ChatPanel is mounted before calling
-                            setTimeout(() => {
-                                chatPanelRef.current?.handleEditElement(element, instruction);
-                            }, 100);
-                        }}
+                        selectedElementName={selectedObject?.name ?? selectedPreviewElement ?? undefined}
                     />
 
                 </aside>
@@ -846,13 +843,7 @@ export default function App() {
             <footer className="studio-footer" style={{ height: isFooterExpanded ? footerHeight : 40 }}>
                 <FooterPanel
                     isExpanded={isFooterExpanded}
-                    onToggleExpand={setIsFooterExpanded}
-                    activeSessionId={activeSessionId}
-                    workspacePath={workspacePath}
-                    onOpenPreviewUrl={(url) => {
-                        setPreviewUrl(url);
-                        setLayoutMode('preview');
-                    }}
+                    onToggleExpand={() => setIsFooterExpanded((expanded) => !expanded)}
                 />
             </footer>
         </div>

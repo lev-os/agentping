@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T07:03:52.920156+00:00",
+  "generated_at": "2026-07-18T01:25:42.585823+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 26259,
+    "operation_count": 28549,
     "by_type": {
-      "upsert_entity": 6147,
-      "add_claim": 14082,
-      "add_link": 6030
+      "upsert_entity": 6639,
+      "add_claim": 15402,
+      "add_link": 6508
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 117,
-    "total_features": 1437,
+    "parity_files": 131,
+    "total_features": 1583,
     "absorbed": 73,
-    "pending": 1032,
-    "deferred": 18,
-    "rejected": 44,
-    "monitor": 125,
+    "pending": 1098,
+    "deferred": 28,
+    "rejected": 68,
+    "monitor": 162,
     "unclassified": 0,
-    "absorbed_pct": 5.1,
+    "absorbed_pct": 4.6,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -1666,6 +1666,203 @@
         {
           "id": "airflow-16",
           "name": "Static workflow bias",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "aisw",
+      "label": "aisw",
+      "category": "agent-home-instance",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/aisw.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "reference": 2,
+        "monitor": 1,
+        "extract": 3,
+        "deferred": 1,
+        "merge": 2,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "aisw-01",
+          "name": "Relocatable home / config-dir awareness",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reference",
+          "notes": "Documents CODEX_HOME and Claude path layouts; manages credentials into aisw store rather than primarily relocating live homes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/AUTH_STORAGE_MATRIX.md",
+            "workshop/intake/aisw/src/auth/claude/paths.rs"
+          ]
+        },
+        {
+          "id": "aisw-02",
+          "name": "Isolate-by-default vs share facets",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Profiles isolate credentials per tool; not a symlink facet share model like clausona.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/src/profile.rs",
+            "workshop/intake/aisw/src/auth/"
+          ]
+        },
+        {
+          "id": "aisw-03",
+          "name": "Multi-profile + multi-tool context compose",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet (selection layer post-v1)",
+          "action": "extract",
+          "notes": "ContextEntry binds claude/codex/gemini profiles; workspace rules bind path→context. Strongest commodity shape for future use/current.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/src/cli.rs",
+            "workshop/intake/aisw/src/config.rs",
+            "workshop/intake/aisw/src/workspace.rs"
+          ]
+        },
+        {
+          "id": "aisw-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "deferred",
+          "notes": "No home fingerprint cache; prefer CAAM.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/src/auth/"
+          ]
+        },
+        {
+          "id": "aisw-05",
+          "name": "Scan / import live homes (init)",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "merge",
+          "notes": "init/import from live credentials with explicit support matrix; doctor/repair for local state. Partial scan exemplar vs clausona discoverAccounts.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/AUTH_STORAGE_MATRIX.md",
+            "workshop/intake/aisw/src/commands/add.rs",
+            "workshop/intake/aisw/src/commands/doctor.rs"
+          ]
+        },
+        {
+          "id": "aisw-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Account manager, not seed harness.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/README.md"
+          ]
+        },
+        {
+          "id": "aisw-07",
+          "name": "Per-project / workspace → context binding",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "workspace bind/resolve is two-tier selection (default context + path/repo rules). Distinct from ccmanager project config merge but validates project commodity.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/src/workspace.rs",
+            "workshop/intake/aisw/src/cli.rs"
+          ]
+        },
+        {
+          "id": "aisw-08",
+          "name": "Auth file/keyring/oauth without secret caching in reports",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "Fail-closed when keyring account undiscoverable; status shows credential presence not values. Steal auth.kind probe policy.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/AUTH_STORAGE_MATRIX.md",
+            "workshop/intake/aisw/src/auth/secure_store.rs",
+            "workshop/intake/aisw/src/auth/system_keyring.rs",
+            "workshop/intake/aisw/src/commands/status.rs"
+          ]
+        },
+        {
+          "id": "aisw-09",
+          "name": "CLI list/status/doctor surfaces",
+          "status": "missing",
+          "lev_equivalent": "lev platforms instances + doctor (planned)",
+          "action": "merge",
+          "notes": "list/status/doctor/repair are solid operator surfaces for readiness projection.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/src/cli.rs",
+            "workshop/intake/aisw/src/commands/list.rs",
+            "workshop/intake/aisw/src/commands/status.rs",
+            "workshop/intake/aisw/src/commands/doctor.rs"
+          ]
+        },
+        {
+          "id": "aisw-10",
+          "name": "Thin provider/tool cards",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "reference",
+          "notes": "Tool enum + auth matrix rows are thin; less card-like than cc-mirror/clausona adapters.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/aisw/AUTH_STORAGE_MATRIX.md",
+            "workshop/intake/aisw/src/types.rs"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/aisw/"
+      ],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 1,
+      "rejected": 1,
+      "monitor": 3,
+      "deferred_items": [
+        {
+          "id": "aisw-04",
+          "name": "Content-hash / home fingerprint",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "aisw-06",
+          "name": "Seed / onboarding skip",
           "action": "reject",
           "absorbed_into": null,
           "tribunal_note": null
@@ -4357,6 +4554,607 @@
       ]
     },
     {
+      "target": "cc-mirror",
+      "label": "cc-mirror",
+      "category": "agent-home-instance",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/cc-mirror.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4,
+        "reference": 2,
+        "deferred": 1,
+        "monitor": 1,
+        "reject": 1,
+        "merge": 1
+      },
+      "features": [
+        {
+          "id": "cc-mirror-01",
+          "name": "Relocatable home via CLAUDE_CONFIG_DIR wrapper",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Launcher shim exports CLAUDE_CONFIG_DIR (+ TWEAKCC_CONFIG_DIR) per variant under ~/.cc-mirror/<name>/config. Maps to card instance.home_dir.env_var.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/core/wrapper.ts",
+            "workshop/intake/cc-mirror/src/core/paths.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-02",
+          "name": "Isolate-by-default variant homes (no shared facets)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Each variant gets its own config tree; isolation is the default product. Aligns with plan isolate-by-default; Lev scanner stays read-only.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/DESIGN.md",
+            "workshop/intake/cc-mirror/src/core/wrapper.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-03",
+          "name": "Multi-variant create/list/update/remove",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reference",
+          "notes": "Multi-home CRUD is useful UX precedent for lev platforms instances list, but Lev owns card-driven scan not variant rebuild.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/cli/commands/create.ts",
+            "workshop/intake/cc-mirror/src/cli/commands/list.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "deferred",
+          "notes": "No home content-hash cache invalidation; rebuild is declarative. Prefer CAAM for fingerprint pattern.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/core/claude-config.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-05",
+          "name": "Scan installed home → report/cache",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Doctor reports binary/wrapper health; not a general home capability scan. Prefer ccusage for scan→report.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/cli/doctor.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-06",
+          "name": "Seed / onboarding skip (.claude.json)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet + install.seed_command",
+          "action": "extract",
+          "notes": "ensureOnboardingState + customApiKeyResponses + hasCompletedOnboarding seed maps directly to install.seed_command for sandbox E2E.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/core/claude-config.ts",
+            "workshop/intake/cc-mirror/src/providers/capabilities.ts",
+            "workshop/intake/cc-mirror/DESIGN.md"
+          ]
+        },
+        {
+          "id": "cc-mirror-07",
+          "name": "Per-project vs global two-tier config",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A for variant-home tool",
+          "action": "reject",
+          "notes": "Config is per-variant under ~/.cc-mirror; not a project-wins merge model.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/DESIGN.md"
+          ]
+        },
+        {
+          "id": "cc-mirror-08",
+          "name": "Auth handling without caching secrets in reports",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "reference",
+          "notes": "Writes API keys into variant settings and last-20-char approval stubs. Useful for seed harness; Lev must NOT cache secret values in platform-instances cache.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/core/shell-env.ts",
+            "workshop/intake/cc-mirror/src/core/claude-config.ts",
+            "workshop/intake/cc-mirror/DESIGN.md"
+          ]
+        },
+        {
+          "id": "cc-mirror-09",
+          "name": "CLI list/status/doctor surfaces",
+          "status": "missing",
+          "lev_equivalent": "lev platforms instances [list|status|matrix] (planned)",
+          "action": "merge",
+          "notes": "list + doctor are the closest CLI shapes; Lev matrix is generated from cards+cache, not variant registry.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/cli/commands/list.ts",
+            "workshop/intake/cc-mirror/src/cli/doctor.ts"
+          ]
+        },
+        {
+          "id": "cc-mirror-10",
+          "name": "Thin provider capability cards",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "ProviderTemplate + ProviderCapabilityProfile are plain objects (auth mode, endpoint, models, onboarding). Validates thin card contracts for instance:/install:.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/cc-mirror/src/providers/index.ts",
+            "workshop/intake/cc-mirror/src/providers/capabilities.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/cc-mirror/",
+        ".lev/pm/parity/mngr.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 1,
+      "rejected": 1,
+      "monitor": 3,
+      "deferred_items": [
+        {
+          "id": "cc-mirror-04",
+          "name": "Content-hash / home fingerprint",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "cc-mirror-07",
+          "name": "Per-project vs global two-tier config",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "ccmanager",
+      "label": "ccmanager",
+      "category": "agent-home-instance",
+      "priority": "P2",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/ccmanager.yaml",
+      "verdict": "monitor",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "reference": 1,
+        "reject": 5,
+        "monitor": 3,
+        "extract": 1
+      },
+      "features": [
+        {
+          "id": "ccmanager-01",
+          "name": "Relocatable home via CLAUDE_CONFIG_DIR",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reference",
+          "notes": "getClaudeDir respects CLAUDE_CONFIG_DIR else ~/.claude. Correct primitive; not a multi-home manager.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/utils/claudeDir.ts"
+          ]
+        },
+        {
+          "id": "ccmanager-02",
+          "name": "Isolate-by-default vs share facets",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Session/worktree manager; does not implement facet share policy.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/README.md"
+          ]
+        },
+        {
+          "id": "ccmanager-03",
+          "name": "Multi-profile / multi-account switch",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Command presets exist; not multi-account home switching like clausona/CAAM.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/components/PresetSelector.test.tsx",
+            "workshop/intake/ccmanager/src/services/config/"
+          ]
+        },
+        {
+          "id": "ccmanager-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reject",
+          "notes": "No fingerprint.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/utils/claudeDir.ts"
+          ]
+        },
+        {
+          "id": "ccmanager-05",
+          "name": "Scan installed home → report/cache",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Discovers git projects under CCMANAGER_MULTI_PROJECT_ROOT with cache; not agent-home capability scan.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/services/projectManager.ts",
+            "workshop/intake/ccmanager/docs/multi-project.md"
+          ]
+        },
+        {
+          "id": "ccmanager-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "No seed harness.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/README.md"
+          ]
+        },
+        {
+          "id": "ccmanager-07",
+          "name": "Per-project vs global two-tier config (project wins)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Global ~/.config/ccmanager/config.json + <git-root>/.ccmanager.json; merge uses global base with scoped override. Best Layer A reference for project-wins.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/services/config/globalConfigManager.ts",
+            "workshop/intake/ccmanager/src/services/config/projectConfigManager.ts",
+            "workshop/intake/ccmanager/src/services/config/configEditor.ts"
+          ]
+        },
+        {
+          "id": "ccmanager-08",
+          "name": "Auth handling without caching secrets",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Does not manage auth files.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/README.md"
+          ]
+        },
+        {
+          "id": "ccmanager-09",
+          "name": "CLI / TUI status surfaces",
+          "status": "partial",
+          "lev_equivalent": "AgentPing / platforms status (adjacent)",
+          "action": "monitor",
+          "notes": "TUI dashboard for sessions; less relevant than JSON list/status for Lev instances CLI.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/src/services/sessionManager.ts",
+            "workshop/intake/ccmanager/src/components/Dashboard.test.tsx"
+          ]
+        },
+        {
+          "id": "ccmanager-10",
+          "name": "Thin provider cards",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Claude-centric session manager; no thin multi-provider cards.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccmanager/README.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/ccmanager/"
+      ],
+      "absorbed": 0,
+      "pending": 1,
+      "deferred": 0,
+      "rejected": 5,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "ccmanager-02",
+          "name": "Isolate-by-default vs share facets",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccmanager-04",
+          "name": "Content-hash / home fingerprint",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccmanager-06",
+          "name": "Seed / onboarding skip",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccmanager-08",
+          "name": "Auth handling without caching secrets",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccmanager-10",
+          "name": "Thin provider cards",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "ccusage",
+      "label": "ccusage",
+      "category": "agent-home-instance",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/ccusage.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4,
+        "reject": 3,
+        "deferred": 1,
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "ccusage-01",
+          "name": "Relocatable / multi-home via config-dir env vars",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "CLAUDE_CONFIG_DIR, CODEX_HOME, and peer vars accept comma-separated path lists; empty/missing skipped. Direct model for multi-home scan roots.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/docs/guide/environment-variables.md",
+            "workshop/intake/ccusage/rust/crates/ccusage/src/main.rs"
+          ]
+        },
+        {
+          "id": "ccusage-02",
+          "name": "Isolate-by-default vs share facets",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A — read-only scanner",
+          "action": "reject",
+          "notes": "ccusage never mutates homes; facet share/isolate is out of scope. Reinforces Lev read-only scanner stance.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/README.md"
+          ]
+        },
+        {
+          "id": "ccusage-03",
+          "name": "Multi-profile / multi-account switch",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Reports across homes; does not switch accounts.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/README.md"
+          ]
+        },
+        {
+          "id": "ccusage-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "deferred",
+          "notes": "No fingerprint cache invalidation in core path utils. Prefer CAAM for fingerprint; ccusage for scan shape.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/rust/crates/ccusage/src/path_utils.rs"
+          ]
+        },
+        {
+          "id": "ccusage-05",
+          "name": "Scan installed home → report/cache",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "daily/monthly/session/blocks commands scan logs under resolved homes and emit reports. Closest analog to lev platforms instances list/status/matrix.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/rust/crates/ccusage/src/commands/",
+            "workshop/intake/ccusage/rust/crates/ccusage/src/main.rs",
+            "workshop/intake/ccusage/docs/guide/environment-variables.md"
+          ]
+        },
+        {
+          "id": "ccusage-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Read-only analytics; no seed.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/README.md"
+          ]
+        },
+        {
+          "id": "ccusage-07",
+          "name": "Per-project vs global two-tier config",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reference",
+          "notes": "Has config schema / files for report defaults; not the project-wins session-manager pattern.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/docs/guide/configuration.md",
+            "workshop/intake/ccusage/rust/crates/ccusage/src/config_schema.rs"
+          ]
+        },
+        {
+          "id": "ccusage-08",
+          "name": "Auth handling without caching secrets",
+          "status": "implemented",
+          "lev_equivalent": "plan rule: never cache secrets (scanner read-only)",
+          "action": "reference",
+          "notes": "Scans usage logs only; no auth token ingestion. Gold standard for Lev cache redaction stance.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/rust/crates/ccusage/src/commands/",
+            "workshop/intake/ccusage/docs/guide/environment-variables.md"
+          ]
+        },
+        {
+          "id": "ccusage-09",
+          "name": "CLI list/status/matrix-like report surfaces",
+          "status": "missing",
+          "lev_equivalent": "lev platforms instances [list|status|matrix] (planned)",
+          "action": "extract",
+          "notes": "Structured report commands + JSON-friendly outputs are the UX to mirror for instances matrix.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/rust/crates/ccusage/src/cli.rs",
+            "workshop/intake/ccusage/rust/crates/ccusage/src/main.rs"
+          ]
+        },
+        {
+          "id": "ccusage-10",
+          "name": "Provider / agent path cards (thin env map)",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "Per-agent env var → default data root table is a thin contract. Steal as instance.home_dir.env_var vocabulary across cards.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/ccusage/docs/guide/environment-variables.md",
+            "workshop/intake/ccusage/rust/crates/ccusage/src/config_schema.rs"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/ccusage/"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 1,
+      "rejected": 3,
+      "monitor": 2,
+      "deferred_items": [
+        {
+          "id": "ccusage-04",
+          "name": "Content-hash / home fingerprint",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "ccusage-02",
+          "name": "Isolate-by-default vs share facets",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccusage-03",
+          "name": "Multi-profile / multi-account switch",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "ccusage-06",
+          "name": "Seed / onboarding skip",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "claude-agent-sdk",
       "label": "Claude Agent SDK",
       "category": "agent-sdk-reference",
@@ -4523,6 +5321,393 @@
       "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "claude-squad",
+      "label": "claude-squad",
+      "category": "agent-home-instance",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "dna/architecture/tmux-control-plane + plugins/platforms",
+      "path": ".lev/pm/parity/claude-squad.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 3,
+        "reference": 1,
+        "extract": 2,
+        "reject": 3,
+        "merge": 1
+      },
+      "features": [
+        {
+          "id": "claude-squad-01",
+          "name": "Relocatable home / config-dir env var",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Does not relocate CLAUDE_CONFIG_DIR; runs program in worktree/tmux. Weak on home relocation — prefer mngr/cc-mirror.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/config/config.go"
+          ]
+        },
+        {
+          "id": "claude-squad-02",
+          "name": "Isolate-by-default (worktree isolation)",
+          "status": "partial",
+          "lev_equivalent": "core/harness + tmux-control-plane (worktrees)",
+          "action": "reference",
+          "notes": "Isolates via git worktrees + tmux sessions — compute/workspace isolation, orthogonal to config-home facets.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/session/git/worktree.go",
+            "workshop/intake/claude-squad/session/git/worktree_ops.go"
+          ]
+        },
+        {
+          "id": "claude-squad-03",
+          "name": "Multi-profile program switch",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Profiles[] = {{Name, Program}}; DefaultProgram selects. Thin multi-agent launcher, not multi-account auth switch.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/config/config.go",
+            "workshop/intake/claude-squad/ui/overlay/profilePicker.go"
+          ]
+        },
+        {
+          "id": "claude-squad-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reject",
+          "notes": "State tracks instances; no home content-hash.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/config/state.go"
+          ]
+        },
+        {
+          "id": "claude-squad-05",
+          "name": "Scan installed home → report/cache",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Persists instance state; not an installed-home capability scanner.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/session/storage.go"
+          ]
+        },
+        {
+          "id": "claude-squad-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "No seed harness.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/README.md"
+          ]
+        },
+        {
+          "id": "claude-squad-07",
+          "name": "Per-project vs global two-tier config",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Single config.json under app config dir; worktrees are per-task not project config merge.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/config/config.go"
+          ]
+        },
+        {
+          "id": "claude-squad-08",
+          "name": "Auth handling without caching secrets",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Delegates auth to the launched program.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/README.md"
+          ]
+        },
+        {
+          "id": "claude-squad-09",
+          "name": "CLI list/status surfaces",
+          "status": "partial",
+          "lev_equivalent": "tmux-control-plane session list + platforms instances",
+          "action": "merge",
+          "notes": "TUI instance list + debug/reset commands; session UX belongs to tmux-control-plane.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/main.go",
+            "workshop/intake/claude-squad/app/app.go",
+            "workshop/intake/claude-squad/cmd/"
+          ]
+        },
+        {
+          "id": "claude-squad-10",
+          "name": "Thin provider card {{name, program}}",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "Profile struct is intentionally minimal — richness from runtime scan/hooks. Gold standard for thin instance: cards.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/claude-squad/config/config.go"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/claude-squad/",
+        ".lev/pm/parity/mngr.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 3,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "claude-squad-04",
+          "name": "Content-hash / home fingerprint",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "claude-squad-06",
+          "name": "Seed / onboarding skip",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "claude-squad-08",
+          "name": "Auth handling without caching secrets",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "clausona",
+      "label": "clausona",
+      "category": "agent-home-instance",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/clausona.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "reference": 1,
+        "deferred": 1,
+        "reject": 1,
+        "merge": 1
+      },
+      "features": [
+        {
+          "id": "clausona-01",
+          "name": "Relocatable home via CLAUDE_CONFIG_DIR / CODEX_HOME",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "ToolAdapter.configEnvVar + defaultConfigDir; keychain service name hashed from configDir. Maps to instance.home_dir.env_var.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/tools/types.ts",
+            "workshop/intake/clausona/src/tools/claude.ts",
+            "workshop/intake/clausona/src/core/paths.ts"
+          ]
+        },
+        {
+          "id": "clausona-02",
+          "name": "Per-facet share vs isolate (symlink policy)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "sharedSkipSet(mergeSessions) keeps auth/state isolated while symlinking shareable facets. Lev should model facets as scan columns, not mutate homes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/lib/service.ts",
+            "workshop/intake/clausona/src/tools/types.ts",
+            "workshop/intake/clausona/src/tools/claude.ts"
+          ]
+        },
+        {
+          "id": "clausona-03",
+          "name": "Multi-profile / multi-account switch",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Registry of profiles with activeProfiles per tool; switch/use surfaces. Lev selection layer is later; pattern validates multi-home commodity.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/core/registry.ts",
+            "workshop/intake/clausona/src/lib/profile-ref.ts",
+            "workshop/intake/clausona/src/commands.ts"
+          ]
+        },
+        {
+          "id": "clausona-04",
+          "name": "Content-hash / home fingerprint",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "reference",
+          "notes": "SHA-256 of configDir used only for keychain service naming, not cache invalidation. Prefer CAAM for fingerprint.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/core/paths.ts"
+          ]
+        },
+        {
+          "id": "clausona-05",
+          "name": "Scan installed homes → register (init)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "discoverAccounts + initializeRegistry on init/--auto is the auto-scan exemplar for lev platforms instances first scan.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/commands.ts",
+            "workshop/intake/clausona/src/lib/service.ts"
+          ]
+        },
+        {
+          "id": "clausona-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "install.seed_command (from cc-mirror)",
+          "action": "deferred",
+          "notes": "runLogin spawns interactive auth; no onboarding seed. Defer to cc-mirror.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/tools/claude.ts"
+          ]
+        },
+        {
+          "id": "clausona-07",
+          "name": "Per-project vs global two-tier config",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Profile registry is global under clausona dir; not project-wins merge.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/core/registry.ts"
+          ]
+        },
+        {
+          "id": "clausona-08",
+          "name": "Auth isolation (file + keychain) without secret caching",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "Reads oauthAccount email/org only; keychain probe is boolean. Aligns with authed:bool|'unknown' and never-cache-secrets rule.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/core/paths.ts",
+            "workshop/intake/clausona/src/tools/claude.ts",
+            "workshop/intake/clausona/src/tools/types.ts"
+          ]
+        },
+        {
+          "id": "clausona-09",
+          "name": "CLI list/status/doctor/repair surfaces",
+          "status": "missing",
+          "lev_equivalent": "lev platforms instances + doctor probe (planned)",
+          "action": "merge",
+          "notes": "list/status/doctor/repair are good operator surfaces; Lev doctor should live-probe homes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/commands.ts",
+            "workshop/intake/clausona/src/core/doctor.ts"
+          ]
+        },
+        {
+          "id": "clausona-10",
+          "name": "Thin tool adapter cards",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "ToolAdapter interface is a thin per-tool card (env var, paths, skip sets, login). Strong analog for instance: blocks.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clausona/src/tools/types.ts",
+            "workshop/intake/clausona/src/tools/claude.ts",
+            "workshop/intake/clausona/src/tools/codex.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/clausona/"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 1,
+      "rejected": 1,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "clausona-06",
+          "name": "Seed / onboarding skip",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "clausona-07",
+          "name": "Per-project vs global two-tier config",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "clawhip",
@@ -5227,6 +6412,195 @@
       "rejected": 0,
       "monitor": 0,
       "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "coding_agent_account_manager",
+      "label": "coding_agent_account_manager",
+      "category": "agent-home-instance",
+      "priority": "P0",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms",
+      "path": ".lev/pm/parity/coding_agent_account_manager.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "merge": 2,
+        "extract": 6,
+        "deferred": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "caam-01",
+          "name": "Relocatable home / config-dir env vars",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "merge",
+          "notes": "Respects CODEX_HOME / GEMINI_HOME; shallow profiles create isolated HOME trees. Complements card home_dir.env_var.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/discovery/watcher.go",
+            "workshop/intake/coding_agent_account_manager/internal/shallow/shallow.go"
+          ]
+        },
+        {
+          "id": "caam-02",
+          "name": "Isolate-by-default facets (shallow homes)",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Shallow $HOME: auth-bearing files real, everything else symlink to real home; .claude.json kept real. Strongest concurrent multi-account isolation pattern.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/shallow/shallow.go",
+            "workshop/intake/coding_agent_account_manager/cmd/caam/cmd/shallow.go",
+            "workshop/intake/coding_agent_account_manager/README.md"
+          ]
+        },
+        {
+          "id": "caam-03",
+          "name": "Multi-profile / multi-account switch",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "Vault backup/activate/swap across Claude/Codex/Gemini/Cursor/OpenCode. Lev should orchestrate with HITL, not reimplement vault.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/authfile/authfile.go",
+            "workshop/intake/coding_agent_account_manager/internal/profile/profile.go",
+            "workshop/intake/coding_agent_account_manager/cmd/caam/cmd/"
+          ]
+        },
+        {
+          "id": "caam-04",
+          "name": "Content-hash / home fingerprint of auth state",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "stableFileHash / ContentHash detect active profile; authwatch invalidates on hash change. Direct model for home_fingerprint cache keys.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/authfile/authfile.go",
+            "workshop/intake/coding_agent_account_manager/internal/authwatch/authwatch.go",
+            "workshop/intake/coding_agent_account_manager/README.md"
+          ]
+        },
+        {
+          "id": "caam-05",
+          "name": "Scan / detect installed homes → status cache",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "extract",
+          "notes": "detect/status/doctor --json + watcher content hashes. Prefer orchestrating CAAM JSON for account readiness; Lev scanner owns non-secret home facets.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/discovery/",
+            "workshop/intake/coding_agent_account_manager/cmd/caam/cmd/robot.go",
+            "workshop/intake/coding_agent_account_manager/internal/authwatch/authwatch.go"
+          ]
+        },
+        {
+          "id": "caam-06",
+          "name": "Seed / onboarding skip",
+          "status": "not-applicable",
+          "lev_equivalent": "install.seed_command (cc-mirror)",
+          "action": "deferred",
+          "notes": "Account swap, not onboarding seed.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/README.md"
+          ]
+        },
+        {
+          "id": "caam-07",
+          "name": "Per-project vs global two-tier config",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms platform-instances plan (draft) — instance:/install: not shipped yet",
+          "action": "monitor",
+          "notes": "Project association exists; not the primary lesson vs fingerprint/shallow.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/project/",
+            "workshop/intake/coding_agent_account_manager/internal/config/"
+          ]
+        },
+        {
+          "id": "caam-08",
+          "name": "Auth file handling without caching secrets in Lev",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet) + external CAAM orchestration",
+          "action": "extract",
+          "notes": "CAAM mutates bearer token files — Lev must treat as HITL effect. For platform-instances: report authed only; never cache token values. Prior intake: adopt as external binary.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/authfile/authfile.go",
+            "workshop/intake/coding_agent_account_manager/internal/identity/",
+            "workshop/analysis/coding_agent_account_manager/analysis.md"
+          ]
+        },
+        {
+          "id": "caam-09",
+          "name": "CLI list/status/doctor/robot JSON surfaces",
+          "status": "missing",
+          "lev_equivalent": "lev platforms instances + AgentPing projection (planned)",
+          "action": "merge",
+          "notes": "detect/status/doctor/robot --json are the orchestration surfaces for AgentPing readiness.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/cmd/caam/cmd/robot.go",
+            "workshop/analysis/coding_agent_account_manager/analysis.md"
+          ]
+        },
+        {
+          "id": "caam-10",
+          "name": "Thin provider auth-file registry cards",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers/*/card.yaml + runner-lifecycle (no instance: block yet)",
+          "action": "extract",
+          "notes": "Per-tool auth file sets + identity-stable hashing fields are thin provider knowledge — belongs on cards as auth.kind + paths, not vault logic.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/coding_agent_account_manager/internal/provider/",
+            "workshop/intake/coding_agent_account_manager/internal/authfile/authfile.go"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/coding_agent_account_manager/analysis.md",
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/plans/plan-research-platforms-instance-capabilities.md",
+        "workshop/intake/coding_agent_account_manager/",
+        ".lev/pm/parity/harbor.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 8,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "caam-06",
+          "name": "Seed / onboarding skip",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
       "rejected_items": []
     },
     {
@@ -6585,6 +7959,301 @@
       "rejected_items": []
     },
     {
+      "target": "daytona",
+      "label": "Daytona",
+      "category": "compute-sandbox-instance-runtime",
+      "priority": "P2",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms + deferred-sandbox-workstream",
+      "path": ".lev/pm/parity/daytona.yaml",
+      "verdict": "reject",
+      "total_features": 12,
+      "classified": 12,
+      "unclassified": 0,
+      "counts": {
+        "reject": 9,
+        "monitor": 2,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "dy-01",
+          "name": "microVM vs container isolation boundary",
+          "status": "not-applicable",
+          "lev_equivalent": "Prefer microagent/forkd (verifiable) or E2B (maintained SDK)",
+          "action": "reject",
+          "notes": "Cannot verify isolation from archived stub tree.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-02",
+          "name": "Spawn latency / fork-from-warm-parent",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Marketing latency only — do not encode as Lev requirement from this source.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md",
+            "workshop/intake/forkd/DESIGN.md"
+          ]
+        },
+        {
+          "id": "dy-03",
+          "name": "OCI image → rootfs",
+          "status": "not-applicable",
+          "lev_equivalent": "Use microagent/E2B template evidence instead",
+          "action": "reject",
+          "notes": "Concept only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-04",
+          "name": "Lifecycle create/start/halt/resume/delete",
+          "status": "not-applicable",
+          "lev_equivalent": "Consumer adapters in sandcastle/flue show SDK-shaped create/exec/close — cross-ref those matrices",
+          "action": "monitor",
+          "notes": "monitor-concepts-only via adapters; reject upstream tree.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md",
+            "workshop/intake/sandcastle/src/sandboxes/daytona.ts",
+            ".lev/pm/parity/sandcastle.yaml",
+            ".lev/pm/parity/flue.yaml"
+          ]
+        },
+        {
+          "id": "dy-05",
+          "name": "Named volumes / artifacts / cp without enter",
+          "status": "not-applicable",
+          "lev_equivalent": "E2B files API / microagent cp",
+          "action": "reject",
+          "notes": "Concept only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-06",
+          "name": "MCP serve / agent-tool surface",
+          "status": "not-applicable",
+          "lev_equivalent": "microagent serve mcp / forkd-mcp / E2B mcp-gateway",
+          "action": "reject",
+          "notes": "Concept only — prefer maintained MCP sandbox adapters.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-07",
+          "name": "Networking modes (user/isolated/publish)",
+          "status": "not-applicable",
+          "lev_equivalent": "microagent networking triad",
+          "action": "reject",
+          "notes": "Concept only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-08",
+          "name": "Snapshot / branch live state",
+          "status": "not-applicable",
+          "lev_equivalent": "E2B pause/snapshot; microagent snapshot/fork; forkd BRANCH",
+          "action": "monitor",
+          "notes": "monitor-concepts-only: persistent snapshot as product shape.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md",
+            "workshop/intake/forkd/DESIGN.md"
+          ]
+        },
+        {
+          "id": "dy-09",
+          "name": "Host support (Linux/macOS)",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A",
+          "action": "reject",
+          "notes": "Irrelevant — do not build on this tree.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-10",
+          "name": "Owns platform; Lev should NOT absorb platform scope",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev keeps FlowMind/policy/billing out of sandbox substrate",
+          "action": "reject",
+          "notes": "Reject platform absorption; concepts may inform capability cards only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-11",
+          "name": "Remote/cloud vs local",
+          "status": "not-applicable",
+          "lev_equivalent": "Prefer E2B for cloud vendor lane",
+          "action": "reject",
+          "notes": "Pass — use E2B/microagent/forkd.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/daytona/README.md"
+          ]
+        },
+        {
+          "id": "dy-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "status": "not-applicable",
+          "lev_equivalent": "DEFERRED + REJECT",
+          "action": "deferred",
+          "notes": "DEFERRED remote SDLC; REJECT Daytona tree as substrate.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+            "workshop/intake/daytona/README.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_head",
+          "value": "ec4c21b",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/daytona rev-parse --short HEAD"
+        },
+        {
+          "name": "public_tree_files",
+          "value": 3,
+          "unit": "count",
+          "source": "git ls-tree -r HEAD → README.md + 2 logo assets"
+        },
+        {
+          "name": "archive_notice_date",
+          "value": "2026-06",
+          "unit": "month",
+          "source": "workshop/intake/daytona/README.md"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/daytona/",
+        "workshop/analysis/daytona/analysis.md",
+        "workshop/analysis/l3-catalogue/daytona.yaml",
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/parity/sandcastle.yaml",
+        ".lev/pm/parity/flue.yaml",
+        ".lev/pm/parity/harbor.yaml",
+        ".lev/pm/parity/background-agents.yaml",
+        ".lev/pm/parity/e2b.yaml",
+        ".lev/pm/parity/microagent.yaml",
+        ".lev/pm/parity/forkd.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 1,
+      "rejected": 9,
+      "monitor": 2,
+      "deferred_items": [
+        {
+          "id": "dy-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "dy-01",
+          "name": "microVM vs container isolation boundary",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-02",
+          "name": "Spawn latency / fork-from-warm-parent",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-03",
+          "name": "OCI image → rootfs",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-05",
+          "name": "Named volumes / artifacts / cp without enter",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-06",
+          "name": "MCP serve / agent-tool surface",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-07",
+          "name": "Networking modes (user/isolated/publish)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-09",
+          "name": "Host support (Linux/macOS)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-10",
+          "name": "Owns platform; Lev should NOT absorb platform scope",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "dy-11",
+          "name": "Remote/cloud vs local",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "deepdive",
       "label": "DeepDive",
       "category": "investigation-runtime",
@@ -7331,6 +9000,251 @@
       "rejected_items": []
     },
     {
+      "target": "e2b",
+      "label": "E2B",
+      "category": "compute-sandbox-instance-runtime",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms + deferred-sandbox-workstream",
+      "path": ".lev/pm/parity/e2b.yaml",
+      "verdict": "monitor",
+      "total_features": 12,
+      "classified": 12,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 6,
+        "extract": 4,
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "e2b-01",
+          "name": "microVM vs container isolation boundary",
+          "status": "missing",
+          "lev_equivalent": "No first-class E2B provider card",
+          "action": "monitor",
+          "notes": "Treat as cloud isolation commodity; verify isolation claims against infra repo when adopting.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/README.md",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts"
+          ]
+        },
+        {
+          "id": "e2b-02",
+          "name": "Spawn latency / fork-from-warm-parent",
+          "status": "partial",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Cross-ref forkd for fan-out; E2B for managed create latency.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/sandboxApi.ts",
+            "workshop/intake/forkd/DESIGN.md"
+          ]
+        },
+        {
+          "id": "e2b-03",
+          "name": "OCI image → rootfs",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Template = cloud image contract; map to future Lev sandbox image card.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/templates/",
+            "workshop/intake/E2B/packages/cli/src/commands/template/",
+            "workshop/intake/E2B/packages/js-sdk/src/template/"
+          ]
+        },
+        {
+          "id": "e2b-04",
+          "name": "Lifecycle create/start/halt/resume/delete",
+          "status": "missing",
+          "lev_equivalent": "partial via sandcastle/background-agents adapters; no Lev-owned card",
+          "action": "extract",
+          "notes": "Steal create/connect/pause/kill vocabulary for cloud provider capability card.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/sandboxApi.ts",
+            "workshop/intake/E2B/packages/cli/src/commands/sandbox/"
+          ]
+        },
+        {
+          "id": "e2b-05",
+          "name": "Named volumes / artifacts / cp without enter",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Filesystem-without-enter is table stakes for any Lev cloud sandbox card.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/filesystem/",
+            "workshop/intake/E2B/packages/js-sdk/src/volume/",
+            "workshop/intake/E2B/spec/envd/filesystem/"
+          ]
+        },
+        {
+          "id": "e2b-06",
+          "name": "MCP serve / agent-tool surface",
+          "status": "missing",
+          "lev_equivalent": "Poly MCP is host-side; E2B pattern is in-sandbox MCP gateway",
+          "action": "monitor",
+          "notes": "Different from microagent/forkd host-stdio MCP — E2B runs MCP gateway inside the sandbox.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/mcp.d.ts"
+          ]
+        },
+        {
+          "id": "e2b-07",
+          "name": "Networking modes (user/isolated/publish)",
+          "status": "partial",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Map cloud network controls to Lev policy when adopting; don't invent a second vocabulary.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/network.ts",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts"
+          ]
+        },
+        {
+          "id": "e2b-08",
+          "name": "Snapshot / branch live state",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Pause/snapshot templates are the cloud analog of checkpoint; cross-ref forkd for live BRANCH.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/sandboxApi.ts",
+            "workshop/intake/E2B/packages/cli/src/commands/sandbox/pause.ts",
+            "workshop/intake/E2B/packages/cli/src/commands/sandbox/resume.ts"
+          ]
+        },
+        {
+          "id": "e2b-09",
+          "name": "Host support (Linux/macOS)",
+          "status": "not-applicable",
+          "lev_equivalent": "Client-side OK on macOS; compute is remote",
+          "action": "reference",
+          "notes": "Good macOS-dev UX for remote compute; local isolation still needs microagent.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/README.md"
+          ]
+        },
+        {
+          "id": "e2b-10",
+          "name": "Owns cloud sandbox API; deliberately does NOT own LLM/planning",
+          "status": "missing",
+          "lev_equivalent": "Aligns with Lev: substrate below FlowMind/policy",
+          "action": "extract",
+          "notes": "Vendor as backend, never as agent brain.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/README.md",
+            "workshop/intake/E2B/packages/js-sdk/src/sandbox/index.ts"
+          ]
+        },
+        {
+          "id": "e2b-11",
+          "name": "Remote/cloud vs local",
+          "status": "missing",
+          "lev_equivalent": "Primary candidate for Lev remote sandbox provider card (when allowed)",
+          "action": "monitor",
+          "notes": "Vendor-candidate later — do not block Layer A instance-capabilities plan.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/E2B/README.md"
+          ]
+        },
+        {
+          "id": "e2b-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "status": "not-applicable",
+          "lev_equivalent": "Future plugins/sdlc remote exec — not now",
+          "action": "deferred",
+          "notes": "DEFERRED: remote SDLC instances (bundle→remote exec→PR) are out of scope until remote-agents hold lifts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_head",
+          "value": "0feb926",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/E2B rev-parse --short HEAD"
+        },
+        {
+          "name": "js_sdk_version",
+          "value": "2.32.0",
+          "unit": "semver",
+          "source": "workshop/intake/E2B/packages/js-sdk/package.json"
+        },
+        {
+          "name": "public_packages",
+          "value": 4,
+          "unit": "count",
+          "source": "cli, js-sdk, python-sdk, connect-python"
+        },
+        {
+          "name": "cli_sandbox_commands",
+          "value": 8,
+          "unit": "count",
+          "source": "create, connect, exec, info, kill, list, logs, metrics, pause, resume"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/E2B/",
+        "workshop/analysis/e2b/analysis.md",
+        "workshop/analysis/l3-catalogue/e2b.yaml",
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/parity/sandcastle.yaml",
+        ".lev/pm/parity/flue.yaml",
+        ".lev/pm/parity/background-agents.yaml",
+        ".lev/pm/parity/forkd.yaml",
+        ".lev/pm/parity/daytona.yaml",
+        ".lev/pm/parity/microagent.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 7,
+      "deferred_items": [
+        {
+          "id": "e2b-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
       "target": "easyocr",
       "label": "EasyOCR",
       "category": "ocr-engine",
@@ -7992,17 +9906,18 @@
       "category": "eval-framework",
       "priority": "P0",
       "measured_at": "2026-06-02",
-      "updated_at": "2026-06-02",
-      "owner": "core/domain + core/orchestration + core/exec + core/graph + plugins/bench + plugins/sdlc + skills/pentagon",
+      "updated_at": "2026-07-17",
+      "owner": "core/domain + core/config + core/flowmind + core/exec + core/eval + core/execution-ledger + plugins/sdlc",
       "path": ".lev/pm/parity/eval-frameworks.yaml",
       "verdict": "extract-heavy",
       "total_features": 17,
       "classified": 17,
       "unclassified": 0,
       "counts": {
-        "build": 14,
+        "build": 13,
         "merge": 1,
-        "extract": 2
+        "extract": 2,
+        "implement-runtime": 1
       },
       "features": [
         {
@@ -8035,10 +9950,10 @@
           "id": "eval-fw-03",
           "name": "FlowMind lane assembly from eval specs",
           "status": "partial",
-          "lev_equivalent": "plugins/sdlc/flows/eval-harness.flow.yaml + EvalJob scheduling",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml + plugins/sdlc/flows/eval-harness.flow.yaml",
           "action": "build",
-          "notes": "The existing eval-harness flow has produce/judge/compare/keep-discard. It needs a compiler from EvalSuite into setup/run/collect/score/compare/receipt/admit lanes.",
-          "absorbed_into": "core/orchestration",
+          "notes": "Eval-design now authors/calibrates evaluator candidates and eval-harness runs admitted product evaluation. Generic candidate admission and execution lowering remain incomplete.",
+          "absorbed_into": "plugins/sdlc + core/flowmind + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "plugins/sdlc/flows/eval-harness.flow.yaml; core/orchestration/src/proof/eval-job-executor.ts"
@@ -8061,10 +9976,10 @@
           "id": "eval-fw-05",
           "name": "Typed scorer catalog",
           "status": "partial",
-          "lev_equivalent": "EvalScorerKind gate-based | metric-based | llm-as-judge | adversarial",
+          "lev_equivalent": "Sensor methodology deterministic | stochastic | llm_observer | hybrid | hitl plus code-companion Measurements",
           "action": "merge",
-          "notes": "DeepEval, Mastra, AgentEvals, and Phoenix show useful scorer categories. Lev already has four strategy kinds but not a suite-owned scorer catalog.",
-          "absorbed_into": "core/domain + core/exec",
+          "notes": "Scorer categories are evaluator-owned Sensor bindings; agent prose never bypasses typed observations, deterministic measurement, and source-policy discharge.",
+          "absorbed_into": "core/domain + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "core/orchestration/src/eval/types.ts; core/exec/src/eval/registry.ts; https://deepeval.com/docs/metrics-introduction"
@@ -8085,12 +10000,12 @@
         },
         {
           "id": "eval-fw-07",
-          "name": "Trace, artifact, receipt, and GateProof linked evidence",
+          "name": "Trace, artifact, receipt, and EvalDecision-linked evidence",
           "status": "partial",
-          "lev_equivalent": "EvalScorecard receipt_refs, trace_refs, gate_proof_refs, evidence_refs",
+          "lev_equivalent": "EvalRun observations, Measurements, receipt_refs, trace_refs, evidence_refs, EvalDecision, and RunSeal",
           "action": "build",
-          "notes": "Lev already validates refs for passing scorecards; EvalSuite should make those evidence obligations part of every promotion gate.",
-          "absorbed_into": "core/exec + core/orchestration proof",
+          "notes": "Scorecards and GateProof are migration residue. Current generation and resolvable causal refs must satisfy suite policy before EvalDecision can qualify.",
+          "absorbed_into": "core/eval + core/execution-ledger",
           "tribunal_note": null,
           "evidence_refs": [
             "core/exec/src/eval/registry.ts; docs/design/design-proof-eval-fabric.md"
@@ -8178,10 +10093,10 @@
           "id": "eval-fw-14",
           "name": "Red-team and adversarial negative cases",
           "status": "partial",
-          "lev_equivalent": "Pentagon/UltraQA negative-case suites compiled into EvalSuite",
+          "lev_equivalent": "eval-design LFD/UltraQA attack inputs compiled into Owner Eval Suite or Task Eval Instance candidates",
           "action": "extract",
-          "notes": "Promptfoo red-team configs and Lev Pentagon intent align here. Negative cases should be first-class cases, not receipt theater.",
-          "absorbed_into": "skills/pentagon + plugins/sdlc + plugins/bench",
+          "notes": "Negative cases, hostile runtime scenarios, cheap paths, and mutations test evaluator fitness; deterministic admission decides whether they become durable source.",
+          "absorbed_into": "plugins/sdlc + evaluator-owner eval roots",
           "tribunal_note": null,
           "evidence_refs": [
             "https://www.promptfoo.dev/docs/intro/; .lev/pm/specs/skill-eval-design.md"
@@ -8203,11 +10118,11 @@
         {
           "id": "eval-fw-16",
           "name": "Judge-the-judge and scorer calibration",
-          "status": "missing",
-          "lev_equivalent": "Meta-eval suites for scorer validity",
-          "action": "build",
-          "notes": "Mastra experiments can target a scorer; local prior art includes judge-the-judge analysis. Lev needs scorer calibration suites before trusting LLM judges.",
-          "absorbed_into": "plugins/bench + core/orchestration eval",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml plus the required plugins/sdlc evaluator-candidate fitness suite",
+          "action": "implement-runtime",
+          "notes": "Known-good/bad separation, hidden holdouts, leak/cheap-path/mutation probes, sample disagreement, and generation rollover are contract. The ordinary EvalDecision-backed evaluator-candidate fitness suite and deterministic runtime proof remain missing.",
+          "absorbed_into": "plugins/sdlc + core/eval",
           "tribunal_note": null,
           "evidence_refs": [
             "workshop/analysis/judge-the-judge-building-llm-evaluators-that-actually-work/analysis.md; https://mastra.ai/docs/evals/datasets/running-experiments"
@@ -8247,10 +10162,13 @@
         "core/exec/src/eval/registry.ts",
         "core/exec/src/eval/benchmark.ts",
         "plugins/sdlc/flows/eval-harness.flow.yaml",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/skills/eval-builder/SKILL.md",
+        "docs/specs/spec-eval.md",
         "plugins/bench"
       ],
       "absorbed": 0,
-      "pending": 17,
+      "pending": 16,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -9793,6 +11711,276 @@
           "name": "Legacy QueueService and StateService proto contracts",
           "action": "reject",
           "absorbed_into": "single action API",
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "forkd",
+      "label": "forkd",
+      "category": "compute-sandbox-instance-runtime",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms + deferred-sandbox-workstream",
+      "path": ".lev/pm/parity/forkd.yaml",
+      "verdict": "monitor",
+      "total_features": 12,
+      "classified": 12,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 5,
+        "extract": 4,
+        "reference": 1,
+        "reject": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "fk-01",
+          "name": "microVM vs container isolation boundary",
+          "status": "missing",
+          "lev_equivalent": "No Lev Firecracker backend",
+          "action": "monitor",
+          "notes": "True microVM; escape requires hypervisor/kernel vuln.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/DESIGN.md",
+            "workshop/intake/forkd/crates/forkd-vmm/"
+          ]
+        },
+        {
+          "id": "fk-02",
+          "name": "Spawn latency / fork-from-warm-parent",
+          "status": "missing",
+          "lev_equivalent": "N/A — no fork-from-warm commodity",
+          "action": "extract",
+          "notes": "Primary steal: 'instances are cheap' economics + warm-parent snapshot model.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/DESIGN.md",
+            "workshop/intake/forkd/bench/live-fork-pause-window/",
+            "workshop/intake/forkd/crates/forkd-vmm/"
+          ]
+        },
+        {
+          "id": "fk-03",
+          "name": "OCI image → rootfs",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "OCI path exists but is a build pipeline into warm snapshots, not a general workspace image manager like microagent.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/scripts/",
+            "workshop/intake/forkd/recipes/",
+            "workshop/intake/forkd/rootfs-init/"
+          ]
+        },
+        {
+          "id": "fk-04",
+          "name": "Lifecycle create/start/halt/resume/delete",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Different lifecycle vocabulary than microagent persistent workspaces — fan-out first.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/crates/forkd-cli/src/main.rs",
+            "workshop/intake/forkd/crates/forkd-controller/",
+            "workshop/intake/forkd/docs/"
+          ]
+        },
+        {
+          "id": "fk-05",
+          "name": "Named volumes / artifacts / cp without enter",
+          "status": "partial",
+          "lev_equivalent": "N/A",
+          "action": "reference",
+          "notes": "Prefer microagent for named-volume/cp ergonomics; forkd for memory CoW fan-out.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/DESIGN.md",
+            "workshop/intake/forkd/README.md"
+          ]
+        },
+        {
+          "id": "fk-06",
+          "name": "MCP serve / agent-tool surface",
+          "status": "missing",
+          "lev_equivalent": "Poly MCP exists; no forkd backend",
+          "action": "extract",
+          "notes": "Steal MCP-over-controller pattern; keep Lev as policy owner.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/sdk/mcp/forkd_mcp/server.py",
+            "workshop/intake/forkd/sdk/python/",
+            "workshop/intake/forkd/sdk/typescript/"
+          ]
+        },
+        {
+          "id": "fk-07",
+          "name": "Networking modes (user/isolated/publish)",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Multi-tenant by construction via netns + cgroup memory.max.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/DESIGN.md",
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/scripts/"
+          ]
+        },
+        {
+          "id": "fk-08",
+          "name": "Snapshot / branch live state",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Best prior art for mid-thought agent fork; Lev should model BRANCH as a capability, not copy UFFD.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/DESIGN-v0.4.md",
+            "workshop/intake/forkd/DESIGN-v0.5-diff-snapshot-chains.md",
+            "workshop/intake/forkd/crates/forkd-uffd/",
+            "workshop/intake/forkd/bench/chain-spawn/"
+          ]
+        },
+        {
+          "id": "fk-09",
+          "name": "Host support (Linux/macOS)",
+          "status": "not-applicable",
+          "lev_equivalent": "Cannot be Lev default local sandbox on macOS developer hosts",
+          "action": "reject",
+          "notes": "Reject as default local backend; accept as Linux fan-out / self-hosted alternative to SaaS.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/DESIGN.md",
+            "workshop/intake/forkd/packaging/k8s/"
+          ]
+        },
+        {
+          "id": "fk-10",
+          "name": "Owns VMM fork primitive; deliberately does NOT own LLM/planning",
+          "status": "missing",
+          "lev_equivalent": "Aligns with Lev substrate-below-policy split",
+          "action": "extract",
+          "notes": "Same ownership lesson as microagent; different primitive (fork vs persistent workspace).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/rootfs-init/",
+            "workshop/intake/forkd/recipes/",
+            "workshop/intake/forkd/DESIGN.md"
+          ]
+        },
+        {
+          "id": "fk-11",
+          "name": "Remote/cloud vs local",
+          "status": "missing",
+          "lev_equivalent": "Self-hosted Linux sandbox option under plugins/platforms",
+          "action": "monitor",
+          "notes": "Cloud lane remains e2b.yaml; forkd is self-host Linux.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/README.md",
+            "workshop/intake/forkd/packaging/"
+          ]
+        },
+        {
+          "id": "fk-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "status": "not-applicable",
+          "lev_equivalent": "Future only",
+          "action": "deferred",
+          "notes": "DEFERRED: NO remote agents yet — do not build remote SDLC on forkd.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/forkd/recipes/coding-agent/",
+            ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_head",
+          "value": "ed4b7f8",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/forkd rev-parse --short HEAD"
+        },
+        {
+          "name": "workspace_version",
+          "value": "0.5.2",
+          "unit": "semver",
+          "source": "workshop/intake/forkd/Cargo.toml"
+        },
+        {
+          "name": "claimed_fork_100_latency",
+          "value": "~101",
+          "unit": "ms",
+          "source": "workshop/intake/forkd/README.md"
+        },
+        {
+          "name": "claimed_live_branch_p50",
+          "value": 56,
+          "unit": "ms",
+          "source": "workshop/intake/forkd/README.md + bench/live-fork-pause-window/"
+        },
+        {
+          "name": "rust_crates",
+          "value": 4,
+          "unit": "count",
+          "source": "forkd-vmm, forkd-controller, forkd-cli, forkd-uffd"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/forkd/",
+        "workshop/analysis/forkd/analysis.md",
+        "workshop/analysis/l3-catalogue/forkd.yaml",
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/parity/microagent.yaml",
+        ".lev/pm/parity/e2b.yaml",
+        ".lev/pm/parity/daytona.yaml",
+        ".lev/pm/parity/sandcastle.yaml",
+        ".lev/pm/parity/background-agents.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 1,
+      "rejected": 1,
+      "monitor": 6,
+      "deferred_items": [
+        {
+          "id": "fk-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": [
+        {
+          "id": "fk-09",
+          "name": "Host support (Linux/macOS)",
+          "action": "reject",
+          "absorbed_into": null,
           "tribunal_note": null
         }
       ]
@@ -14407,20 +16595,22 @@
       "category": "eval-harness-agentic-loop",
       "priority": "P0",
       "measured_at": "2026-07-05",
-      "updated_at": "2026-07-05",
+      "updated_at": "2026-07-17",
       "owner": "core/eval + plugins/sdlc",
       "path": ".lev/pm/parity/loss-function-driven-agentic-loops.yaml",
       "verdict": "extract",
-      "total_features": 14,
-      "classified": 14,
+      "total_features": 15,
+      "classified": 15,
       "unclassified": 0,
       "counts": {
         "extract": 5,
-        "spike": 2,
+        "implement": 1,
         "build": 3,
         "merge": 2,
         "reject": 1,
-        "monitor": 1
+        "monitor": 1,
+        "spike": 1,
+        "implement-runtime": 1
       },
       "features": [
         {
@@ -14441,10 +16631,10 @@
         {
           "id": "lfd-02",
           "name": "Harness scaffold from goal prompt",
-          "status": "missing",
-          "lev_equivalent": "owner-local EvalSuiteManifest and task eval binding authoring",
-          "action": "spike",
-          "notes": "Useful as a proposal/eval-design helper if it emits owner-local eval packs instead of project-local proof authority.",
+          "status": "partial",
+          "lev_equivalent": "durable Owner Eval Suites plus run-scoped generated Task Eval Instances admitted by plugins/sdlc/flows/eval-harness.flow.yaml",
+          "action": "implement",
+          "notes": "The design now preserves both use cases: recurring methodology belongs in an owner suite; an LLM may synthesize task-local checks inside a predeclared policy envelope. Exact bytes are frozen and digested before execution, and a passing run never auto-promotes them into source. Runtime admission and typed result wiring remain unimplemented.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -14470,10 +16660,10 @@
         {
           "id": "lfd-04",
           "name": "Fake-agent deterministic dogfood verifier",
-          "status": "missing",
+          "status": "partial",
           "lev_equivalent": "core/eval command cases and proposal_readiness regression fixtures",
           "action": "build",
-          "notes": "High-value spike fixture. It can become a deterministic command-case input for EvalDecision after mapping.",
+          "notes": "High-value known-good/known-bad and adapter fixture for eval-design. It must map into typed observations and measurements; it is not a prerequisite for the authoring lifecycle or a verdict authority.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -14629,6 +16819,22 @@
             "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verifiers/private/grader.sh",
             "workshop/approved/loss-function-driven-agentic-loops/skills/meta-loss-function-development/references/harness-completeness-checklist.md"
           ]
+        },
+        {
+          "id": "lfd-15",
+          "name": "Iterative evaluator meta-evaluation and repair",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/eval-design.flow.yaml plus generated eval-builder skill projection",
+          "action": "implement-runtime",
+          "notes": "The flow now freezes candidate generations, calibrates known-good/bad, attacks leakage/cheap paths/mutations, checks generated product attacks against calibration defects, repairs evaluator-only failures, and emits admission-ready or hold. The owner-local evaluator-candidate fitness suite, deterministic candidate admission, and dogfood fixtures remain missing. Holdout secrecy and generated-probe freshness are separate policies.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/sdlc/flows/eval-design.flow.yaml",
+            "plugins/sdlc/skills/eval-builder/SKILL.md",
+            "docs/specs/spec-eval.md",
+            "dna/core/eval.dna.yaml"
+          ]
         }
       ],
       "metrics": [
@@ -14666,7 +16872,10 @@
         ".lev/pm/designs/design-core-eval-poly-bound-sdk.md",
         "plugins/sdlc/flows/propose-adversarial-contract.flow.yaml",
         "core/eval/src/eval-decision.ts",
-        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml"
+        "core/eval/evaluators/proposal_readiness/proposal_readiness.eval.yaml",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/skills/eval-builder/SKILL.md",
+        ".lev/pm/workstreams/lfd-lifecycle-playbook/captures/20260717-capture-universal-eval-design-lifecycle.yaml"
       ],
       "absorbed": 0,
       "pending": 10,
@@ -14683,6 +16892,273 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "microagent",
+      "label": "microagent",
+      "category": "compute-sandbox-instance-runtime",
+      "priority": "P1",
+      "measured_at": "2026-07-09",
+      "updated_at": "2026-07-09",
+      "owner": "plugins/platforms + deferred-sandbox-workstream",
+      "path": ".lev/pm/parity/microagent.yaml",
+      "verdict": "monitor",
+      "total_features": 12,
+      "classified": 12,
+      "unclassified": 0,
+      "counts": {
+        "monitor": 3,
+        "extract": 7,
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "ma-01",
+          "name": "microVM vs container isolation boundary",
+          "status": "missing",
+          "lev_equivalent": "No first-class microVM sandbox backend; sandcastle/flue cover provider adapters only",
+          "action": "monitor",
+          "notes": "Steal the hard boundary: VM owns isolation; caller owns identity/policy/credentials.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/README.md",
+            "workshop/intake/microagent/docs/concepts/boundaries.md",
+            "workshop/intake/microagent/docs/concepts/backends.md",
+            "workshop/intake/microagent/supervisors/applevf/",
+            "workshop/intake/microagent/cmd/microagent-firecracker-supervisor/"
+          ]
+        },
+        {
+          "id": "ma-02",
+          "name": "Spawn latency / fork-from-warm-parent",
+          "status": "missing",
+          "lev_equivalent": "N/A — no microVM spawn commodity",
+          "action": "monitor",
+          "notes": "For extreme fan-out latency, cross-ref forkd.yaml; microagent wins on macOS + persistent workspace UX.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/guides/snapshots-and-forking.md",
+            "workshop/intake/microagent/docs/cli/perf.md",
+            "workshop/intake/microagent/pkg/perf/"
+          ]
+        },
+        {
+          "id": "ma-03",
+          "name": "OCI image → rootfs",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Steal OCI→ext4 + digest-pin discipline for any Lev local sandbox card.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/pkg/ociimage/",
+            "workshop/intake/microagent/pkg/rootfs/",
+            "workshop/intake/microagent/pkg/imagecache/",
+            "workshop/intake/microagent/docs/cli/image.md",
+            "workshop/intake/microagent/docs/cli/rootfs.md",
+            "workshop/intake/microagent/docs/cli/commit.md"
+          ]
+        },
+        {
+          "id": "ma-04",
+          "name": "Lifecycle create/start/halt/resume/delete",
+          "status": "missing",
+          "lev_equivalent": "partial in sandcastle/background-agents provider lifecycles; no Lev-native microVM lifecycle",
+          "action": "extract",
+          "notes": "Map to future SandboxProvider capability card; do not invent a second lifecycle vocabulary.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/cli/create.md",
+            "workshop/intake/microagent/docs/cli/start.md",
+            "workshop/intake/microagent/docs/cli/halt.md",
+            "workshop/intake/microagent/docs/cli/pause.md",
+            "workshop/intake/microagent/docs/cli/resume.md",
+            "workshop/intake/microagent/docs/cli/delete.md",
+            "workshop/intake/microagent/pkg/workspace/lifecycle.go"
+          ]
+        },
+        {
+          "id": "ma-05",
+          "name": "Named volumes / artifacts / cp without enter",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Hard rule for Lev: no bind-mount of host dirs into untrusted agent sandboxes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/concepts/storage.md",
+            "workshop/intake/microagent/docs/cli/volume.md",
+            "workshop/intake/microagent/docs/cli/cp.md",
+            "workshop/intake/microagent/docs/cli/artifact.md",
+            "workshop/intake/microagent/pkg/volume/",
+            "workshop/intake/microagent/pkg/workspace/files.go"
+          ]
+        },
+        {
+          "id": "ma-06",
+          "name": "MCP serve / agent-tool surface",
+          "status": "missing",
+          "lev_equivalent": "Poly MCP surfaces exist; no microVM MCP backend",
+          "action": "extract",
+          "notes": "Steal MCP-as-thin-adapter-over-typed-API pattern; keep policy in Lev caller.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/cli/serve.md",
+            "workshop/intake/microagent/README.md"
+          ]
+        },
+        {
+          "id": "ma-07",
+          "name": "Networking modes (user/isolated/publish)",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "user/isolated/publish triad is the right default vocabulary for Lev sandbox cards.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/concepts/networking.md",
+            "workshop/intake/microagent/docs/concepts/egress-mediation.md",
+            "workshop/intake/microagent/docs/cli/network.md",
+            "workshop/intake/microagent/internal/egress/"
+          ]
+        },
+        {
+          "id": "ma-08",
+          "name": "Snapshot / branch live state",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "Cross-ref forkd for high-N BRANCH latency; microagent for persistent workspace checkpoint UX.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/docs/guides/snapshots-and-forking.md",
+            "workshop/intake/microagent/docs/cli/snapshot.md",
+            "workshop/intake/microagent/pkg/workspace/"
+          ]
+        },
+        {
+          "id": "ma-09",
+          "name": "Host support (Linux/macOS)",
+          "status": "missing",
+          "lev_equivalent": "N/A — Lev local default must work on macOS developer hosts",
+          "action": "extract",
+          "notes": "macOS parity is why microagent outranks forkd as default local sandbox candidate.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/AGENTS.md",
+            "workshop/intake/microagent/docs/cli/doctor.md",
+            "workshop/intake/microagent/supervisors/applevf/"
+          ]
+        },
+        {
+          "id": "ma-10",
+          "name": "Owns VM boundary; deliberately does NOT own LLM/planning",
+          "status": "missing",
+          "lev_equivalent": "Aligns with Lev: FlowMind/policy/credentials stay above substrate",
+          "action": "extract",
+          "notes": "Canonical steal: substrate stops at the VM; Lev keeps identity/policy/credentials.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/README.md",
+            "workshop/intake/microagent/docs/concepts/boundaries.md",
+            "workshop/intake/microagent/CHANGELOG.md"
+          ]
+        },
+        {
+          "id": "ma-11",
+          "name": "Remote/cloud vs local",
+          "status": "not-applicable",
+          "lev_equivalent": "Local sandbox backend candidate; cloud remains E2B/vendor lane",
+          "action": "reference",
+          "notes": "Pair with e2b.yaml for cloud; microagent for local true isolation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/microagent/README.md"
+          ]
+        },
+        {
+          "id": "ma-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "status": "not-applicable",
+          "lev_equivalent": "Future plugins/sdlc + sandbox backend; not now",
+          "action": "deferred",
+          "notes": "DEFERRED: remote SDLC instances (bundle→remote exec→PR) are out of scope until user lifts the remote-agents hold.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_head",
+          "value": "e9c1dc9",
+          "unit": "git-sha",
+          "source": "git -C workshop/intake/microagent rev-parse --short HEAD"
+        },
+        {
+          "name": "go_source_files",
+          "value": 325,
+          "unit": "count",
+          "source": "find workshop/intake/microagent -name '*.go' | wc -l"
+        },
+        {
+          "name": "pkg_packages",
+          "value": 22,
+          "unit": "count",
+          "source": "ls workshop/intake/microagent/pkg/"
+        },
+        {
+          "name": "cli_doc_pages",
+          "value": 46,
+          "unit": "count",
+          "source": "ls workshop/intake/microagent/docs/cli/"
+        },
+        {
+          "name": "host_backends",
+          "value": 2,
+          "unit": "count",
+          "source": "linux-kvm/Firecracker + apple-vf (Windows Hyper-V experimental)"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/microagent/",
+        "workshop/analysis/microagent/analysis.md",
+        "workshop/analysis/l3-catalogue/microagent.yaml",
+        ".lev/pm/intake/platforms-instance-prior-art-batch-intake.md",
+        ".lev/pm/parity/sandcastle.yaml",
+        ".lev/pm/parity/flue.yaml",
+        ".lev/pm/parity/harbor.yaml",
+        ".lev/pm/parity/background-agents.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 4,
+      "deferred_items": [
+        {
+          "id": "ma-12",
+          "name": "SDLC fit: bundle code → remote exec → PR",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
     },
     {
       "target": "ml-agents",
@@ -15054,11 +17530,11 @@
       "label": "mngr",
       "category": "agent-runtime",
       "priority": "P0",
-      "measured_at": "2026-09-04",
-      "updated_at": "2026-09-04",
+      "measured_at": "2026-04-17",
+      "updated_at": "2026-04-17",
       "owner": "dna/architecture/tmux-control-plane + core/harness",
       "path": ".lev/pm/parity/mngr.yaml",
-      "verdict": "extract",
+      "verdict": "gap-analysis",
       "total_features": 28,
       "classified": 28,
       "unclassified": 0,
@@ -16662,6 +19138,124 @@
       "rejected_items": []
     },
     {
+      "target": "oh-my-codex",
+      "label": "Oh My Codex",
+      "category": "agent-framework",
+      "priority": "P0",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "plugins/sdlc",
+      "path": ".lev/pm/parity/oh-my-codex.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "prove-runtime": 2,
+        "implement-admission": 1,
+        "prove-generation-separation": 1,
+        "replace-prose-authority": 1,
+        "reject-authority": 1,
+        "keep-separate": 1
+      },
+      "features": [
+        {
+          "id": "omx-uq-01",
+          "name": "Required hostile scenario matrix",
+          "status": "partial",
+          "lev_equivalent": "eval-design authors and calibration-checks cases; eval-harness executes admitted cases against the product",
+          "action": "prove-runtime",
+          "notes": "Malformed input, interruption, injection, cancel/resume, stale state, dirty worktree, hung command, flaky retry, misleading success, and cleanup are policy-selected product attack classes. LFD leak/cheap-path/mutation probes attack the evaluator; the targets are not conflated.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-02",
+          "name": "Temporary project-native harness generation",
+          "status": "partial",
+          "lev_equivalent": "generated Task Eval Instance and Executable Check Projection",
+          "action": "implement-admission",
+          "notes": "Generated files stay inside declared capabilities, are frozen/digested before execution, and are cleaned after XDG evidence persistence.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-03",
+          "name": "Bounded diagnose-fix-retest loop",
+          "status": "partial",
+          "lev_equivalent": "eval-design evaluator-repair loop and Semantic Control product ADAPT loop",
+          "action": "prove-generation-separation",
+          "notes": "Lev separates evaluator repair from product repair; one attempt cannot change both and self-grade.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-04",
+          "name": "Evidence-rich structured report",
+          "status": "partial",
+          "lev_equivalent": "typed observations, measurements, evidence refs, execution ledger, and trace projection",
+          "action": "replace-prose-authority",
+          "notes": "OMX markdown/report fields are useful UX but must normalize into typed payloads and content-addressed refs before blocking.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-05",
+          "name": "Autopilot UltraQA completion gate",
+          "status": "partial",
+          "lev_equivalent": "core/eval EvalDecision plus FlowMind lifecycle routing",
+          "action": "reject-authority",
+          "notes": "A qa_verdict.clean state field is not enough for Lev completion; current evaluator generation, measurements, effects, and terminal seal must resolve.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-06",
+          "name": "Cleanup and dirty-worktree discipline",
+          "status": "partial",
+          "lev_equivalent": "admitted cleanup plan, cleanup observation, and pre/post worktree evidence",
+          "action": "prove-runtime",
+          "notes": "Cleanup failure is typed evidence failure, not a warning hidden in the final report.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omx-uq-07",
+          "name": "Automatic reusable harness promotion",
+          "status": "partial",
+          "lev_equivalent": "explicit reviewed source promotion into Owner Eval Suite",
+          "action": "keep-separate",
+          "notes": "UltraQA normally cleans scratch harnesses; one passing run never promotes generated files into durable Lev source.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/oh-my-codex/plugins/oh-my-codex/skills/ultraqa/SKILL.md",
+        "workshop/intake/oh-my-codex/plugins/oh-my-codex/skills/autopilot/SKILL.md",
+        "workshop/intake/oh-my-codex/src/pipeline/stages/ultraqa.ts",
+        "workshop/intake/oh-my-codex/src/pipeline/orchestrator.ts",
+        "plugins/sdlc/flows/eval-design.flow.yaml",
+        "plugins/sdlc/flows/eval-harness.flow.yaml",
+        "docs/design/design-eval-framework-1-0.md"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "omc",
       "label": "OMC",
       "category": "agent-framework",
@@ -16954,21 +19548,19 @@
       "target": "omo",
       "label": "OMO",
       "category": "agent-framework",
-      "priority": "P0",
-      "measured_at": "2026-09-04",
-      "updated_at": "2026-09-04",
+      "priority": "P2",
+      "measured_at": "2026-04-10",
+      "updated_at": "2026-04-10",
       "owner": "plugins/platforms",
       "path": ".lev/pm/parity/omo.yaml",
       "verdict": "extract",
-      "total_features": 7,
-      "classified": 7,
+      "total_features": 3,
+      "classified": 3,
       "unclassified": 0,
       "counts": {
-        "extract": 3,
+        "extract": 1,
         "implemented": 1,
-        "evaluate": 1,
-        "adopt": 1,
-        "build": 1
+        "evaluate": 1
       },
       "features": [
         {
@@ -17003,61 +19595,15 @@
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
-        },
-        {
-          "id": "omo-04",
-          "name": "Bounded worker roles with separate implementation, review, QA, and gate contracts",
-          "status": "partial",
-          "lev_equivalent": "~/.agents/skills/coding-agent plus Lev exec profiles",
-          "action": "extract",
-          "notes": "LazyCodex provides concrete low/medium/high workers and separate review/QA/gate roles. Consolidate these semantics into provider-neutral `$coder`; do not preserve LazyCodex as the authority.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "omo-05",
-          "name": "Hook-driven durable continuation and verified completion",
-          "status": "partial",
-          "lev_equivalent": "core/orchestration + core/flowmind + core/exec receipts",
-          "action": "extract",
-          "notes": "Extract stop/resume and evidence-gate behavior, but keep `.lev` execution identity and receipts authoritative instead of `.omo` Boulder/ledger state.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "omo-06",
-          "name": "Explicit CODEX_HOME installation boundary",
-          "status": "implemented",
-          "lev_equivalent": "CAAM-managed LazyCodex shallow profile",
-          "action": "adopt",
-          "notes": "Installed OMO 4.19.4 into `/Users/jean-patricksmith/orch-homes/lazycodex/.codex` using a CAAM-isolated Codex identity; main `~/.codex` was not the install target.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "omo-07",
-          "name": "Never-rebase compatibility",
-          "status": "missing",
-          "lev_equivalent": "operator and Lev repository policy",
-          "action": "build",
-          "notes": "LazyCodex `ulw-loop` permits rebasing overlapping work. Lev-managed launches must override this before the harness is trusted for landing.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
         }
       ],
       "metrics": [],
       "lineage": [
         "workshop/analysis/oh-my-openagent/",
-        "workshop/analysis/lazycodex/analysis.md",
-        ".lev/pm/workstreams/codex-worker-lane/state/workstream.yaml",
         ".lev/pm/handoffs/20260324-skill-intake-ohmyopenagent-site-session-1.md"
       ],
       "absorbed": 1,
-      "pending": 5,
+      "pending": 1,
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
@@ -19748,9 +22294,9 @@
       "label": "Ouroboros",
       "category": "agent-framework",
       "priority": "P0",
-      "measured_at": "2026-04-10",
-      "updated_at": "2026-04-10",
-      "owner": "plugins/sdlc + core/orchestration",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "plugins/sdlc + core/orchestration + core/eval",
       "path": ".lev/pm/parity/ouroboros.yaml",
       "verdict": "extract",
       "total_features": 12,
@@ -19796,10 +22342,10 @@
         {
           "id": "ooo-04",
           "name": "3-stage eval gate (Mechanical→Semantic→Multi-Model)",
-          "status": "implemented",
-          "lev_equivalent": "core/orchestration/src/eval/types.ts",
+          "status": "partial",
+          "lev_equivalent": "core/eval evaluator packs + plugins/sdlc/flows/eval-design.flow.yaml + plugins/sdlc/flows/eval-harness.flow.yaml",
           "action": "unclassified",
-          "notes": "EvalStrategy has 4 kinds: gate-based (mechanical), metric-based (semantic), llm-as-judge, adversarial. Eval harness flow implements the gating.",
+          "notes": "Lev canon supports deterministic, stochastic, LLM-observer, hybrid, and HITL sensors with one EvalDecision authority. The authoring flows exist; generic runtime admission and blocking remain incomplete.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -19808,9 +22354,9 @@
           "id": "ooo-05",
           "name": "Evolutionary loop with ontology convergence",
           "status": "partial",
-          "lev_equivalent": "plugins/sdlc/flows/eval-harness.flow.yaml",
+          "lev_equivalent": "docs/specs/spec-semantic-control.md ADAPT plus plugins/sdlc/flows/eval-design.flow.yaml",
           "action": "unclassified",
-          "notes": "eval-harness produce→judge→compare→keep_or_discard is the same pattern. HOLD state = collect more samples. But no ontology similarity metric.",
+          "notes": "Wonder maps to an evidence/probe-seeking next intent and Reflect maps to evaluator plus lineage synthesis. They share one bounded strategy-mutation policy shape with LFD forced entropy and product ADAPT. Eval-design applies it only to evaluator generations; product ADAPT applies it only to product generations. Neither overrides EvalDecision.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -19830,9 +22376,9 @@
           "id": "ooo-07",
           "name": "PAL Router (3-tier cost optimization 1x/10x/30x)",
           "status": "implemented",
-          "lev_equivalent": "core/harness/src/ (adapter selection)",
+          "lev_equivalent": "FlowMind per-node adapter/model profiles over core/exec and Poly",
           "action": "unclassified",
-          "notes": "Lev has adapter + model selection per node. lev-ralph uses haiku for triage, sonnet for work, opus for review. Same pattern.",
+          "notes": "Lev already supports adapter and model selection per node without the deleted core/harness owner. Cost-tier policy remains authoring configuration, not proof authority.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -19863,9 +22409,9 @@
           "id": "ooo-10",
           "name": "Drift measurement (goal 50% + constraint 30% + ontology 20%)",
           "status": "partial",
-          "lev_equivalent": "plugins/validator/ + dna/gates.yaml",
+          "lev_equivalent": "intent-conservation Sensor measurements plus Semantic Control ADAPT",
           "action": "unclassified",
-          "notes": "ValidatorChain detects constraint drift. No composite drift score with weighted dimensions yet.",
+          "notes": "Lev models goal, constraint, ontology, trace, and evidence drift as evaluator-local measurements. A hardcoded universal weighted composite is not required; owner policy declares aggregation.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -19874,9 +22420,9 @@
           "id": "ooo-11",
           "name": "Brownfield auto-detection (scan existing repo patterns)",
           "status": "partial",
-          "lev_equivalent": "core/config/ (fractal resolver)",
+          "lev_equivalent": "core/config SourceCatalog and fractal root resolution plus eval-design discovery",
           "action": "unclassified",
-          "notes": "Fractal config resolver discovers project structure. No explicit brownfield scanner.",
+          "notes": "lev init binds one config-owned SourceCatalog proof inventory; coverage analysis, eval-design, and runtime execution consume the same ref. Runtime owners must not add a second brownfield scanner.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -20296,6 +22842,273 @@
       ],
       "absorbed": 0,
       "pending": 1,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "port",
+      "label": "Port",
+      "category": "internal-developer-portal-agentic-sdlc",
+      "priority": "P0",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "parity / AgentPing dashboard projection lane",
+      "path": ".lev/pm/parity/port.yaml",
+      "verdict": "extract",
+      "total_features": 17,
+      "classified": 17,
+      "unclassified": 0,
+      "counts": {
+        "extract": 12,
+        "build": 5
+      },
+      "features": [
+        {
+          "id": "context-lake-software-catalog",
+          "name": "Context lake / software catalog",
+          "status": "partial",
+          "lev_equivalent": "context graph direction, entity lifecycle, source catalogs, parity registry",
+          "action": "extract",
+          "notes": "Port validates Lev's need for a productized catalog projection over existing graph/workstream/plugin facts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/context-lake/overview/",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "native-integrations-ingestion",
+          "name": "Native integrations and ingestion mappings",
+          "status": "partial",
+          "lev_equivalent": "plugin/provider adapters, intake/parity registry, source-catalog descriptors",
+          "action": "extract",
+          "notes": "Extract integration descriptor and mapping UX; do not add managed SaaS connector assumptions to core.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/integrations-index/",
+            "https://docs.port.io/context-lake/ingestion/ingest-data-into-port/native-integrations/git/github-ocean/"
+          ]
+        },
+        {
+          "id": "workflows-as-tools",
+          "name": "Workflows as governed tools for humans, automation, and AI/MCP",
+          "status": "partial",
+          "lev_equivalent": "FlowMind + Exec + PolyOp-generated CLI/MCP/HTTP/SDK surfaces",
+          "action": "extract",
+          "notes": "Strong validation for PolyOp-first semantics with generated surfaces and shared audit.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/workflows/overview/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "self-service-actions",
+          "name": "Self-service actions with approvals, progress, logs, and audit",
+          "status": "partial",
+          "lev_equivalent": "Exec profiles, prompt-stack runtime, leases, receipts",
+          "action": "build",
+          "notes": "Build as a projection over existing operations rather than as a parallel action engine.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/workflows/actions-and-automations/create-self-service-experiences/"
+          ]
+        },
+        {
+          "id": "event-automations",
+          "name": "Event-triggered automations",
+          "status": "partial",
+          "lev_equivalent": "event bus, daemon runtime, reconciler, FlowMind declarations",
+          "action": "extract",
+          "notes": "Port's shared backend/progress model pressures Lev to keep action and automation receipts unified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/actions-and-automations/overview"
+          ]
+        },
+        {
+          "id": "scorecards-standards",
+          "name": "Scorecards, standards, DORA, security, compliance",
+          "status": "partial",
+          "lev_equivalent": "parity scorecards, DNA gates, eval proposals, static checkers",
+          "action": "extract",
+          "notes": "Generalize scorecard UX without weakening deterministic DNA gates.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/guides/all/setup-dora-scorecards/",
+            "docs/specs/spec-parity.md"
+          ]
+        },
+        {
+          "id": "rbac-dynamic-permissions",
+          "name": "RBAC and dynamic catalog-aware permissions",
+          "status": "missing",
+          "lev_equivalent": "lease/trust/fail-closed policy direction",
+          "action": "build",
+          "notes": "Requires deterministic policy/DNA before UI or LLM planning can safely invoke actions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/platform-administration/users-and-teams/manage-users-teams/",
+            "https://docs.port.io/actions-and-automations/create-self-service-experiences/set-self-service-actions-rbac/dynamic-permissions/"
+          ]
+        },
+        {
+          "id": "port-ai-natural-language",
+          "name": "Natural-language catalog Q&A and action invocation",
+          "status": "partial",
+          "lev_equivalent": "conversational router/dispatcher vision and proposal-first agent loop",
+          "action": "extract",
+          "notes": "LLM should classify and propose; deterministic code must admit, execute, and receipt.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/",
+            "docs/NORTH_STAR.md"
+          ]
+        },
+        {
+          "id": "custom-agent-registry",
+          "name": "Custom AI agents and agent registry",
+          "status": "partial",
+          "lev_equivalent": "skills, prompt-stack, exec profiles, AgentPing surfaces",
+          "action": "extract",
+          "notes": "Extract metadata and registry UX before introducing durable core registry fields.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/agent-management/custom-agents/overview/"
+          ]
+        },
+        {
+          "id": "mcp-connectors",
+          "name": "MCP connectors with per-user auth, RBAC, and audit logging",
+          "status": "partial",
+          "lev_equivalent": "Poly-generated MCP surfaces; MCP as tool/context plane",
+          "action": "extract",
+          "notes": "Generated MCP connectors should inherit PolyOp permissions and receipts, not become semantic authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/agent-management/ai-registry/mcp-connectors/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "interface-builder-dashboards",
+          "name": "Interface builder, catalog views, dashboards, approvals, notifications",
+          "status": "partial",
+          "lev_equivalent": "AgentPing surfaces, parity dashboard, GenUI projection plans",
+          "action": "build",
+          "notes": "Extract card/table/action schema patterns into generated GenUI contracts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/",
+            "docs/specs/spec-parity.md"
+          ]
+        },
+        {
+          "id": "security-audit-admin",
+          "name": "SSO/RBAC admin, audit logs, and retention policy",
+          "status": "missing",
+          "lev_equivalent": "append-only receipts, ratchet goals, OTel/daemon observability",
+          "action": "build",
+          "notes": "Define retention and audit policy as DNA before enterprise admin surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/security/"
+          ]
+        },
+        {
+          "id": "business-context-enrichment",
+          "name": "Business context and catalog enrichment",
+          "status": "partial",
+          "lev_equivalent": "domain plugin schemas, graph/entity overlays, workstream/task metadata",
+          "action": "extract",
+          "notes": "Keep organizational/business overlays provenance-bearing and domain-owned instead of hardcoding them into core.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/context-lake/business-context/",
+            "https://docs.port.io/context-lake/extend-the-context-lake/"
+          ]
+        },
+        {
+          "id": "ai-runtime-controls",
+          "name": "AI provider, memory, quota, feedback, and data controls",
+          "status": "partial",
+          "lev_equivalent": "provider catalogs, exec profiles, memory decay, budget posture, eval plans",
+          "action": "extract",
+          "notes": "Productize AI runtime controls as deterministic policy and scorecard surfaces, not prompt-only guidance.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/port-ai/llm-provider-management/",
+            "https://docs.port.io/port-ai/memory/",
+            "https://docs.port.io/port-ai/ai-security-and-data-controls/"
+          ]
+        },
+        {
+          "id": "notifications-collaboration",
+          "name": "Notifications and collaboration workflows",
+          "status": "missing",
+          "lev_equivalent": "event streams and AgentPing surfaces",
+          "action": "build",
+          "notes": "Build as receipt-backed event subscribers with explicit delivery policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/interface-builder/notifications/",
+            "https://docs.port.io/guides/all/send-slack-messages-using-port-slack-app-and-automations/"
+          ]
+        },
+        {
+          "id": "api-extensibility",
+          "name": "API and extensibility surface",
+          "status": "partial",
+          "lev_equivalent": "SDK-first Poly pipeline with generated CLI/MCP/HTTP/SDK targets",
+          "action": "extract",
+          "notes": "Preserve SDK/PolyOp as semantic source and generate wire surfaces from it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/api-reference/",
+            "docs/VISION.md"
+          ]
+        },
+        {
+          "id": "packaged-solution-patterns",
+          "name": "Packaged solution guides and use-case patterns",
+          "status": "partial",
+          "lev_equivalent": "workshop intake, skills, plugin POCs, parity registry",
+          "action": "extract",
+          "notes": "Promote only proven workflows into plugin-owned solution packs after receipts/evals pass.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://docs.port.io/solutions/",
+            "https://docs.port.io/guides/all/"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/port/analysis.md",
+        "docs/specs/spec-parity.md"
+      ],
+      "absorbed": 0,
+      "pending": 17,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -24631,6 +27444,141 @@
         {
           "id": "uai-12",
           "name": "Figma-to-Unity UI generation",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "whathappened",
+      "label": "whathappened",
+      "category": "research-context-engineering",
+      "priority": "P1",
+      "measured_at": "2026-07-17",
+      "updated_at": "2026-07-17",
+      "owner": "core/research + plugins/timetravel",
+      "path": ".lev/pm/parity/whathappened.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "wh-01",
+          "name": "Capability-gated native-tool contract",
+          "status": "missing",
+          "lev_equivalent": "Current research adapter availability checks without typed capability outcomes",
+          "action": "extract",
+          "notes": "Required X tools are explicit and the skill refuses when they are unavailable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-02",
+          "name": "Typed unavailable/empty/failure semantics",
+          "status": "missing",
+          "lev_equivalent": "Current adapter contract and merged research result",
+          "action": "extract",
+          "notes": "Prevents unavailable providers from becoming silent empty successes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "core/research/src/adapter.ts"
+          ]
+        },
+        {
+          "id": "wh-03",
+          "name": "Adaptive pulse and shortest-sufficient recency window",
+          "status": "missing",
+          "lev_equivalent": "Research strategy prompt guidance only",
+          "action": "extract",
+          "notes": "Promote as a FlowMind policy stage, not provider-specific core code.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-04",
+          "name": "Purpose-specific search lattice",
+          "status": "partial",
+          "lev_equivalent": "Parallel research adapters without lane-level evidence requirements",
+          "action": "extract",
+          "notes": "Top, Latest, Semantic, First-party, and Debate are a reusable policy shape; X query syntax remains provider-owned.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "workshop/intake/whathappened/skills/whathappened/references/query-patterns.md"
+          ]
+        },
+        {
+          "id": "wh-05",
+          "name": "Bounded origin/official/counterargument thread enrichment",
+          "status": "missing",
+          "lev_equivalent": "No unified research extraction/enrichment stage",
+          "action": "extract",
+          "notes": "Requires source-bearing adapter capabilities and receipt links before synthesis.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md"
+          ]
+        },
+        {
+          "id": "wh-06",
+          "name": "Provenance-aware ranking, clustering, and honest gaps",
+          "status": "partial",
+          "lev_equivalent": "Research synthesis/output contracts without complete adapter receipts",
+          "action": "extract",
+          "notes": "Freshness, authority, entity match, disagreement, sample size, and gaps should remain visible in the result envelope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/skills/whathappened/SKILL.md",
+            "workshop/intake/whathappened/skills/whathappened/references/failure-modes.md"
+          ]
+        },
+        {
+          "id": "wh-07",
+          "name": "Portable Lev-wide whathappened routine",
+          "status": "not-applicable",
+          "lev_equivalent": "No X-native capability on the current host",
+          "action": "deferred",
+          "notes": "Do not ship until the four native X capabilities can be satisfied through a stable adapter.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/whathappened/README.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/whathappened/analysis.md",
+        ".lev/pm/designs/design-index-retrieval-plane.md",
+        ".lev/pm/workstreams/timetravel-research/state/workstream.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [
+        {
+          "id": "wh-07",
+          "name": "Portable Lev-wide whathappened routine",
           "action": "deferred",
           "absorbed_into": null,
           "tribunal_note": null

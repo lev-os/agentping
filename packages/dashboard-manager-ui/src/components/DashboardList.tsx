@@ -18,6 +18,7 @@ import {
   groupDashboardsByLane,
 } from "../lib/command-center";
 import { ParitySection } from "./ParitySection";
+import { PluginHealthSection } from "./PluginHealthSection";
 import { SetupPanel } from "./SetupPanel";
 import { WorkflowSection } from "./WorkflowSection";
 
@@ -271,6 +272,9 @@ export function DashboardList() {
           <Link to="/projects" className="command-center-button">
             Projects →
           </Link>
+          <Link to="/heartbeat" className="command-center-button">
+            Heartbeat →
+          </Link>
         </section>
 
         <section className="command-center-stats">
@@ -500,6 +504,8 @@ export function DashboardList() {
             </div>
           </section>
         ) : null}
+
+        <PluginHealthSection dashboards={dashboards} />
       </div>
 
       <SetupPanel

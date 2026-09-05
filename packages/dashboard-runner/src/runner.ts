@@ -7,7 +7,7 @@
 
 import { EventEmitter } from 'events';
 import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
-import { join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { homedir } from 'os';
 import { parse as parseYaml } from 'yaml';
 import type { DashboardConfig, DashboardStatus, RunnerConfig, RunnerState, DashboardEvent } from './types.js';
@@ -34,7 +34,11 @@ export class DashboardRunner extends EventEmitter {
     this.registry = registry;
 
     // Initialize directories
-    this.stateDir = config.stateDir || join(homedir(), '.local/share/lev/dashboard-runner');
+    this.stateDir = config.stateDir || join(
+      process.env.XDG_DATA_HOME || join(homedir(), '.local/share'),
+      'agentping',
+      'dashboard-runner',
+    );
     this.pidFile = join(this.stateDir, 'runner.pid');
     this.stateFile = join(this.stateDir, 'state.json');
 
@@ -109,34 +113,93 @@ export class DashboardRunner extends EventEmitter {
    * Load dashboard configurations from YAML
    */
   private loadConfig(): void {
-    if (!existsSync(this.config.configPath)) {
-      throw new Error(`Config file not found: ${this.config.configPath}`);
+    const configPath = resolve(this.config.configPath);
+    if (!existsSync(configPath)) {
+      throw new Error(`Config file not found: ${configPath}`);
     }
 
-    const yaml = readFileSync(this.config.configPath, 'utf-8');
+    const yaml = readFileSync(configPath, 'utf-8');
     const config = parseYaml(yaml) as { dashboards: DashboardConfig[] };
 
     if (!config.dashboards || !Array.isArray(config.dashboards)) {
       throw new Error('Invalid config: missing dashboards array');
     }
 
+    const projectRoot = this.findProjectRoot(dirname(configPath));
+    let loadedCount = 0;
+
     // Register all dashboards
     for (const dashboard of config.dashboards) {
-      // Expand tilde in cwd path
-      if (dashboard.cwd && dashboard.cwd.startsWith('~')) {
-        dashboard.cwd = dashboard.cwd.replace(/^~/, homedir());
+      const cwd = this.resolveDashboardCwd(dashboard, projectRoot);
+      if (!cwd) {
+        continue;
       }
 
-      this.registry.register(dashboard.id, dashboard);
+      const normalizedDashboard = { ...dashboard, cwd };
+      this.registry.register(normalizedDashboard.id, normalizedDashboard);
       this.state.dashboards[dashboard.id] = {
         id: dashboard.id,
         status: 'stopped',
         restartAttempts: 0,
         crashes: 0
       };
+      loadedCount++;
     }
 
-    this.logger.info(`Loaded ${config.dashboards.length} dashboard configurations`);
+    this.logger.info(`Loaded ${loadedCount} dashboard configurations`);
+  }
+
+  private findProjectRoot(startDir: string): string {
+    let current = startDir;
+
+    while (true) {
+      if (existsSync(join(current, 'pnpm-workspace.yaml')) && existsSync(join(current, 'package.json'))) {
+        return current;
+      }
+
+      const parent = dirname(current);
+      if (parent === current) {
+        return process.cwd();
+      }
+      current = parent;
+    }
+  }
+
+  private resolveDashboardCwd(dashboard: DashboardConfig, projectRoot: string): string | undefined {
+    const hostWorkspace = dashboard.metadata?.host_workspace === true;
+    let cwd = dashboard.cwd.split('{project_root}').join(projectRoot);
+
+    if (cwd.includes('{host_root}')) {
+      const hostRoot = process.env.AGENTPING_HOST_ROOT?.trim();
+      if (!hostRoot) {
+        this.logger.warn(
+          `Skipping host-workspace dashboard ${dashboard.id}: set AGENTPING_HOST_ROOT to enable ${dashboard.cwd}`
+        );
+        return undefined;
+      }
+      cwd = cwd.split('{host_root}').join(this.expandHome(hostRoot));
+    }
+
+    cwd = this.expandHome(cwd);
+
+    if (hostWorkspace && !existsSync(cwd)) {
+      this.logger.warn(`Skipping host-workspace dashboard ${dashboard.id}: cwd does not exist (${cwd})`);
+      return undefined;
+    }
+
+    return cwd;
+  }
+
+  private expandHome(path: string): string {
+    if (path === '~') {
+      return homedir();
+    }
+
+    if (path.startsWith('~/')) {
+      return join(homedir(), path.slice(2));
+    }
+
+    return path;
   }
 
   /**

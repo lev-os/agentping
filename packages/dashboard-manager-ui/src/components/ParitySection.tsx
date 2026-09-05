@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getParityEntries, paritySlug, type ParityEntry } from "../api/parity";
+import { fetchParityEntries, paritySlug, type ParityEntry } from "../api/parity";
 
 type Classifier = ParityEntry["classifier"];
 
@@ -58,8 +58,35 @@ function progressBarColor(percent: number): string {
 }
 
 export function ParitySection() {
-  const entries = useMemo(() => getParityEntries(), []);
+  const [entries, setEntries] = useState<ParityEntry[]>([]);
   const [activeFilter, setActiveFilter] = useState<Classifier | "all">("all");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const nextEntries = await fetchParityEntries();
+        if (cancelled) return;
+        setEntries(nextEntries);
+      } catch (err) {
+        if (cancelled) return;
+        setEntries([]);
+        setError(err instanceof Error ? err.message : "Failed to load parity registry");
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(
     () =>
@@ -81,28 +108,34 @@ export function ParitySection() {
         </div>
       </div>
 
-      {/* Filter chips */}
-      <div className="parity-filters">
-        {FILTER_OPTIONS.map((opt) => {
-          const isActive = activeFilter === opt.value;
-          return (
-            <button
-              key={opt.value}
-              onClick={() => setActiveFilter(opt.value)}
-              className={`parity-filter${isActive ? " parity-filter--active" : ""}`}
-            >
-              {opt.label}
-            </button>
-          );
-        })}
-      </div>
+      {isLoading ? (
+        <div className="projects-empty">Loading parity registry…</div>
+      ) : error ? (
+        <div className="projects-empty projects-empty--error">{error}</div>
+      ) : (
+        <>
+          <div className="parity-filters">
+            {FILTER_OPTIONS.map((opt) => {
+              const isActive = activeFilter === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => setActiveFilter(opt.value)}
+                  className={`parity-filter${isActive ? " parity-filter--active" : ""}`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* Card grid */}
-      <div className="parity-grid">
-        {filtered.map((entry) => (
-          <ParityCard key={entry.target} entry={entry} />
-        ))}
-      </div>
+          <div className="parity-grid">
+            {filtered.map((entry) => (
+              <ParityCard key={entry.target} entry={entry} />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }

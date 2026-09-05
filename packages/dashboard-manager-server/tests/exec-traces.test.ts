@@ -131,14 +131,7 @@ describe("createExecTraceRoutes", () => {
     const payload = await response.json();
 
     expect(response.status).toBe(404);
-    expect(payload.error).toBe("Exec trace not found");
-    expect(payload.diagnostics).toEqual([
-      {
-        level: "error",
-        code: "TRACE_NOT_FOUND",
-        message: "no events found for run",
-      },
-    ]);
+    expect(payload).toEqual({ error: "trace not found", execId: "missing-run" });
     expect(commandRunner).toHaveBeenCalledTimes(1);
   });
 

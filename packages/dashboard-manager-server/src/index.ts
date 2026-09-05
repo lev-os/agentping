@@ -14,9 +14,13 @@ import type { DashboardRunner } from '@lev-os/dashboard-runner';
 import { createDashboardRoutes } from './routes/dashboards.js';
 import { createProjectsRoutes } from './routes/projects.js';
 import { createComponentsRoutes } from './routes/components.js';
+import { createParityRoutes } from './routes/parity.js';
 import { createExecTraceRoutes } from './routes/exec-traces.js';
 import { createLevObservabilityRoutes } from './routes/lev-observability.js';
+import { createHeartbeatRoutes, warmHeartbeatResearchCache } from './routes/heartbeat.js';
+import { createWorkflowRoutes } from './routes/workflows.js';
 import { createWebSocketServer } from './websocket.js';
+import type { LevAdapter } from './adapter.js';
 
 // ============================================================================
 // Server Configuration
@@ -24,6 +28,7 @@ import { createWebSocketServer } from './websocket.js';
 
 export interface ServerConfig {
   runner: DashboardRunner;
+  levAdapter?: LevAdapter;
   port?: number;
   host?: string;
   corsOrigins?: string[];
@@ -38,6 +43,7 @@ export interface ServerConfig {
 export function createServer(config: ServerConfig) {
   const {
     runner,
+    levAdapter,
     port = 3030,
     host = '127.0.0.1',
     corsOrigins = ['*'],
@@ -77,11 +83,18 @@ export function createServer(config: ServerConfig) {
   const componentsRoutes = createComponentsRoutes();
   app.route('/api/components', componentsRoutes);
 
+  app.route('/api/parity', createParityRoutes());
+
   const execTraceRoutes = createExecTraceRoutes();
   app.route('/api/exec-traces', execTraceRoutes);
 
-  const levObservabilityRoutes = createLevObservabilityRoutes();
+  const levObservabilityRoutes = createLevObservabilityRoutes({ projectionReader: levAdapter?.projectionReader });
   app.route('/api/lev', levObservabilityRoutes);
+
+  const heartbeatRoutes = createHeartbeatRoutes();
+  app.route('/api/heartbeat', heartbeatRoutes);
+
+  app.route('/api/workflows', createWorkflowRoutes());
 
   // =========================================================================
   // Start Server with Optional WebSocket Support
@@ -141,6 +154,10 @@ export function createServer(config: ServerConfig) {
         if (enableWebSocket) {
           console.log(`[DashboardServer] WebSocket available at ws://${host}:${port}/socket.io`);
         }
+        void warmHeartbeatResearchCache().catch((error: unknown) => {
+          const message = error instanceof Error ? error.message : String(error);
+          console.warn(`[DashboardServer] Heartbeat research cache warmup failed: ${message}`);
+        });
       });
 
       return {
@@ -158,4 +175,14 @@ export function createServer(config: ServerConfig) {
   };
 }
 
-export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createWebSocketServer };
+export { createDashboardRoutes, createComponentsRoutes, createExecTraceRoutes, createLevObservabilityRoutes, createHeartbeatRoutes, createWorkflowRoutes, createWebSocketServer };
+export type { LevAdapter } from './adapter.js';
+export { LEV_OBSERVABILITY_PROJECTION_SCHEMA } from './routes/lev-observability-projection.js';
+export type {
+  LevDiagnostic,
+  LevProjection,
+  LevProjectionKind,
+  LevProjectionReader,
+  LevProjectionReadRequest,
+  LevProjectionReadResult,
+} from './routes/lev-observability-projection.js';

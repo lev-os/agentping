@@ -1,8 +1,4 @@
-// Parity Registry projection.
-// Generated source: ../generated/parity-scorecard.json
-// Canonical source of truth: ../../../../../../.lev/pm/parity/*.yaml
-
-import scorecard from "../generated/parity-scorecard.json";
+const API_BASE = "/api";
 
 export interface ParityFeature {
   id: string;
@@ -36,44 +32,45 @@ export interface ParityEntry {
   classifier: "adopted" | "in-progress" | "referenced-only";
 }
 
-interface GeneratedFeature {
-  id?: string;
-  name?: string;
-  status?: string;
-  lev_equivalent?: string;
-  action?: string;
-  notes?: string;
+type RawRecord = Readonly<Record<string, unknown>>;
+
+interface GeneratedTarget extends RawRecord {
+  readonly target: string;
 }
 
-interface GeneratedMetric {
-  name?: string;
-  value?: string | number;
-  unit?: string;
-  source?: string;
+interface GeneratedScorecard extends RawRecord {
+  readonly targets: readonly GeneratedTarget[];
 }
 
-interface GeneratedTarget {
-  target: string;
-  label?: string;
-  category?: string | null;
-  verdict?: string | null;
-  measured_at?: string | null;
-  updated_at?: string | null;
-  priority?: string | null;
-  owner?: string | null;
-  path?: string;
-  features?: GeneratedFeature[];
-  metrics?: GeneratedMetric[];
-  lineage?: string[];
+let cachedEntries: ParityEntry[] = [];
+
+function isRecord(value: unknown): value is RawRecord {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-interface GeneratedScorecard {
-  targets: GeneratedTarget[];
+function asString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
-const GENERATED = scorecard as GeneratedScorecard;
+function asStringArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const items = value.filter((item) => typeof item === "string" && item.trim().length > 0);
+  return items.length > 0 ? items : undefined;
+}
 
-function normalizeStatus(status?: string): ParityFeature["status"] {
+function asGeneratedRecords(value: unknown): RawRecord[] {
+  return Array.isArray(value) ? value.filter(isRecord) : [];
+}
+
+function isGeneratedTarget(value: unknown): value is GeneratedTarget {
+  return isRecord(value) && typeof value.target === "string" && value.target.trim().length > 0;
+}
+
+function isGeneratedScorecard(value: unknown): value is GeneratedScorecard {
+  return isRecord(value) && Array.isArray(value.targets) && value.targets.every(isGeneratedTarget);
+}
+
+function normalizeStatus(status: unknown): ParityFeature["status"] {
   switch (status) {
     case "implemented":
     case "partial":
@@ -94,25 +91,29 @@ function normalizeStatus(status?: string): ParityFeature["status"] {
   }
 }
 
-function normalizeFeature(feature: GeneratedFeature, index: number): ParityFeature {
+function normalizeFeature(feature: RawRecord, index: number): ParityFeature {
+  const name = asString(feature.name);
+  const id = asString(feature.id);
   return {
-    id: feature.id || paritySlug(feature.name || `feature-${index + 1}`),
-    name: feature.name || feature.id || `Feature ${index + 1}`,
+    id: id ?? paritySlug(name ?? `feature-${index + 1}`),
+    name: name ?? id ?? `Feature ${index + 1}`,
     status: normalizeStatus(feature.status),
-    lev_equivalent: feature.lev_equivalent || "N/A",
-    action: feature.action || "unclassified",
-    notes: feature.notes || undefined,
+    lev_equivalent: asString(feature.lev_equivalent) ?? "N/A",
+    action: asString(feature.action) ?? "unclassified",
+    notes: asString(feature.notes),
   };
 }
 
-function normalizeMetric(metric: GeneratedMetric): ParityMetric | null {
-  if (!metric.name || metric.value === undefined || metric.value === null) return null;
+function normalizeMetric(metric: RawRecord): ParityMetric | null {
+  const name = asString(metric.name);
+  const value = metric.value;
+  if (!name || (typeof value !== "string" && typeof value !== "number")) return null;
 
   return {
-    name: metric.name,
-    value: metric.value,
-    unit: metric.unit || "count",
-    source: metric.source,
+    name,
+    value,
+    unit: asString(metric.unit) ?? "count",
+    source: asString(metric.source),
   };
 }
 
@@ -181,21 +182,22 @@ export function paritySlug(target: string): string {
 }
 
 function enrichEntry(raw: GeneratedTarget): ParityEntry {
-  const features = (raw.features || []).map(normalizeFeature);
+  const features = asGeneratedRecords(raw.features).map(normalizeFeature);
   const implementedPercent = computeImplementedPercent(features);
-  const verdict = raw.verdict || "reference";
-  const lineage = raw.lineage || (raw.path ? [raw.path] : undefined);
+  const verdict = asString(raw.verdict) ?? "reference";
+  const path = asString(raw.path);
+  const lineage = asStringArray(raw.lineage) ?? (path ? [path] : undefined);
 
   return {
     target: raw.target,
-    repo: raw.path || ".lev/pm/parity",
-    category: raw.category || "uncategorized",
+    repo: path ?? ".lev/pm/parity",
+    category: asString(raw.category) ?? "uncategorized",
     verdict,
-    measured_at: raw.updated_at || raw.measured_at || "unmeasured",
-    priority: raw.priority || undefined,
-    owner: raw.owner || undefined,
+    measured_at: asString(raw.updated_at) ?? asString(raw.measured_at) ?? "unmeasured",
+    priority: asString(raw.priority),
+    owner: asString(raw.owner),
     features,
-    metrics: (raw.metrics || []).map(normalizeMetric).filter((x): x is ParityMetric => x !== null),
+    metrics: asGeneratedRecords(raw.metrics).map(normalizeMetric).filter((x): x is ParityMetric => x !== null),
     lineage,
     implementedPercent,
     adoptionHealth: computeAdoptionHealth(implementedPercent, verdict),
@@ -203,12 +205,29 @@ function enrichEntry(raw: GeneratedTarget): ParityEntry {
   };
 }
 
-export function getParityEntries(): ParityEntry[] {
-  return GENERATED.targets.map(enrichEntry).sort((a, b) => {
+function sortEntries(entries: ParityEntry[]): ParityEntry[] {
+  return entries.sort((a, b) => {
     const dateDelta = (b.measured_at || "").localeCompare(a.measured_at || "");
     if (dateDelta !== 0) return dateDelta;
     const priorityDelta = priorityRank(a.priority) - priorityRank(b.priority);
     if (priorityDelta !== 0) return priorityDelta;
     return a.target.localeCompare(b.target);
   });
+}
+
+export function getParityEntries(): ParityEntry[] {
+  return cachedEntries;
+}
+
+export async function fetchParityEntries(): Promise<ParityEntry[]> {
+  const response = await fetch(`${API_BASE}/parity/scorecard`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch parity scorecard: ${response.statusText}`);
+  }
+  const payload: unknown = await response.json();
+  if (!isGeneratedScorecard(payload)) {
+    throw new Error("Parity scorecard response contract invalid");
+  }
+  cachedEntries = sortEntries(payload.targets.map(enrichEntry));
+  return cachedEntries;
 }

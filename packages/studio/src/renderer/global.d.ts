@@ -83,7 +83,7 @@ export interface IStudioControl {
     refreshPreview: () => void;
     setPreviewUrl: (url: string) => void;
     openExternal: (url: string) => void;
-    onLayoutModeChange: (callback: (mode: string) => void) => () => void;
+    onLayoutModeChange: (callback: (mode: 'design' | 'dashboard' | 'code' | 'preview') => void) => () => void;
     onOpenFile: (callback: (filePath: string) => void) => () => void;
     onRunTerminalCommand: (callback: (command: string) => void) => () => void;
     onRefreshPreview: (callback: () => void) => () => void;
@@ -112,6 +112,11 @@ export interface ISettings {
 export interface IDashboardManager {
     restart: (dashboardId: string) => Promise<{ success?: boolean; error?: string }>;
     getStatus: () => Promise<Record<string, any>>;
+    streamLogs: (options: { dashboardId: string; lines?: number; follow?: boolean }) => Promise<{ success?: boolean; error?: string }>;
+    stopStreamLogs: (options: { dashboardId: string }) => Promise<{ success?: boolean; error?: string }>;
+    onLogLine: (callback: (data: { dashboardId: string; timestamp: string; level: 'info' | 'warn' | 'error' | 'debug'; message: string; line: number }) => void) => () => void;
+    onLogStreamEnd: (callback: (data: { dashboardId: string; totalLines: number }) => void) => () => void;
+    onLogStreamError: (callback: (data: { dashboardId: string; error: string }) => void) => () => void;
     onProcessStarted: (callback: (data: any) => void) => () => void;
     onProcessCrashed: (callback: (data: any) => void) => () => void;
     onRestartSuccess: (callback: (data: any) => void) => () => void;

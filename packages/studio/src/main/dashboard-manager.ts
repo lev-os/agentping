@@ -23,6 +23,14 @@ import type {
     GetAggregateStatsResponse
 } from '../types/dashboard';
 
+function runnerStateDir(): string {
+    return join(
+        process.env.XDG_DATA_HOME || join(homedir(), '.local/share'),
+        'agentping',
+        'dashboard-runner',
+    );
+}
+
 export class DashboardManager {
     public runner: DashboardRunner | null = null;
     private configPath: string;
@@ -34,7 +42,7 @@ export class DashboardManager {
     constructor() {
         // Config path relative to main process
         this.configPath = join(__dirname, '../../dashboard-runner/config/dashboards.yaml');
-        this.metricsPath = join(homedir(), '.local/share/lev/dashboard-runner/metrics.json');
+        this.metricsPath = join(runnerStateDir(), 'metrics.json');
         console.log('[DashboardManager] Config path:', this.configPath);
         console.log('[DashboardManager] Metrics path:', this.metricsPath);
         this.setupIpcHandlers();
@@ -189,7 +197,7 @@ export class DashboardManager {
                     throw new Error('Invalid dashboard ID format');
                 }
 
-                const logPath = join(homedir(), '.local/share/lev/dashboard-runner/logs', `${dashboardId}.log`);
+                const logPath = join(runnerStateDir(), 'logs', `${dashboardId}.log`);
                 console.log('[DashboardManager] Streaming logs from:', logPath);
 
                 // Stop existing stream for this dashboard if any
@@ -728,7 +736,7 @@ export class DashboardManager {
      */
     private async saveMetrics(): Promise<void> {
         try {
-            const dir = join(homedir(), '.local/share/lev/dashboard-runner');
+            const dir = runnerStateDir();
             await fs.mkdir(dir, { recursive: true });
 
             const dashboards: Record<string, DashboardMetrics> = {};
