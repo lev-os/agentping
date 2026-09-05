@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T01:25:42.585823+00:00",
+  "generated_at": "2026-08-05T23:39:06.715Z",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -8,31 +8,31 @@
   "projections": {
     "json": "reports/parity-scorecard.json",
     "markdown": "reports/parity-scorecard.md",
-    "agentping_dashboard": "community/agentping/packages/dashboard-manager-ui/src/generated/parity-scorecard.json",
+    "agentping_dashboard": "",
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 28549,
+    "operation_count": 28972,
     "by_type": {
-      "upsert_entity": 6639,
-      "add_claim": 15402,
-      "add_link": 6508
+      "upsert_entity": 6739,
+      "add_claim": 15628,
+      "add_link": 6605
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 131,
-    "total_features": 1583,
+    "parity_files": 134,
+    "total_features": 1604,
     "absorbed": 73,
-    "pending": 1098,
+    "pending": 1114,
     "deferred": 28,
-    "rejected": 68,
-    "monitor": 162,
+    "rejected": 72,
+    "monitor": 163,
     "unclassified": 0,
     "absorbed_pct": 4.6,
-    "unclassified_pct": 0.0
+    "unclassified_pct": 0
   },
   "untriaged_targets": [],
   "targets": [
@@ -10887,278 +10887,6 @@
       "rejected_items": []
     },
     {
-      "target": "flyte-sdk",
-      "label": "flyte-sdk",
-      "category": "workflow-orchestration-sdk",
-      "priority": "P1",
-      "measured_at": "2026-05-04",
-      "updated_at": "2026-05-04",
-      "owner": "core/sdk + core/exec + core/poly + core/flowmind + core/eval + core/event-dispatch",
-      "path": ".lev/pm/parity/flyte-sdk.yaml",
-      "verdict": "extract",
-      "total_features": 18,
-      "classified": 18,
-      "unclassified": 0,
-      "counts": {
-        "extract": 15,
-        "adapt": 1,
-        "avoid_as_canon": 1,
-        "monitor": 1
-      },
-      "features": [
-        {
-          "id": "flyte-01",
-          "name": "Pure Python SDK authoring; no workflow DSL",
-          "status": "partial",
-          "lev_equivalent": "sdk.flow.define / generated app routes must feel code-native while compiling to FlowMind/Poly declarations.",
-          "action": "extract",
-          "notes": "Flyte 2 positions normal Python control flow as the workflow authoring surface; @env.task is the unit of declaration.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-02",
-          "name": "TaskEnvironment configuration owner",
-          "status": "missing",
-          "lev_equivalent": "Fractal app root + execution profile + project/user/global policy cascade.",
-          "action": "extract",
-          "notes": "TaskEnvironment sets shared image/resources/secrets/cache/reusable/queue defaults; task decorator and task.override narrow them.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-03",
-          "name": "Task decorator to typed runnable unit",
-          "status": "missing",
-          "lev_equivalent": "User-named capability files compile into FractalEntry -> PolyOp -> ServiceManifest.",
-          "action": "extract",
-          "notes": "@env.task creates a TaskTemplate with NativeInterface, task name, cache, retries, reports, triggers, links, and plugin config.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-04",
-          "name": "Async `.aio()` distributed composition",
-          "status": "partial",
-          "lev_equivalent": "FlowMind fanout and SDK session futures.",
-          "action": "extract",
-          "notes": "Tasks can be awaited through `.aio()` inside task context; composition uses normal asyncio/gather.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-05",
-          "name": "Local/remote/hybrid run context",
-          "status": "partial",
-          "lev_equivalent": "sdk.agent.session / lev exec substrate profile resolution: tmux/local/remote providers.",
-          "action": "extract",
-          "notes": "flyte.run and with_runcontext support local, remote, and hybrid modes with the same task object.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-06",
-          "name": "Remote Run handle",
-          "status": "missing",
-          "lev_equivalent": "AgentSession and FlowRun handle with stream/wait/cancel/attach/capture/receipt.",
-          "action": "extract",
-          "notes": "Run exposes wait, watch, logs, details, inputs, outputs, URL, debug URL, abort, done, and sync.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-07",
-          "name": "Action handle and status streaming",
-          "status": "missing",
-          "lev_equivalent": "Per-step execution receipts and event frames.",
-          "action": "extract",
-          "notes": "Action exposes phase, wait, watch, logs, attempts, inputs, outputs, and phase durations.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-08",
-          "name": "Typed IO and wire serialization",
-          "status": "partial",
-          "lev_equivalent": "Poly ServiceManifest, typed generated SDK clients, and FlowMind args schemas.",
-          "action": "extract",
-          "notes": "TypeEngine/protobuf/mashumaro/msgpack plus File/Dir/DataFrame and JSON schema conversion provide a strong typed contract layer.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-09",
-          "name": "Task serde projection",
-          "status": "partial",
-          "lev_equivalent": "FractalEntry -> PolyOp -> ServiceManifest snapshots.",
-          "action": "extract",
-          "notes": "TaskTemplate is translated to protobuf TaskTemplate with id, metadata, interface, resources, logs, security context, and config.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-10",
-          "name": "Triggers as task metadata",
-          "status": "partial",
-          "lev_equivalent": "core/event-dispatch trigger projection + FlowMind event admission.",
-          "action": "extract",
-          "notes": "Trigger supports cron/fixed-rate constructors, inputs, env vars, queue, labels, annotations, and custom context.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-11",
-          "name": "Trace/checkpoint/report artifacts",
-          "status": "partial",
-          "lev_equivalent": "content-addressed proof.yaml + receipts + GenUI/now reports.",
-          "action": "adapt",
-          "notes": "@flyte.trace records call outputs/errors; Checkpoint supports previous attempt repair; Report produces HTML artifacts.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-12",
-          "name": "Resources and secrets",
-          "status": "partial",
-          "lev_equivalent": "AgentGuard leases + PolyCard provider capabilities.",
-          "action": "extract",
-          "notes": "Environment/task declarations include resources and secrets; task serde emits security context.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-13",
-          "name": "Plugin registry",
-          "status": "partial",
-          "lev_equivalent": "plugins/* + PolyCard capability registration.",
-          "action": "extract",
-          "notes": "TaskPluginRegistry maps config types to task template classes; repo has many optional plugin packages.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-14",
-          "name": "CLI docs generation",
-          "status": "missing",
-          "lev_equivalent": "lev poly codegen docs/client projection.",
-          "action": "extract",
-          "notes": "flyte gen docs walks the Click command tree and renders command markdown, including plugin metadata.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-15",
-          "name": "HITL event/wait plugin",
-          "status": "partial",
-          "lev_equivalent": "AgentPing/ACP typed action intents and approval waits.",
-          "action": "extract",
-          "notes": "HITL plugin creates typed events that pause execution until human input is submitted.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-16",
-          "name": "Code generation and evaluation plugin",
-          "status": "partial",
-          "lev_equivalent": "core/eval, final-boss constraints, sandbox provider cards, NAAC-style eval suites.",
-          "action": "extract",
-          "notes": "Codegen plugin loops prompt -> plan -> code -> dependencies -> tests -> sandbox execution -> diagnose/fix, or Claude agent mode with intercepted tests.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-17",
-          "name": "Local run store and cache",
-          "status": "not-applicable",
-          "lev_equivalent": "XDG session metadata plus append-only receipts and proof.yaml.",
-          "action": "avoid_as_canon",
-          "notes": "Local SQLite run metadata and cache are useful dev conveniences, but insufficient as proof fabric.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
-          "id": "flyte-18",
-          "name": "Code bundle/content hash versioning",
-          "status": "partial",
-          "lev_equivalent": "proof.yaml artifact hashes and replay expected_hash.",
-          "action": "monitor",
-          "notes": "Flyte code bundles and cache versions are useful inspiration for artifact hashes but not a substitute for receipts.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        }
-      ],
-      "metrics": [
-        {
-          "name": "source_py_files",
-          "value": 257,
-          "unit": "count",
-          "source": "find src/flyte -name '*.py'"
-        },
-        {
-          "name": "plugin_py_files",
-          "value": 234,
-          "unit": "count",
-          "source": "find plugins -name '*.py'"
-        },
-        {
-          "name": "example_py_files",
-          "value": 428,
-          "unit": "count",
-          "source": "find examples -name '*.py'"
-        },
-        {
-          "name": "test_py_files",
-          "value": 237,
-          "unit": "count",
-          "source": "find tests -name '*.py'"
-        },
-        {
-          "name": "optional_plugin_dirs",
-          "value": 24,
-          "unit": "approx_count",
-          "source": "plugins/*/pyproject.toml"
-        },
-        {
-          "name": "cli_entrypoints",
-          "value": 4,
-          "unit": "scripts",
-          "source": "pyproject.toml project.scripts flyte/a0/fserve/c0"
-        }
-      ],
-      "lineage": [
-        "https://github.com/flyteorg/flyte-sdk",
-        "workshop/intake/flyte-sdk/",
-        "workshop/analysis/flyte-sdk/analysis.md",
-        ".lev/pm/designs/design-sdk-flowmind-poly-mesh-kickoff.md",
-        ".lev/pm/workstreams/platforms-v1/captures/20260504-sdk-branch-knowledge-merge.yaml"
-      ],
-      "absorbed": 0,
-      "pending": 15,
-      "deferred": 0,
-      "rejected": 0,
-      "monitor": 1,
-      "deferred_items": [],
-      "rejected_items": []
-    },
-    {
       "target": "flyte",
       "label": "Flyte",
       "category": "distributed-run-plane",
@@ -11714,6 +11442,278 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "flyte-sdk",
+      "label": "flyte-sdk",
+      "category": "workflow-orchestration-sdk",
+      "priority": "P1",
+      "measured_at": "2026-05-04",
+      "updated_at": "2026-05-04",
+      "owner": "core/sdk + core/exec + core/poly + core/flowmind + core/eval + core/event-dispatch",
+      "path": ".lev/pm/parity/flyte-sdk.yaml",
+      "verdict": "extract",
+      "total_features": 18,
+      "classified": 18,
+      "unclassified": 0,
+      "counts": {
+        "extract": 15,
+        "adapt": 1,
+        "avoid_as_canon": 1,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "flyte-01",
+          "name": "Pure Python SDK authoring; no workflow DSL",
+          "status": "partial",
+          "lev_equivalent": "sdk.flow.define / generated app routes must feel code-native while compiling to FlowMind/Poly declarations.",
+          "action": "extract",
+          "notes": "Flyte 2 positions normal Python control flow as the workflow authoring surface; @env.task is the unit of declaration.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-02",
+          "name": "TaskEnvironment configuration owner",
+          "status": "missing",
+          "lev_equivalent": "Fractal app root + execution profile + project/user/global policy cascade.",
+          "action": "extract",
+          "notes": "TaskEnvironment sets shared image/resources/secrets/cache/reusable/queue defaults; task decorator and task.override narrow them.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-03",
+          "name": "Task decorator to typed runnable unit",
+          "status": "missing",
+          "lev_equivalent": "User-named capability files compile into FractalEntry -> PolyOp -> ServiceManifest.",
+          "action": "extract",
+          "notes": "@env.task creates a TaskTemplate with NativeInterface, task name, cache, retries, reports, triggers, links, and plugin config.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-04",
+          "name": "Async `.aio()` distributed composition",
+          "status": "partial",
+          "lev_equivalent": "FlowMind fanout and SDK session futures.",
+          "action": "extract",
+          "notes": "Tasks can be awaited through `.aio()` inside task context; composition uses normal asyncio/gather.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-05",
+          "name": "Local/remote/hybrid run context",
+          "status": "partial",
+          "lev_equivalent": "sdk.agent.session / lev exec substrate profile resolution: tmux/local/remote providers.",
+          "action": "extract",
+          "notes": "flyte.run and with_runcontext support local, remote, and hybrid modes with the same task object.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-06",
+          "name": "Remote Run handle",
+          "status": "missing",
+          "lev_equivalent": "AgentSession and FlowRun handle with stream/wait/cancel/attach/capture/receipt.",
+          "action": "extract",
+          "notes": "Run exposes wait, watch, logs, details, inputs, outputs, URL, debug URL, abort, done, and sync.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-07",
+          "name": "Action handle and status streaming",
+          "status": "missing",
+          "lev_equivalent": "Per-step execution receipts and event frames.",
+          "action": "extract",
+          "notes": "Action exposes phase, wait, watch, logs, attempts, inputs, outputs, and phase durations.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-08",
+          "name": "Typed IO and wire serialization",
+          "status": "partial",
+          "lev_equivalent": "Poly ServiceManifest, typed generated SDK clients, and FlowMind args schemas.",
+          "action": "extract",
+          "notes": "TypeEngine/protobuf/mashumaro/msgpack plus File/Dir/DataFrame and JSON schema conversion provide a strong typed contract layer.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-09",
+          "name": "Task serde projection",
+          "status": "partial",
+          "lev_equivalent": "FractalEntry -> PolyOp -> ServiceManifest snapshots.",
+          "action": "extract",
+          "notes": "TaskTemplate is translated to protobuf TaskTemplate with id, metadata, interface, resources, logs, security context, and config.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-10",
+          "name": "Triggers as task metadata",
+          "status": "partial",
+          "lev_equivalent": "core/event-dispatch trigger projection + FlowMind event admission.",
+          "action": "extract",
+          "notes": "Trigger supports cron/fixed-rate constructors, inputs, env vars, queue, labels, annotations, and custom context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-11",
+          "name": "Trace/checkpoint/report artifacts",
+          "status": "partial",
+          "lev_equivalent": "content-addressed proof.yaml + receipts + GenUI/now reports.",
+          "action": "adapt",
+          "notes": "@flyte.trace records call outputs/errors; Checkpoint supports previous attempt repair; Report produces HTML artifacts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-12",
+          "name": "Resources and secrets",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard leases + PolyCard provider capabilities.",
+          "action": "extract",
+          "notes": "Environment/task declarations include resources and secrets; task serde emits security context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-13",
+          "name": "Plugin registry",
+          "status": "partial",
+          "lev_equivalent": "plugins/* + PolyCard capability registration.",
+          "action": "extract",
+          "notes": "TaskPluginRegistry maps config types to task template classes; repo has many optional plugin packages.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-14",
+          "name": "CLI docs generation",
+          "status": "missing",
+          "lev_equivalent": "lev poly codegen docs/client projection.",
+          "action": "extract",
+          "notes": "flyte gen docs walks the Click command tree and renders command markdown, including plugin metadata.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-15",
+          "name": "HITL event/wait plugin",
+          "status": "partial",
+          "lev_equivalent": "AgentPing/ACP typed action intents and approval waits.",
+          "action": "extract",
+          "notes": "HITL plugin creates typed events that pause execution until human input is submitted.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-16",
+          "name": "Code generation and evaluation plugin",
+          "status": "partial",
+          "lev_equivalent": "core/eval, final-boss constraints, sandbox provider cards, NAAC-style eval suites.",
+          "action": "extract",
+          "notes": "Codegen plugin loops prompt -> plan -> code -> dependencies -> tests -> sandbox execution -> diagnose/fix, or Claude agent mode with intercepted tests.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-17",
+          "name": "Local run store and cache",
+          "status": "not-applicable",
+          "lev_equivalent": "XDG session metadata plus append-only receipts and proof.yaml.",
+          "action": "avoid_as_canon",
+          "notes": "Local SQLite run metadata and cache are useful dev conveniences, but insufficient as proof fabric.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "flyte-18",
+          "name": "Code bundle/content hash versioning",
+          "status": "partial",
+          "lev_equivalent": "proof.yaml artifact hashes and replay expected_hash.",
+          "action": "monitor",
+          "notes": "Flyte code bundles and cache versions are useful inspiration for artifact hashes but not a substitute for receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_py_files",
+          "value": 257,
+          "unit": "count",
+          "source": "find src/flyte -name '*.py'"
+        },
+        {
+          "name": "plugin_py_files",
+          "value": 234,
+          "unit": "count",
+          "source": "find plugins -name '*.py'"
+        },
+        {
+          "name": "example_py_files",
+          "value": 428,
+          "unit": "count",
+          "source": "find examples -name '*.py'"
+        },
+        {
+          "name": "test_py_files",
+          "value": 237,
+          "unit": "count",
+          "source": "find tests -name '*.py'"
+        },
+        {
+          "name": "optional_plugin_dirs",
+          "value": 24,
+          "unit": "approx_count",
+          "source": "plugins/*/pyproject.toml"
+        },
+        {
+          "name": "cli_entrypoints",
+          "value": 4,
+          "unit": "scripts",
+          "source": "pyproject.toml project.scripts flyte/a0/fserve/c0"
+        }
+      ],
+      "lineage": [
+        "https://github.com/flyteorg/flyte-sdk",
+        "workshop/intake/flyte-sdk/",
+        "workshop/analysis/flyte-sdk/analysis.md",
+        ".lev/pm/designs/design-sdk-flowmind-poly-mesh-kickoff.md",
+        ".lev/pm/workstreams/platforms-v1/captures/20260504-sdk-branch-knowledge-merge.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 15,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "forkd",
@@ -15296,6 +15296,158 @@
       "rejected_items": []
     },
     {
+      "target": "jinn",
+      "label": "Jinn",
+      "category": "agent-runtime-operator-control-plane",
+      "priority": "P1",
+      "measured_at": "2026-08-05",
+      "updated_at": "2026-08-05",
+      "owner": "plugins/workshop + core/daemon + core/poly + core/flowmind + community/agentping",
+      "path": ".lev/pm/parity/jinn.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 7,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "jinn-installed-cli-engine-registry",
+          "name": "Installed-agent CLI engine registry",
+          "status": "partial",
+          "lev_equivalent": "core/exec provider adapters + core/poly registry projections",
+          "action": "extract",
+          "notes": "Extract descriptor discovery and unavailable-engine UX before any dispatch path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/antigravity.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/pi.ts"
+          ]
+        },
+        {
+          "id": "jinn-pty-lifecycle",
+          "name": "Interactive PTY lifecycle and hook transport",
+          "status": "partial",
+          "lev_equivalent": "core/exec + core/tmux-harness",
+          "action": "extract",
+          "notes": "Spike with fake binaries, scoped secrets, deterministic timeout, and orphan-reaping receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/pty-lifecycle.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/sse-pty-proxy.ts"
+          ]
+        },
+        {
+          "id": "jinn-session-delegation-recovery",
+          "name": "Session delegation and restart recovery",
+          "status": "partial",
+          "lev_equivalent": "workstreams + core/orchestration + LevEvent receipts",
+          "action": "extract",
+          "notes": "Preserve parent-child causality and explicit interrupted-work state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/sessions/manager.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/lifecycle.ts"
+          ]
+        },
+        {
+          "id": "jinn-org-yaml-projection",
+          "name": "File-backed org hierarchy and employee declarations",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/DNA declarations + AgentPing graph projection",
+          "action": "extract",
+          "notes": "Hierarchy is a human-facing projection, not an execution authority source.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/org.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/org-hierarchy.ts"
+          ]
+        },
+        {
+          "id": "jinn-scheduler-declarations",
+          "name": "Hot-reloadable scheduler declarations",
+          "status": "partial",
+          "lev_equivalent": "FlowMind schedule declarations + plugins/samurai",
+          "action": "extract",
+          "notes": "Require explicit missed-run policy, current lease, and replayable receipt chain.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/cron/jobs.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/cron/runner.ts"
+          ]
+        },
+        {
+          "id": "jinn-connector-ingress",
+          "name": "Multi-surface connector ingress",
+          "status": "partial",
+          "lev_equivalent": "AgentPing surfaces + plugins/samurai connector admission",
+          "action": "extract",
+          "notes": "Normalize identity and thread events before policy admission; never allow connector bypass.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/server.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/shared/types.ts"
+          ]
+        },
+        {
+          "id": "jinn-operator-dashboard",
+          "name": "Unified local operator dashboard",
+          "status": "partial",
+          "lev_equivalent": "community/agentping + packages/dashboard-core",
+          "action": "extract",
+          "notes": "Read from Lev events and submit proposals; do not mutate runtime state directly.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/web/src/lib/api.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/web/src/components/org/employee-editor.tsx"
+          ]
+        },
+        {
+          "id": "jinn-ambient-self-modification",
+          "name": "Ambient agent self-modification",
+          "status": "not-applicable",
+          "lev_equivalent": "FlowMind proposal, lease, approval, rollback, and receipt gates",
+          "action": "reject",
+          "notes": "Preserve editable ergonomics only through explicit proposal and approval boundaries.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/template/docs/self-modification.md",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/watcher.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/jinn/refinement-decision.yaml",
+        ".lev/pm/intake/jinn/source-analysis-evidence.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "jinn-ambient-self-modification",
+          "name": "Ambient agent self-modification",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "jiuwenclaw",
       "label": "JiuwenClaw",
       "category": "agent-framework",
@@ -16858,7 +17010,7 @@
         },
         {
           "name": "fake_verifier_design_pass_rate",
-          "value": 1.0,
+          "value": 1,
           "unit": "count",
           "source": "workshop/approved/loss-function-driven-agentic-loops/examples/lfd-system-verifier/verification-report.json"
         }
@@ -18045,6 +18197,125 @@
       "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
+    },
+    {
+      "target": "no-mistakes",
+      "label": "no-mistakes",
+      "category": "eval-harness",
+      "priority": "P1",
+      "measured_at": "2026-07-18",
+      "updated_at": "2026-07-18",
+      "owner": "core/eval + dna/gates.yaml + plugins/sdlc",
+      "path": ".lev/pm/parity/no-mistakes.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "reject": 2,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "nm-01",
+          "name": "Structured review finding schema (severity/action/review_scope)",
+          "status": "missing",
+          "lev_equivalent": "core/eval/src/strategy/types.ts EvalStrategyKind.llm-as-judge (type only, no adapter)",
+          "action": "extract",
+          "notes": "Port the schema shape into a concrete Lev EvalStrategy adapter, not the Go struct itself.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-02",
+          "name": "Fail-closed default action (unclassified -> ask-user)",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "internal/types/findings.go actionOrDefault -- directly portable discipline for any Lev llm-as-judge adapter.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-03",
+          "name": "Isolated reviewer vs fixer agent sessions across rounds",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Durable reviewer session persists across re-review rounds; fixer gets a fresh session so it never inherits reviewer rationale. Prevents self-serving re-justification.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-04",
+          "name": "Git-remote-as-gate delivery mechanism (bare repo + daemon + post-receive hook)",
+          "status": "not-applicable",
+          "lev_equivalent": "core/exec + core/orchestration worktree/dispatch primitives",
+          "action": "reject",
+          "notes": "Out of scope for clean-room extraction -- duplicates existing Lev delivery/orchestration machinery.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-05",
+          "name": "SCM PR/CI automation (GitHub/GitLab/Bitbucket/Azure adapters)",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A -- deferred",
+          "action": "reject",
+          "notes": "Real and useful in the standalone product but not part of the review-gate slice worth extracting first.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-06",
+          "name": "Documented-but-unbuilt deterministic net-deleted-lines backstop",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "no-mistakes itself flags this as HELD/not built (review.go:173-176) -- a known gap in LLM-only review gating worth tracking for Lev's own adapter too.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/no-mistakes/",
+        "workshop/analysis/no-mistakes/analysis.md",
+        "docs/design/design-constraint-engineering-manifesto.md",
+        "core/eval/src/strategy/types.ts",
+        "dna/gates.yaml",
+        "dna/core-contract.dna.yaml",
+        "core/validator/src/adapters/index.ts"
+      ],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 2,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "nm-04",
+          "name": "Git-remote-as-gate delivery mechanism (bare repo + daemon + post-receive hook)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "nm-05",
+          "name": "SCM PR/CI automation (GitHub/GitLab/Bitbucket/Azure adapters)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
     },
     {
       "target": "nofs-dreamgraph",
@@ -23342,6 +23613,150 @@
       "rejected_items": []
     },
     {
+      "target": "pydantic-ai-2.0",
+      "label": "Pydantic AI 2.0",
+      "category": "agent-sdk-capability-platform",
+      "priority": "P0",
+      "measured_at": "2026-07-11",
+      "updated_at": "2026-07-11",
+      "owner": "core/domain + core/flowmind + core/exec + plugins/platforms",
+      "path": ".lev/pm/parity/pydantic-ai-2.0.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "build": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "pydanticai-01",
+          "name": "Capability middleware as first-class extension unit",
+          "status": "partial",
+          "lev_equivalent": "core/domain capability contract + FlowMind/Exec lifecycle hooks + plugins/platforms projection",
+          "action": "extract",
+          "notes": "Pydantic's AbstractCapability unifies instructions, model settings, toolsets, wrapper toolsets, native tools, run/node/event/model/tool/output hooks. Lev should extract the contract grammar, not the Python runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/abstract.py",
+            "workshop/analysis/pydantic-ai-2.0/analysis.md#capability-contract-parity"
+          ]
+        },
+        {
+          "id": "pydanticai-02",
+          "name": "Provider/model/profile separation",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms provider declarations + model catalog + runner lifecycle",
+          "action": "extract",
+          "notes": "Mirrors Lev's provider-owned-island doctrine. Use as pressure test for provider auth/client/profile/model capability facts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/providers/__init__.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/models/__init__.py",
+            "plugins/platforms/dna/provider-boundary.yaml",
+            "plugins/platforms/src/model-catalog/types.ts"
+          ]
+        },
+        {
+          "id": "pydanticai-03",
+          "name": "Deferred capability loading and provider-adaptive tool search",
+          "status": "missing",
+          "lev_equivalent": "FlowMind/Exec context/tool surfacing with receipt-backed load/search events",
+          "action": "build",
+          "notes": "High-value missing semantics: hidden tools/capabilities should not leak before recorded load/authorization state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/_deferred_capabilities.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/_deferred_capability_loader.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/_tool_search.py"
+          ]
+        },
+        {
+          "id": "pydanticai-04",
+          "name": "AG-UI event stream and deny-by-default interrupt approval mapping",
+          "status": "partial",
+          "lev_equivalent": "AgentPing/UI approval envelopes + Event Bus receipts + tool-call IDs",
+          "action": "extract",
+          "notes": "Extract the interrupt/resume/approval semantics, especially malformed resume denial, into Lev approval receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_adapter.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_event_stream.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_interrupt.py"
+          ]
+        },
+        {
+          "id": "pydanticai-05",
+          "name": "Durable execution wrappers as compatibility target",
+          "status": "partial",
+          "lev_equivalent": "core/exec receipts + replay harness + external workflow-engine compatibility tests",
+          "action": "extract",
+          "notes": "Treat Temporal/DBOS/Prefect support as tests for whether Lev preserves run context, deps, message history, retry budgets, tool ordering, and trace IDs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/durable_exec/temporal/_agent.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/durable_exec/AGENTS.md"
+          ]
+        },
+        {
+          "id": "pydanticai-06",
+          "name": "OTel-backed eval package and stochastic function evaluation",
+          "status": "partial",
+          "lev_equivalent": "core/eval + core/telemetry",
+          "action": "extract",
+          "notes": "Use pydantic-evals as prior art for typed eval cases, evaluator composition, and OpenTelemetry trace shape.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_evals/README.md",
+            "workshop/analysis/pydantic-ai-2.0/analysis.md#evidence-notes"
+          ]
+        },
+        {
+          "id": "pydanticai-07",
+          "name": "Direct Python Agent runtime adoption",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev FlowMind/Orchestration/Exec/Event Bus runtime authority",
+          "action": "reject",
+          "notes": "Reject replacing Lev's runtime authority with Pydantic's Agent loop; use bounded spikes to extract patterns only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/agent/__init__.py"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/pydantic-ai",
+        "workshop/analysis/pydantic-ai-2.0/analysis.md",
+        ".lev/pm/parity/pydantic-ai-2.0.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "pydanticai-07",
+          "name": "Direct Python Agent runtime adoption",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "qdrant",
       "label": "Qdrant",
       "category": "search-index",
@@ -24343,7 +24758,7 @@
         },
         {
           "name": "mesh_protocol_version",
-          "value": 1.0,
+          "value": 1,
           "unit": "protocol-version",
           "source": "workshop/intake/Fusion/docs/shared-mesh-protocol.md"
         },
