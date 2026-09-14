@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T01:25:42.585823+00:00",
+  "generated_at": "2026-09-03T07:32:21.804330+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -8,30 +8,30 @@
   "projections": {
     "json": "reports/parity-scorecard.json",
     "markdown": "reports/parity-scorecard.md",
-    "agentping_dashboard": "community/agentping/packages/dashboard-manager-ui/src/generated/parity-scorecard.json",
+    "agentping_dashboard": "",
     "gen_ui_contract": "reports/parity-gen-ui.contract.json"
   },
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 28549,
+    "operation_count": 29051,
     "by_type": {
-      "upsert_entity": 6639,
-      "add_claim": 15402,
-      "add_link": 6508
+      "upsert_entity": 6755,
+      "add_claim": 15676,
+      "add_link": 6620
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 131,
-    "total_features": 1583,
+    "parity_files": 135,
+    "total_features": 1609,
     "absorbed": 73,
-    "pending": 1098,
+    "pending": 1118,
     "deferred": 28,
-    "rejected": 68,
-    "monitor": 162,
+    "rejected": 71,
+    "monitor": 165,
     "unclassified": 0,
-    "absorbed_pct": 4.6,
+    "absorbed_pct": 4.5,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -10176,6 +10176,123 @@
       "rejected_items": []
     },
     {
+      "target": "executor",
+      "label": "Executor MCP Gateway",
+      "category": "mcp-gateway-run-fabric",
+      "priority": "P0",
+      "measured_at": "2026-09-03",
+      "updated_at": "2026-09-03",
+      "owner": "core/daemon-mcp",
+      "path": ".lev/pm/parity/executor.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "build": 3,
+        "extract": 1,
+        "merge": 1,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "executor-01",
+          "name": "Small default MCP gateway surface",
+          "status": "partial",
+          "lev_equivalent": "core/daemon-mcp",
+          "action": "build",
+          "notes": "Executor registers execute, skills, and resume as the default gateway shape. Lev daemon-mcp serves MCP today, but current Poly/daemon paths still expose generated runner tools such as exec_exec instead of a bounded default profile.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/packages/hosts/mcp/src/tool-server.ts",
+            "core/daemon-mcp/src/index.ts"
+          ]
+        },
+        {
+          "id": "executor-02",
+          "name": "Lazy tool catalog discovery",
+          "status": "missing",
+          "lev_equivalent": "core/poly + core/daemon-mcp",
+          "action": "extract",
+          "notes": "Executor refuses tools enumeration inside code mode and routes users to tools.search. Lev needs deterministic search/describe meta-tools over Poly runners instead of eager schema injection.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/packages/kernel/runtime-dynamic-worker/src/invocation.test.ts",
+            "workshop/intake/executor/packages/hosts/mcp/src/tool-server.ts"
+          ]
+        },
+        {
+          "id": "executor-03",
+          "name": "Per-session opt-in search shards",
+          "status": "missing",
+          "lev_equivalent": "core/daemon-mcp ToolProjectionPolicy",
+          "action": "build",
+          "notes": "Executor enables search_<integration> tools only with search_tools=true. Lev should generalize this to project/run-scoped toolset manifests rather than global MCP exposure.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/packages/hosts/mcp/src/tool-server.ts",
+            "workshop/intake/executor/e2e/src/surfaces/mcp.ts"
+          ]
+        },
+        {
+          "id": "executor-04",
+          "name": "Host-owned approval and resume lifecycle",
+          "status": "partial",
+          "lev_equivalent": "core/exec + core/eval",
+          "action": "merge",
+          "notes": "Executor models paused execution IDs and resume modes. Lev should bind the equivalent to Run identity, EvalDecision authority, and receipt/proof refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/packages/hosts/mcp/src/tool-server.ts",
+            "core/daemon-mcp/src/index.ts"
+          ]
+        },
+        {
+          "id": "executor-05",
+          "name": "Real MCP e2e surface harness",
+          "status": "partial",
+          "lev_equivalent": "core/daemon-pentagon + community/examples",
+          "action": "build",
+          "notes": "Executor tests real MCP sessions. Lev has daemon Pentagon MCP proof paths, but exec_exec alone is explicitly orchestration evidence and must not satisfy app-domain coverage.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/e2e/src/surfaces/mcp.ts",
+            "core/daemon-pentagon/src/daemon-coding-agent-mcp-ultraqa-suite.ts"
+          ]
+        },
+        {
+          "id": "executor-06",
+          "name": "Credential mediation outside the model",
+          "status": "partial",
+          "lev_equivalent": "core/daemon + AgentGuard",
+          "action": "reference",
+          "notes": "Executor keeps secrets host-side. Lev should preserve this through daemon/AgentGuard leases and never let gateway sharding widen credential visibility.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/executor/README.md",
+            "workshop/intake/executor/packages/hosts/mcp/src/tool-server.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "{'local_source': 'workshop/intake/executor', 'revision': '5e4da2af3d1391cbebd0c3d9f2217e4ba41d6104'}"
+      ],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "faster-whisper",
       "label": "faster-whisper",
       "category": "asr-engine",
@@ -18047,6 +18164,125 @@
       "rejected_items": []
     },
     {
+      "target": "no-mistakes",
+      "label": "no-mistakes",
+      "category": "eval-harness",
+      "priority": "P1",
+      "measured_at": "2026-07-18",
+      "updated_at": "2026-07-18",
+      "owner": "core/eval + dna/gates.yaml + plugins/sdlc",
+      "path": ".lev/pm/parity/no-mistakes.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "reject": 2,
+        "monitor": 1
+      },
+      "features": [
+        {
+          "id": "nm-01",
+          "name": "Structured review finding schema (severity/action/review_scope)",
+          "status": "missing",
+          "lev_equivalent": "core/eval/src/strategy/types.ts EvalStrategyKind.llm-as-judge (type only, no adapter)",
+          "action": "extract",
+          "notes": "Port the schema shape into a concrete Lev EvalStrategy adapter, not the Go struct itself.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-02",
+          "name": "Fail-closed default action (unclassified -> ask-user)",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "internal/types/findings.go actionOrDefault -- directly portable discipline for any Lev llm-as-judge adapter.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-03",
+          "name": "Isolated reviewer vs fixer agent sessions across rounds",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "extract",
+          "notes": "Durable reviewer session persists across re-review rounds; fixer gets a fresh session so it never inherits reviewer rationale. Prevents self-serving re-justification.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-04",
+          "name": "Git-remote-as-gate delivery mechanism (bare repo + daemon + post-receive hook)",
+          "status": "not-applicable",
+          "lev_equivalent": "core/exec + core/orchestration worktree/dispatch primitives",
+          "action": "reject",
+          "notes": "Out of scope for clean-room extraction -- duplicates existing Lev delivery/orchestration machinery.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-05",
+          "name": "SCM PR/CI automation (GitHub/GitLab/Bitbucket/Azure adapters)",
+          "status": "not-applicable",
+          "lev_equivalent": "N/A -- deferred",
+          "action": "reject",
+          "notes": "Real and useful in the standalone product but not part of the review-gate slice worth extracting first.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "nm-06",
+          "name": "Documented-but-unbuilt deterministic net-deleted-lines backstop",
+          "status": "missing",
+          "lev_equivalent": "N/A",
+          "action": "monitor",
+          "notes": "no-mistakes itself flags this as HELD/not built (review.go:173-176) -- a known gap in LLM-only review gating worth tracking for Lev's own adapter too.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/no-mistakes/",
+        "workshop/analysis/no-mistakes/analysis.md",
+        "docs/design/design-constraint-engineering-manifesto.md",
+        "core/eval/src/strategy/types.ts",
+        "dna/gates.yaml",
+        "dna/core-contract.dna.yaml",
+        "core/validator/src/adapters/index.ts"
+      ],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 2,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "nm-04",
+          "name": "Git-remote-as-gate delivery mechanism (bare repo + daemon + post-receive hook)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "nm-05",
+          "name": "SCM PR/CI automation (GitHub/GitLab/Bitbucket/Azure adapters)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "nofs-dreamgraph",
       "label": "nofs-dreamgraph",
       "category": "graph-native-substrate",
@@ -23342,6 +23578,150 @@
       "rejected_items": []
     },
     {
+      "target": "pydantic-ai-2.0",
+      "label": "Pydantic AI 2.0",
+      "category": "agent-sdk-capability-platform",
+      "priority": "P0",
+      "measured_at": "2026-07-11",
+      "updated_at": "2026-07-11",
+      "owner": "core/domain + core/flowmind + core/exec + plugins/platforms",
+      "path": ".lev/pm/parity/pydantic-ai-2.0.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "build": 1,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "pydanticai-01",
+          "name": "Capability middleware as first-class extension unit",
+          "status": "partial",
+          "lev_equivalent": "core/domain capability contract + FlowMind/Exec lifecycle hooks + plugins/platforms projection",
+          "action": "extract",
+          "notes": "Pydantic's AbstractCapability unifies instructions, model settings, toolsets, wrapper toolsets, native tools, run/node/event/model/tool/output hooks. Lev should extract the contract grammar, not the Python runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/abstract.py",
+            "workshop/analysis/pydantic-ai-2.0/analysis.md#capability-contract-parity"
+          ]
+        },
+        {
+          "id": "pydanticai-02",
+          "name": "Provider/model/profile separation",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms provider declarations + model catalog + runner lifecycle",
+          "action": "extract",
+          "notes": "Mirrors Lev's provider-owned-island doctrine. Use as pressure test for provider auth/client/profile/model capability facts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/providers/__init__.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/models/__init__.py",
+            "plugins/platforms/dna/provider-boundary.yaml",
+            "plugins/platforms/src/model-catalog/types.ts"
+          ]
+        },
+        {
+          "id": "pydanticai-03",
+          "name": "Deferred capability loading and provider-adaptive tool search",
+          "status": "missing",
+          "lev_equivalent": "FlowMind/Exec context/tool surfacing with receipt-backed load/search events",
+          "action": "build",
+          "notes": "High-value missing semantics: hidden tools/capabilities should not leak before recorded load/authorization state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/_deferred_capabilities.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/_deferred_capability_loader.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/capabilities/_tool_search.py"
+          ]
+        },
+        {
+          "id": "pydanticai-04",
+          "name": "AG-UI event stream and deny-by-default interrupt approval mapping",
+          "status": "partial",
+          "lev_equivalent": "AgentPing/UI approval envelopes + Event Bus receipts + tool-call IDs",
+          "action": "extract",
+          "notes": "Extract the interrupt/resume/approval semantics, especially malformed resume denial, into Lev approval receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_adapter.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_event_stream.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/ui/ag_ui/_interrupt.py"
+          ]
+        },
+        {
+          "id": "pydanticai-05",
+          "name": "Durable execution wrappers as compatibility target",
+          "status": "partial",
+          "lev_equivalent": "core/exec receipts + replay harness + external workflow-engine compatibility tests",
+          "action": "extract",
+          "notes": "Treat Temporal/DBOS/Prefect support as tests for whether Lev preserves run context, deps, message history, retry budgets, tool ordering, and trace IDs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/durable_exec/temporal/_agent.py",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/durable_exec/AGENTS.md"
+          ]
+        },
+        {
+          "id": "pydanticai-06",
+          "name": "OTel-backed eval package and stochastic function evaluation",
+          "status": "partial",
+          "lev_equivalent": "core/eval + core/telemetry",
+          "action": "extract",
+          "notes": "Use pydantic-evals as prior art for typed eval cases, evaluator composition, and OpenTelemetry trace shape.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pydantic-ai/pydantic_evals/README.md",
+            "workshop/analysis/pydantic-ai-2.0/analysis.md#evidence-notes"
+          ]
+        },
+        {
+          "id": "pydanticai-07",
+          "name": "Direct Python Agent runtime adoption",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev FlowMind/Orchestration/Exec/Event Bus runtime authority",
+          "action": "reject",
+          "notes": "Reject replacing Lev's runtime authority with Pydantic's Agent loop; use bounded spikes to extract patterns only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/ARCHITECTURE.md",
+            "workshop/intake/pydantic-ai/pydantic_ai_slim/pydantic_ai/agent/__init__.py"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/pydantic-ai",
+        "workshop/analysis/pydantic-ai-2.0/analysis.md",
+        ".lev/pm/parity/pydantic-ai-2.0.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "pydanticai-07",
+          "name": "Direct Python Agent runtime adoption",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "qdrant",
       "label": "Qdrant",
       "category": "search-index",
@@ -26035,6 +26415,137 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "treg",
+      "label": "Treg",
+      "category": "mcp-tool-registry-gateway",
+      "priority": "P0",
+      "measured_at": "2026-09-03",
+      "updated_at": "2026-09-03",
+      "owner": "core/daemon-mcp",
+      "path": ".lev/pm/parity/treg.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "build": 3,
+        "extract": 2,
+        "merge": 1,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "treg-01",
+          "name": "Six-tool MCP surface over thousands of catalog endpoints",
+          "status": "missing",
+          "lev_equivalent": "core/daemon-mcp bounded profile",
+          "action": "build",
+          "notes": "Treg's MCP module and tests reject one-tool-per-endpoint and lock an exact small connector contract. Lev should use the same principle for Poly runner catalogs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/src/treg/mcp.py",
+            "workshop/intake/treg/tests/test_mcp_directory.py"
+          ]
+        },
+        {
+          "id": "treg-02",
+          "name": "Catalog search/get before spend or execution",
+          "status": "partial",
+          "lev_equivalent": "core/poly + core/daemon-mcp search/describe",
+          "action": "extract",
+          "notes": "Treg separates discovery, detailed price/schema read, and call. Lev needs search/describe/run rather than eager schemas in MCP context.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/src/treg/mcp.py",
+            "workshop/intake/treg/README.md"
+          ]
+        },
+        {
+          "id": "treg-03",
+          "name": "Server-side credential injection and org isolation",
+          "status": "partial",
+          "lev_equivalent": "AgentGuard + core/daemon",
+          "action": "merge",
+          "notes": "Treg validates caller identity and keeps provider credentials server-side. Lev should map this to AgentGuard leases and project/run identity, not expose secrets to MCP clients.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/src/treg/domain/identity/access.py",
+            "workshop/intake/treg/tests/test_orgs_isolation.py"
+          ]
+        },
+        {
+          "id": "treg-04",
+          "name": "Read/write separated MCP connector surface",
+          "status": "missing",
+          "lev_equivalent": "core/daemon-mcp tool annotations and policy",
+          "action": "build",
+          "notes": "Treg has a catalog-only v2 surface that separates read and write calls. Lev should preserve safety semantics in MCP sharded profiles and Pentagon proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/src/treg/mcp.py",
+            "workshop/intake/treg/docs/CLAUDE-CONNECTOR-SUBMISSION.md"
+          ]
+        },
+        {
+          "id": "treg-05",
+          "name": "Agent MCP config installation tests",
+          "status": "partial",
+          "lev_equivalent": "core/daemon-pentagon coding-agent MCP load suite",
+          "action": "build",
+          "notes": "Treg tests writing Cursor/opencode config safely and idempotently. Lev should extend this into real agent MCP load tests for mini-app workflows.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/tests/test_mcp_install.py",
+            "core/daemon-pentagon/src/daemon-coding-agent-mcp-ultraqa-suite.ts"
+          ]
+        },
+        {
+          "id": "treg-06",
+          "name": "Idempotent calls with cost/audit evidence",
+          "status": "partial",
+          "lev_equivalent": "core/exec receipts + EvalDecision refs",
+          "action": "extract",
+          "notes": "Treg returns replay/cost/audit-style evidence around calls. Lev should bind MCP calls to Run, Receipt, trace, and EvalDecision authority instead of billing-centric records.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/src/treg/mcp.py",
+            "workshop/intake/treg/src/treg/application/call/service.py",
+            "workshop/intake/treg/src/treg/models.py"
+          ]
+        },
+        {
+          "id": "treg-07",
+          "name": "Lightweight CLI/server dependency split",
+          "status": "implemented",
+          "lev_equivalent": "core package boundary and DNA import gates",
+          "action": "reference",
+          "notes": "Treg keeps MCP/server dependencies out of the light CLI install through extras and import-linter contracts. Lev should preserve existing package-boundary discipline while changing MCP projection.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/treg/pyproject.toml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "{'local_source': 'workshop/intake/treg', 'revision': 'b7367585f0b0ae32fc37053e6ddbd14c7d86ae83'}"
+      ],
+      "absorbed": 0,
+      "pending": 6,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "ultraswarm",

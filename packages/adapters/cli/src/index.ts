@@ -260,6 +260,9 @@ lease
                     scope: options.scope,
                     ttl: options.ttl,
                     reason: options.reason,
+                    confirmationRequired: true,
+                    receiptRefs: [],
+                    auditRefs: [],
                     constraints,
                 },
             });
@@ -722,7 +725,7 @@ async function waitForLeaseActivation(client: AgentPingClient, pingId: string, t
 // ============================================================================
 
 import { spawn, execSync } from 'child_process';
-import { writeFileSync, readFileSync, existsSync, unlinkSync } from 'fs';
+import { closeSync, existsSync, openSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import { registerConfigCommands } from './commands/config.js';
@@ -768,12 +771,14 @@ daemon
 
         console.log('🚀 Starting AgentPing daemon...');
 
+        const logFd = openSync(LOG_FILE, 'a');
         const child = spawn('npx', ['tsx', 'packages/daemon/src/index.ts'], {
             cwd: process.cwd(),
             detached: true,
-            stdio: ['ignore', 'pipe', 'pipe'],
+            stdio: ['ignore', logFd, logFd],
             env: { ...process.env, AGENTPING_PORT: options.port },
         });
+        closeSync(logFd);
 
         if (child.pid) {
             writeFileSync(PID_FILE, String(child.pid));
@@ -877,12 +882,14 @@ daemon
         }
 
         // Start
+        const logFd = openSync(LOG_FILE, 'a');
         const child = spawn('npx', ['tsx', 'packages/daemon/src/index.ts'], {
             cwd: process.cwd(),
             detached: true,
-            stdio: 'ignore',
+            stdio: ['ignore', logFd, logFd],
             env: { ...process.env, AGENTPING_PORT: options.port },
         });
+        closeSync(logFd);
 
         if (child.pid) {
             writeFileSync(PID_FILE, String(child.pid));

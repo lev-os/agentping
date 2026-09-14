@@ -43,6 +43,8 @@ export interface WorkflowGraphEdgeView {
 }
 
 export interface WorkflowGraphFrame {
+  execId?: string;
+  data?: Record<string, unknown>;
   index: number;
   ts: string;
   eventType: string;

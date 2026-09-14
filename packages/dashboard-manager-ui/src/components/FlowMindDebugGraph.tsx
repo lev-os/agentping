@@ -12,6 +12,8 @@ import type {
 
 interface FlowMindDebugGraphProps {
   graph: FlowMindGraph;
+  focusNodeId?: string | null;
+  onSelectNode?: (id:string|null)=>void;
 }
 
 interface PositionedNode extends WorkflowGraphNodeView {
@@ -194,10 +196,16 @@ function buildLayout(graph: FlowMindGraph, frame?: WorkflowGraphFrame) {
   };
 }
 
-export function FlowMindDebugGraph({ graph }: FlowMindDebugGraphProps) {
+export function FlowMindDebugGraph({ graph,focusNodeId,onSelectNode }: FlowMindDebugGraphProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [zoom, setZoom] = useState(1);
   const [autoFollow, setAutoFollow] = useState(true);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  useEffect(()=>{if(focusNodeId!==undefined)setSelectedNodeId(focusNodeId);},[focusNodeId]);
+  function selectNode(id:string|null){setSelectedNodeId(id);onSelectNode?.(id);}
+  const agentDialog = useRef<HTMLDialogElement | null>(null);
+  const selectedNode = graph.nodes.find(node => node.id === selectedNodeId);
+  const nodeFrames = graph.frames.filter(frame => frame.activeNodeId === selectedNodeId && frame.data !== undefined);
   const frame = latestActiveFrame(graph.frames);
   const layout = useMemo(() => buildLayout(graph, frame), [graph, frame]);
   const markerId = useMemo(
@@ -363,6 +371,17 @@ export function FlowMindDebugGraph({ graph }: FlowMindDebugGraphProps) {
                 return (
                   <motion.div
                     key={node.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Inspect ${node.label}`}
+                    aria-pressed={node.id === selectedNodeId}
+                    onClick={() => selectNode(node.id)}
+                    onKeyDown={event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        selectNode(node.id);
+                      }
+                    }}
                     className={[
                       "flowmind-debug-node",
                       statusClass(status),
@@ -400,6 +419,34 @@ export function FlowMindDebugGraph({ graph }: FlowMindDebugGraphProps) {
           </motion.div>
         </div>
       </div>
+      {selectedNode && (
+        <aside aria-label={`${selectedNode.label} inspector`} style={{padding:20,borderTop:'1px solid currentColor'}}>
+          <button type="button" onClick={() => selectNode(null)}>Close inspector</button>
+          <h3>{selectedNode.label} · {selectedNode.kind}</h3>
+          {selectedNode.kind === 'agent' && <button type="button" onClick={()=>agentDialog.current?.showModal()}>Open agent workspace</button>}
+          <details open><summary>Definition and expected types</summary>
+            <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(selectedNode.metadata?.definition ?? selectedNode.metadata ?? {},null,2)}</pre>
+          </details>
+          {selectedNode.metadata?.schemaInspection != null && <details open><summary>Resolved schema inspection</summary><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(selectedNode.metadata.schemaInspection,null,2)}</pre></details>}
+          <details open><summary>Execution events ({nodeFrames.length})</summary>
+            {nodeFrames.length === 0 ? <p>No node execution events supplied.</p> : nodeFrames.map(item => (
+              <details key={`${item.execId ?? 'unattributed'}:${item.index}`}>
+                <summary>{item.ts} · {item.eventType} · {item.execId ?? 'run identity unavailable'}</summary>
+                <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(item.data ?? {summary:item.summary},null,2)}</pre>
+              </details>
+            ))}
+          </details>
+        </aside>
+      )}
+      {selectedNode?.kind === 'agent' && <dialog ref={agentDialog} aria-label={`${selectedNode.label} agent workspace`} style={{width:'90vw',maxHeight:'90vh',background:'#101827',color:'#eef',padding:24,border:'1px solid #678'}}>
+        <form method="dialog"><button>Return to map</button></form>
+        <h2>{selectedNode.label} agent workspace</h2>
+        <p>Declared agent task and supplied events. No active agent session controls are connected.</p>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20}}>
+          <section><h3>Task and expected contracts</h3><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(selectedNode.metadata?.definition??{},null,2)}</pre></section>
+          <section><h3>Execution evidence</h3>{nodeFrames.length?nodeFrames.map(item=><details key={`${item.execId??'unknown'}:${item.index}`}><summary>{item.ts} · {item.execId??'Unknown run'}</summary><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(item.data,null,2)}</pre></details>):<p>No execution events supplied for this agent.</p>}</section>
+        </div>
+      </dialog>}
     </div>
   );
 }

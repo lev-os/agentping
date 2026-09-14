@@ -78,6 +78,7 @@ export interface NotificationManagerConfig {
  */
 export class NotificationManager {
   private ui: NotificationUI | null = null;
+  private toolbarDrawer: DrawerNotificationUI | null = null;
   private themeManager: ThemeManager | null = null;
   private config: NotificationManagerConfig;
   private initialized = false;
@@ -136,6 +137,10 @@ export class NotificationManager {
       notification: { ...this.config.notification, ...newConfig.notification },
     };
 
+    // The toolbar drawer uses the current notification tokens/config on next open.
+    this.toolbarDrawer?.destroy();
+    this.toolbarDrawer = null;
+
     // Recreate UI if style changed
     if (styleChanged && this.initialized) {
       this.destroy();
@@ -167,33 +172,31 @@ export class NotificationManager {
    */
   hide(fade = false): void {
     this.ui?.hide(fade);
+    this.toolbarDrawer?.hide(fade);
   }
 
   /**
-   * Toggle drawer visibility (drawer style only)
+   * Toggle the toolbar drawer without changing the configured lease UI style.
    */
   toggleDrawer(): void {
-    if (this.ui instanceof DrawerNotificationUI) {
-      (this.ui as DrawerNotificationUI).toggle();
-    }
+    this.getToolbarDrawer()?.toggle();
   }
 
   /**
-   * Show drawer (drawer style only)
+   * Show the toolbar drawer without changing the configured lease UI style.
    */
   showDrawer(): void {
-    if (this.ui instanceof DrawerNotificationUI) {
-      (this.ui as DrawerNotificationUI).showDrawer();
-    }
+    this.getToolbarDrawer()?.showDrawer();
   }
 
   /**
-   * Update drawer state (drawer style only)
+   * Update any drawer currently owned by the manager.
    */
   updateDrawerState(state: DrawerState): void {
     if (this.ui instanceof DrawerNotificationUI) {
-      (this.ui as DrawerNotificationUI).updateState(state);
+      this.ui.updateState(state);
     }
+    this.toolbarDrawer?.updateState(state);
   }
 
   /**
@@ -229,8 +232,31 @@ export class NotificationManager {
    */
   destroy(): void {
     this.ui?.destroy();
+    this.toolbarDrawer?.destroy();
+    this.toolbarDrawer = null;
     this.ui = null;
     this.initialized = false;
+  }
+
+  private getToolbarDrawer(): DrawerNotificationUI | null {
+    if (this.ui instanceof DrawerNotificationUI) {
+      return this.ui;
+    }
+
+    if (!this.themeManager) {
+      console.warn('[AgentPing] NotificationManager not initialized');
+      return null;
+    }
+
+    if (!this.toolbarDrawer) {
+      this.toolbarDrawer = new DrawerNotificationUI(this.themeManager, this.config.notification);
+      this.toolbarDrawer.onGrant = (requestId) => this.onGrant(requestId);
+      this.toolbarDrawer.onDeny = (requestId) => this.onDeny(requestId);
+      this.toolbarDrawer.onRevoke = (token) => this.onRevoke(token);
+      this.toolbarDrawer.onStateRequest = (callback) => this.onStateRequest(callback);
+    }
+
+    return this.toolbarDrawer;
   }
 }
 

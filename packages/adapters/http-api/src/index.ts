@@ -89,6 +89,13 @@ export function createHttpApi(config: HttpApiConfig) {
         return c.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
+    app.get('/api/v1/browser/status', (c) => {
+        return c.json({
+            available: browserCDPAdapter !== undefined,
+            extensionConnected: browserCDPAdapter?.isExtensionConnected() ?? false,
+        });
+    });
+
     // =========================================================================
     // Create Ping
     // =========================================================================

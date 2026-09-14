@@ -1,3 +1,5 @@
+import { sendToggleDrawer } from '../lib/toolbar-action';
+
 /**
  * AgentPing Browser Extension - Service Worker
  *
@@ -31,7 +33,7 @@ export default defineBackground(() => {
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   let attachedTabs = new Set<number>();
 
-  const DEFAULT_DAEMON_URL = 'ws://localhost:7890/browser-cdp';
+  const DEFAULT_DAEMON_URL = import.meta.env.WXT_AGENTPING_DAEMON_WS_URL || 'ws://localhost:7890/browser-cdp';
   const DAEMON_URL_STORAGE_KEY = 'agentping_daemon_ws_url';
   const RECONNECT_DELAY_MS = 3000;
   const KEEPALIVE_ALARM = 'agentping-keepalive';
@@ -513,10 +515,18 @@ export default defineBackground(() => {
   });
 
   // Extension action click - toggle drawer
-  chrome.action.onClicked.addListener(async (tab) => {
+  chrome.action.onClicked.addListener((tab) => {
     if (tab.id && !tab.url?.startsWith('chrome://')) {
-      chrome.tabs.sendMessage(tab.id, { type: 'toggleDrawer' }).catch(() => {
-        console.warn('[AgentPing] Content script not loaded on this tab');
+      const tabId = tab.id;
+      void sendToggleDrawer(
+        tabId,
+        (id, message) => chrome.tabs.sendMessage(id, message),
+        () => chrome.scripting.executeScript({
+          target: { tabId },
+          files: ['content-scripts/content.js'],
+        }),
+      ).catch((err) => {
+        console.warn('[AgentPing] Could not toggle drawer:', err);
       });
     }
   });
