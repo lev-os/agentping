@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T07:32:21.804330+00:00",
+  "generated_at": "2026-09-15T04:34:56.831704+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 29051,
+    "operation_count": 30497,
     "by_type": {
-      "upsert_entity": 6755,
-      "add_claim": 15676,
-      "add_link": 6620
+      "upsert_entity": 7069,
+      "add_claim": 16501,
+      "add_link": 6927
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 135,
-    "total_features": 1609,
-    "absorbed": 73,
-    "pending": 1118,
-    "deferred": 28,
-    "rejected": 71,
-    "monitor": 165,
+    "parity_files": 142,
+    "total_features": 1701,
+    "absorbed": 74,
+    "pending": 1173,
+    "deferred": 29,
+    "rejected": 74,
+    "monitor": 179,
     "unclassified": 0,
-    "absorbed_pct": 4.5,
+    "absorbed_pct": 4.4,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -194,6 +194,406 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "agent-native-eve",
+      "label": "EVE / Company Brain Agent Pattern",
+      "category": "agent-home-and-company-brain",
+      "priority": "P0",
+      "measured_at": "2026-09-05",
+      "updated_at": "2026-09-05",
+      "owner": "core/domain + core/flowmind + core/poly + plugins/dashboard + plugins/scheduling",
+      "path": ".lev/pm/parity/agent-native-eve.yaml",
+      "verdict": "extract",
+      "total_features": 24,
+      "classified": 24,
+      "unclassified": 0,
+      "counts": {
+        "extract": 9,
+        "merge": 10,
+        "build": 1,
+        "spike": 2,
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "eve-01",
+          "name": "Owned agent identity and instructions",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/config declarations plus repo-local skills and agent profiles",
+          "action": "extract",
+          "notes": "Lev has declarations and skills, but no single AgentHome identity contract spanning all surfaces.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L400-L423",
+            "docs/ARCHITECTURE.md#L443-L462",
+            "docs/NORTH_STAR.md#L89-L103"
+          ]
+        },
+        {
+          "id": "eve-02",
+          "name": "Company knowledge and business-intelligence brain",
+          "status": "partial",
+          "lev_equivalent": "core/context-graph + core/memory + core/index + provider adapters",
+          "action": "extract",
+          "notes": "Retrieval and memory exist as separate capabilities; a governed company-agent projection is missing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L120-L156",
+            "core/context-graph/package.json",
+            "core/memory/package.json",
+            "core/index/package.json"
+          ]
+        },
+        {
+          "id": "eve-03",
+          "name": "One conversational router over specialized agents",
+          "status": "partial",
+          "lev_equivalent": "FlowMind router + orchestration DAG/fanout + exec provider dispatch",
+          "action": "extract",
+          "notes": "The runtime pieces exist, but the user-facing agent-home composition contract is not unified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L220-L260",
+            "docs/ARCHITECTURE.md#L219-L234",
+            "core/orchestration/package.json"
+          ]
+        },
+        {
+          "id": "eve-04",
+          "name": "Skill authoring and progressive improvement",
+          "status": "partial",
+          "lev_equivalent": "skills + plugins/evolve-memory + FlowMind promotion/eval paths",
+          "action": "merge",
+          "notes": "Evolution exists; the missing boundary is attaching accepted skills to an addressable agent identity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L823-L829",
+            "plugins/evolve-memory/src/evolution/engine.ts",
+            "plugins/evolve-memory/flows/skill-evolution.flow.yaml"
+          ]
+        },
+        {
+          "id": "eve-05",
+          "name": "Tool composition and connector access",
+          "status": "partial",
+          "lev_equivalent": "Poly capability/provider registry + MCP/tool projections",
+          "action": "merge",
+          "notes": "Tool/provider surfaces exist; per-agent tool allowlists and data scopes need one compiled manifest.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L711-L735",
+            "docs/ARCHITECTURE.md#L332-L354",
+            "plugins/platforms/src/index.ts"
+          ]
+        },
+        {
+          "id": "eve-06",
+          "name": "Omnipresent team channels",
+          "status": "partial",
+          "lev_equivalent": "AgentPing + Poly CLI/MCP/HTTP/WS surfaces + platform chat sync",
+          "action": "extract",
+          "notes": "Lev has multiple surfaces, but a single agent identity/channel binding is not yet productized.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L727-L735",
+            "docs/ARCHITECTURE.md#L38-L43",
+            "plugins/platforms/src/chat-sync"
+          ]
+        },
+        {
+          "id": "eve-07",
+          "name": "Scheduled proactive work",
+          "status": "partial",
+          "lev_equivalent": "plugins/scheduling cron store/tick provider + daemon heartbeat",
+          "action": "merge",
+          "notes": "Scheduling is shipped as a plugin; agent-owned schedules and channel delivery remain the gap.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L823-L856",
+            "plugins/scheduling/src/cron-tick-provider.ts",
+            "plugins/scheduling/src/schedule-loader.ts",
+            "core/daemon/src/core.ts"
+          ]
+        },
+        {
+          "id": "eve-08",
+          "name": "External event triggers and connector subscriptions",
+          "status": "partial",
+          "lev_equivalent": "core/event-providers + core/event-bus + FlowMind triggers",
+          "action": "merge",
+          "notes": "The causal spine exists; broad connector subscription and idempotent agent routing need field proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L871-L909",
+            "core/event-providers/src/events/base.ts",
+            "core/event-bus/src/events/event-bus.ts",
+            "core/flowmind/src/router"
+          ]
+        },
+        {
+          "id": "eve-09",
+          "name": "Identity-aware data access",
+          "status": "partial",
+          "lev_equivalent": "plugins/sentinel identity verification + AgentGuard lease concepts + provider policy",
+          "action": "build",
+          "notes": "Identity and provider admission exist separately; the agent/channel/user/data-scope join is not one contract.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L620-L668",
+            "plugins/sentinel/src/oauth/identity-verifier.ts",
+            "plugins/platforms/dna/provider-boundary.yaml"
+          ]
+        },
+        {
+          "id": "eve-10",
+          "name": "Scoped tools, approvals, guardrails, and audit trails",
+          "status": "partial",
+          "lev_equivalent": "AgentPing HITL contracts + harness guardrails + exec/eval receipts",
+          "action": "merge",
+          "notes": "Lev's safety direction is stronger than ambient access, but the AgentHome manifest must compile these controls consistently.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L743-L763",
+            "plugins/harness-patterns/src/guardrails/engine.ts",
+            "plugins/dashboard/src/briefs/hitl.ts",
+            "core/exec/src/shell-gateway.ts"
+          ]
+        },
+        {
+          "id": "eve-11",
+          "name": "Dedicated computer/workspace execution",
+          "status": "partial",
+          "lev_equivalent": "core/exec + core/tmux-harness + plugins/browser + platform adapters",
+          "action": "extract",
+          "notes": "Execution providers exist, but there is no provider-neutral per-agent workspace lifecycle with sleep/wake semantics.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L424-L479",
+            "docs/ARCHITECTURE.md#L101-L107",
+            "docs/ARCHITECTURE.md#L212-L215",
+            "plugins/browser/src/handlers/browse.ts"
+          ]
+        },
+        {
+          "id": "eve-12",
+          "name": "Efficient sleep/wake and serverless scaling",
+          "status": "missing",
+          "lev_equivalent": "daemon/exec lifecycle; no unified agent workspace hibernation contract",
+          "action": "spike",
+          "notes": "Do not build this until AgentHome identity and provider capability contracts are settled.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L455-L479",
+            "core/daemon/src/core.ts",
+            "core/exec/package.json"
+          ]
+        },
+        {
+          "id": "eve-13",
+          "name": "Model/provider neutrality and policy routing",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms provider cards + model catalog + exec profiles",
+          "action": "merge",
+          "notes": "Provider choice exists; agent-scoped policy and outcome-based routing need one manifest.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1267-L1281",
+            "plugins/platforms/src/model-catalog",
+            "plugins/platforms/providers",
+            "core/exec/src"
+          ]
+        },
+        {
+          "id": "eve-14",
+          "name": "Interactive latency versus asynchronous quality profiles",
+          "status": "partial",
+          "lev_equivalent": "exec profiles + orchestration budgets + scheduling",
+          "action": "extract",
+          "notes": "Budgets and profiles exist, but the product-level distinction is not exposed as an AgentHome policy.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1282-L1323",
+            "docs/ARCHITECTURE.md#L462-L511",
+            "plugins/scheduling/src/executor.ts"
+          ]
+        },
+        {
+          "id": "eve-15",
+          "name": "Multi-model consortium/best-of-N asynchronous inference",
+          "status": "partial",
+          "lev_equivalent": "core/eval strategy best-of-N + provider dispatch",
+          "action": "reference",
+          "notes": "Lev has evaluation strategies, not a general spot-market or asynchronous model consortium.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1287-L1337",
+            "core/eval/src/strategy/best-of-n-policy.ts",
+            "core/exec/src"
+          ]
+        },
+        {
+          "id": "eve-16",
+          "name": "Feedback capture and eval cases",
+          "status": "partial",
+          "lev_equivalent": "AgentPing feedback + core/eval decision/proof bundle + synth events",
+          "action": "merge",
+          "notes": "Feedback/eval pieces exist; a durable agent-scoped feedback-to-eval projection needs proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L992-L1027",
+            "core/eval/src/eval-decision.ts",
+            "plugins/dashboard/src/briefs/hitl.ts",
+            "core/event-bus/src/events/synth.ts"
+          ]
+        },
+        {
+          "id": "eve-17",
+          "name": "Human-gated self-improvement proposals",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory mutation contract + FlowMind promotion gates",
+          "action": "merge",
+          "notes": "The required separation between proposal and promotion is present; agent-home attachment is missing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/analysis.json",
+            "plugins/evolve-memory/src/evolution/skill-mutation-contract.ts",
+            "plugins/evolve-memory/flows/dna-mutation-proposal.flow.yaml"
+          ]
+        },
+        {
+          "id": "eve-18",
+          "name": "Operator-friendly agent configuration surface",
+          "status": "partial",
+          "lev_equivalent": "AgentPing dashboard + LevUI IR + config/FlowMind authoring",
+          "action": "spike",
+          "notes": "The source identifies the UX gap explicitly; solve it as a projection/editor over typed contracts, not raw file editing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L669-L710",
+            "docs/ARCHITECTURE.md#L38-L43",
+            "docs/ARCHITECTURE.md#L439-L462"
+          ]
+        },
+        {
+          "id": "eve-19",
+          "name": "Company-scale contribution model for skills and knowledge",
+          "status": "partial",
+          "lev_equivalent": "graph/workstream identity + event projections + evolve-memory",
+          "action": "extract",
+          "notes": "Shared contribution and review semantics need agent identity, roles, and provenance in one product flow.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1046-L1073",
+            "core/workstream/package.json",
+            "core/event-bus/src/events",
+            "plugins/evolve-memory/src"
+          ]
+        },
+        {
+          "id": "eve-20",
+          "name": "End-user abstraction from provider/computer topology",
+          "status": "partial",
+          "lev_equivalent": "Poly surfaces over exec/provider capabilities",
+          "action": "merge",
+          "notes": "The architecture points in this direction; no single agent-home projection hides topology while preserving receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L511-L560",
+            "docs/ARCHITECTURE.md#L332-L354",
+            "docs/ARCHITECTURE.md#L462-L511"
+          ]
+        },
+        {
+          "id": "eve-21",
+          "name": "Provider lock-in avoidance and owned data/skills",
+          "status": "partial",
+          "lev_equivalent": "local-first config + provider cards + model catalog",
+          "action": "reference",
+          "notes": "Strategic alignment is strong; verify actual cross-provider portability in a field proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1341-L1372",
+            "docs/NORTH_STAR.md#L48-L51",
+            "plugins/platforms/providers"
+          ]
+        },
+        {
+          "id": "eve-22",
+          "name": "Productized first-agent onboarding around one toil task",
+          "status": "partial",
+          "lev_equivalent": "core/onboarding + skills + plugin/provider doctor surfaces",
+          "action": "extract",
+          "notes": "Lev has onboarding primitives but no one obvious AgentHome first-run path with measurable toil baseline.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1096-L1110",
+            "core/onboarding/package.json",
+            "docs/VISION.md#L82-L91"
+          ]
+        },
+        {
+          "id": "eve-23",
+          "name": "Computer-use and browser-use capability",
+          "status": "partial",
+          "lev_equivalent": "plugins/browser cascade with optional AgentPing lease",
+          "action": "merge",
+          "notes": "Capability exists; bind it to AgentHome scopes and lifecycle rather than adding another browser runtime.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L424-L430",
+            "plugins/browser/src/types.ts",
+            "plugins/browser/src/handlers/browse.ts"
+          ]
+        },
+        {
+          "id": "eve-24",
+          "name": "Operational excellence as the builder role",
+          "status": "partial",
+          "lev_equivalent": "FlowMind policy, eval, receipts, runtime health, and proof skills",
+          "action": "extract",
+          "notes": "This is a strong product framing for existing Lev primitives, not a new code subsystem.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/hqxi4snP36I/transcript.txt#L1057-L1073",
+            "docs/NORTH_STAR.md#L251-L267",
+            "docs/ARCHITECTURE.md#L503-L519"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 20,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -2389,6 +2789,104 @@
       "rejected_items": []
     },
     {
+      "target": "archify",
+      "label": "Archify",
+      "category": "typed-architecture-projection",
+      "priority": "P1",
+      "measured_at": "2026-09-04",
+      "updated_at": "2026-09-04",
+      "owner": null,
+      "path": ".lev/pm/parity/archify.yaml",
+      "verdict": "extract",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "benchmark": 1,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "typed-json-ir",
+          "name": "Typed JSON intermediate representation",
+          "status": "partial",
+          "lev_equivalent": "core config/domain schemas plus plugin-local RenderSpec",
+          "action": "extract",
+          "notes": "Compose the existing pieces into one public validation operation; do not import diagram schemas into core.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/archify/archify/schemas/architecture.schema.json",
+            "core/config/src/source-validator-registry.ts"
+          ]
+        },
+        {
+          "id": "repair-diagnostics",
+          "name": "Stable repair-friendly validation diagnostics",
+          "status": "partial",
+          "lev_equivalent": "domain validation results and evaluator diagnostics",
+          "action": "extract",
+          "notes": "Preserve stable codes, subjects, evidence, and supported fixes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/archify/archify/renderers/shared/validator.mjs"
+          ]
+        },
+        {
+          "id": "atomic-projection-delivery",
+          "name": "Checked candidate and atomic last-good delivery",
+          "status": "partial",
+          "lev_equivalent": "content-addressed projections and receipts",
+          "action": "extract",
+          "notes": "Useful plugin behavior; projection remains rebuildable and non-authoritative.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/archify/archify/bin/archify.mjs",
+            "workshop/analysis/archify-typed-domain-graph/leviathan-validated-projection.html"
+          ]
+        },
+        {
+          "id": "interactive-architecture-viewer",
+          "name": "Truth-bounded interactive architecture viewer",
+          "status": "partial",
+          "lev_equivalent": "plugins/now plus AgentPing GenUI",
+          "action": "benchmark",
+          "notes": "Keep Archify only for interactions that Now cannot reproduce at lower ownership cost.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/archify/archify/assets/template.html",
+            "workshop/analysis/archify-typed-domain-graph/leviathan-validated-projection.visual-check.json"
+          ]
+        },
+        {
+          "id": "code-discovery",
+          "name": "Codebase indexing and call-chain discovery",
+          "status": "not-applicable",
+          "lev_equivalent": "plugins/codebase-memory-mcp and core/index",
+          "action": "reference",
+          "notes": "Archify consumes authored topology; it does not replace CBM.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/codebase-memory-mcp/config.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "arscontexta",
       "label": "ArsContexta",
       "category": "agent-memory-architecture",
@@ -2534,6 +3032,289 @@
         {
           "id": "arscontexta-07",
           "name": "File-as-complete-artifact authority",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "arsumbris",
+      "label": "Ars Umbris",
+      "category": "agentic-cms-typed-knowledge-ide",
+      "priority": "P1",
+      "measured_at": "2026-09-14",
+      "updated_at": "2026-09-14",
+      "owner": "core/flowmind + core/context-graph + lev-genui-dashboard + apps/cockpit",
+      "path": ".lev/pm/parity/arsumbris.yaml",
+      "verdict": "extract",
+      "total_features": 16,
+      "classified": 16,
+      "unclassified": 0,
+      "counts": {
+        "extract": 10,
+        "reference": 2,
+        "monitor": 2,
+        "reject": 2
+      },
+      "features": [
+        {
+          "id": "arsumbris-type-def-is-config-declaration",
+          "name": "Projection declaration where the type-def IS the config (no manifest, no registry)",
+          "status": "missing",
+          "lev_equivalent": "SurfaceDeclaration primitive (spec-only); `dna/ui/schemas/*.yaml` do not exist",
+          "action": "extract",
+          "notes": "Resolves cockpit open question 20 (the q9 ownership fork: FlowMind-native `surface` key vs `.lev/ui/` island vs plugin `src/ui/`). Declaration lives in the graph as a type; discovery is a graph query; no third registry to maintain.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:19-41",
+            ".lev/pm/designs/lev-world-cockpit-brief/primitives/surface-declaration.md"
+          ]
+        },
+        {
+          "id": "arsumbris-role-typed-view-discovery",
+          "name": "Role-typed view discovery by type-query (pane / spatial-container / grouping-container / bar / placeholder)",
+          "status": "missing",
+          "lev_equivalent": "ProjectionSlot (code-proven partial) + LayoutMode (spec-only)",
+          "action": "extract",
+          "notes": "\"No container is privileged, each owns only its own layout.\" Must be validated against grammar G1 visible-set purity before adoption.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:24-91",
+            "workshop/intake/arsumbris/au-host.md:161-166"
+          ]
+        },
+        {
+          "id": "arsumbris-composition-instance-pool",
+          "name": "Composition as a flat instance pool plus a reference graph",
+          "status": "partial",
+          "lev_equivalent": "LayoutRecipe (spec-only)",
+          "action": "extract",
+          "notes": "`^: id` declares a pool entry, `[[^^id]]` references one; \"the layout tree is the reference graph.\" A serialization answer for recipes-as-data. Bears on open question 5 (recipe vs CockpitStateToken boundary).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:123-159",
+            ".lev/pm/designs/lev-world-cockpit-brief/primitives/layout-recipe.md"
+          ]
+        },
+        {
+          "id": "arsumbris-view-state-channels",
+          "name": "Four named view-state channels — intent (routed or broadcast), focus, selection, viewState",
+          "status": "missing",
+          "lev_equivalent": "EventBinding primitive — entirely deferred to bead lev-02oe; \"no openlang/flow analog exists\"",
+          "action": "extract",
+          "notes": "Highest-value row in this intake. Cockpit open question 18 is fully deferred and every liveness claim in morning-cockpit, review-pass, and t6-research is contingent on it. The routed-vs-broadcast distinction is the specific prior art. Must route through FlowMind/Poly without becoming a second dispatch authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:96-121",
+            "workshop/intake/arsumbris/au-host.md:167-169",
+            ".lev/pm/designs/lev-world-cockpit-brief/primitives/event-binding.md"
+          ]
+        },
+        {
+          "id": "arsumbris-mount-contract-disposer",
+          "name": "Pure renderer mount contract returning its own disposer",
+          "status": "partial",
+          "lev_equivalent": "q9 assertion 'runtime stays FlowMind/Poly, renderer stays pure'",
+          "action": "extract",
+          "notes": "`mount(container, host) => () => void`. Host supplies config/files/selection/intent/ saveConfig; the projection owns its cleanup. Minimal and testable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:43-56",
+            "workshop/intake/arsumbris/au-host.md:92-112"
+          ]
+        },
+        {
+          "id": "arsumbris-contract-version-refusal",
+          "name": "Declared contractVersion must equal the SDK constant; release-wide tag with loud startup refusal",
+          "status": "missing",
+          "lev_equivalent": "gap — no cockpit contract-version drift mechanism specified",
+          "action": "extract",
+          "notes": "One version tagged across every part; generated VERSION.md records each part's commit plus its internal wire/contract integer; a detected mismatch is \"a loud refusal at startup.\" Directly applicable to a composed UI with third-party views.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:38-40",
+            "workshop/intake/arsumbris/INSTALL.md:194-209",
+            "workshop/intake/arsumbris/VERSION.md:8-21"
+          ]
+        },
+        {
+          "id": "arsumbris-themes-and-component-set",
+          "name": "Themes as typed instances over CSS tokens plus a swappable component catalog/set",
+          "status": "partial",
+          "lev_equivalent": "ThemeDeclaration primitive (q24; W3C tokens + [data-theme]); fleet-deck port is the themes-are-data proof",
+          "action": "extract",
+          "notes": "Lev already proved themes-are-data via the fleet-deck preset. The additional idea is the `<au-*>` catalog/component-set split — swap the implementation set without touching views.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:171-174",
+            ".lev/pm/designs/lev-world-cockpit-brief/primitives/theme-declaration.md"
+          ]
+        },
+        {
+          "id": "arsumbris-view-as-repo-packaging",
+          "name": "A view is its own repo declaring the host SDK as a dependency",
+          "status": "missing",
+          "lev_equivalent": "AppSatellite / RendererTakeover (research-derived); AppDirectory rides dashboard-runner",
+          "action": "reference",
+          "notes": "Packaging granularity precedent. Lev's fractal-island intuition (.lev/ui/<feature>/) is the existing analogue; do not adopt sibling-first ambient resolution (see rejected row).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:58-65",
+            "workshop/intake/arsumbris/au-engine.md:10-45"
+          ]
+        },
+        {
+          "id": "arsumbris-user-authorable-type-language",
+          "name": "User-authorable type language over markdown/YAML (extends, constrained scalars, cardinality, refs, unions, sealed, abstract, body sections)",
+          "status": "missing",
+          "lev_equivalent": "gap — FlowMind uses a lightweight JSON-Schema subset; scoped-asset `extends` is fixed-kind config resolution",
+          "action": "monitor",
+          "notes": "A genuine capability gap per agent://TypedGraphFit, and the most ambitious part of arsumbris. Deliberately NOT routed to extract in this pass: Lev's schema ownership is owner-registered by design, and a generic type language would cross several ownership boundaries. Revisit only if a concrete Lev need demands authorable types.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-engine.md:55-129",
+            "core/flowmind/src/validation.ts:1-12",
+            "core/config/src/scoped-asset-resolution.ts:112-203"
+          ]
+        },
+        {
+          "id": "arsumbris-cross-repo-typed-graph",
+          "name": "Multi-repo workspace graph with declared deps, edit/discover member sets, and cross-repo wikilinks",
+          "status": "missing",
+          "lev_equivalent": "partial — fractal roots and source catalogs give explicit containment/provenance, not workspace-member semantics",
+          "action": "monitor",
+          "notes": "Lev's explicit-root model is deliberately stricter than sibling-first ambient discovery (INSTALL.md:28-32 makes the sibling layout load-bearing wiring). Keep Lev's explicitness; the unresolved-cross-project-reference behavior is already the Lev answer.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-engine.md:10-53",
+            "core/config/src/config-loader.ts:1599-1760",
+            "core/context-graph/src/adapters/file.ts:36-93"
+          ]
+        },
+        {
+          "id": "arsumbris-typed-mcp-tools-and-hook-shapes",
+          "name": "Typed MCP tools (fields are the input, broker access class) and hook shapes observer/mediator/stamper/session-start with tier ordering and critical fail-closed load",
+          "status": "partial",
+          "lev_equivalent": "Poly command catalog + side_effect class; core/domain hooks + platforms hooks-manifest; effect-control ADMISSION_GATE/ACT/VERIFY_GATE",
+          "action": "extract",
+          "notes": "Extract the vocabulary only: named hook shapes, tier ordering, and critical fail-closed loading. Lev hooks currently return void with no mediator result. Do NOT import a mediator that returns allow/deny/inject/ask as a verdict — that would be a second decision brain (dna/gates.yaml:198-283 single-verdict). Per agent://AgentGovernanceFit.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-mcp.md:17-87",
+            "workshop/intake/arsumbris/au-mcp.md:111-129",
+            "core/domain/src/hooks.ts:85-108",
+            "plugins/platforms/src/shared/hooks-manifest.ts:9-67",
+            "core/effect/src/effect-control-runtime.ts:41-44"
+          ]
+        },
+        {
+          "id": "arsumbris-agent-profile-bundle",
+          "name": "Agent profile bundling skills, injects, tools, native-tool allowlist, and hooks with daemon-side tool visibility",
+          "status": "partial",
+          "lev_equivalent": ".lev/exec-profiles/* runtime profiles + generated skills + worker completion manifest",
+          "action": "extract",
+          "notes": "Lev has scoped profiles and a narrow worker-visible surface manifest but no single bundle that controls tool visibility, skills, hooks, and native allowlist together. Per agent://AgentGovernanceFit.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-mcp.md:89-108",
+            "core/config/src/exec-runtime-profile.ts:23-40",
+            "core/exec/src/completion/completion-contract.ts:156-207"
+          ]
+        },
+        {
+          "id": "arsumbris-native-tool-redirect-floor",
+          "name": "Native-tool redirect plus read-guard as always-on governance floors",
+          "status": "missing",
+          "lev_equivalent": "partial — generated pre-bash-guard blocks named destructive commands; no unread-file guard, no native redirect layer",
+          "action": "extract",
+          "notes": "\"The harness's own tools point at the governed equivalents\" is the sharp idea — it closes the hole where an agent bypasses governed writes via native tools.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-mcp.md:122-129",
+            "plugins/platforms/templates/claude-code/hooks/pre-bash-guard.sh.tmpl:2-5"
+          ]
+        },
+        {
+          "id": "arsumbris-diagnostics-never-block",
+          "name": "Type violations surface as diagnostics and never block a save or a read",
+          "status": "not-applicable",
+          "lev_equivalent": "deliberate divergence — Lev is fail-closed at declaration, source, and gate boundaries",
+          "action": "reject",
+          "notes": "Rejected as a Lev policy. Authoring ergonomics are real, but Lev's gates ratchet one way (dna/gates.yaml) and fail-closed declaration parsing is load-bearing. A non-blocking diagnostic channel could be added later without weakening any existing gate.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-engine.md:141-142",
+            "core/flowmind/src/parser.ts:885-965",
+            "core/config/src/source-catalog.ts:500-660"
+          ]
+        },
+        {
+          "id": "arsumbris-graph-owns-workspace-daemon",
+          "name": "Graph engine owns its own per-workspace Unix-socket daemon, guarded write path, versioned reads, and subscriptions",
+          "status": "not-applicable",
+          "lev_equivalent": "deliberate divergence — graph DNA excludes execution, process lifecycle, and transport",
+          "action": "reject",
+          "notes": "Rejected as a shape. The separable good idea — versioned reads and delta subscriptions — is already Lev's own stated target in docs/specs/spec-snapshot-delta-sync.md:41-66 and belongs to that plan, not to a graph-owned daemon.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-engine.md:132-148",
+            "dna/core/context-graph.dna.yaml",
+            "docs/specs/spec-graph.md:1-133"
+          ]
+        },
+        {
+          "id": "arsumbris-no-zoom-or-provenance-model",
+          "name": "No zoom axis, no fidelity contract, no provenance spine, no verdict adjacency",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev-only — ZoomDepthContract, G2/G3/G4, SourceStamp, DegradedReasonEnum, LLMRegionClass, G7/G8, EscalationFeed",
+          "action": "reference",
+          "notes": "The divergence, recorded deliberately. Nothing in au-host mentions zoom, level, depth, fidelity, staleness, degraded state, source attribution, or verdicts; its containers arrange without carrying a depth coordinate. This is Lev's differentiator and the reason the frame can be adopted without overwriting any Lev decision. The zoom-graft spike is the test.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/arsumbris/au-host.md:1-203",
+            ".lev/pm/designs/lev-world-cockpit-brief/index.md:93-103"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/designs/lev-world-cockpit-brief/index.md",
+        ".lev/pm/workstreams/lev-genui-dashboard/state/workstream.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 2,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "arsumbris-diagnostics-never-block",
+          "name": "Type violations surface as diagnostics and never block a save or a read",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "arsumbris-graph-owns-workspace-daemon",
+          "name": "Graph engine owns its own per-workspace Unix-socket daemon, guarded write path, versioned reads, and subscriptions",
           "action": "reject",
           "absorbed_into": null,
           "tribunal_note": null
@@ -4196,6 +4977,172 @@
       ]
     },
     {
+      "target": "buzz",
+      "label": "Block Buzz",
+      "category": "agent-collaboration-runtime",
+      "priority": "P0",
+      "measured_at": "2026-09-08",
+      "updated_at": "2026-09-08",
+      "owner": "plugins/buzz + core/exec + plugins/platforms + core/event-bus",
+      "path": ".lev/pm/parity/buzz.yaml",
+      "verdict": "adopt",
+      "total_features": 9,
+      "classified": 9,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 2,
+        "build": 4,
+        "merge": 1,
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "buzz-01",
+          "name": "Signed human and agent collaboration events",
+          "status": "partial",
+          "lev_equivalent": "core/event-bus plus AgentPing and gateway projections",
+          "action": "adopt",
+          "notes": "Buzz remains authoritative for Nostr collaboration events; Lev lifecycle truth is linked by correlation refs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:5",
+            "workshop/intake/buzz/ARCHITECTURE.md:103"
+          ]
+        },
+        {
+          "id": "buzz-02",
+          "name": "Arbitrary ACP agent subprocess boundary",
+          "status": "missing",
+          "lev_equivalent": "ACP surface classification exists, but no verified lev-acp runtime adapter",
+          "action": "build",
+          "notes": "This is the first spike and the seam that makes all Buzz-managed agents Lev agents.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:653",
+            "workshop/intake/buzz/crates/buzz-acp/src/config.rs:195",
+            "workshop/intake/buzz/crates/buzz-acp/src/acp.rs:446"
+          ]
+        },
+        {
+          "id": "buzz-03",
+          "name": "Per-launch Lev worker authority",
+          "status": "implemented",
+          "lev_equivalent": "core/exec claim-bound completion and worker invocation binding",
+          "action": "merge",
+          "notes": "Reuse unchanged; the Buzz adapter must enter before this boundary and cannot mint authority itself.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/completion/prepare-node-completion.ts:215",
+            "core/exec/src/completion/completion-contract.ts:10"
+          ]
+        },
+        {
+          "id": "buzz-04",
+          "name": "Buzz persona to Lev agent definition projection",
+          "status": "missing",
+          "lev_equivalent": "provider cards and config source catalog provide partial building blocks",
+          "action": "build",
+          "notes": "Buzz persona stores a stable Lev entity/profile ref; Lev resolves and admits it at launch.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/docs/nips/NIP-AP.md:81",
+            "plugins/platforms/config.yaml:16"
+          ]
+        },
+        {
+          "id": "buzz-05",
+          "name": "Channel-scoped queue and multi-agent pool",
+          "status": "partial",
+          "lev_equivalent": "core orchestration and exec concurrency exist; Buzz owns collaboration scheduling",
+          "action": "adopt",
+          "notes": "Do not reimplement Buzz queueing; translate each admitted dispatch into a distinct Lev invocation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:663",
+            "workshop/intake/buzz/ARCHITECTURE.md:678"
+          ]
+        },
+        {
+          "id": "buzz-06",
+          "name": "Bidirectional lifecycle and receipt projection",
+          "status": "missing",
+          "lev_equivalent": "LevEvent and execution receipts exist without a Buzz adapter",
+          "action": "build",
+          "notes": "Keep projection replay-safe and retain separate Buzz event IDs and Lev invocation/receipt IDs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/docs/nips/NIP-AO.md:9",
+            "core/exec/src/completion/completion-contract.ts:39"
+          ]
+        },
+        {
+          "id": "buzz-07",
+          "name": "Buzz workflow triggers and approvals",
+          "status": "partial",
+          "lev_equivalent": "FlowMind and EvalDecision own Lev execution and promotion policy",
+          "action": "reference",
+          "notes": "Buzz triggers may request Lev work; Buzz approval records cannot substitute for Lev admission or EvalDecision.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:518",
+            "workshop/intake/buzz/ARCHITECTURE.md:833"
+          ]
+        },
+        {
+          "id": "buzz-08",
+          "name": "Supervised pinned external runtime",
+          "status": "partial",
+          "lev_equivalent": "core/daemon plus Poly plugin runtime declarations",
+          "action": "build",
+          "notes": "Prefer pinned release binaries or OCI images; do not vendor the monorepo for the first implementation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:583",
+            "docs/ARCHITECTURE.md:62"
+          ]
+        },
+        {
+          "id": "buzz-09",
+          "name": "Enforced agent rate limiting",
+          "status": "missing",
+          "lev_equivalent": "provider policy and execution concurrency limits",
+          "action": "deferred",
+          "notes": "Lev limits its own invocations, but a public relay still needs transport-level rate limiting upstream or at the deployment edge.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/buzz/ARCHITECTURE.md:830"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "buzz-09",
+          "name": "Enforced agent rate limiting",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
       "target": "cap-creator",
       "label": "Cap",
       "category": "creator-tool",
@@ -5713,21 +6660,22 @@
       "target": "clawhip",
       "label": "clawhip",
       "category": "infrastructure",
-      "priority": null,
-      "measured_at": "2026-04-11",
-      "updated_at": null,
-      "owner": null,
+      "priority": "P1",
+      "measured_at": "2026-09-08",
+      "updated_at": "2026-09-08",
+      "owner": "core/event-dispatch + core/tmux-harness + core/poly + core/sdk",
       "path": ".lev/pm/parity/clawhip.yaml",
       "verdict": "extract",
-      "total_features": 11,
-      "classified": 11,
+      "total_features": 14,
+      "classified": 14,
       "unclassified": 0,
       "counts": {
         "absorbed": 3,
         "deferred": 1,
         "absorb": 4,
-        "reference": 1,
-        "reject": 2
+        "reference": 2,
+        "reject": 2,
+        "extract": 2
       },
       "features": [
         {
@@ -5777,8 +6725,8 @@
         {
           "id": "cw-05",
           "name": "Prompt delivery with TUI readiness + retry + verification",
-          "status": "missing",
-          "lev_equivalent": "N/A",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness/src/execution-transport/observation.ts and session readiness/injection",
           "action": "absorb",
           "notes": "clawhip hooks/prompt_deliver.rs: detect TUI ready, send via send-keys -l, content-hash verify, retry up to max_attempts.",
           "absorbed_into": "lev-tmux crate (Wave 3)",
@@ -5799,8 +6747,8 @@
         {
           "id": "cw-07",
           "name": "Content hash for change detection",
-          "status": "missing",
-          "lev_equivalent": "N/A",
+          "status": "partial",
+          "lev_equivalent": "core/sdk/src/index.ts captureDelta and core/tmux-harness session delta observation",
           "action": "absorb",
           "notes": "clawhip source/tmux.rs content_hash() — hash capture-pane before/after to verify delivery and detect stale.",
           "absorbed_into": "lev-tmux crate (Wave 3)",
@@ -5810,8 +6758,8 @@
         {
           "id": "cw-08",
           "name": "Shared session registry (Arc<RwLock<HashMap>>)",
-          "status": "missing",
-          "lev_equivalent": "N/A",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness/src/session-registry.ts plus core/sdk session handles",
           "action": "absorb",
           "notes": "clawhip RegisteredTmuxSession: session, channel, mention, keywords, stale_minutes, format, parent_process, registration_source.",
           "absorbed_into": "lev-tmux crate (Wave 3)",
@@ -5850,6 +6798,47 @@
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
+        },
+        {
+          "id": "cw-12",
+          "name": "Metadata-first route matching and explainable fan-out",
+          "status": "partial",
+          "lev_equivalent": "core/event-dispatch trigger projection; no proven identical outbound routing trace",
+          "action": "extract",
+          "notes": "Worktree/repo/session metadata outranks name heuristics; multiple matched deliveries are valid for observations, not multiple answer consumers.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clawhip/src/router.rs:108",
+            "workshop/intake/clawhip/src/router.rs:552"
+          ]
+        },
+        {
+          "id": "cw-13",
+          "name": "Ledger-backed event deduplication before notification delivery",
+          "status": "partial",
+          "lev_equivalent": "core/execution-ledger run/source identity",
+          "action": "reference",
+          "notes": "Reuse existing Lev identity/admission; do not adopt a second ledger. Ingest dedupe is not proof of durable delivery or exactly-once effects.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clawhip/src/dispatch.rs:82",
+            "workshop/intake/clawhip/src/ledger.rs:191"
+          ]
+        },
+        {
+          "id": "cw-14",
+          "name": "Prompt submit marker plus progress verification",
+          "status": "partial",
+          "lev_equivalent": "core/tmux-harness injection and observation",
+          "action": "extract",
+          "notes": "Send prompt once, retry Enter, verify marker and progress. These prove transport submission, not task completion.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/clawhip/src/hooks/prompt_deliver.rs:134"
+          ]
         }
       ],
       "metrics": [],
@@ -5860,10 +6849,10 @@
         ".lev/scratch/feature-dna-drafts/clawhip-vendor.dna.yaml"
       ],
       "absorbed": 3,
-      "pending": 4,
+      "pending": 6,
       "deferred": 1,
       "rejected": 2,
-      "monitor": 1,
+      "monitor": 2,
       "deferred_items": [
         {
           "id": "cw-04",
@@ -9301,7 +10290,8 @@
       "unclassified": 0,
       "counts": {
         "extract": 7,
-        "build": 7,
+        "reference": 1,
+        "build": 6,
         "merge": 2,
         "build-projection": 2,
         "build-plugin": 2
@@ -9321,13 +10311,21 @@
         {
           "id": "eg-02",
           "name": "Session-start identity resolution, greeting, and health bootstrap",
-          "status": "missing",
-          "lev_equivalent": "work skill + dashboard surfaces without a unified collaboration bootstrap",
-          "action": "build",
-          "notes": "Lev has the pieces, but not a cohesive first-class collaboration-session bootstrap for a coding team shell.\n",
+          "status": "implemented",
+          "lev_equivalent": "lev session bootstrap + SessionStart hook wiring (plugins/sdlc/src/handlers/session/)",
+          "action": "reference",
+          "notes": "Unified deterministic bootstrap payload (identity, workstream, handoff, git, health dots) ships via `lev session bootstrap`; Claude Code hook calls it on startup. LLM greeting enrichment remains opt-in via skills.\n",
           "absorbed_into": null,
           "tribunal_note": null,
-          "evidence_refs": []
+          "evidence_refs": [
+            "core/domain/src/session-bootstrap.ts",
+            "plugins/sdlc/src/handlers/session/bootstrap.ts",
+            "plugins/sdlc/src/session-bootstrap/gather.ts",
+            "plugins/sdlc/test/session-bootstrap.test.ts",
+            "plugins/sdlc/evals/session_bootstrap/shipped-session-bootstrap.eval.js",
+            "plugins/platforms/templates/claude-code/hooks/session-start.sh.tmpl",
+            ".claude/hooks/session-start.sh"
+          ]
         },
         {
           "id": "eg-03",
@@ -9616,10 +10614,10 @@
         ".lev/pm/workstreams/workshop-intake/state/workstream.yaml"
       ],
       "absorbed": 0,
-      "pending": 16,
+      "pending": 15,
       "deferred": 0,
       "rejected": 0,
-      "monitor": 0,
+      "monitor": 1,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -15413,6 +16411,158 @@
       "rejected_items": []
     },
     {
+      "target": "jinn",
+      "label": "Jinn",
+      "category": "agent-runtime-operator-control-plane",
+      "priority": "P1",
+      "measured_at": "2026-08-05",
+      "updated_at": "2026-08-05",
+      "owner": "plugins/workshop + core/daemon + core/poly + core/flowmind + community/agentping",
+      "path": ".lev/pm/parity/jinn.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 7,
+        "reject": 1
+      },
+      "features": [
+        {
+          "id": "jinn-installed-cli-engine-registry",
+          "name": "Installed-agent CLI engine registry",
+          "status": "partial",
+          "lev_equivalent": "core/exec provider adapters + core/poly registry projections",
+          "action": "extract",
+          "notes": "Extract descriptor discovery and unavailable-engine UX before any dispatch path.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/antigravity.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/pi.ts"
+          ]
+        },
+        {
+          "id": "jinn-pty-lifecycle",
+          "name": "Interactive PTY lifecycle and hook transport",
+          "status": "partial",
+          "lev_equivalent": "core/exec + core/tmux-harness",
+          "action": "extract",
+          "notes": "Spike with fake binaries, scoped secrets, deterministic timeout, and orphan-reaping receipts.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/pty-lifecycle.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/engines/sse-pty-proxy.ts"
+          ]
+        },
+        {
+          "id": "jinn-session-delegation-recovery",
+          "name": "Session delegation and restart recovery",
+          "status": "partial",
+          "lev_equivalent": "workstreams + core/orchestration + LevEvent receipts",
+          "action": "extract",
+          "notes": "Preserve parent-child causality and explicit interrupted-work state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/sessions/manager.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/lifecycle.ts"
+          ]
+        },
+        {
+          "id": "jinn-org-yaml-projection",
+          "name": "File-backed org hierarchy and employee declarations",
+          "status": "partial",
+          "lev_equivalent": "FlowMind/DNA declarations + AgentPing graph projection",
+          "action": "extract",
+          "notes": "Hierarchy is a human-facing projection, not an execution authority source.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/org.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/org-hierarchy.ts"
+          ]
+        },
+        {
+          "id": "jinn-scheduler-declarations",
+          "name": "Hot-reloadable scheduler declarations",
+          "status": "partial",
+          "lev_equivalent": "FlowMind schedule declarations + plugins/samurai",
+          "action": "extract",
+          "notes": "Require explicit missed-run policy, current lease, and replayable receipt chain.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/cron/jobs.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/cron/runner.ts"
+          ]
+        },
+        {
+          "id": "jinn-connector-ingress",
+          "name": "Multi-surface connector ingress",
+          "status": "partial",
+          "lev_equivalent": "AgentPing surfaces + plugins/samurai connector admission",
+          "action": "extract",
+          "notes": "Normalize identity and thread events before policy admission; never allow connector bypass.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/server.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/shared/types.ts"
+          ]
+        },
+        {
+          "id": "jinn-operator-dashboard",
+          "name": "Unified local operator dashboard",
+          "status": "partial",
+          "lev_equivalent": "community/agentping + packages/dashboard-core",
+          "action": "extract",
+          "notes": "Read from Lev events and submit proposals; do not mutate runtime state directly.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/web/src/lib/api.ts",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/web/src/components/org/employee-editor.tsx"
+          ]
+        },
+        {
+          "id": "jinn-ambient-self-modification",
+          "name": "Ambient agent self-modification",
+          "status": "not-applicable",
+          "lev_equivalent": "FlowMind proposal, lease, approval, rollback, and receipt gates",
+          "action": "reject",
+          "notes": "Preserve editable ergonomics only through explicit proposal and approval boundaries.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/template/docs/self-modification.md",
+            "https://github.com/hristo2612/jinn/blob/d280bcf69ae61a8d34ef92b25c5386b975a151fa/packages/jinn/src/gateway/watcher.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/intake/jinn/refinement-decision.yaml",
+        ".lev/pm/intake/jinn/source-analysis-evidence.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "jinn-ambient-self-modification",
+          "name": "Ambient agent self-modification",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
       "target": "jiuwenclaw",
       "label": "JiuwenClaw",
       "category": "agent-framework",
@@ -17647,11 +18797,11 @@
       "label": "mngr",
       "category": "agent-runtime",
       "priority": "P0",
-      "measured_at": "2026-04-17",
-      "updated_at": "2026-04-17",
+      "measured_at": "2026-09-04",
+      "updated_at": "2026-09-04",
       "owner": "dna/architecture/tmux-control-plane + core/harness",
       "path": ".lev/pm/parity/mngr.yaml",
-      "verdict": "gap-analysis",
+      "verdict": "extract",
       "total_features": 28,
       "classified": 28,
       "unclassified": 0,
@@ -19492,6 +20642,180 @@
       "rejected_items": []
     },
     {
+      "target": "oh-my-pi",
+      "label": "oh-my-pi",
+      "category": "agent-framework",
+      "priority": "P0",
+      "measured_at": "2026-09-12",
+      "updated_at": "2026-09-12",
+      "owner": "plugins/platforms + core/uri",
+      "path": ".lev/pm/parity/oh-my-pi.yaml",
+      "verdict": "adopt",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "reference": 4,
+        "adopt": 2,
+        "extract": 1,
+        "implemented": 1
+      },
+      "features": [
+        {
+          "id": "omp-01",
+          "name": "Internal URL router (stateless ProtocolHandler registry)",
+          "status": "partial",
+          "lev_equivalent": "@lev-os/uri dispatcher (registerScheme/registerFamily/resolve) — registry exists, no default handlers, no tool-surface consumers",
+          "action": "reference",
+          "notes": "Lev already owns the grammar; do not rebuild. Extract only the ResolveContext idea (caller identity threaded, not global) if family handlers need session scope.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/router.ts:32-153",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/types.ts:92-238",
+            "core/uri/src/dispatcher.ts:7-37"
+          ]
+        },
+        {
+          "id": "omp-02",
+          "name": "RPC host URI bridge (set_host_uri_schemes / host_uri_request / host_uri_result)",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms/src/adapters/omp/{rpc-client,lev-host}.ts — Lev registers lev/exec/find, answers via @lev-os/uri; card.yaml rpc_host block",
+          "action": "adopt",
+          "notes": "Spike PASS: lev://entity/work/workstream/<id> byte-equal roundtrip inside a live omp turn. Promotion into conversation.transport needs core/exec ExecutionBindingConversation to admit rpc-stdio.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/modes/rpc/host-uris.ts:41-59",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/modes/rpc/host-uris.ts:116-120",
+            "workshop/intake/oh-my-pi/docs/rpc.md:436-470",
+            "workshop/intake/oh-my-pi/docs/rpc.md:686-764"
+          ]
+        },
+        {
+          "id": "omp-03",
+          "name": "RPC mode transport (prompt/steer/follow_up/abort + streamed events + set_host_tools)",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms/providers/omp/card.yaml — substrate-pane transport; stream_events/interrupt/queue_message typed-error",
+          "action": "adopt",
+          "notes": "Card gains conversation.transport: rpc-stdio; rollback is the transport flag. Pin protocolVersion 2 and omp >=18.1.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/docs/rpc.md:111-133",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/modes/rpc/rpc-mode.ts:793-830",
+            "plugins/platforms/providers/omp/card.yaml:63-89"
+          ]
+        },
+        {
+          "id": "omp-04",
+          "name": "Scheme autocomplete via ProtocolHandler.complete()",
+          "status": "missing",
+          "lev_equivalent": "gap — core/uri FamilyHandler has resolve only, no list/complete",
+          "action": "extract",
+          "notes": "Optional list?(prefix) on FamilyHandler so any host can render a lev:// menu. Shape decided by spike 1.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/types.ts:224-237",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/skill-protocol.ts:125-130",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/router.ts:100-116"
+          ]
+        },
+        {
+          "id": "omp-05",
+          "name": "xd:// virtual tool devices (read docs / write JSON to execute)",
+          "status": "missing",
+          "lev_equivalent": "gap — Poly projects to CLI/MCP/HTTP; no virtual-device transport for context-window pressure",
+          "action": "reference",
+          "notes": "Revisit when any Poly MCP surface exceeds ~40 tools.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/tools/xdev.ts:1-30",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/tools/xdev.ts:143-177",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/tools/xdev.ts:408-477"
+          ]
+        },
+        {
+          "id": "omp-06",
+          "name": "skill:// resolution of Lev-synced skills",
+          "status": "implemented",
+          "lev_equivalent": "~/.config/lev/config.yaml sync.skills + .claude/CLAUDE.md s:// shim",
+          "action": "implemented",
+          "notes": "No action. Do not add a skill family to lev:// (retired in dna/standards/uri-schemes.yaml).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/skill-protocol.ts:47-123",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/tools/bash-skill-urls.ts:337-347"
+          ]
+        },
+        {
+          "id": "omp-07",
+          "name": "Internal URL expansion inside bash commands",
+          "status": "missing",
+          "lev_equivalent": "gap — lev exec passes raw argv",
+          "action": "reference",
+          "notes": "Host-registered schemes are not expanded in bash (regex is a fixed scheme list, line 19); lev:// in shell args would need omp upstream change or Lev-side pre-expansion.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/tools/bash-skill-urls.ts:354-394"
+          ]
+        },
+        {
+          "id": "omp-08",
+          "name": "agent:// / history:// subagent output addressing with jq extraction",
+          "status": "partial",
+          "lev_equivalent": "lev://entity/run/... identity + receipts; cass owns transcript search",
+          "action": "reference",
+          "notes": "Pattern for ?q= JSON extraction on lev://entity/run receipts is worth copying once run receipts are URI-addressable.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/agent-protocol.ts:9-16",
+            "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/agent-protocol.ts:71-88",
+            ".lev/pm/parity/cass.yaml:54-55"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "internal_url_schemes",
+          "value": 16,
+          "unit": "count",
+          "source": "workshop/intake/oh-my-pi/packages/coding-agent/src/internal-urls/router.ts:38-53"
+        },
+        {
+          "name": "version",
+          "value": "18.1.18",
+          "unit": "semver",
+          "source": "workshop/intake/oh-my-pi/package.json"
+        },
+        {
+          "name": "rpc_protocol_version",
+          "value": 2,
+          "unit": "int",
+          "source": "workshop/intake/oh-my-pi/docs/rpc.md:122"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/oh-my-pi/",
+        "workshop/analysis/oh-my-pi/analysis.md",
+        "plugins/platforms/providers/omp/card.yaml",
+        ".lev/pm/parity/oh-my-codex.yaml",
+        ".lev/pm/parity/omc.yaml"
+      ],
+      "absorbed": 1,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "omc",
       "label": "OMC",
       "category": "agent-framework",
@@ -19784,19 +21108,21 @@
       "target": "omo",
       "label": "OMO",
       "category": "agent-framework",
-      "priority": "P2",
-      "measured_at": "2026-04-10",
-      "updated_at": "2026-04-10",
+      "priority": "P0",
+      "measured_at": "2026-09-04",
+      "updated_at": "2026-09-04",
       "owner": "plugins/platforms",
       "path": ".lev/pm/parity/omo.yaml",
       "verdict": "extract",
-      "total_features": 3,
-      "classified": 3,
+      "total_features": 7,
+      "classified": 7,
       "unclassified": 0,
       "counts": {
-        "extract": 1,
+        "extract": 3,
         "implemented": 1,
-        "evaluate": 1
+        "evaluate": 1,
+        "adopt": 1,
+        "build": 1
       },
       "features": [
         {
@@ -19831,15 +21157,61 @@
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
+        },
+        {
+          "id": "omo-04",
+          "name": "Bounded worker roles with separate implementation, review, QA, and gate contracts",
+          "status": "partial",
+          "lev_equivalent": "~/.agents/skills/coding-agent plus Lev exec profiles",
+          "action": "extract",
+          "notes": "LazyCodex provides concrete low/medium/high workers and separate review/QA/gate roles. Consolidate these semantics into provider-neutral `$coder`; do not preserve LazyCodex as the authority.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omo-05",
+          "name": "Hook-driven durable continuation and verified completion",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration + core/flowmind + core/exec receipts",
+          "action": "extract",
+          "notes": "Extract stop/resume and evidence-gate behavior, but keep `.lev` execution identity and receipts authoritative instead of `.omo` Boulder/ledger state.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omo-06",
+          "name": "Explicit CODEX_HOME installation boundary",
+          "status": "implemented",
+          "lev_equivalent": "CAAM-managed LazyCodex shallow profile",
+          "action": "adopt",
+          "notes": "Installed OMO 4.19.4 into `/Users/jean-patricksmith/orch-homes/lazycodex/.codex` using a CAAM-isolated Codex identity; main `~/.codex` was not the install target.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "omo-07",
+          "name": "Never-rebase compatibility",
+          "status": "missing",
+          "lev_equivalent": "operator and Lev repository policy",
+          "action": "build",
+          "notes": "LazyCodex `ulw-loop` permits rebasing overlapping work. Lev-managed launches must override this before the harness is trusted for landing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
         }
       ],
       "metrics": [],
       "lineage": [
         "workshop/analysis/oh-my-openagent/",
+        "workshop/analysis/lazycodex/analysis.md",
+        ".lev/pm/workstreams/codex-worker-lane/state/workstream.yaml",
         ".lev/pm/handoffs/20260324-skill-intake-ohmyopenagent-site-session-1.md"
       ],
       "absorbed": 1,
-      "pending": 1,
+      "pending": 5,
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
@@ -22875,6 +24247,199 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "paseo",
+      "label": "paseo",
+      "category": "agent-control-plane",
+      "priority": "P1",
+      "measured_at": "2026-09-13",
+      "updated_at": "2026-09-13",
+      "owner": "core/exec + plugins/platforms",
+      "path": ".lev/pm/parity/paseo.yaml",
+      "verdict": "spike",
+      "total_features": 15,
+      "classified": 15,
+      "unclassified": 0,
+      "counts": {
+        "unclassified": 15
+      },
+      "features": [
+        {
+          "id": "ps-01",
+          "name": "Provider adapter via structured protocol (ACP / JSON-RPC / SDK), never PTY scraping",
+          "status": "missing",
+          "lev_equivalent": "plugins/platforms/providers/*/card.yaml + core/exec transport-bindings/substrate-pane.ts",
+          "action": "unclassified",
+          "notes": "Lev launches argv into a tmux/herdr pane and infers liveness/completion from pane deltas + an awareness fifo. NOTE: the pane-based claim loop IS proven — workstream.yaml session_20260908_goal_completion records a live fail->repair->pass journey (2 schema rejections, 2 admitted claims, core_eval decisions [fail, pass], 5 provider smokes, verified attach/detach). So this is NOT an unblock-the-MVP argument; it is an ADAPTER ECONOMICS and fragility argument: paseo reaches 39 providers because every provider speaks a typed session/turn/permission protocol and new ones cost one subclass overriding resolveLaunchCommand(). Lev is at 9 bespoke argv+pane cards. ACP is an open spec with an official SDK (@agentclientprotocol/sdk 0.17.1).\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-02",
+          "name": "Claim -> admission -> EvalDecision proof layer",
+          "status": "partial",
+          "lev_equivalent": "core/eval/, core/execution-ledger/, .lev/pm/tasks/*/receipts/",
+          "action": "unclassified",
+          "notes": "Paseo \"receipts\" are request-dedup/crash-safety journals, NOT verdict authority. There is no evaluator, no gate, no truth-decider anywhere in the repo. Lev's differentiator is uncontested. Do not trade it away.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-03",
+          "name": "Versioned wire protocol package with permanent backward-compat law",
+          "status": "partial",
+          "lev_equivalent": "core/domain/src/poly-protocol/, core/poly/src/proto/, core/substrate/src/adapters/herdr/protocol.ts",
+          "action": "unclassified",
+          "notes": "Lev's protocol is split across three places with no single external contract. The COMPAT(name)+removal-date discipline and the feature-flag-negotiation pattern are cheap to adopt and worth copying verbatim. NOTE tension with canon invariant 11/12 (zero shims) — paseo's law is the opposite stance; adopt the feature-gate, not the shim culture.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-04",
+          "name": "Daemon with 4 pluggable transport surfaces",
+          "status": "implemented",
+          "lev_equivalent": "core/daemon/ + core/daemon-{http,mcp,grpc,websocket}/",
+          "action": "unclassified",
+          "notes": "Lev is arguably ahead structurally (4 adapters vs 1 WS); paseo is ahead on proven stability.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-05",
+          "name": "git worktree automation with reference-counted teardown",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration/src/git/worktree.ts (322 loc)",
+          "action": "unclassified",
+          "notes": "Lev has the primitive; paseo has the hardening. Cheap uplift, not urgent.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-06",
+          "name": "MCP server exposing own orchestration tools + auto-injection into launched agents",
+          "status": "partial",
+          "lev_equivalent": "core/daemon-mcp/src/index.ts",
+          "action": "unclassified",
+          "notes": "The self-referential injection (spawned agent can call back to spawn more, identified as callerAgentId) is the recursion primitive Lev's orchestration would need for graph-driven fan-out. Lev exposes MCP but does not inject it.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-07",
+          "name": "Cross-platform clients (iOS/Android/web/Electron) at feature parity",
+          "status": "missing",
+          "lev_equivalent": "apps/expo/, apps/desktop/ (Electron), crates/lev-desktop (Tauri), plugins/dashboard",
+          "action": "unclassified",
+          "notes": "Lev has THREE half-started client shells (Electron + Tauri + Vite dashboard) and no shipped one. Paseo spent ~450k LOC here. This is not a parity target; it is a reason not to compete on this axis.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-08",
+          "name": "E2E-encrypted relay + QR device pairing",
+          "status": "missing",
+          "lev_equivalent": "none in core/; community/kingly-assistant has GatewayService/DevicePairingService",
+          "action": "unclassified",
+          "notes": "Well-specified and small (3335 loc). Reference-grade if Lev ever needs remote pairing.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-09",
+          "name": "Unsandboxed TS plugin system with git-source install + semver requirements gate",
+          "status": "partial",
+          "lev_equivalent": "plugins/ (~57 plugins), config.yaml + flows/*.flow.yaml + src/handlers/",
+          "action": "unclassified",
+          "notes": "Lev's plugin contract is richer (flows, validators, entity_definitions). Paseo's DISTRIBUTION is better — git-repo-as-package, exact-commit pinning, 66 community plugins on paseo.cafe generated straight from each repo, no submission form. Lev has no external plugin distribution story at all.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-10",
+          "name": "External TypeScript SDK for third parties",
+          "status": "partial",
+          "lev_equivalent": "core/sdk (facade over @lev-os/exec/client, thin, unpublished)",
+          "action": "unclassified",
+          "notes": "Lev's SDK is an internal facade, not a published developer surface.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-11",
+          "name": "Team triggers from GitHub/Slack/Discord (the Hub)",
+          "status": "missing",
+          "lev_equivalent": "none (plugins/sdlc autodev --notify is outbound webhook only)",
+          "action": "unclassified",
+          "notes": "The business-model shape is the interesting artifact, not the code: OSS runtime free forever, monetize the TEAM COORDINATION layer above it, and never run the customer's code. The capability-scoped service-principal (hub.execute and nothing else) is a clean pattern for Lev to copy if Lev ever grows an external trigger surface.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-12",
+          "name": "Local-first voice (ONNX STT/TTS) with optional cloud",
+          "status": "missing",
+          "lev_equivalent": "none",
+          "action": "unclassified",
+          "notes": "Out of scope for Lev. Pass.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-13",
+          "name": "Own terminal multiplexer on node-pty + @xterm/headless (no tmux/zellij dependency)",
+          "status": "partial",
+          "lev_equivalent": "core/substrate (tmux + herdr adapters), plugins/substrate-zellij",
+          "action": "unclassified",
+          "notes": "Deliberate opposite bet. Paseo owns the whole terminal stack (their own coalescing/backpressure pipeline, docs/terminal-performance.md) and uses it ONLY for the interactive terminal feature — never for driving agents. Lev uses the multiplexer AS the agent execution transport. That coupling is the root of ps-01. Worth re-examining: the multiplexer should be the OBSERVATION surface, not the CONTROL channel.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-14",
+          "name": "Cron/heartbeat scheduled agents",
+          "status": "partial",
+          "lev_equivalent": "core/daemon queue-manager, plugins/* flows, lev triggers",
+          "action": "unclassified",
+          "notes": "Paseo ships this as a first-class user-facing noun. Lev has the machinery, not the noun.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ps-15",
+          "name": "In-repo orchestration skills teaching the agent to drive the control plane",
+          "status": "implemented",
+          "lev_equivalent": "~/.agents/skills/coder, /handoff, /cdo, /tribunal",
+          "action": "unclassified",
+          "notes": "Lev is well ahead on skill depth. One cheap idea worth stealing: skills that fetch a live llms.txt doc index instead of embedding docs that rot.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "peekaboo",
