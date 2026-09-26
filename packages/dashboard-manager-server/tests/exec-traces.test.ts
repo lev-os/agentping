@@ -83,6 +83,20 @@ describe("createExecTraceRoutes", () => {
     );
   });
 
+  it("unwraps the lev CLI operation envelope for trace and graph output", async () => {
+    const envelope = (data: unknown) => ({ version: 1, operation: { id: "x" }, result: { status: "ok", data } });
+    const commandRunner = vi.fn<ExecTraceCommandRunner>(async (_command, args) =>
+      ok(envelope(args[0] === "exec" ? { execId: "c0343638af93", status: "completed" } : workflowGraph)),
+    );
+    const app = createExecTraceRoutes({ projectRoot: "/repo", commandRunner });
+
+    const payload = await (await app.request("/c0343638af93")).json();
+
+    expect(payload.trace).toEqual({ execId: "c0343638af93", status: "completed" });
+    expect(payload.graph).toEqual(workflowGraph);
+    expect(payload.diagnostics.warnings).toEqual([]);
+  });
+
   it("uses LEV_PROJECT_ROOT when an explicit project root is not configured", async () => {
     vi.stubEnv("LEV_PROJECT_ROOT", "/env/repo");
     const commandRunner = vi.fn<ExecTraceCommandRunner>(async (_command, args) => {

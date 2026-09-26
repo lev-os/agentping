@@ -92,7 +92,15 @@ function parseCommandJson(result: CommandRunResult): unknown {
   if (!output) {
     throw new Error('Command returned empty JSON output');
   }
-  return JSON.parse(output);
+  return unwrapOperationEnvelope(JSON.parse(output));
+}
+
+// The lev CLI wraps --json output as { version, operation, result: { data } }.
+function unwrapOperationEnvelope(value: unknown): unknown {
+  if (isRecord(value) && isRecord(value.operation) && isRecord(value.result) && 'data' in value.result) {
+    return value.result.data;
+  }
+  return value;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
