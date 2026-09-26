@@ -89,7 +89,8 @@ export function ExecTraceDebug() {
   const { payload, error, notFound, autoRefresh, refreshPaused } = fsmState;
   const [loading, setLoading] = useState(true);
   const [refreshNonce, setRefreshNonce] = useState(0);
-  const fetchInFlightRef = useRef(false);
+  // Owned by one effect run; cleanup releases it so a re-run (StrictMode, dep change) can fetch.
+  const fetchInFlightRef = useRef<object | null>(null);
 
   useEffect(() => {
     dispatch({ type: "execid_changed" });
@@ -104,7 +105,8 @@ export function ExecTraceDebug() {
 
     async function load() {
       if (fetchInFlightRef.current) return;
-      fetchInFlightRef.current = true;
+      const owner = {};
+      fetchInFlightRef.current = owner;
       try {
         const result = await getExecTraceDebug(resolvedExecId);
         if (cancelled) return;
@@ -127,7 +129,7 @@ export function ExecTraceDebug() {
           error: caught instanceof Error ? caught.message : "Failed to load exec trace",
         });
       } finally {
-        fetchInFlightRef.current = false;
+        if (fetchInFlightRef.current === owner) fetchInFlightRef.current = null;
         if (!cancelled) setLoading(false);
       }
     }
@@ -136,12 +138,14 @@ export function ExecTraceDebug() {
     if (!shouldPoll) {
       return () => {
         cancelled = true;
+        fetchInFlightRef.current = null;
       };
     }
 
     const interval = window.setInterval(() => void load(), 2500);
     return () => {
       cancelled = true;
+      fetchInFlightRef.current = null;
       window.clearInterval(interval);
     };
   }, [autoRefresh, execId, notFound, refreshNonce, refreshPaused]);
