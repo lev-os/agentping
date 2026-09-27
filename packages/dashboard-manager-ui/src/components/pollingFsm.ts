@@ -20,6 +20,9 @@ export const INITIAL_POLLING_STATE: PollingFsmState = {
   consecutiveFailures: 0,
 };
 
+// A finished run's trace cannot change; polling it only re-runs the CLI.
+const TERMINAL_TRACE_STATUSES = new Set(["completed", "failed", "interrupted", "cancelled"]);
+
 export type PollingFsmAction =
   | { type: "fetched_ok"; data: AgentPingExecDebugPayload }
   | { type: "fetched_404" }
@@ -40,6 +43,7 @@ export function pollingFsmReducer(
         error: null,
         notFound: false,
         consecutiveFailures: 0,
+        ...(TERMINAL_TRACE_STATUSES.has(String(action.data.trace?.status)) ? { autoRefresh: false } : {}),
       };
     case "fetched_404":
       return {

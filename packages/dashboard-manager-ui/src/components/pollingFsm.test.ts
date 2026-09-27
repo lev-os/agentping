@@ -20,6 +20,13 @@ const DUMMY_PAYLOAD: AgentPingExecDebugPayload = {
 };
 
 describe("pollingFsmReducer", () => {
+  it("fetched_ok on a terminal trace stops auto-refresh; a running trace keeps it", () => {
+    const done = { ...DUMMY_PAYLOAD, trace: { status: "completed" } };
+    expect(pollingFsmReducer(INITIAL_POLLING_STATE, { type: "fetched_ok", data: done }).autoRefresh).toBe(false);
+    const running = { ...DUMMY_PAYLOAD, trace: { status: "running" } };
+    expect(pollingFsmReducer(INITIAL_POLLING_STATE, { type: "fetched_ok", data: running }).autoRefresh).toBe(true);
+  });
+
   it("404 → polling stops, notFound=true, autoRefresh=false", () => {
     const state = pollingFsmReducer(INITIAL_POLLING_STATE, { type: "fetched_404" });
     expect(state.notFound).toBe(true);
