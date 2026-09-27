@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GraphView } from "@kingly/ui/components";
 
 import {
-  deriveProofBackedStatus,
   getExecTraceDebug,
   type AgentPingExecDebugPayload,
   type ExecTrace,
@@ -32,10 +31,6 @@ function traceExitCode(trace: ExecTrace): number | null {
   return asNumber(trace.exitCode) ?? asNumber(trace.exit_code);
 }
 
-function traceReceipt(trace: ExecTrace): unknown {
-  return trace.receipt ?? trace.receiptPath ?? trace.receipt_id ?? null;
-}
-
 function graphFlowPath(payload: AgentPingExecDebugPayload): string {
   const trace = payload.trace;
   const graph = payload.graph?.widget.graph;
@@ -55,8 +50,8 @@ function graphFlowPath(payload: AgentPingExecDebugPayload): string {
 
 function statusTone(status: string): string {
   const normalized = status.toLowerCase();
-  if (normalized.includes("fail") || normalized.includes("error")) return "is-error";
-  if (normalized.includes("complete") || normalized.includes("success")) return "is-success";
+  if (normalized.includes("fail") || normalized.includes("error") || normalized.includes("block")) return "is-error";
+  if (normalized.includes("complete") || normalized.includes("success") || normalized.includes("pass")) return "is-success";
   if (normalized.includes("running") || normalized.includes("active")) return "is-active";
   return "is-muted";
 }
@@ -67,7 +62,7 @@ function renderReceipt(receipt: unknown) {
   return <pre>{JSON.stringify(receipt, null, 2)}</pre>;
 }
 
-function renderRefs(label: string, refs: string[]) {
+function renderRefs(label: string, refs: string[], emptyLabel = "missing") {
   return (
     <div className="exec-debug-proof-chain__group">
       <div className="command-center-status-card__label">{label}</div>
@@ -76,7 +71,7 @@ function renderRefs(label: string, refs: string[]) {
           {refs.map((ref) => <li key={ref}><code>{ref}</code></li>)}
         </ul>
       ) : (
-        <p className="command-center-section__meta">missing</p>
+        <p className="command-center-section__meta">{emptyLabel}</p>
       )}
     </div>
   );
@@ -152,14 +147,19 @@ export function ExecTraceDebug() {
 
   const summary = useMemo(() => {
     if (!payload) return null;
-    const proofStatus = deriveProofBackedStatus(payload.trace);
+    const { proof, evidence } = payload.trace;
+    const decisions = evidence?.decision_refs ?? [];
     return {
-      status: proofStatus.status,
-      proofStatus,
+      status: proof?.status ?? "unreported",
+      issues: proof?.issues ?? [],
+      receiptRef: evidence?.receipt_ref?.ref,
+      traceRef: evidence?.trace_ref?.ref,
+      decisions: decisions.map((d) => `${d.gate_id ?? d.ref ?? "decision"}: ${d.verdict ?? "no verdict"}`),
+      missing: evidence?.missing ?? [],
       eventCount: traceEventCount(payload.trace),
       exitCode: traceExitCode(payload.trace),
       flowPath: graphFlowPath(payload),
-      receipt: proofStatus.receiptRef ?? traceReceipt(payload.trace),
+      receipt: payload.trace.receipt ?? null,
       latestFrame: payload.graph?.widget.graph.frames[payload.graph.widget.graph.frames.length - 1],
     };
   }, [payload]);
@@ -277,7 +277,11 @@ export function ExecTraceDebug() {
                 <div className={`command-center-status-card exec-debug-status ${statusTone(summary.status)}`}>
                   <div className="command-center-status-card__label">Proof Status</div>
                   <div className="command-center-status-card__value">{summary.status}</div>
-                  <div className="command-center-section__meta">{summary.proofStatus.reason}</div>
+                  {summary.issues.length > 0 ? (
+                    <ul className="exec-debug-warning-list">
+                      {summary.issues.map((issue) => <li key={issue.code}>{issue.message}</li>)}
+                    </ul>
+                  ) : null}
                 </div>
                 <div className="command-center-status-card">
                   <div className="command-center-status-card__label">Events</div>
@@ -303,10 +307,10 @@ export function ExecTraceDebug() {
               ) : null}
 
               <div className="exec-debug-proof-chain">
-                {renderRefs("GateProof", summary.proofStatus.proofRefs)}
-                {renderRefs("Trace", summary.proofStatus.traceRef ? [summary.proofStatus.traceRef] : [])}
-                {renderRefs("Evidence", summary.proofStatus.evidenceRefs)}
-                {renderRefs("Audit", summary.proofStatus.auditRefs)}
+                {renderRefs("Receipt Ref", summary.receiptRef ? [summary.receiptRef] : [])}
+                {renderRefs("Trace Ref", summary.traceRef ? [summary.traceRef] : [])}
+                {renderRefs(`Decisions (${summary.decisions.length})`, summary.decisions)}
+                {renderRefs("Missing", summary.missing, "none")}
               </div>
             </section>
 

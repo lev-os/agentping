@@ -1,90 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { deriveProofBackedStatus, getExecTraceDebug, type ExecTrace } from "./exec-traces";
-
-const NOW = new Date("2026-05-22T20:00:00.000Z");
-
-function proofTrace(overrides: Partial<ExecTrace> = {}): ExecTrace {
-  return {
-    status: "SUCCESS",
-    monitor_id: "monitor-api-heartbeat",
-    observed_at: "2026-05-22T19:59:30.000Z",
-    freshness_ms: 60_000,
-    receipt_id: "rcpt-monitor-heartbeat",
-    trace_ref: { events_path: ".lev/agentfs/exec/events.jsonl" },
-    gate_proof_refs: [{
-      gate_id: "gate-monitor-heartbeat",
-      verdict: "pass",
-      evidence_refs: [
-        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/stdout.txt",
-      ],
-      audit_refs: [
-        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/audit.json",
-      ],
-    }],
-    claim_verdicts: [{
-      claim_id: "monitor-run-evidence-queryable",
-      verdict: "pass",
-      evidence_ref: ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/claim.json",
-    }],
-    ...overrides,
-  };
-}
-
-describe("proof-backed exec trace status", () => {
-  it("marks monitor status healthy only from fresh GateProof, receipt, trace, and evidence refs", () => {
-    expect(deriveProofBackedStatus(proofTrace(), NOW)).toEqual({
-      status: "healthy",
-      reason: "proof-backed-fresh",
-      monitorId: "monitor-api-heartbeat",
-      receiptRef: "rcpt-monitor-heartbeat",
-      traceRef: ".lev/agentfs/exec/events.jsonl",
-      proofRefs: ["gate-monitor-heartbeat"],
-      evidenceRefs: [
-        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/stdout.txt",
-      ],
-      auditRefs: [
-        ".lev/agentfs/exec/artifacts/exec-monitor-heartbeat/heartbeat/audit.json",
-      ],
-    });
-  });
-
-  it("blocks success-looking traces when GateProof is missing", () => {
-    expect(deriveProofBackedStatus(proofTrace({ gate_proof_refs: [] }), NOW)).toMatchObject({
-      status: "blocked",
-      reason: "missing-gate-proof",
-    });
-  });
-
-  it("degrades stale proof instead of rendering green", () => {
-    expect(deriveProofBackedStatus(proofTrace({ observed_at: "2026-05-22T19:58:59.999Z" }), NOW)).toMatchObject({
-      status: "degraded",
-      reason: "stale-proof",
-    });
-  });
-
-  it("blocks proof chains without audit linkage", () => {
-    expect(deriveProofBackedStatus(proofTrace({ receipt_id: undefined }), NOW)).toMatchObject({
-      status: "blocked",
-      reason: "missing-receipt",
-    });
-    expect(deriveProofBackedStatus(proofTrace({ trace_ref: undefined }), NOW)).toMatchObject({
-      status: "blocked",
-      reason: "missing-trace",
-    });
-    expect(deriveProofBackedStatus(proofTrace({ gate_proof_refs: [{ verdict: "pass", evidence_refs: [] }] }), NOW)).toMatchObject({
-      status: "blocked",
-      reason: "missing-evidence-refs",
-    });
-    expect(deriveProofBackedStatus(proofTrace({
-      gate_proof_refs: [{ gate_id: "gate-monitor-heartbeat", verdict: "pass", evidence_refs: ["artifact"] }],
-    }), NOW)).toMatchObject({
-      status: "blocked",
-      reason: "missing-audit-refs",
-    });
-  });
-});
-
+import { getExecTraceDebug } from "./exec-traces";
 
 describe("getExecTraceDebug", () => {
   it("narrows 404 into a typed not-found result without throwing", async () => {
@@ -129,6 +45,34 @@ describe("getExecTraceDebug", () => {
     try {
       const result = await getExecTraceDebug("run-1");
       expect(result).toEqual({ ok: true, data: payload });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it("passes owner proof and evidence through untouched", async () => {
+    const trace = {
+      exitCode: 0,
+      proof: {
+        ok: false,
+        status: "blocked",
+        issues: [{ code: "run_evidence_claim_verdict_missing", field: "claim_verdicts", message: "Replay-grade run evidence requires claim verdicts." }],
+      },
+      evidence: {
+        receipt_ref: { ref: "runtime-events.jsonl#receipt:rcpt-1" },
+        trace_ref: { ref: "runtime-events.jsonl" },
+        decision_refs: [{ ref: "decision.json", gate_id: "code_review", verdict: "pass" }],
+        missing: [],
+        claim_verdicts: [],
+      },
+    };
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () =>
+      new Response(JSON.stringify({ execId: "run-1", trace, graph: null, diagnostics: { warnings: [] } }), { status: 200 });
+
+    try {
+      const result = await getExecTraceDebug("run-1");
+      expect(result.ok && result.data.trace).toEqual(trace);
     } finally {
       globalThis.fetch = originalFetch;
     }
