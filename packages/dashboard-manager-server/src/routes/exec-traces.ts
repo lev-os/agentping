@@ -200,6 +200,13 @@ export function createExecTraceRoutes(config: ExecTraceRoutesConfig = {}) {
         const parsedGraph = parseCommandJson(graphResult);
         if (hasWorkflowGraphEnvelope(parsedGraph)) {
           graph = parsedGraph;
+          const provenance = isRecord(parsedGraph) && isRecord(parsedGraph.widget) && isRecord(parsedGraph.widget.graph)
+            ? parsedGraph.widget.graph.provenance : undefined;
+          if (isRecord(provenance) && Array.isArray(provenance.diagnostics)) {
+            for (const message of provenance.diagnostics) {
+              if (typeof message === 'string') diagnostics.push({ level: 'warning', code: 'PROVENANCE', message });
+            }
+          }
         } else {
           diagnostics.push({
             level: 'warning',

@@ -217,4 +217,27 @@ describe("createExecTraceRoutes", () => {
       warnings: ["GRAPH_CONTRACT_INVALID: FlowMind debug output did not include widget.graph"],
     });
   });
+
+  it("surfaces FlowMind provenance diagnostics as warnings", async () => {
+    const drifted = {
+      widget: {
+        ...workflowGraph.widget,
+        graph: {
+          ...workflowGraph.widget.graph,
+          provenance: { diagnostics: ["Execution did not capture a flow revision; current topology may have drifted.", 42] },
+        },
+      },
+    };
+    const commandRunner = vi.fn<ExecTraceCommandRunner>(async (_command, args) =>
+      ok(args[0] === "exec" ? { events: [] } : drifted),
+    );
+    const app = createExecTraceRoutes({ projectRoot: "/repo", commandRunner });
+
+    const payload = await (await app.request("/run-123")).json();
+
+    expect(payload.graph).toEqual(drifted);
+    expect(payload.diagnostics.warnings).toEqual([
+      "PROVENANCE: Execution did not capture a flow revision; current topology may have drifted.",
+    ]);
+  });
 });
