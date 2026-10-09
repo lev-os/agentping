@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T04:34:56.831704+00:00",
+  "generated_at": "2026-10-08T06:32:19.480685+00:00",
   "generator": "tooling/scripts/parity-scorecard.py",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 30497,
+    "operation_count": 32852,
     "by_type": {
-      "upsert_entity": 7069,
-      "add_claim": 16501,
-      "add_link": 6927
+      "upsert_entity": 7539,
+      "add_claim": 17933,
+      "add_link": 7380
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 142,
-    "total_features": 1701,
-    "absorbed": 74,
-    "pending": 1173,
-    "deferred": 29,
-    "rejected": 74,
-    "monitor": 179,
+    "parity_files": 159,
+    "total_features": 1871,
+    "absorbed": 79,
+    "pending": 1252,
+    "deferred": 39,
+    "rejected": 75,
+    "monitor": 209,
     "unclassified": 0,
-    "absorbed_pct": 4.4,
+    "absorbed_pct": 4.2,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -3322,6 +3322,90 @@
       ]
     },
     {
+      "target": "autolith",
+      "label": "Autolith",
+      "category": "self-modifying-agent-runtime",
+      "priority": "P1",
+      "measured_at": "2026-10-05",
+      "updated_at": "2026-10-05",
+      "owner": "workshop-intake",
+      "path": ".lev/pm/parity/autolith.yaml",
+      "verdict": "extract",
+      "total_features": 4,
+      "classified": 4,
+      "unclassified": 0,
+      "counts": {
+        "reference": 4
+      },
+      "features": [
+        {
+          "id": "replay-before-publication",
+          "name": "Clean-process replay before durable mutation selection",
+          "status": "partial",
+          "lev_equivalent": "core/exec",
+          "action": "reference",
+          "notes": "Reference only; replay success does not prove semantic correctness.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autolith/src/state/image-commits.lisp:880",
+            "workshop/intake/autolith/tests/active-image-tests.lisp:135"
+          ]
+        },
+        {
+          "id": "independent-acceptance",
+          "name": "Acceptance outside the self-modifying guest",
+          "status": "partial",
+          "lev_equivalent": "core/eval",
+          "action": "reference",
+          "notes": "Preserve Lev evaluator authority; qualify known-bad semantic control.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autolith/src/state/image-commits.lisp:801",
+            "core/eval/src/repair-rearm.ts:9"
+          ]
+        },
+        {
+          "id": "managed-image-recovery",
+          "name": "Generation recovery with explicit effect scope",
+          "status": "partial",
+          "lev_equivalent": "core/exec",
+          "action": "reference",
+          "notes": "Retained image selection is not external-effect rollback.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autolith/src/state/generations.lisp:259",
+            "core/exec/src/run/checkpoint.ts:292"
+          ]
+        },
+        {
+          "id": "acp-runtime-seam",
+          "name": "Optional headless runtime integration",
+          "status": "partial",
+          "lev_equivalent": "core/substrate",
+          "action": "reference",
+          "notes": "Existing process supervision may host later wrapper; not an adopted provider.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/autolith/src/acp/runtime.lisp",
+            "core/substrate/src/port/types.ts:156"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "autonomy-loop",
       "label": "Autonomy Loop",
       "category": "autonomous-agent-loop-runtime",
@@ -3890,6 +3974,73 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "beads-context-federation",
+      "label": "Beads context generation and federation",
+      "category": "agent-context-and-replication",
+      "priority": "P1",
+      "measured_at": "2026-10-08",
+      "updated_at": "2026-10-08",
+      "owner": null,
+      "path": ".lev/pm/parity/beads-context-federation.yaml",
+      "verdict": "extract",
+      "total_features": 2,
+      "classified": 2,
+      "unclassified": 0,
+      "counts": {
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "prime-context",
+          "name": "Prime context selection and bounded output",
+          "status": "partial",
+          "lev_equivalent": "Existing context compiler and platform delivery; unified path incomplete",
+          "action": "reference",
+          "notes": "Extract precedence, omissions and degraded-state fixtures; retain fail-closed required context and do not copy oversized-first-entry budget behavior.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/gastownhall/beads/blob/785f10724a8dbf1022f2d8dd6ad6f937b1f3e643/cmd/bd/prime.go",
+            "docs/specs/spec-semantic-control.md",
+            "dna/architecture/mesh-node/concept.yaml"
+          ]
+        },
+        {
+          "id": "replication-messaging",
+          "name": "Federation versus message delivery",
+          "status": "partial",
+          "lev_equivalent": "Draft mesh admission and existing event delivery owners; no Beads transport adopted",
+          "action": "deferred",
+          "notes": "Operator: no federation, yet. Reference evidence only; reopen only on explicit request. See .lev/pm/decisions/20261008-federation-deferred.yaml.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/gastownhall/beads/blob/785f10724a8dbf1022f2d8dd6ad6f937b1f3e643/engdocs/messaging.md",
+            "docs/specs/spec-semantic-control.md",
+            "dna/architecture/mesh-node/concept.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "replication-messaging",
+          "name": "Federation versus message delivery",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
     },
     {
       "target": "bettercapture",
@@ -6100,6 +6251,110 @@
           "tribunal_note": null
         }
       ]
+    },
+    {
+      "target": "choir",
+      "label": "Choir",
+      "category": "formal-verification-and-contributor-coordination",
+      "priority": "P1",
+      "measured_at": "2026-10-03",
+      "updated_at": "2026-10-03",
+      "owner": "workshop-intake",
+      "path": ".lev/pm/parity/choir.yaml",
+      "verdict": "extract",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "formal-checker-evidence",
+          "name": "Independent formal checker evidence",
+          "status": "partial",
+          "lev_equivalent": "Existing core/eval command sensor and sim-witness non-authoritative evidence; native Lean/Isabelle/Rocq adapter not demonstrated.",
+          "action": "extract",
+          "notes": "Live prover tests skipped; candidate wrapper remains unqualified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/command-cases.ts",
+            "plugins/sim-witness/src/index.ts",
+            "workshop/intake/Choir/gate/verify/comparator_cli.py"
+          ]
+        },
+        {
+          "id": "trusted-verifier-admission",
+          "name": "Candidate cannot modify its verifier or audit policy",
+          "status": "partial",
+          "lev_equivalent": "core/eval input snapshots and admission; exact external protected-path fixture not implemented.",
+          "action": "extract",
+          "notes": "Choir documents a model refusal; mocked gate edit reaches merge_pr when named checks are green. Do not copy that authority gap.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/command-cases.ts",
+            "workshop/intake/Choir/docs/agents/ORCHESTRATOR.md",
+            "workshop/intake/Choir/templates/workflows/verify-axiom-honesty.yml"
+          ]
+        },
+        {
+          "id": "explicit-proof-applicability",
+          "name": "Unknown or skipped checks cannot certify completed proof",
+          "status": "partial",
+          "lev_equivalent": "EvalDecision distinguishes cases_unobserved from successful evaluation.",
+          "action": "reference",
+          "notes": "Counterexample shows unchanged sorry is delta-clean and non-applicable comparator exits zero; those individual statuses do not prove full-pipeline acceptance.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/eval-decision.ts",
+            "workshop/intake/Choir/gate/verify/sorry_delta.py",
+            "workshop/intake/Choir/gate/verify/comparator_cli.py"
+          ]
+        },
+        {
+          "id": "contributor-lease-lifecycle",
+          "name": "Contributor identity, claiming, expiry and release",
+          "status": "partial",
+          "lev_equivalent": "core/daemon local queue claims; distributed contributor lease not demonstrated.",
+          "action": "extract",
+          "notes": "Reproduced released claimant resurrection after a late heartbeat. Same-snapshot deterministic arbitration is not cross-host mutual exclusion.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/daemon/src/queue-manager.ts",
+            "workshop/intake/Choir/gate/state/lease_arbiter.py",
+            "workshop/intake/Choir/gate/state/lease_comment.py"
+          ]
+        },
+        {
+          "id": "fresh-merge-preflight",
+          "name": "Require checks and bind action to the checked commit",
+          "status": "partial",
+          "lev_equivalent": "Eval input binding and existing SDLC policy; no equivalent GitHub merge authority certified this turn.",
+          "action": "reference",
+          "notes": "Useful required-present checks and head pinning; requires trusted verifier code as well as check names.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/Choir/orchestrator/prs.py",
+            "workshop/intake/Choir/gate/checks.py",
+            "core/eval/src/eval-decision.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
     },
     {
       "target": "claude-agent-sdk",
@@ -9824,6 +10079,551 @@
       "rejected_items": []
     },
     {
+      "target": "dockview",
+      "label": "dockview",
+      "category": "pane-layout-engine",
+      "priority": "P1",
+      "measured_at": "2026-10-06",
+      "updated_at": "2026-10-06",
+      "owner": "apps/jarvis/src/workspace",
+      "path": ".lev/pm/parity/dockview.yaml",
+      "verdict": "extract",
+      "total_features": 47,
+      "classified": 47,
+      "unclassified": 0,
+      "counts": {
+        "unclassified": 47
+      },
+      "features": [
+        {
+          "id": "dv-01",
+          "name": "Layout tree, sizes and ids in the saved layout",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Plain JSON with weights in unit space and one id namespace (api.ts:11-13, 49-69). Dockview saves pixel sizes (packages/dockview-core/src/gridview/gridview.ts:249-290). Saved view and group fields are fewer than Dockview's; see matrix rows What is saved for each view and each tab group.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-02",
+          "name": "Save, load into a live screen, reset and replay",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "setLayout matches views by id so live content stays (api.ts:357-360; behaviors.yaml:675-698). A replay of an operation log gives the same layout (behaviors.yaml:641-652), which Dockview cannot promise because its ids come from a counter (packages/dockview-core/src/dockview/dockviewComponent.ts:576).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-03",
+          "name": "Broken, stale or old saved layouts",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/model.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "repair is total and never throws (model.ts:171-254); a layout of another version falls back (model.ts:256-260). Dockview throws after it tears down (packages/dockview-core/src/dockview/dockviewComponent.ts:3741-3758). Proposals dv-p05 (an upgrade step) and dv-p06 (a repair report).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-04",
+          "name": "Remember the focused panel across a reload",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "The selected tab is saved, the focused panel is not (api.ts:54, 153-158). Dockview saves the active group (packages/dockview-core/src/dockview/dockviewComponent.ts:3658). Proposal dv-p07.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-05",
+          "name": "A workspace inside a panel",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Host panels hold nested workspaces with one outermost unit space (api.ts:49-58; behaviors.yaml:915-918). Dockview has only a separate nested instance (packages/docs/docs/core/nested.mdx:9-10).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-06",
+          "name": "Hide a panel and bring it back to its place",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Restore points (api.ts:74-85; workspace.ts:54-71). When the named neighbour is gone the panel comes back as a float; Dockview keeps a slot at size 0 (packages/dockview-core/src/splitview/viewItem.ts:43-63). Proposal dv-p27.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-07",
+          "name": "Open, reuse, close and close guards",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "open with reuse and singleton (api.ts:297-306), close guards and closable types (api.ts:255-256; behaviors.yaml:41-44). Dockview has no reuse rule and no close guard (packages/dockview-core/src/dockview/dockviewComponent.ts:4440-4444).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-08",
+          "name": "Open options (background, size, index, the focused panel)",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "open always selects, and a side panel takes a fixed quarter (workspace.ts:19-21). Dockview has inactive, index and initial size options (packages/dockview-core/src/dockview/options.ts:965-972). Proposal dv-p08.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-09",
+          "name": "Close panel, close others, close all, close to the left or right",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/commands.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "menuFor has close and close others on the selected view (commands.ts:113-145). Dockview has the full set and a menu on any tab (packages/dockview-core/src/dockview/options.ts:40-53). Proposal dv-p09.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-10",
+          "name": "Which tab shows after a close",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/panels.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "The neighbour by position takes over (panels.ts:33-39). Dockview picks the last used (packages/dockview-core/src/dockview/dockviewGroupPanelModel.ts:1695-1726). Proposal dv-p01.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-11",
+          "name": "Move views and panels, and keep sizes in the same row",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/tree.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Move into or beside any panel (api.ts:341-344). A move in its own row takes half of the target (tree.ts:127-132; behaviors.yaml:472-479), and no call moves a whole panel. Dockview keeps sizes for siblings (packages/dockview-core/src/dockview/dockviewComponent.ts:5371-5388). Proposals dv-p02, dv-p08.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-12",
+          "name": "Lock a panel, and change a view's params or title after it opens",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Allow rules see the view and a region only (api.ts:221-222, 257-258); params change only through setLayout (api.ts:357-360). Dockview has a group lock and panel update calls (packages/dockview-core/src/api/dockviewPanelApi.ts:36-83). Proposals dv-p10, dv-p03.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-13",
+          "name": "Change signals (one onChange, kind and origin, focus event)",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "One onChange per committed change, and mount, unmount and navigate hooks (api.ts:280-291). No kind, no origin and no focus hook. Dockview has many single-thing events with an origin (packages/dockview-core/src/dockview/dockviewComponent.ts:361-384). Proposals dv-p04, dv-p32.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-14",
+          "name": "Layout history (undo and redo)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/state/history.mdx:12-25); slice P9. Depth 50, whole layouts, keys and menu rows, one step per gesture (workspace.ts:448-452; react/Workspace.tsx:471-477). Missing a clear call, a change hook, one step per run of divider keys, and a clear on load. Proposals dv-p11, dv-p12.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-15",
+          "name": "Tab strip basics (press, close button, middle click, keys, reorder by drag and by keys)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/TabStrip.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "TabStrip.tsx:58-103 and react/__tests__/workspace.test.tsx:92-128. Dockview has no keyboard reorder. Small differences are proposals dv-p14 (middle click on release), dv-p15 (Backspace), dv-p16 (manual activation), dv-p17 (slide), dv-p18 (wheel).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-16",
+          "name": "Tear a tab out, drag a whole panel, drop on the empty strip",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/drop.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "drop.ts:97-118 and react/TabStrip.tsx:77. Dockview uses a separate void area (packages/dockview-core/src/dockview/components/titlebar/voidContainer.ts:46-125).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-17",
+          "name": "Tab overflow switcher (count, search, recent first)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Menu.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/panels/advancedOverflow.mdx:12-101); slice P12. Count button, Mod+Alt+P, search and recent first (react/Menu.tsx:84-131; react/Workspace.tsx:595-600). Missing recency across a reload, a scope option, and previews (not described, tbd).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-18",
+          "name": "Pinned tabs",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/panels/pinnedTabs.mdx:12-156); slice P13. Order, API, saved state and sticky icons (api.ts:363-365; workspace.ts:430-440; react/TabStrip.tsx:84-103). Inline and separate-row modes, a default key and pin by drag are missing. Proposal dv-p29.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-19",
+          "name": "Tabs on more than one row",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/scene.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/panels/multiRowTabs.mdx:22-117); slice P13. tabRows with a cap, the content box follows (react/scene.ts:82-98, 160-164). Nearest row on a drop is proposal dv-p20. Vertical columns are not sliced.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-20",
+          "name": "Coloured tab sets in one strip (tab group chips)",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "A panel has one flat tab list (api.ts:49-56). Free in Dockview (packages/dockview-core/src/dockview/tabGroup.ts:17-66). Proposal dv-p13.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-21",
+          "name": "App slots in the strip, a custom tab, and a menu on any tab",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/TabStrip.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "A tools slot used only by the peek, a fixed tab, and an extra menu prop (react/TabStrip.tsx:26-27, 81-139; react/Workspace.tsx:38-39). Dockview has three header slots and tab components (packages/dockview-react/src/dockview/dockview.tsx:63-73). Proposals dv-p33, dv-p09.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-22",
+          "name": "Tab strip layout options (side of the panel, one tab fills, hide the strip, long titles)",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/detail.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "The strip is always on top; a small panel drops its strip (detail.ts:12-18). Dockview can put the header on any side and make one tab fill it (packages/dockview-core/src/dockview/options.ts:203, 370).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-23",
+          "name": "Drag and drop targets (panel zones, corners, layout edge, seam, empty layout, one answer per point)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/drop.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "One ordered hit-test (drop.ts:64-195) with a seam target Dockview lacks (drop.ts:146-163). The preview is the drop (drop.ts:254-292), except that preview() skips the pinned-first sort that commit applies (workspace.ts:196), so a tab dropped before a pinned tab previews in front of it. Dockview zones are tunable (packages/dockview-core/src/dnd/droptarget.ts:140-157). Proposal dv-p21.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-24",
+          "name": "Touch and pen drags",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "One 4 px pickup for every pointer (react/Workspace.tsx:45-46, 373-378). Dockview has a hold rule for touch (packages/dockview-core/src/dnd/pointer/pointerDragSource.ts:33-35, 135-196). Proposal dv-p22.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-25",
+          "name": "Drop compass",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/aim.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/dnd/dndCompass.mdx:12-74); slice P11. Five cells and edge pads that stand for engine points (react/aim.ts:38-56; react/Workspace.tsx:290-322). Cells for refused drops still show. Proposal dv-p24.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-26",
+          "name": "Drags that start outside the workspace",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/drop.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "A drag source must exist (api.ts:189; drop.ts:26-31). Dockview fires an event for an unknown drag (packages/dockview-core/src/dockview/dockviewGroupPanelModel.ts:1883-1899). Proposal dv-p23.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-27",
+          "name": "Drag vetoes and placement rules",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Allow rules per view type remove targets before they preview (api.ts:257-258; drop.ts:70-71), which Dockview has no match for. No draggable flag per type. Dockview vetoes a start and a target with the target in view (packages/dockview-core/src/dockview/events.ts:34-88). Proposals dv-p28, dv-p10.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-28",
+          "name": "Floats (open, move, resize, dock back, two layers, front-to-back order)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "api.ts:71-73, 347-350, 366-367; react/Workspace.tsx:84-100, 418-422. A desktop layer Dockview lacks. A float resize is one commit (react/Workspace.tsx:405).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-29",
+          "name": "Float from code with a clamp, tear-off with a key, partly off screen, pixel size",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/workspace.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "float takes a panel id and commits the rect as given (workspace.ts:302-306); repair clamps fully inside (model.ts:154-161). Dockview floats one tab, keeps 100 px inside and ties a float to its nearer side (packages/dockview-core/src/overlay/overlay.ts:202-282). Proposals dv-p34 to dv-p37.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-30",
+          "name": "Several panels split inside one float",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/panels.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "A float holds one tab panel and refuses a host (panels.ts:6-9; behaviors.yaml:1316-1318). Dockview floats own a small grid (packages/dockview-core/src/dockview/dockviewFloatingGroupPanel.ts:27-67). Proposal dv-p13.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-31",
+          "name": "Alignment lines and snapping for floats",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/aim.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/core/dnd/smartGuides.mdx:12-168); slice P15. 8 px snap to sides and the middle with guide lines and Alt to hold it off (react/aim.ts:95-116). Missing a release distance, centre and divider lines, an opt-out per float, a run-time switch, events and snap together. Proposal dv-p38.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-32",
+          "name": "Maximize and the camera (frame any group, step out, back and forward)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/navigation.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "The camera never changes the layout and saves apart (api.ts:14-16, 378-401). Dockview maximizes one group and must leave maximize to save (packages/dockview-core/src/gridview/gridview.ts:519-576).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-33",
+          "name": "Edge groups (park on an edge, a shelf, a peek, empty edges take no space)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Two enterprise features in Dockview (packages/docs/docs/core/groups/autoHideEdgeGroups.mdx:14-147; packages/docs/docs/core/groups/autoEdgeGroups.mdx:14-104); slice P14. hide(id, edge), shelves, a peek with no reflow and edge pads (workspace.ts:317-319; react/Workspace.tsx:627-650, 728-737). The peek and the pad live in the screen layer. Proposals dv-p52, dv-p25.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-34",
+          "name": "Popout windows",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/api.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Layout has docked, floating and hidden places only (api.ts:87-96). Free in Dockview, with style copy, a URL guard, close detection and restore (packages/dockview-core/src/popoutWindow.ts:62-383). History and keyboard docking across windows are enterprise and not sliced. Proposal dv-p53.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-35",
+          "name": "Divider drags and pushes across nested groups",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/resize.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "The push crosses nested groups into the parent (resize.ts:59-141; behaviors.yaml:309-323), which Dockview's walk cannot (packages/dockview-core/src/splitview/splitview.ts:1080-1207). Keyboard resize is in the engine (resize.ts:170-183).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-36",
+          "name": "Size extras (maximum size, pixel-width side panels, snap closed, equalize, set size, flip)",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/rects.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Minimum only, and only weights are saved (api.ts:119-126; rects.ts:59-68). Dockview has all six (packages/dockview-core/src/splitview/splitview.ts:42-46, 504-568, 644-670; packages/dockview-core/src/gridview/gridview.ts:66-116). Proposals dv-p39 to dv-p45.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-37",
+          "name": "Divider look, touch area and whole-pixel sizes",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/panes.css (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Always a resize cursor and fractional boxes (react/panes.css:149-155; react/scene.ts:115-118). Dockview shows one-way cursors and rounds to whole pixels (packages/dockview-core/src/splitview/splitview.ts:789-852, 993-1078). Proposals dv-p43, dv-p46.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-38",
+          "name": "Keyboard (rebindable keymap, F6, next and previous tab, focus by direction)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/keys.ts (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Spatial navigation is enterprise in Dockview (packages/docs/docs/advanced/keyboard.mdx:22-93); slice P10. keys.ts:6-23, panelToward (api.ts:493-496) and Mod+Alt+Shift with an arrow (react/keys.ts:13-20). F6 and tabs stop at the ends. Proposal dv-p19.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-39",
+          "name": "Keyboard docking",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Enterprise in Dockview (packages/docs/docs/advanced/keyboard.mdx:95-140); slice P10. Mod+Alt+M, arrows aim, Enter drops, Escape cancels, a live region speaks (react/Workspace.tsx:324-365, 778). Missing a float key, a visible hint and Escape that steps back a phase.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-40",
+          "name": "Move focus from view content to its tab strip, and Tab into the view",
+          "status": "missing",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "No one key moves focus from content to its own tab; F6 then Shift+F6 gets there as a side effect (react/Workspace.tsx:173-178, 505-521). Tab from a tab goes to its strip buttons and then the next strip, not into its view (react/Workspace.tsx:718, 754). The key is enterprise in Dockview (packages/dockview-core/src/dockview/options.ts:116-139) and not sliced. Proposal dv-p26.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-41",
+          "name": "Roles and names for screen readers",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/TabStrip.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Tab list, tab, tab panel and separator roles with links (react/TabStrip.tsx:76, 86-88; react/__tests__/workspace.test.tsx:52-66). No named region per panel and no dialog role per float (packages/dockview-core/src/overlay/overlay.ts:146-151). Proposal dv-p48.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-42",
+          "name": "Announcements and messages the app can translate",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "A live region speaks during a keyboard move only, and strings are in the code (react/Workspace.tsx:350-354, 778). Dockview has free live regions and a message table (packages/dockview-core/src/dockview/liveRegionService.ts:51-80; packages/dockview-core/src/dockview/accessibilityMessages.ts:12-90). Proposal dv-p47.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-43",
+          "name": "Reduced motion, tooltips, high contrast and right to left",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/panes.css (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Panels ease only under no reduced-motion setting, but the refused-close shake plays for all (react/panes.css:120-121, 192-196). Tooltips exist (react/Workspace.tsx:602-610). Neither side handles forced colours or right to left. Proposal dv-p49.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-44",
+          "name": "Themes and CSS variables",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/panes.css (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "18 variables and one dark palette with no colour-scheme line (react/panes.css:3-21). Dockview ships many themes (packages/dockview-core/src/dockview/theme.ts:72-224). Proposal dv-p49.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-45",
+          "name": "React binding (mount once, keep alive, context, option changes, clean-up)",
+          "status": "implemented",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "Flat siblings keyed by view id never remount (react/Workspace.tsx:655-671; behaviors.yaml:885-892). Dockview needs an overlay layer for the same (packages/dockview-core/src/overlay/overlayRenderContainer.ts:215-432).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-46",
+          "name": "Empty-state component and a boundary for a view that throws",
+          "status": "partial",
+          "lev_equivalent": "apps/jarvis/src/workspace/react/Workspace.tsx (branch lev/nested-zoom)",
+          "action": "unclassified",
+          "notes": "An empty stage shows a fixed add button, and an error reaches the app's boundary (react/Workspace.tsx:105-107, 708-717). Dockview has an empty-state component and no boundary either (packages/dockview-react/src/dockview/dockview.tsx:69, 187-197). Proposals dv-p50, dv-p51.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "dv-47",
+          "name": "Enterprise licence key and watermark",
+          "status": "not-applicable",
+          "lev_equivalent": "none (not a user feature)",
+          "action": "unclassified",
+          "notes": "A sales gate (packages/docs/docs/overview/enterprise-setup.mdx:13-78; packages/dockview-enterprise/README.md:22-24). We build our own and need no key.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "e-graphs-primer",
       "label": "e-graphs-primer",
       "category": "rewrite-runtime",
@@ -11167,6 +11967,509 @@
       ],
       "absorbed": 0,
       "pending": 16,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "eval-hillclimbing-playbook",
+      "label": "Eval Design and Hillclimbing Playbook",
+      "category": "eval-framework",
+      "priority": "P1",
+      "measured_at": "2026-09-29",
+      "updated_at": "2026-09-29",
+      "owner": "core/eval + plugins/sdlc (evaluator side); optimizer lane owner unresolved (proposed plugins/evolve-memory)",
+      "path": ".lev/pm/parity/eval-hillclimbing-playbook.yaml",
+      "verdict": "extract",
+      "total_features": 9,
+      "classified": 9,
+      "unclassified": 0,
+      "counts": {
+        "extract": 8,
+        "implemented": 1
+      },
+      "features": [
+        {
+          "id": "hillclimb-01",
+          "name": "Noise-floor gate: admit an optimization loop only when run-to-run noise is below the minimum actionable delta",
+          "status": "missing",
+          "lev_equivalent": "core/eval/src/loop-admission.ts admits on obligations and budgets only",
+          "action": "extract",
+          "notes": "Deterministic precondition. Emit evaluation_error with \"more repeats or cases\" rather than spend generations on unmeasurable changes.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/automating-eval-design-and-hillclimbing/article.md",
+            "core/eval/src/loop-admission.ts"
+          ]
+        },
+        {
+          "id": "hillclimb-02",
+          "name": "Train/test split with revert on train-up-test-flat",
+          "status": "partial",
+          "lev_equivalent": "controller-owned protected holdouts (spec-eval Eval Design Lifecycle); no visible random split, no revert branch",
+          "action": "extract",
+          "notes": "Policy-selected technique below the secret holdout. The revert rule is a loop branch, not a new authority.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/specs/spec-eval.md",
+            "dna/core/eval.dna.yaml"
+          ]
+        },
+        {
+          "id": "hillclimb-03",
+          "name": "Headroom check on baseline; redirect saturated evals to cost or latency",
+          "status": "missing",
+          "lev_equivalent": "none",
+          "action": "extract",
+          "notes": "Warn at roughly 95% or above. Pairs with hillclimb-06.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/automating-eval-design-and-hillclimbing/article.md"
+          ]
+        },
+        {
+          "id": "hillclimb-04",
+          "name": "Grader self-consistency: grade the same output twice and report disagreement",
+          "status": "partial",
+          "lev_equivalent": "known-good/known-bad separation and disagreement handling for sampled observers (spec-eval), not a same-output repeat",
+          "action": "extract",
+          "notes": "Cheapest possible variance probe. Add to the fitness suite when it ships.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/specs/spec-eval.md",
+            "plugins/sdlc/flows/eval-design.flow.yaml"
+          ]
+        },
+        {
+          "id": "hillclimb-05",
+          "name": "Stall reflection: no edit, bucket every remaining failure by root cause; catches flawed cases and graders",
+          "status": "missing",
+          "lev_equivalent": "loop terminals are budget exhaustion, escalate, close_incomplete (loop-admission.ts)",
+          "action": "extract",
+          "notes": "Trigger on two or three flat rounds or when no single fix can beat noise. Output feeds the Cheap-Path and Non-Static Gap registries.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/loop-admission.ts",
+            "workshop/intake/automating-eval-design-and-hillclimbing/article.md"
+          ]
+        },
+        {
+          "id": "hillclimb-06",
+          "name": "Cost-parity objective: reduce cost or latency while quality holds",
+          "status": "missing",
+          "lev_equivalent": "eval suites score quality; no first-class cost objective",
+          "action": "extract",
+          "notes": "Strong objective even on a saturated eval. Model and effort step-down, prompt audit, and caching are the common drivers.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/automating-eval-design-and-hillclimbing/article.md"
+          ]
+        },
+        {
+          "id": "hillclimb-07",
+          "name": "Adversarial-sampling warning and cheapest-grader ladder in case design guidance",
+          "status": "missing",
+          "lev_equivalent": "eval-builder SKILL procedure has neither",
+          "action": "extract",
+          "notes": "Docs-only. Pick hard cases because a human can say why; do not sample one model's failure fingerprint; production traffic skews easy.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/sdlc/skills/eval-builder/SKILL.md"
+          ]
+        },
+        {
+          "id": "hillclimb-08",
+          "name": "Optimizer leakage rule: never copy failure content into the surface being climbed",
+          "status": "partial",
+          "lev_equivalent": "eval.dna.yaml forbids generated material altering source_policy or holdout answers (evaluator side only)",
+          "action": "extract",
+          "notes": "Symmetric DNA rule for the optimizer side. Pairs with \"answers structurally out of the model's reach\".\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "dna/core/eval.dna.yaml"
+          ]
+        },
+        {
+          "id": "hillclimb-09",
+          "name": "Controller-secret holdouts, calibration, generation digests, no self-grading",
+          "status": "implemented",
+          "lev_equivalent": "spec-eval Eval Design Lifecycle; eval.dna.yaml rules 181, 207, 216, 224, 233",
+          "action": "implemented",
+          "notes": "Lev is stricter than the article here. Keep. The article's visible split is a cheaper technique layered beneath, never a replacement.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/specs/spec-eval.md",
+            "dna/core/eval.dna.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        ".lev/pm/parity/eval-frameworks.yaml",
+        "workshop/analysis/eval-driven-development-intake.md",
+        "workshop/analysis/why-building-eval-platforms-is-hard-phil-hetzel-braintrust/analysis.md",
+        "docs/specs/spec-eval.md",
+        "dna/core/eval.dna.yaml"
+      ],
+      "absorbed": 1,
+      "pending": 8,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "evals-for-taste",
+      "label": "Evals for taste workshop",
+      "category": "artifact-evaluation-and-bounded-improvement",
+      "priority": "P1",
+      "measured_at": "2026-10-05",
+      "updated_at": "2026-10-05",
+      "owner": "agent-runtime-convergence / eval-genui",
+      "path": ".lev/pm/parity/evals-for-taste.yaml",
+      "verdict": "extract",
+      "total_features": 19,
+      "classified": 19,
+      "unclassified": 0,
+      "counts": {
+        "extract": 19
+      },
+      "features": [
+        {
+          "id": "replay-corpus",
+          "name": "Replayable domain-specific examples",
+          "status": "partial",
+          "lev_equivalent": "Config-resolved EvalSuite/EvalCase and subject binding",
+          "action": "extract",
+          "notes": "tasks.json contains five topic prompts, each requesting five slides; the README ten-task claim is stale. Follow-up: Use versioned real or consented user cases, baseline outputs, explicit holdout split and exact artifact identity; keep the workshop tasks as seed examples only.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/tasks.json:1",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/batch.ts",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "candidate-variants",
+          "name": "Prompt, tool-loop and model variants",
+          "status": "partial",
+          "lev_equivalent": "Autoresearch candidate loop; canonical eval decisions must be integrated",
+          "action": "extract",
+          "notes": "Solutions contain polish, diagram generation, rasterize-inspect QA, and model-swap variants. Model swap returns to the naive prompt; it is not cumulative QA plus the larger model. Follow-up: Vary one declared dimension at a time; preserve candidate lineage, prompt/model/environment refs, attempt budget and comparable runs.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/solutions/01-polish.agent.yaml",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/solutions/02-diagram.agent.yaml",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/solutions/03-qa-loop.agent.yaml",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/solutions/04-model-swap.agent.yaml",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "artifact-pipeline",
+          "name": "Generate, retain, render and inspect actual artifacts",
+          "status": "partial",
+          "lev_equivalent": "Exec-owned effects and eval observation/sensor contracts",
+          "action": "extract",
+          "notes": "Managed Agent generation saves the deck and session events; PPTX parsing and image rendering prepare structural and visual inputs. Follow-up: Render sandboxed outputs, retain original and rendered artifacts, record render failures, bind both to immutable subject identity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/create-slides.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/parse-pptx.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/render.ts",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-produced-result",
+          "name": "Produced result",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/produced-result.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-slide-count",
+          "name": "Slide count",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/slide-count.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-slides-with-image",
+          "name": "Slides with images",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/slides-with-image.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-text-heavy-slides",
+          "name": "Text-heavy slides",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/text-heavy-slides.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-cluttered-slides",
+          "name": "Cluttered slides",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/cluttered-slides.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-small-font-slides",
+          "name": "Slides with small fonts",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/small-font-slides.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "code-emoji-count",
+          "name": "Emoji count",
+          "status": "partial",
+          "lev_equivalent": "Code companion sensor and deterministic policy comparison",
+          "action": "extract",
+          "notes": "Available deterministic grader in the source catalog; only Produced result is wired into the default GRADERS array. Follow-up: Port the useful measurement through admitted sensors; calibrate thresholds on the actual domain. Existence or ZIP validity alone must never establish a usable artifact.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/code/emoji-count.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:19",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders.ts:19",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "visual-text",
+          "name": "Text quality",
+          "status": "partial",
+          "lev_equivalent": "Typed EvalObservation / Measurement; separate deterministic EvalDecision",
+          "action": "extract",
+          "notes": "Available model judge; observed source catalog does not enable these by default. Follow-up: Bind observations to rendered artifacts and a fixed rubric version, persist rationale and invalid/missing states; calibrate against independent human preferences and counterexamples.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/text-judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:31",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "visual-image",
+          "name": "Image quality",
+          "status": "partial",
+          "lev_equivalent": "Typed EvalObservation / Measurement; separate deterministic EvalDecision",
+          "action": "extract",
+          "notes": "Available model judge; observed source catalog does not enable these by default. Follow-up: Bind observations to rendered artifacts and a fixed rubric version, persist rationale and invalid/missing states; calibrate against independent human preferences and counterexamples.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/image-judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:31",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "visual-layout",
+          "name": "Layout quality",
+          "status": "partial",
+          "lev_equivalent": "Typed EvalObservation / Measurement; separate deterministic EvalDecision",
+          "action": "extract",
+          "notes": "Available model judge; observed source catalog does not enable these by default. Follow-up: Bind observations to rendered artifacts and a fixed rubric version, persist rationale and invalid/missing states; calibrate against independent human preferences and counterexamples.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/layout-judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:31",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "visual-color",
+          "name": "Color quality",
+          "status": "partial",
+          "lev_equivalent": "Typed EvalObservation / Measurement; separate deterministic EvalDecision",
+          "action": "extract",
+          "notes": "Available model judge; observed source catalog does not enable these by default. Follow-up: Bind observations to rendered artifacts and a fixed rubric version, persist rationale and invalid/missing states; calibrate against independent human preferences and counterexamples.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/color-judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:31",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "visual-title-body-coherence",
+          "name": "Title/body coherence",
+          "status": "partial",
+          "lev_equivalent": "Typed EvalObservation / Measurement; separate deterministic EvalDecision",
+          "action": "extract",
+          "notes": "Available model judge; observed source catalog does not enable these by default. Follow-up: Bind observations to rendered artifacts and a fixed rubric version, persist rationale and invalid/missing states; calibrate against independent human preferences and counterexamples.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/title-body-coherence-judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/judge/judge.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts:31",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "baseline-comparison",
+          "name": "Per-example baseline deltas and run summaries",
+          "status": "partial",
+          "lev_equivalent": "Generation-bound evaluation and measurement read projections",
+          "action": "extract",
+          "notes": "Eval runner writes score.json, can read baseline.score.json, renders a terminal grid and numeric deltas. It does not preserve full per-slide judge reasoning or rubric/model digests in score JSON. Follow-up: Show case-level improvements and regressions, uncertainty and failures; preserve raw observations. Never promote from a rendered table or average alone.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/eval-runner.ts",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "operating-metrics",
+          "name": "Quality, cost, latency, errors and token usage",
+          "status": "partial",
+          "lev_equivalent": "Execution telemetry and typed measurements",
+          "action": "extract",
+          "notes": "Official London session abstract claims these signals and less than six hours per model change. The inspected grader catalog does not implement a full usage/cost/latency aggregation. Follow-up: Capture actual usage, currency/pricing version, latency units and errors; unknown values remain unknown. Six hours is a source claim, not Lev acceptance or observed performance.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/create-slides.ts",
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/graders/all.ts",
+            "https://claude.com/code-with-claude/session/ldn-ext-evals-for-taste-hill-climbing-a-slide-generation-agent",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "feedback-loop",
+          "name": "Real-user dissatisfaction feeding new evaluation cases",
+          "status": "partial",
+          "lev_equivalent": "Human feedback surface, source-bound cases and evaluator calibration",
+          "action": "extract",
+          "notes": "Official abstract describes feedback from user dissatisfaction; no complete ingestion loop was established in the inspected workshop code. Follow-up: Capture rejection, correction, pair preference and reasons with artifact/context refs; review case promotion, deduplicate and protect held-out answers.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/eval-runner.ts",
+            "https://claude.com/code-with-claude/session/ldn-ext-evals-for-taste-hill-climbing-a-slide-generation-agent",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        },
+        {
+          "id": "bounded-improvement",
+          "name": "Candidate search, stop, keep and restore",
+          "status": "partial",
+          "lev_equivalent": "Autoresearch loop exists, but current inspected loop selects locally instead of consuming canonical EvalDecision",
+          "action": "extract",
+          "notes": "Workshop batch source generates/renders candidates but leaves grading and round organization manual; it is not an automatic certified hill-climber. Follow-up: Reuse bounded scheduling/candidate mechanics only after authority reconciliation. Keep evaluator repair in a separate generation; budget exhaustion, timeout and missing evidence cannot become success.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/evals-for-taste/cwc-workshops/eval-driven-agent-development/src/batch.ts",
+            "dna/core/eval.dna.yaml",
+            "workshop/analysis/evals-for-taste/analysis.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 19,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -14865,6 +16168,122 @@
       "rejected_items": []
     },
     {
+      "target": "getone-one",
+      "label": "One (GetOne)",
+      "category": "agent-human-interaction-and-session-control",
+      "priority": "P1",
+      "measured_at": "2026-10-08",
+      "updated_at": "2026-10-08",
+      "owner": "workshop-intake",
+      "path": ".lev/pm/parity/getone-one.yaml",
+      "verdict": "extract",
+      "total_features": 6,
+      "classified": 6,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "reference": 1
+      },
+      "features": [
+        {
+          "id": "unified-question-inbox",
+          "name": "One inbox for correlated questions and approvals",
+          "status": "partial",
+          "lev_equivalent": "PingService responses, waiters and events",
+          "action": "extract",
+          "notes": "Existing response flow is reusable; atomic concurrent settlement and worker continuation require proof.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://getone.one/",
+            "community/agentping/packages/core/src/services/ping-service.ts:141"
+          ]
+        },
+        {
+          "id": "managed-session-control",
+          "name": "Distinguish visible agents from controllable sessions",
+          "status": "partial",
+          "lev_equivalent": "Existing herdr substrate adapter",
+          "action": "reference",
+          "notes": "Do not add a second session runtime; show controls only for admitted managed sessions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://getone.one/",
+            "core/substrate/src/adapters/herdr/adapter.ts:158",
+            "core/substrate/src/adapters/herdr/adapter.ts:180"
+          ]
+        },
+        {
+          "id": "generated-ui-round-trip",
+          "name": "Generated surface through the public request and response path",
+          "status": "partial",
+          "lev_equivalent": "Host envelope, core canvas schema and json-render catalog",
+          "action": "extract",
+          "notes": "Verified local mismatch blocks the candidate envelope; arbitrary GenUI in One itself was not verified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "community/agentping/packages/core/src/domain/ping.ts:180",
+            "community/agentping/packages/adapters/web-ui/src/lib/host-envelope.ts:37",
+            "workshop/analysis/getone-one/verification.json"
+          ]
+        },
+        {
+          "id": "truthful-worker-stop",
+          "name": "Stop controls that stop underlying work",
+          "status": "partial",
+          "lev_equivalent": "Exec/substrate lifecycle versus Studio local session maps",
+          "action": "extract",
+          "notes": "Ping dismissal and local map deletion are not evidence of process cancellation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://getone.one/docs/remote-machines",
+            "community/agentping/packages/studio/src/main/bridge/ClaudeCodeBridge.ts:341",
+            "core/substrate/src/adapters/herdr/adapter.ts:180"
+          ]
+        },
+        {
+          "id": "remote-authority-and-reconnect",
+          "name": "Device approval, host checks and reconnect continuity",
+          "status": "partial",
+          "lev_equivalent": "Existing node collaboration draft and local interaction persistence",
+          "action": "extract",
+          "notes": "One documents same-account device control; cross-person host-scoped execution remains a separate Lev proof obligation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://getone.one/docs/remote-machines",
+            "docs/design/design-node-collaboration.md:84"
+          ]
+        },
+        {
+          "id": "cancellable-answer-dispatch",
+          "name": "Cancel an answer before dispatch",
+          "status": "partial",
+          "lev_equivalent": "Pending ping lifecycle; UI grace-window parity not verified",
+          "action": "extract",
+          "notes": "A short pre-send delay is not undo of completed work. Keep request cancellation and effect compensation distinct.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://getone.one/",
+            "community/agentping/packages/core/src/services/ping-service.ts:210"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 5,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "gitagent",
       "label": "GitAgent",
       "category": "functionality-target",
@@ -16563,6 +17982,93 @@
       ]
     },
     {
+      "target": "jiti-kernel-gist",
+      "label": "JITI kernel gist",
+      "category": "managed-repair-and-recovery",
+      "priority": "P1",
+      "measured_at": "2026-10-04",
+      "updated_at": "2026-10-04",
+      "owner": "workshop-intake",
+      "path": ".lev/pm/parity/jiti-kernel-gist.yaml",
+      "verdict": "extract",
+      "total_features": 4,
+      "classified": 4,
+      "unclassified": 0,
+      "counts": {
+        "reference": 2,
+        "extract": 2
+      },
+      "features": [
+        {
+          "id": "generation-bound-admission",
+          "name": "State-specific proposal admission",
+          "status": "partial",
+          "lev_equivalent": "Claim identity binding and evaluator generation/rearm checks",
+          "action": "reference",
+          "notes": "A matching field when supplied is not proof every operation requires a world generation. Current repair_rearm targeted suite passed.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/domain/src/claim.ts",
+            "core/eval/src/repair-rearm-pack.test.ts",
+            "workshop/intake/jiti-kernel-gist/source.readable.txt"
+          ]
+        },
+        {
+          "id": "managed-repair-attempt",
+          "name": "One provisional attempt spanning execution and nested repairs",
+          "status": "partial",
+          "lev_equivalent": "Existing effect admission/ACT/VERIFY/seal and exec adapter boundaries",
+          "action": "extract",
+          "notes": "No generic restore call in inspected effect runtime. Adapt only with a declared, tested managed-state scope; external effects require separate treatment.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/effect/src/effect-control-runtime.ts",
+            "workshop/intake/jiti-kernel-gist/source.readable.txt"
+          ]
+        },
+        {
+          "id": "safety-goal-predicate-coverage",
+          "name": "Safe progress distinguished from achieved goal",
+          "status": "partial",
+          "lev_equivalent": "Independently admitted evaluator/obligation policy and negative controls",
+          "action": "extract",
+          "notes": "Displayed helper check remains true when bad total-price produces a negative effective tax. Preserve as a known-bad coverage scenario, not an implementation guarantee.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "dna/core/eval.dna.yaml",
+            "workshop/intake/jiti-kernel-gist/source.readable.txt"
+          ]
+        },
+        {
+          "id": "continuation-recovery-separation",
+          "name": "Live restart authority differs from durable accepted-state recovery",
+          "status": "partial",
+          "lev_equivalent": "Runtime checkpoint and matching resume receipt authority; accepted publication mechanisms",
+          "action": "reference",
+          "notes": "No Lisp call-stack preservation or durable JITI recovery established. Projections cannot authorize resume; retained attempt history is not rewound.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/exec/src/run/checkpoint.ts",
+            "core/context-graph/src/project-image-generation.ts",
+            "workshop/intake/jiti-kernel-gist/source.readable.txt"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 2,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "jiuwenclaw",
       "label": "JiuwenClaw",
       "category": "agent-framework",
@@ -17419,6 +18925,107 @@
       "lineage": [],
       "absorbed": 0,
       "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "lifeos-isa",
+      "label": "LifeOS ISA",
+      "category": "intent-contract-and-proof",
+      "priority": "P1",
+      "measured_at": "2026-09-28",
+      "updated_at": "2026-09-28",
+      "owner": "workshop-intake",
+      "path": ".lev/pm/parity/lifeos-isa.yaml",
+      "verdict": "extract",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "inherited-obligations",
+          "name": "Ancestor obligations with non-weakenable hard constraints",
+          "status": "partial",
+          "lev_equivalent": "Intent cascade contract; generic config merge is not constraint composition",
+          "action": "extract",
+          "notes": "Lev declares the contract; end-to-end ancestor resolution proof is not established by this intake. LifeOS public gate accepts contradictory and missing parents.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "docs/specs/spec-intent.md",
+            "docs/specs/spec-intent-cascade.md",
+            "workshop/intake/LifeOS/LifeOS/install/LIFEOS/DOCUMENTATION/ISA/ISAHierarchy.md",
+            "workshop/analysis/lifeos-isa/probe-results.json"
+          ]
+        },
+        {
+          "id": "bridge-proof-and-invalidation",
+          "name": "Integration claims and upstream-change proof freshness",
+          "status": "partial",
+          "lev_equivalent": "core/eval proof bundles plus graph provenance; automatic hierarchy invalidation unproven",
+          "action": "extract",
+          "notes": "Do not infer integrated parent closure from separate child successes or artifact hashes alone.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/proof-bundle.ts",
+            "workshop/intake/LifeOS/LifeOS/install/LIFEOS/DOCUMENTATION/ISA/ISAHierarchy.md"
+          ]
+        },
+        {
+          "id": "claim-authoring-and-projection",
+          "name": "Stable claims connecting intent, probe, evidence and status",
+          "status": "partial",
+          "lev_equivalent": "Task and Claim contracts with owner-specific projections",
+          "action": "extract",
+          "notes": "Consolidated reading surface proposed; no second canonical ISA store or new public vocabulary.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/context-graph/src/claim-contract.ts",
+            "core/eval/src/claim-review.ts",
+            "workshop/intake/LifeOS/LifeOS/install/LIFEOS/DOCUMENTATION/ISA/ISAFormat.md"
+          ]
+        },
+        {
+          "id": "collector-coverage",
+          "name": "Complete collection required before absence or expiry conclusions",
+          "status": "partial",
+          "lev_equivalent": "Existing context-graph and reconciler owners; specific sweep parity not certified",
+          "action": "reference",
+          "notes": "Source-backed external pattern; no provider runtime test or Lev parity proof claimed.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/LifeOS/LifeOS/install/LIFEOS/ATLAS/Store.ts"
+          ]
+        },
+        {
+          "id": "review-freshness",
+          "name": "Review freshness distinct from edit and regeneration timestamps",
+          "status": "partial",
+          "lev_equivalent": "Existing provenance and generated skill surfaces; review-age parity unproven",
+          "action": "reference",
+          "notes": "Useful dogfood audit scenario; no runtime adoption.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/LifeOS/LifeOS/install/LIFEOS/TOOLS/TelosFreshness.ts",
+            "dna/thesis.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
       "deferred": 0,
       "rejected": 0,
       "monitor": 2,
@@ -21105,23 +22712,179 @@
       "rejected_items": []
     },
     {
+      "target": "omo-herdr-dag",
+      "label": "omo-herdr-dag",
+      "category": "operator-surface-tui",
+      "priority": "P2",
+      "measured_at": "2026-09-27",
+      "updated_at": "2026-09-27",
+      "owner": "apps/jarvis (holdout-client lane) + core/substrate (herdr adapter) + core/orchestration events",
+      "path": ".lev/pm/parity/omo-herdr-dag.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3,
+        "reference": 4,
+        "build": 1
+      },
+      "features": [
+        {
+          "id": "ohd-01",
+          "name": "Live DAG projection from runtime workflow events",
+          "status": "partial",
+          "lev_equivalent": "core/orchestration run events -> LevEvent; apps/jarvis run views",
+          "action": "extract",
+          "notes": "Subscribes to omo.dag.updated / omo.task.updated and re-renders. Lev analogue is a run/DAG event stream exposed as a generated poly operation.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/extension.mjs:39"
+          ]
+        },
+        {
+          "id": "ohd-02",
+          "name": "Snapshot file as writer/viewer contract",
+          "status": "missing",
+          "lev_equivalent": "generated SDK read op over execution-ledger projection (gap for a non-Jarvis client)",
+          "action": "extract",
+          "notes": "Writer normalizes and writes local JSON; the viewer only watches the file. This is the holdout-client property: the viewer knows nothing but the published shape.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/storage.mjs",
+            "workshop/intake/omo-herdr-dag/src/viewer.mjs"
+          ]
+        },
+        {
+          "id": "ohd-03",
+          "name": "Fail-closed snapshot normalization",
+          "status": "partial",
+          "lev_equivalent": "generated operation schemas (zod) at the SDK boundary",
+          "action": "extract",
+          "notes": "Rejects unknown states, duplicate nodes, and dangling edges; strips control chars. Cycle detection in layers().",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/model.mjs:10"
+          ]
+        },
+        {
+          "id": "ohd-04",
+          "name": "Side pane via substrate pane split without stealing focus",
+          "status": "partial",
+          "lev_equivalent": "core/substrate herdr adapter (spec-substrate-parity: herdr home)",
+          "action": "reference",
+          "notes": "Uses `herdr pane split --ratio 0.65 --no-focus`, rename, run. Lev already owns herdr transport (unix-socket JSON-RPC); only the 'open a companion pane' verb is new.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/controller.mjs:177",
+            "core/substrate/src/adapters/herdr/adapter.ts"
+          ]
+        },
+        {
+          "id": "ohd-05",
+          "name": "Activation guard (env markers + live socket + resolvable binary)",
+          "status": "implemented",
+          "lev_equivalent": "core/substrate reachable capability + beacon env-marker join",
+          "action": "reference",
+          "notes": "Stale HERDR_* env from a dead session stays inactive. Matches Lev's dead-herdr eval case.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/herdr.mjs:32",
+            ".lev/pm/specs/spec-substrate-parity.yaml"
+          ]
+        },
+        {
+          "id": "ohd-06",
+          "name": "Session-scoped checkpoint recovery on start",
+          "status": "partial",
+          "lev_equivalent": "core/execution-ledger replay",
+          "action": "reference",
+          "notes": "Restores only current-session DAG checkpoints; never reruns tasks.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/task-data.mjs"
+          ]
+        },
+        {
+          "id": "ohd-07",
+          "name": "Viewer-owned preferences separate from run truth",
+          "status": "implemented",
+          "lev_equivalent": "client-local UI state in apps/jarvis (zustand)",
+          "action": "reference",
+          "notes": "<snapshot>.view.json is never overwritten by workflow updates.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/omo-herdr-dag/src/view-state.mjs"
+          ]
+        },
+        {
+          "id": "ohd-08",
+          "name": "Jarvis holdout client (second UI built only from public operations)",
+          "status": "missing",
+          "lev_equivalent": "gap: no client besides apps/jarvis consumes the generated poly operation list",
+          "action": "build",
+          "notes": "Candidate only. Competing holdout candidates: Expo app (apps/expo) and a future Tauri shell; operator ruling pending.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "apps/expo/src/utils/api.tsx",
+            "apps/desktop/package.json"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "name": "source_revision",
+          "value": "1c02049",
+          "unit": "git_sha",
+          "source": "workshop/intake/omo-herdr-dag"
+        },
+        {
+          "name": "runtime_npm_dependencies",
+          "value": 0,
+          "unit": "packages",
+          "source": "workshop/intake/omo-herdr-dag/package.json"
+        }
+      ],
+      "lineage": [
+        "workshop/intake/omo-herdr-dag",
+        ".lev/pm/parity/omo.yaml",
+        ".lev/pm/parity/oh-my-pi.yaml",
+        ".lev/pm/specs/spec-substrate-parity.yaml",
+        "core/substrate/src/adapters/herdr"
+      ],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "omo",
       "label": "OMO",
       "category": "agent-framework",
       "priority": "P0",
       "measured_at": "2026-09-04",
-      "updated_at": "2026-09-04",
+      "updated_at": "2026-09-28",
       "owner": "plugins/platforms",
       "path": ".lev/pm/parity/omo.yaml",
       "verdict": "extract",
-      "total_features": 7,
-      "classified": 7,
+      "total_features": 6,
+      "classified": 6,
       "unclassified": 0,
       "counts": {
         "extract": 3,
         "implemented": 1,
         "evaluate": 1,
-        "adopt": 1,
         "build": 1
       },
       "features": [
@@ -21162,9 +22925,9 @@
           "id": "omo-04",
           "name": "Bounded worker roles with separate implementation, review, QA, and gate contracts",
           "status": "partial",
-          "lev_equivalent": "~/.agents/skills/coding-agent plus Lev exec profiles",
+          "lev_equivalent": "~/.agents/skills/coder plus Lev exec profiles",
           "action": "extract",
-          "notes": "LazyCodex provides concrete low/medium/high workers and separate review/QA/gate roles. Consolidate these semantics into provider-neutral `$coder`; do not preserve LazyCodex as the authority.",
+          "notes": "OMO provides concrete low/medium/high workers and separate review/QA/gate roles. Consolidate these semantics into provider-neutral `$coder`; LazyCodex support was dropped 2026-09-28.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -21181,23 +22944,12 @@
           "evidence_refs": []
         },
         {
-          "id": "omo-06",
-          "name": "Explicit CODEX_HOME installation boundary",
-          "status": "implemented",
-          "lev_equivalent": "CAAM-managed LazyCodex shallow profile",
-          "action": "adopt",
-          "notes": "Installed OMO 4.19.4 into `/Users/jean-patricksmith/orch-homes/lazycodex/.codex` using a CAAM-isolated Codex identity; main `~/.codex` was not the install target.",
-          "absorbed_into": null,
-          "tribunal_note": null,
-          "evidence_refs": []
-        },
-        {
           "id": "omo-07",
           "name": "Never-rebase compatibility",
           "status": "missing",
           "lev_equivalent": "operator and Lev repository policy",
           "action": "build",
-          "notes": "LazyCodex `ulw-loop` permits rebasing overlapping work. Lev-managed launches must override this before the harness is trusted for landing.",
+          "notes": "OMO `ulw-loop` permits rebasing overlapping work. Lev-managed launches must override this before the harness is trusted for landing.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -21211,7 +22963,7 @@
         ".lev/pm/handoffs/20260324-skill-intake-ohmyopenagent-site-session-1.md"
       ],
       "absorbed": 1,
-      "pending": 5,
+      "pending": 4,
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
@@ -21908,6 +23660,191 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "openchatter",
+      "label": "OpenChatter",
+      "category": "agent-fleet-chat-room",
+      "priority": "P1",
+      "measured_at": "2026-09-08",
+      "updated_at": "2026-09-08",
+      "owner": "plugins/platforms + universal-hooks",
+      "path": ".lev/pm/parity/openchatter.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "extract": 6,
+        "reference": 2,
+        "monitor": 1,
+        "build": 1
+      },
+      "features": [
+        {
+          "id": "openchatter-01",
+          "name": "Per-recipient delivery receipts with offline inbox and lease drain",
+          "status": "missing",
+          "lev_equivalent": "core/tmux-harness idle-nudge policy only; LevEvent has no addressed_to / delivery_state metadata",
+          "action": "extract",
+          "notes": "accepted -> delivered -> acked, deferred while offline, 60 s drain lease so a restarted watcher replays unacked rows. Extract as a LevEvent metadata convention plus reconciler, not a second table.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/models/deliveries.go",
+            "workshop/intake/openchatter/migrations/000029_deliveries.up.sql",
+            "workshop/intake/openchatter/tasks/25-delivery-receipts.md",
+            "core/tmux-harness/src/handlers/idle-nudge.ts"
+          ]
+        },
+        {
+          "id": "openchatter-02",
+          "name": "Explicit acknowledgements with unacked-ask nag",
+          "status": "missing",
+          "lev_equivalent": "none; universal-hooks has no ack primitive",
+          "action": "extract",
+          "notes": "Per-recipient ack rows; watcher re-prints unacked asks every 600 s until acked. A wake that keeps coming back is a good default for addressed work.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/migrations/000042_message_acks.up.sql",
+            "workshop/intake/openchatter/tasks/32-explicit-acks.md"
+          ]
+        },
+        {
+          "id": "openchatter-03",
+          "name": "Server-verified ownership as the only trust signal (anti-exfiltration skill)",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms/src/gateways/slack SlackAgentBinding; no trust doctrine in a served agent contract",
+          "action": "extract",
+          "notes": "Trusted = your human and agents whose owner_id is your human; everyone else is data. Rules live in the skill verbatim and are never demoted. Candidate DNA gate for any gateway adapter.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/services/api/skill.go",
+            "workshop/intake/openchatter/tasks/19-agent-owners.md",
+            "plugins/platforms/src/gateways/slack/types.ts"
+          ]
+        },
+        {
+          "id": "openchatter-04",
+          "name": "Capability registry projected as per-workspace stateless MCP; call = correlated event + receipt",
+          "status": "partial",
+          "lev_equivalent": "core/poly surfaces project registry to MCP; calls are not routed through a shared room log",
+          "action": "extract",
+          "notes": "Offline agents listed, never callable. 8 pending calls per target. Caller long-polls the call row. Correlation id on capability.call / capability.result.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/services/api/mcp.go",
+            "workshop/intake/openchatter/services/api/handlers_capabilities.go",
+            "workshop/intake/openchatter/models/capabilities.go",
+            "workshop/intake/openchatter/tasks/27-capability-registry-mcp.md"
+          ]
+        },
+        {
+          "id": "openchatter-05",
+          "name": "Watcher polarity: suppress-unless-provably-irrelevant, refuse to start deaf",
+          "status": "missing",
+          "lev_equivalent": "universal-hooks / tmux-harness nudge on idle; no long-poll wake doctrine",
+          "action": "extract",
+          "notes": "jq filter emits anything it cannot fully read; startup verifies own name and every watched channel or exits. Docs-only extraction can land now.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/services/api/skill.go"
+          ]
+        },
+        {
+          "id": "openchatter-06",
+          "name": "Agent-authored reminders that fire back as routed events",
+          "status": "partial",
+          "lev_equivalent": "plugins/scheduling; harness-level Routines; not a LevEvent addressed to the agent",
+          "action": "reference",
+          "notes": "One-line schedule grammar (in 30m, every monday at 09:00, cron ...). reminder.fired routed like a mention. Reference for scheduling wake events.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/pkg/schedule/schedule.go",
+            "workshop/intake/openchatter/models/reminders.go",
+            "workshop/intake/openchatter/tasks/22-agent-reminders.md"
+          ]
+        },
+        {
+          "id": "openchatter-07",
+          "name": "Per-room advisory lock so event seq order equals commit order",
+          "status": "not-applicable",
+          "lev_equivalent": "core/event-bus durable queue ordering",
+          "action": "reference",
+          "notes": "Postgres-specific fix for long-poll cursors skipping late commits. Keep as a warning for any DB-backed LevEvent store.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/models/events.go"
+          ]
+        },
+        {
+          "id": "openchatter-08",
+          "name": "Served skill with server URL baked in, per-harness guides, shared watcher script",
+          "status": "partial",
+          "lev_equivalent": "plugins/platforms providers cards; served skills not a Lev pattern",
+          "action": "extract",
+          "notes": "GET /skill, /skill/claude-code, /skill/codex, /skill/opencode, /skill/pi, /skill/hermes, /skill/watch.sh, /cli.sh. One contract, many harnesses.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/services/api/skill.go",
+            "workshop/intake/openchatter/services/api/cli.sh"
+          ]
+        },
+        {
+          "id": "openchatter-09",
+          "name": "Slack-style web UI for a fleet (rail, channels, threads, presence, profiles)",
+          "status": "not-applicable",
+          "lev_equivalent": "AgentPing dashboard host; different surface strategy",
+          "action": "monitor",
+          "notes": "Chat window is the loop Lev breaks. Watch only for fleet UX ideas.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/openchatter/web/src/app.js",
+            "workshop/intake/openchatter/README.md"
+          ]
+        },
+        {
+          "id": "openchatter-10",
+          "name": "Wrap unchanged: Lev worker joins a room via cli.sh",
+          "status": "partial",
+          "lev_equivalent": "workshop/pocs/openchatter-room-wake (validated spike); plugins/platforms/src/openclaw/bridge.ts shape for the gateway",
+          "action": "build",
+          "notes": "Spike passed 2026-09-09: wake, receipt ack, ask ack, LevEvent mirror with lineage, and offline inbox drain, all with upstream unchanged. Finding: a bare tmux pane kill never reaches the watcher offline trap; TERM the process first. Next: /propose plugins/platforms/src/gateways/openchatter. Blocked from vendor/fork by missing LICENSE; wrapper route is unaffected.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/pocs/openchatter-room-wake/run.sh",
+            "workshop/pocs/openchatter-room-wake/bridge.ts",
+            "workshop/pocs/openchatter-room-wake/results/eval.md",
+            "workshop/intake/openchatter/services/api/cli.sh",
+            "plugins/platforms/src/openclaw/bridge.ts"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/openchatter/analysis.md",
+        "workshop/intake/openchatter/",
+        "docs/design/design-graph-addressed-mail.md",
+        "docs/_inbox/clawmeet-distributed-agent-mesh.md",
+        ".lev/pm/parity/runfusion-fusion.yaml",
+        ".lev/pm/parity/openclaw.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 3,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -23902,25 +25839,30 @@
       "label": "Ouroboros",
       "category": "agent-framework",
       "priority": "P0",
-      "measured_at": "2026-07-17",
-      "updated_at": "2026-07-17",
+      "measured_at": "2026-09-29",
+      "updated_at": "2026-09-29",
       "owner": "plugins/sdlc + core/orchestration + core/eval",
       "path": ".lev/pm/parity/ouroboros.yaml",
       "verdict": "extract",
-      "total_features": 12,
-      "classified": 12,
+      "total_features": 19,
+      "classified": 19,
       "unclassified": 0,
       "counts": {
-        "unclassified": 12
+        "extract": 6,
+        "implemented": 4,
+        "reject": 1,
+        "monitor": 4,
+        "adopt": 3,
+        "build": 1
       },
       "features": [
         {
           "id": "ooo-01",
           "name": "Socratic interview with ambiguity scoring",
           "status": "partial",
-          "lev_equivalent": "plugins/sdlc/ (plan phase)",
-          "action": "unclassified",
-          "notes": "Lev has planning flows but no Socratic interview with mathematical ambiguity gate. DNA constraints are the equivalent but applied to code, not requirements.",
+          "lev_equivalent": "plugins/sdlc/flows/arch-interview.flow.yaml:75 (depth thresholds quick<=0.30, standard<=0.20, deep<=0.15)",
+          "action": "extract",
+          "notes": "Lev's arch-interview loop carries an ambiguity score and threshold (arch-interview.flow.yaml:75,222,235), but the score is model-reported, not computed by code. Upstream added advisory fan-out, an answer refiner, and a provenance gate before seeding; Lev has none of those.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23930,8 +25872,8 @@
           "name": "Immutable seed spec (crystallized from interview)",
           "status": "implemented",
           "lev_equivalent": "dna/*.yaml + .lev/pm/specs/",
-          "action": "unclassified",
-          "notes": "DNA contracts ARE immutable specs. The pattern is identical — define constraints before implementation.",
+          "action": "implemented",
+          "notes": "DNA contracts ARE immutable specs. Unchanged by this rescan.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23939,10 +25881,10 @@
         {
           "id": "ooo-03",
           "name": "Double Diamond decomposition (Discover→Define→Design→Deliver)",
-          "status": "partial",
+          "status": "not-applicable",
           "lev_equivalent": "plugins/sdlc/flows/",
-          "action": "unclassified",
-          "notes": "FlowMind flows implement this pattern. stabilization-loop.flow.yaml, plan-execute-verify. Not branded as Double Diamond.",
+          "action": "reject",
+          "notes": "Upstream deleted its Double Diamond executor (src/ouroboros/execution/ now holds only __init__.py at 93b6e21). Nothing left to match; Lev's plan-execute-verify flow covers staged delivery.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23951,9 +25893,9 @@
           "id": "ooo-04",
           "name": "3-stage eval gate (Mechanical→Semantic→Multi-Model)",
           "status": "partial",
-          "lev_equivalent": "core/eval evaluator packs + plugins/sdlc/flows/eval-design.flow.yaml + plugins/sdlc/flows/eval-harness.flow.yaml",
-          "action": "unclassified",
-          "notes": "Lev canon supports deterministic, stochastic, LLM-observer, hybrid, and HITL sensors with one EvalDecision authority. The authoring flows exist; generic runtime admission and blocking remain incomplete.",
+          "lev_equivalent": "plugins/sdlc/flows/plan-execute-verify.flow.yaml:66-83 (lev.validate + evaluators.required) + core/exec/src/execution/runner/graph-support.ts:351-367 + core/eval/src/handlers/eval.ts:1,66-78 (lev eval run over VerificationCommandRunner)",
+          "action": "extract",
+          "notes": "Moved forward: the default task loop now runs a deterministic check (exit 0 passes, empty command fails closed) plus a required intent_conservation evaluator, and the runner loops on the discharged decision. lev eval run reaches exec only through the VerificationCommandRunner port (core/exec/src/ports.ts:5-19). Upstream's new rule — only executed checks grant approval, model review can only veto — is already Lev canon (dna/core/eval.dna.yaml:180,323). Still partial because there is no runtime multi-model consensus stage; tribunal remains a skill.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23962,9 +25904,9 @@
           "id": "ooo-05",
           "name": "Evolutionary loop with ontology convergence",
           "status": "partial",
-          "lev_equivalent": "docs/specs/spec-semantic-control.md ADAPT plus plugins/sdlc/flows/eval-design.flow.yaml",
-          "action": "unclassified",
-          "notes": "Wonder maps to an evidence/probe-seeking next intent and Reflect maps to evaluator plus lineage synthesis. They share one bounded strategy-mutation policy shape with LFD forced entropy and product ADAPT. Eval-design applies it only to evaluator generations; product ADAPT applies it only to product generations. Neither overrides EvalDecision.",
+          "lev_equivalent": "core/eval/src/strategy/strategy-mutation-policy.ts:14,18-23,141-147 + .lev/flows/ouroboros-evolve.flow.yaml (dogfood spike)",
+          "action": "extract",
+          "notes": "The mutation policy admits one child generation per attempt under a hard attempt budget and names ouroboros_wonder_reflect as a mechanism, but its only non-test consumer is the core/eval index export; no runtime loop drives it. The evolve flow is a June spike in .lev/flows, not a shipped plugin flow.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23974,8 +25916,8 @@
           "name": "Nine agent personas (Socratic, Ontologist, Contrarian, etc.)",
           "status": "partial",
           "lev_equivalent": "skills/ (tribunal, cdo, adversarial-review)",
-          "action": "unclassified",
-          "notes": "Lev has tribunal (multi-model), cdo (deliberation), adversarial review. Not branded as named personas. The adversarial flowmind IS the Contrarian.",
+          "action": "monitor",
+          "notes": "Unchanged. Lev has tribunal, cdo, and adversarial review; not branded as named personas.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23983,10 +25925,10 @@
         {
           "id": "ooo-07",
           "name": "PAL Router (3-tier cost optimization 1x/10x/30x)",
-          "status": "implemented",
+          "status": "partial",
           "lev_equivalent": "FlowMind per-node adapter/model profiles over core/exec and Poly",
-          "action": "unclassified",
-          "notes": "Lev already supports adapter and model selection per node without the deleted core/harness owner. Cost-tier policy remains authoring configuration, not proof authority.",
+          "action": "extract",
+          "notes": "Downgraded from implemented. Upstream deleted the static PAL router package and replaced it with model-tier routing that escalates cheapest-first on each retry and emits a frugality proof (a5a8fa9, 58625cb, f09fa36). Lev selects adapter/model per node but has no retry-driven escalation: rg for model-tier escalation in core/exec, core/orchestration, core/flowmind, core/poly returns nothing.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -23995,9 +25937,9 @@
           "id": "ooo-08",
           "name": "Ralph persistent loop across sessions",
           "status": "implemented",
-          "lev_equivalent": "plugins/sdlc/flows/lev-ralph.flow.yaml",
-          "action": "unclassified",
-          "notes": "lev-ralph IS this. Same name even. Work→gate→review→done. Fresh context per iteration.",
+          "lev_equivalent": "plugins/sdlc/flows/lev-ralph.flow.yaml:18,113-132 + plugins/sdlc/flows/plan-execute-verify.flow.yaml:84 + core/exec/src/loop/until.ts:172-212",
+          "action": "implemented",
+          "notes": "Still implemented: fresh context per iteration, deterministic gate, bounded iterations, and until.ts turns the verifier exit into a pass/fail branch. Upstream's newer stagnation and oscillation terminals are tracked separately as ooo-18.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -24007,8 +25949,8 @@
           "name": "Event sourcing with checkpoint recovery",
           "status": "implemented",
           "lev_equivalent": "core/event-bus/ + LevEvent JSONL",
-          "action": "unclassified",
-          "notes": "LevEvent bus with append-only JSONL. AgentFS tool call audit trail. C2 Non-Commutation.",
+          "action": "implemented",
+          "notes": "Unchanged.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -24017,9 +25959,9 @@
           "id": "ooo-10",
           "name": "Drift measurement (goal 50% + constraint 30% + ontology 20%)",
           "status": "partial",
-          "lev_equivalent": "intent-conservation Sensor measurements plus Semantic Control ADAPT",
-          "action": "unclassified",
-          "notes": "Lev models goal, constraint, ontology, trace, and evidence drift as evaluator-local measurements. A hardcoded universal weighted composite is not required; owner policy declares aggregation.",
+          "lev_equivalent": "core/eval/evaluators/intent_conservation/ (sensor.mjs, observer.mjs, flows/measure.flow.yaml)",
+          "action": "monitor",
+          "notes": "Unchanged. Drift is an evaluator-local measurement; owner policy declares aggregation.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -24029,8 +25971,8 @@
           "name": "Brownfield auto-detection (scan existing repo patterns)",
           "status": "partial",
           "lev_equivalent": "core/config SourceCatalog and fractal root resolution plus eval-design discovery",
-          "action": "unclassified",
-          "notes": "lev init binds one config-owned SourceCatalog proof inventory; coverage analysis, eval-design, and runtime execution consume the same ref. Runtime owners must not add a second brownfield scanner.",
+          "action": "monitor",
+          "notes": "Unchanged.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -24038,10 +25980,87 @@
         {
           "id": "ooo-12",
           "name": "TUI dashboard",
-          "status": "missing",
-          "lev_equivalent": "N/A",
-          "action": "unclassified",
-          "notes": "Lev has no TUI. CLI + MCP surfaces only.",
+          "status": "partial",
+          "lev_equivalent": "crates/lev-tui/src/main.rs:1-20 (ratatui over LevEvent) + crates/lev-tui-widgets (event_log, attention_kanban, status_badge) + plugins/dashboard",
+          "action": "monitor",
+          "notes": "Corrected from missing: a Rust terminal dashboard over LevEvent has existed since 2026-01-17 (1d05e329e). It shows an event log, not acceptance-criteria or lineage views. Upstream itself trimmed its TUI and moved to a web kanban.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-13",
+          "name": "Frozen check package with held-out oracle cases, admitted before the worker starts",
+          "status": "partial",
+          "lev_equivalent": "core/eval/src/evaluator-calibration.ts:119,366 (protected holdouts outside the project) + dna/core/eval.dna.yaml:323 (holdout separation at admission)",
+          "action": "extract",
+          "notes": "Lev keeps holdouts for evaluator calibration only. There is no per-task check package frozen on the base checkout before a worker runs, and no held-out case a task worker cannot see.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-14",
+          "name": "Executed checks are the only approval authority; model review can only veto",
+          "status": "implemented",
+          "lev_equivalent": "dna/core/eval.dna.yaml:180,323 + plugins/sdlc/flows/plan-execute-verify.flow.yaml:66-83",
+          "action": "implemented",
+          "notes": "Lev's one-brain rule already says this: LLM judges emit observations, core/eval alone discharges EvalDecision, and the default loop's pass branch needs a command exit 0. Upstream arrived at the same rule in #2449.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-15",
+          "name": "Claim corroboration (worker claims are verified, never trusted)",
+          "status": "partial",
+          "lev_equivalent": "core/exec/src/handlers/claim-review.ts:1-9 (exec.claim_review.decide) + core/eval/src/claim-review.ts + .lev/flows/claim-visible-demo.flow.yaml:87,104 + plugins/sdlc/flows/project-hygiene-reviewed.flow.yaml:118,138",
+          "action": "adopt",
+          "notes": "Corrected 2026-09-29 (JP): Lev's primitive is the Claim. The worker submits a schema-gated Claim; claim_review re-reads worker and reviewer admissions from the durable event log, re-hashes them, reruns the flow-declared command_cases through exec's runner, and core/eval emits the only EvalDecision. Lev reruns checks the flow declared rather than commands the worker chose (ooo replays transcript commands), which is the stronger form. Partial only because the claim loop is wired in two flows (one draft demo), not in the shipped default plan-execute-verify.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-16",
+          "name": "Hidden-checklist convergence (verify command withheld from the worker; rejection seeds a bounded evolve lineage)",
+          "status": "partial",
+          "lev_equivalent": "plugins/sdlc/flows/plan-execute-verify.flow.yaml:39,41,53 (leak) + .lev/flows/claim-visible-demo.flow.yaml:98-106 (amend edge = new generation)",
+          "action": "adopt",
+          "notes": "The architecture already separates worker from check (claim -> eval). One shipped flow template leaks it: the plan node's prompt interpolates {{knobs.validation_command}} (line 39), its output execution_plan (line 41) is fed into the execute worker's prompt (line 53). Removing that interpolation is a flow-YAML change, not new code. Retries feed back verify_result (line 57), the check's output, which ooo also does in assertion-safe form. The claim-review gate already sends failures back as a new generation (claim-visible-demo.flow.yaml:98-106).",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-17",
+          "name": "Reviewer independence (executor's vendor excluded from the review jury)",
+          "status": "partial",
+          "lev_equivalent": "reviewer_profile knob (.lev/flows/claim-visible-demo.flow.yaml:22,64; plugins/sdlc/flows/project-hygiene-reviewed.flow.yaml:35,96) + per-node adapter/model (core/exec/src/execution/dispatch/exec-lev-exec.ts:121) + docs/specs/spec-semantic-control.md:241 (ADAPT may change reviewer/witness shape and model/provider choice)",
+          "action": "adopt",
+          "notes": "Corrected 2026-09-29 (JP: 'a config preference ... just settings'). Lev already lets a flow pick the reviewer's adapter and model separately from the worker's, so 'reviewer is not the worker's vendor' is a profile setting, not a primitive. Remaining: no shipped default profile expresses it, and no admission check refuses a same-vendor reviewer when a project asks for that.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-18",
+          "name": "Loop terminal classification (converged / stagnated / oscillating / exhausted)",
+          "status": "partial",
+          "lev_equivalent": "docs/specs/spec-semantic-control.md:239 (stagnation/oscillation as ADAPT lifecycle-policy signal) + core/eval/src/strategy/strategy-mutation-policy.ts (bounded generations) + core/exec/src/execution/dispatch/gate-decision.ts:124-128 (pass/fail/escalate arms)",
+          "action": "build",
+          "notes": "Corrected 2026-09-29 (JP: this is Semantic Control). Specified: stagnation/oscillation are ADAPT signals that trigger rework, fanout, evaluator change, context injection or escalation. Not yet running: roadmap step 6 (first-class NextTickPlan after VERIFY_GATE, spec-semantic-control.md:1132-1144) is unbuilt, so today's gates end pass, fail, or escalate on evaluation_error.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "ooo-19",
+          "name": "Execution sandbox for controller-run verification commands",
+          "status": "partial",
+          "lev_equivalent": "core/exec/src/execution/execution-admission.ts:104-150,445-460 (sandbox-exec profile for provider binaries)",
+          "action": "extract",
+          "notes": "Lev confines provider processes on macOS. Whether VerificationCommandRunner (core/exec/src/ports.ts:5 -> eval/command-runner.js) runs checks confined is not shown by this scan (gap).",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": []
@@ -24067,18 +26086,160 @@
           "source": "https://github.com/Q00/ouroboros"
         },
         {
-          "name": "cost_tiers",
+          "name": "default_auto_evolve_generations",
           "value": 3,
           "unit": "count",
-          "source": "https://github.com/Q00/ouroboros"
+          "source": "workshop/intake/ouroboros/CHANGELOG.md (run/convergence)"
+        },
+        {
+          "name": "upstream_commits_since_last_intake",
+          "value": 803,
+          "unit": "count",
+          "source": "git -C workshop/intake/ouroboros rev-list --count 3e382a3..93b6e21"
         }
       ],
       "lineage": [],
+      "absorbed": 4,
+      "pending": 10,
+      "deferred": 0,
+      "rejected": 1,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": [
+        {
+          "id": "ooo-03",
+          "name": "Double Diamond decomposition (Discover→Define→Design→Deliver)",
+          "action": "reject",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ]
+    },
+    {
+      "target": "overmind",
+      "label": "Overmind",
+      "category": "agent-traces-to-training-data",
+      "priority": "P1",
+      "measured_at": "2026-10-07",
+      "updated_at": "2026-10-07",
+      "owner": "agent-runtime-convergence / eval-genui",
+      "path": ".lev/pm/parity/overmind.yaml",
+      "verdict": "extract",
+      "total_features": 7,
+      "classified": 7,
+      "unclassified": 0,
+      "counts": {
+        "reference": 2,
+        "extract": 5
+      },
+      "features": [
+        {
+          "id": "diff-optimiser",
+          "name": "Coding-agent-written diff candidates run in git worktrees with baseline and plateau stop",
+          "status": "partial",
+          "lev_equivalent": "plugins/autoresearch branch-per-experiment, commit checkpoint, keep or discard",
+          "action": "reference",
+          "notes": "Overmind falls back to randint(60, 85) when no evaluator exists (overbae/models/optimizer.py:996); Lev must fail closed. Spike S2.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overmind/overmind/optimizer.py:116",
+            "workshop/intake/overmind/overmind/overmind/optimizer_api.py:123",
+            "plugins/autoresearch/src/engine/git-state.ts:12"
+          ]
+        },
+        {
+          "id": "mcp-cost-class-guard",
+          "name": "Required cost class per MCP tool; destructive tools rejected when the catalog loads",
+          "status": "partial",
+          "lev_equivalent": "none in core/daemon-mcp",
+          "action": "extract",
+          "notes": "Spike S1. Name-based guard only; Lev should check a declared flag, not a name substring.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overbae/services/mcp/catalog.py:22",
+            "workshop/intake/overmind/overbae/services/mcp/catalog.py:79"
+          ]
+        },
+        {
+          "id": "trace-capability-binding",
+          "name": "Inbound OTLP spans bound by one explicit capability id; ingest never creates a capability",
+          "status": "partial",
+          "lev_equivalent": "core/telemetry emits OTel; no inbound ingest",
+          "action": "extract",
+          "notes": "Spike S3.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overbae/api/otlp.py:368",
+            "core/telemetry/config.yaml:15"
+          ]
+        },
+        {
+          "id": "abstain-verdicts",
+          "name": "Scored, abstained, not_applicable or error outcomes with a nullable score",
+          "status": "partial",
+          "lev_equivalent": "core/eval unmeasured diagnostics that never make a verdict",
+          "action": "reference",
+          "notes": "Lev already covers this.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overbae/models/evaluation.py:139",
+            "core/eval/src/eval-decision.ts:72"
+          ]
+        },
+        {
+          "id": "trace-datasets",
+          "name": "Versioned eval and training datasets from production traces",
+          "status": "partial",
+          "lev_equivalent": "replay corpus row in evals-for-taste parity",
+          "action": "extract",
+          "notes": "Folded into the hill-climbing follow-up.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/pm/parity/evals-for-taste.yaml",
+            "core/telemetry/src/replay.ts"
+          ]
+        },
+        {
+          "id": "trace-to-training-data",
+          "name": "Recorded LLM calls become train and eval datasets (one row per call, hash split)",
+          "status": "partial",
+          "lev_equivalent": "none; docs/specs/proposal-memory-self-learning-pipeline.md:32 names it as missing",
+          "action": "extract",
+          "notes": "The core job of Overmind. Spike S1.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overmind/skills/overmind/references/finetuning.md",
+            "docs/NORTH_STAR.md:273"
+          ]
+        },
+        {
+          "id": "finetune-backtest",
+          "name": "Fine-tune a small model and compare it with its base on held-out traces",
+          "status": "partial",
+          "lev_equivalent": "core/eval can judge; nothing trains",
+          "action": "extract",
+          "notes": "Spikes S2-S3; trainer choice is open decision 1.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/overmind/overbae/modal/modal_sft_worker.py",
+            "workshop/intake/overmind/overmind/overmind/backtest.py"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
       "absorbed": 0,
-      "pending": 0,
+      "pending": 5,
       "deferred": 0,
       "rejected": 0,
-      "monitor": 0,
+      "monitor": 2,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -24910,6 +27071,107 @@
       ],
       "absorbed": 0,
       "pending": 17,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "pr-lens",
+      "label": "PR Lens",
+      "category": "pr-comprehension-and-diagrams",
+      "priority": "P1",
+      "measured_at": "2026-10-02",
+      "updated_at": "2026-10-02",
+      "owner": "proposed plugins/prlens",
+      "path": ".lev/pm/parity/pr-lens.yaml",
+      "verdict": "adopt",
+      "total_features": 5,
+      "classified": 5,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 4,
+        "build": 1
+      },
+      "features": [
+        {
+          "id": "prlens-graph",
+          "name": "Typed graph with referential-integrity validation",
+          "status": "missing",
+          "lev_equivalent": "Not integrated; use upstream public validator",
+          "action": "adopt",
+          "notes": "",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pr-lens/packages/schema/src/validate.ts:104"
+          ]
+        },
+        {
+          "id": "prlens-render",
+          "name": "Deterministic themed animated SVG diagrams",
+          "status": "missing",
+          "lev_equivalent": "No PR Lens provider integration",
+          "action": "adopt",
+          "notes": "",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pr-lens/packages/renderer/src/index.ts"
+          ]
+        },
+        {
+          "id": "prlens-walkthrough",
+          "name": "Source-linked progressive architecture/data-flow walkthrough",
+          "status": "partial",
+          "lev_equivalent": "explain/ux prompt skills exist; no PR graph composition",
+          "action": "adopt",
+          "notes": "",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pr-lens/packages/schema/src/graph.ts:432",
+            "/Users/jean-patricksmith/.agents/skills/explain/SKILL.md"
+          ]
+        },
+        {
+          "id": "prlens-sticky",
+          "name": "Author-bound same-comment publishing with stale-head suppression",
+          "status": "partial",
+          "lev_equivalent": "Old Gemini workflow exists; local personal publisher not shipped",
+          "action": "adopt",
+          "notes": "",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/pr-lens/packages/action/scripts/comment.sh:71",
+            ".github/workflows/pr-lens.yml"
+          ]
+        },
+        {
+          "id": "prlens-eval",
+          "name": "Project-aware significance and adherence with inconclusive",
+          "status": "partial",
+          "lev_equivalent": "core/eval owns decisions; PR-specific policy not implemented",
+          "action": "build",
+          "notes": "",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/eval/src/claim-review.ts",
+            ".lev/pm/designs/design-prlens-local-review.yaml"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/pr-lens/analysis.yaml",
+        ".lev/pm/designs/design-prlens-local-review.yaml",
+        ".lev/pm/plans/plan-impl-prlens-local-review.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 5,
       "deferred": 0,
       "rejected": 0,
       "monitor": 0,
@@ -27273,6 +29535,311 @@
       "rejected_items": []
     },
     {
+      "target": "sermakarevich-2106453816757354947",
+      "label": "Evals: how to know whether an AI system actually works",
+      "category": "evaluation-research",
+      "priority": "P1",
+      "measured_at": "2026-10-08",
+      "updated_at": "2026-10-08",
+      "owner": null,
+      "path": ".lev/pm/parity/sermakarevich-2106453816757354947.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "deferred": 8
+      },
+      "features": [
+        {
+          "id": "1",
+          "name": "Observed failure taxonomy",
+          "status": "partial",
+          "lev_equivalent": "Task requirements and domain-owned evaluation cases",
+          "action": "deferred",
+          "notes": "Capture first; do not derive a grader only from imagined failures.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "workshop/intake/sermakarevich-2106453816757354947/article.txt:121"
+          ]
+        },
+        {
+          "id": "2",
+          "name": "Code checks before semantic observations",
+          "status": "partial",
+          "lev_equivalent": "Existing suite runner and module companions",
+          "action": "deferred",
+          "notes": "Source order exists; no new runtime proof in this intake.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "core/eval/src/suite-runner.ts:270"
+          ]
+        },
+        {
+          "id": "3",
+          "name": "Evidence-backed semantic observations",
+          "status": "partial",
+          "lev_equivalent": "Typed Measurement and deterministic discharge",
+          "action": "deferred",
+          "notes": "Missing, stale and malformed observations remain evaluation_error.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "core/eval/src/discharge.ts:61"
+          ]
+        },
+        {
+          "id": "4",
+          "name": "Independent held-out comparisons",
+          "status": "partial",
+          "lev_equivalent": "Generation-bound decisions and protected calibration material",
+          "action": "deferred",
+          "notes": "Current evaluator calibration is distinct from proving a subject optimization loop.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "core/eval/src/evaluator-calibration.ts:143"
+          ]
+        },
+        {
+          "id": "5",
+          "name": "Paired uncertainty and regressions",
+          "status": "partial",
+          "lev_equivalent": "Existing taste hill-climbing S1-S2 follow-up",
+          "action": "deferred",
+          "notes": "Retain case outcomes and sampling uncertainty; inconclusive does not mean equivalent.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "workshop/intake/sermakarevich-2106453816757354947/article.txt:287"
+          ]
+        },
+        {
+          "id": "6",
+          "name": "State, path, reliability and operating cost",
+          "status": "partial",
+          "lev_equivalent": "Owner-local sensors and actual execution evidence",
+          "action": "deferred",
+          "notes": "Final state alone can miss disallowed actions; include failed attempts and actual spend.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "workshop/intake/sermakarevich-2106453816757354947/article.txt:337"
+          ]
+        },
+        {
+          "id": "7",
+          "name": "Bounded candidate promotion and comparison UX",
+          "status": "partial",
+          "lev_equivalent": "Existing hill-climbing S1-S3; canonical EvalDecision",
+          "action": "deferred",
+          "notes": "No competing runner or scoring owner. Follow-up, not delivered capability.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "https://arxiv.org/abs/2606.26300"
+          ]
+        },
+        {
+          "id": "8",
+          "name": "Calibration, judge biases and provider comparisons",
+          "status": "partial",
+          "lev_equivalent": "Existing calibration-last backlog",
+          "action": "deferred",
+          "notes": "Research retained; calibration timing stays last. Universal thresholds are not adopted.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/sermakarevich-2106453816757354947/analysis.md",
+            "https://arxiv.org/abs/2609.12191"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 8,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [
+        {
+          "id": "1",
+          "name": "Observed failure taxonomy",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "2",
+          "name": "Code checks before semantic observations",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "3",
+          "name": "Evidence-backed semantic observations",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "4",
+          "name": "Independent held-out comparisons",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "5",
+          "name": "Paired uncertainty and regressions",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "6",
+          "name": "State, path, reliability and operating cost",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "7",
+          "name": "Bounded candidate promotion and comparison UX",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        },
+        {
+          "id": "8",
+          "name": "Calibration, judge biases and provider comparisons",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "simplex-chat",
+      "label": "SimpleX Chat",
+      "category": "no-identity-transport",
+      "priority": "P2",
+      "measured_at": "2026-09-29",
+      "updated_at": "2026-09-29",
+      "owner": "core/domain/poly-protocol",
+      "path": ".lev/pm/parity/simplex-chat.yaml",
+      "verdict": "reference",
+      "total_features": 4,
+      "classified": 4,
+      "unclassified": 0,
+      "counts": {
+        "reference": 4
+      },
+      "features": [
+        {
+          "id": "smp-01",
+          "name": "Capability-address-as-identity (per-contact random queue address; no global user id)",
+          "status": "missing",
+          "lev_equivalent": "MeshEnvelope.originNodeId is an unsigned string (mesh.ts). Buzz identity is a persistent Nostr pubkey (buzz.yaml adopt; axis-poly-vs-nostr-mesh.md). AgentLeaseGrant is a policy row with issuer, holder, and receipt refs (authority.ts), not a queue address.",
+          "action": "reference",
+          "notes": "The principle this row exists to keep. Reference implementation is the SMP spec. Not a lease-keying spike.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/simplex-chat/simplexmq/blob/master/protocol/simplex-messaging.md",
+            "core/domain/src/poly-protocol/mesh.ts",
+            ".lev/pm/parity/buzz.yaml",
+            "core/domain/src/authority.ts"
+          ]
+        },
+        {
+          "id": "smp-02",
+          "name": "Duplex-over-simplex (a bidirectional channel is two independently authorized one-way queues)",
+          "status": "missing",
+          "lev_equivalent": "MeshEnvelope is a single envelope. Buzz spec-mesh-wire-contract.md carries one fenced header (session_id, generation, owner_runtime_id) per session-bearing frame.",
+          "action": "reference",
+          "notes": "Design principle only. Do not split MeshEnvelope in this row.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/simplex-chat/simplexmq/blob/stable/protocol/agent-protocol.md",
+            "core/domain/src/poly-protocol/mesh.ts",
+            "docs/specs/buzz/spec-mesh-wire-contract.md"
+          ]
+        },
+        {
+          "id": "smp-03",
+          "name": "Content-blind fixed-size blocks (relays see queue id and timestamp, not payload)",
+          "status": "missing",
+          "lev_equivalent": "lev-wire is length-prefixed JSON-RPC over a Unix socket (crates/lev-wire). LevEvent persistence is JSONL. Neither pads to hide content.",
+          "action": "reference",
+          "notes": "Record the constraint. Padding costs latency and bandwidth, so it is not a default and not a build queued here.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/simplex-chat/simplexmq/blob/master/protocol/simplex-messaging.md",
+            "crates/lev-wire/Cargo.toml",
+            "crates/lev-wire/src/protocol.rs"
+          ]
+        },
+        {
+          "id": "smp-06",
+          "name": "Deniable authentication (contrast with receipt-anchored settlement)",
+          "status": "not-applicable",
+          "lev_equivalent": "Lev receipt refs on AgentLeaseGrant and on MeshEnvelope. Buzz signs collaboration events. Both are meant to be checked later.",
+          "action": "reference",
+          "notes": "Kept so the precedent is not read as 'adopt repudiation.' Do not extract it.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "https://github.com/simplex-chat/simplexmq/blob/stable/protocol/agent-protocol.md",
+            "core/domain/src/authority.ts",
+            "docs/specs/buzz/axis-poly-vs-nostr-mesh.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "https://github.com/simplex-chat/simplexmq/blob/master/protocol/simplex-messaging.md",
+        "https://github.com/simplex-chat/simplexmq/blob/stable/protocol/agent-protocol.md",
+        "https://simplex.chat/docs/guide/privacy-security.html",
+        ".lev/pm/parity/buzz.yaml",
+        "workshop/analysis/buzz/analysis.md",
+        "docs/specs/buzz/axis-poly-vs-nostr-mesh.md",
+        "docs/specs/buzz/spec-mesh-wire-contract.md",
+        "docs/specs/buzz/spec-mesh-gossip.md",
+        ".lev/pm/parity/runfusion-fusion.yaml",
+        "core/domain/src/poly-protocol/mesh.ts",
+        "core/domain/src/authority.ts",
+        "crates/lev-wire/Cargo.toml",
+        "crates/lev-wire/src/lib.rs",
+        "crates/lev-wire/src/protocol.rs",
+        "crates/lev-wire/src/client.rs",
+        "docs/VISION.md",
+        "workshop/analysis/simplex-chat/analysis.md",
+        "docs/specs/spec-parity.md"
+      ],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 4,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "sqlite-fts5-sqlite-vec",
       "label": "SQLite FTS5/sqlite-vec",
       "category": "search-index",
@@ -27817,6 +30384,144 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 1,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "tester-army-e2e",
+      "label": "tester-army/e2e",
+      "category": "agentic-e2e-testing",
+      "priority": "P0",
+      "measured_at": "2026-10-02",
+      "updated_at": "2026-10-02",
+      "owner": "core/eval (judge contract); plugins/sdlc (test bindings); surface drivers tbd (decision eval-surface-drivers-20261002)",
+      "path": ".lev/pm/parity/tester-army-e2e.yaml",
+      "verdict": "extract",
+      "total_features": 10,
+      "classified": 10,
+      "unclassified": 0,
+      "counts": {
+        "unclassified": 10
+      },
+      "features": [
+        {
+          "id": "e2e-01",
+          "name": "Three-way judge verdict (holds, fails, inconclusive); both non-holds fail with separate codes",
+          "status": "partial",
+          "lev_equivalent": "core/eval/src/claim-review.ts, core/eval intent grader contract",
+          "action": "unclassified",
+          "notes": "Built 154cf627c (reviewer) and 3385ce200 (intent grader): inconclusive fails with its own reason. JP 2026-10-02: always give the agent a way to say I don't know.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-02",
+          "name": "Explanation before verdict in the judge schema",
+          "status": "partial",
+          "lev_equivalent": "core/eval/evaluators/code_review/schema/review.schema.json",
+          "action": "unclassified",
+          "notes": "Built 154cf627c; packages/e2e/src/agent/protocol.ts:36-41",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-03",
+          "name": "Strict judge schema, one repair round, then MODEL_OUTPUT_INVALID",
+          "status": "partial",
+          "lev_equivalent": "core/eval payload validation",
+          "action": "unclassified",
+          "notes": "Strict schema on the code reviewer only; the repair round is being built for the audit tool first (lane repair-round, 2026-10-02), product reviewer in plan step S3",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-04",
+          "name": "Judge isolated from actor transcript and system prompt",
+          "status": "partial",
+          "lev_equivalent": "tooling/scripts/eval-ratchet (read-only auditor)",
+          "action": "unclassified",
+          "notes": "Product reviewer path (plan slice S3) not built yet",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-05",
+          "name": "Recorded steps kept only when a later verification passes",
+          "status": "missing",
+          "lev_equivalent": "plan slice S6",
+          "action": "unclassified",
+          "notes": "packages/e2e/src/cache/context.ts:120-153",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-06",
+          "name": "Planted-bug and trap scenarios, each with a deterministic twin",
+          "status": "partial",
+          "lev_equivalent": "core/eval intent grader cases (fixtures/grader-cases), core/eval/src/evaluator-calibration.ts",
+          "action": "unclassified",
+          "notes": "Intent grader has 3 planted and 2 trap cases, live 5/5 (3385ce200). The code reviewer's calibration is still offline fake reporters; plan step S5.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-07",
+          "name": "Typed error codes with exit code per category and a docs-sync check",
+          "status": "partial",
+          "lev_equivalent": "core/eval reason_code",
+          "action": "unclassified",
+          "notes": "scripts/check-error-codes.ts",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-08",
+          "name": "Web and mobile engines (Playwright, agent-device)",
+          "status": "partial",
+          "lev_equivalent": "community/kingly-assistant/packages/apptestr/, plugins/browser",
+          "action": "unclassified",
+          "notes": "Candidate plugin-wrapper surface driver; see decision eval-surface-drivers-20261002",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-09",
+          "name": "Behaviour-first A/B between builds (status and step sequence before timing)",
+          "status": "missing",
+          "lev_equivalent": "tooling/scripts/eval-ratchet compare",
+          "action": "unclassified",
+          "notes": "scripts/bench-ab/compare.ts:85-110",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        },
+        {
+          "id": "e2e-10",
+          "name": "Agent skill shipped inside the package plus MCP for live app exploration",
+          "status": "partial",
+          "lev_equivalent": ".agents/skills",
+          "action": "unclassified",
+          "notes": "skills/e2e/SKILL.md",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": []
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -29520,6 +32225,209 @@
         {
           "id": "uai-12",
           "name": "Figma-to-Unity UI generation",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
+      "rejected_items": []
+    },
+    {
+      "target": "varick-agents",
+      "label": "Varick Agents",
+      "category": "agent-team-deployment",
+      "priority": "P1",
+      "measured_at": "2026-07-24",
+      "updated_at": "2026-07-24",
+      "owner": "plugins/opsqueue (proposed) + plugins/scheduling + plugins/dashboard + core/orchestration",
+      "path": ".lev/pm/parity/varick-agents.yaml",
+      "verdict": "extract",
+      "total_features": 11,
+      "classified": 11,
+      "unclassified": 0,
+      "counts": {
+        "extract": 5,
+        "build": 4,
+        "reference": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "varick-01",
+          "name": "Agency motion: audit -> build -> operate with ROI baseline per agent",
+          "status": "partial",
+          "lev_equivalent": "workshop intake engine + .lev/pm/workstreams/ + runtime_governance.value_policy (dna/pm/schemas/workstream.yaml)",
+          "action": "extract",
+          "notes": "Audit interviews -> ROI baseline -> build plan is not templated; no hrs/wk + $/yr value model per deployed automation.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/varick-agents/article.md",
+            "dna/pm/schemas/workstream.yaml"
+          ]
+        },
+        {
+          "id": "varick-02",
+          "name": "Multi-channel intake/ingest agent (forms/docs/Slack/inbox/SFTP -> typed request entity)",
+          "status": "partial",
+          "lev_equivalent": "core/event-providers + plugins/platforms Slack gateway + plugins/sentinel (Gmail readonly)",
+          "action": "build",
+          "notes": "No webhook receiver, no email/SFTP/portal pollers, no generic request-entity normalization pipeline.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/platforms/src/gateways/slack/",
+            "plugins/sentinel/config.yaml"
+          ]
+        },
+        {
+          "id": "varick-03",
+          "name": "Rulebook validator / policy QA (claims language, clause policy matrix, field validation)",
+          "status": "partial",
+          "lev_equivalent": "dna/gates.yaml ratchet + FlowMind gates + core/eval EvalDecision",
+          "action": "extract",
+          "notes": "Gate engine and eval authority exist; domain rulebook packs as loadable entity_definitions/overlays do not.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "dna/gates.yaml",
+            "docs/ARCHITECTURE.md"
+          ]
+        },
+        {
+          "id": "varick-04",
+          "name": "SLA-aware queue routing + risk-based escalation",
+          "status": "partial",
+          "lev_equivalent": "dna/standards/escalation.yaml spine + core/daemon QueueManager + sdlc task:escalated surfacing",
+          "action": "build",
+          "notes": "Escalation spine works (detect->classify->route->remediate->learn, circuit breaker, human fallback); no SLA timers/aging; marketing plugin_handler is a declared stub (\"future: wiggum splintered\").\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "dna/standards/escalation.yaml",
+            "core/daemon/src/queue-manager.ts"
+          ]
+        },
+        {
+          "id": "varick-05",
+          "name": "Scheduled watcher / pacing monitor raising typed incidents (budget pacing, signal QA)",
+          "status": "partial",
+          "lev_equivalent": "plugins/scheduling (config schedules[] -> cron store -> executor w/ report artifacts) + .lev/flows/*.schedule.yaml",
+          "action": "extract",
+          "notes": "Engine working end-to-end; watchers need connectors (varick-08) to observe external metrics. Homegrown cron parser self-flagged at core/event-providers/src/providers/cron.ts:297. Scheduling builds its own QueueManager instead of DaemonCore.tickProviders (plugins/scheduling/src/index.ts:127) — converge before building on it.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/scheduling/src/schedule-loader.ts",
+            "plugins/scheduling/src/executor.ts",
+            "plugins/scheduling/src/cron-tick-provider.ts"
+          ]
+        },
+        {
+          "id": "varick-06",
+          "name": "Draft-for-approval generator (redlines, localized creative, vendor emails, readouts)",
+          "status": "partial",
+          "lev_equivalent": "FlowMind prompt nodes + plugins/prompt-stack + plugins/writer + plugins/wiggum-marketer (voice extract/score)",
+          "action": "extract",
+          "notes": "Drafting patterns exist; draft->approve->write-back loop closure depends on varick-07.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "plugins/wiggum-marketer/config.yaml",
+            "plugins/prompt-stack/config.yaml"
+          ]
+        },
+        {
+          "id": "varick-07",
+          "name": "One operating queue: HITL block->notify->decide->resume + 3-role views over one data plane",
+          "status": "missing",
+          "lev_equivalent": "Contract only: core/domain/src/authority.ts HITLDecisionEvidence + genui-runtime-intent hitl_gate + plugins/dashboard/src/briefs/hitl.ts (read-only projection) + runtime_governance schema",
+          "action": "build",
+          "notes": "THE gap. Reference adapter auto-approves (adapter.ts:523; comment at :536 says real adapters must block on human input); wrappedInstruction is not re-executed after approval; AgentPing is spec-draft with community/agentping/ empty; TenantScope/roles never reach a rendered view. Field-proof candidate: community/examples/field-proofs/operating-queue/.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/orchestration/src/execution-contract/adapter.ts",
+            "plugins/dashboard/src/briefs/hitl.ts",
+            "core/domain/src/authority.ts",
+            "dna/pm/schemas/workstream.yaml",
+            "docs/specs/spec-pi-agentping-surface.md"
+          ]
+        },
+        {
+          "id": "varick-08",
+          "name": "External SaaS connectors (ads/CRM/email/analytics; 13-system integration map)",
+          "status": "missing",
+          "lev_equivalent": "Surfaces only: core/daemon-mcp (MCP/HTTP/WS/gRPC) + plugins/notion + Slack gateway + sentinel OAuth",
+          "action": "build",
+          "notes": "No ads/CRM/email connectors in-repo (grep hits only in vendored litellm deps). MCP-first bridge (external MCP servers as Lev event sources/sinks with receipts) is the candidate route; /interview if product direction unclear.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/daemon-mcp/src/index.ts",
+            "plugins/notion/src/index.ts"
+          ]
+        },
+        {
+          "id": "varick-09",
+          "name": "Write-back to source systems with audit logging",
+          "status": "implemented",
+          "lev_equivalent": "core/execution-ledger (RunEnvelope/seals/receipt+decision refs) + core/event-bus JSONL + core/telemetry",
+          "action": "reference",
+          "notes": "Substrate is Lev's strength vs Varick (sealed receipts, deterministic replay). Untested against real external SaaS write-back; connectors (varick-08) gate that proof.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "core/execution-ledger/src/run-service.ts",
+            "core/event-bus/"
+          ]
+        },
+        {
+          "id": "varick-10",
+          "name": "Ongoing ops loop: daily digest, monthly drift/threshold tuning, quarterly exec review, model swaps, accuracy trajectory",
+          "status": "partial",
+          "lev_equivalent": ".lev/loops/*.levloop.yaml (gated ticks) + .lev/exec-profiles/ (model swap) + autodev hygiene drift + scheduling report artifacts",
+          "action": "extract",
+          "notes": "Loops are prompt-driven dogfood, not a shipped primitive; no business-KPI/accuracy-trajectory model; sdlc-hygiene-hourly schedule exists but enabled: false.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            ".lev/loops/",
+            ".lev/exec-profiles/",
+            ".lev/config.yaml"
+          ]
+        },
+        {
+          "id": "varick-11",
+          "name": "Departmental deployment templates (finance/sales/ops/eng/marketing agent rosters)",
+          "status": "missing",
+          "lev_equivalent": "No domain deployment templates; plugins/platforms templates/examples/onboarding-bot.yaml is the only agent-template example",
+          "action": "deferred",
+          "notes": "Deferred until varick-07/-08 exist; templates without a queue and connectors are prose. Compose from the 7 primitives, not 28 bespoke agents.\n",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/varick-agents/article.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/intake/varick-agents/article.md",
+        "docs/NORTH_STAR.md",
+        "docs/design/design-use-case-tiers-levified.md",
+        "dna/pm/schemas/workstream.yaml",
+        "dna/standards/escalation.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 9,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 1,
+      "deferred_items": [
+        {
+          "id": "varick-11",
+          "name": "Departmental deployment templates (finance/sales/ops/eng/marketing agent rosters)",
           "action": "deferred",
           "absorbed_into": null,
           "tribunal_note": null
