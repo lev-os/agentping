@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T01:23:03.554000+00:00",
+  "generated_at": "2026-10-17T01:25:41.341000+00:00",
   "generator": "plugins/workshop/scripts/parity-scorecard.mjs",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
@@ -13278,7 +13278,7 @@
           "status": "missing",
           "lev_equivalent": "ExecEngine emits execution-level lifecycle events and generic dispatch results. A matched provider stream/delegate/tool-ownership conformance layer is not established by those files or the bounded non-fixture protocol-symbol probe.",
           "action": "extract",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Replace the broad partial assertion: executionId/provider/method provenance is not Endo delegate/tool-result ownership conformance. Missing means current source proof of this exact mechanism is unestablished; it is not a measured runtime regression. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: regressed. Assessment correction only; no runtime loss inferred. Closing source audit 2026-10-16 at Lev54a: Replace the broad partial assertion: executionId/provider/method provenance is not Endo delegate/tool-result ownership conformance. Missing means current source proof of this exact mechanism is unestablished; it is not a measured runtime regression. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -13294,7 +13294,7 @@
           "status": "partial",
           "lev_equivalent": "Current dispatchParallel batches child calls with a concurrency bound and aggregates failure modes; dispatchForEach retains input-ordered per-item arms. Joined native-child cancellation, session serialization and exact Endo failure semantics remain unproved.",
           "action": "extract",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Concrete bounded child scheduling and result aggregation exist. Promise.all batching and list-ordered records do not by themselves certify Effect interruption joins or per-native-session ownership. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Concrete bounded child scheduling and result aggregation exist. Promise.all batching and list-ordered records do not by themselves certify Effect interruption joins or per-native-session ownership. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -13311,7 +13311,7 @@
           "status": "partial",
           "lev_equivalent": "First-party T3 application CodexAdapterV2 builds turn/start from native thread identity and exposes thread/start/thread/resume at accepted e99. This supports native same-thread continuation primitives. Endo prompt/config identity keys, full cross-provider history replay and core/exec binding remain unproved.",
           "action": "extract",
-          "notes": "Closing source audit 2026-10-16 at Lev54a/T3e99: partial is limited to the first-party application native identity/start/resume mechanism; it is not core/exec integration or Endo full prompt-prefix conformance. The recorded Oct16 pure-helper probe remains historical and was not rerun; binary-length key reuse and provider/cache impact remain separate. Source only; complete acceptance remains unassessed and no runtime/provider check was run.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a/T3e99: partial is limited to the first-party application native identity/start/resume mechanism; it is not core/exec integration or Endo full prompt-prefix conformance. The recorded Oct16 pure-helper probe remains historical and was not rerun; binary-length key reuse and provider/cache impact remain separate. Source only; complete acceptance remains unassessed and no runtime/provider check was run.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -13328,7 +13328,7 @@
           "status": "not-applicable",
           "lev_equivalent": "Adoption boundary only: do not replace Lev FlowMind/orchestration/application owners with Endo full desktop/session runtime. No equivalent application implementation is asserted.",
           "action": "reject",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: The original reject action is preserved as an adoption choice. Endo workspace workflows execute trusted backend code with invocation-scoped child ownership; they are not an untrusted-code sandbox. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: The original reject action is preserved as an adoption choice. Endo workspace workflows execute trusted backend code with invocation-scoped child ownership; they are not an untrusted-code sandbox. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -31970,7 +31970,7 @@
           "status": "partial",
           "lev_equivalent": "Deploy planProvision binds provider/account/target/names/egress/cost scope, and E2B has lifecycle adapter methods. This is a scoped machine-control counterpart; no Overalls persistent control plane, HA or region-routing equivalence is established.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Partial is limited to actual machine-plan/lifecycle code, not generic agent dispatch. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Partial is limited to actual machine-plan/lifecycle code, not generic agent dispatch. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -31987,7 +31987,7 @@
           "status": "missing",
           "lev_equivalent": "Deploy effect approval authorizes a scoped create/delete plan. It does not establish Overalls email/passkey registration, SSH key enrollment, viewer/operator/manager access, execution-time Cedar checks or team roles.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Withdraw the partial inference from unrelated machine-effect approval. End-user identity/team parity is unproved by the assigned source witness; all five target requirements remain retained and unassessed. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: regressed. Assessment correction only; no runtime loss inferred. Closing source audit 2026-10-16 at Lev54a: Withdraw the partial inference from unrelated machine-effect approval. End-user identity/team parity is unproved by the assigned source witness; all five target requirements remain retained and unassessed. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32003,7 +32003,7 @@
           "status": "partial",
           "lev_equivalent": "E2B implements create/list/exec/destroy, pause and snapshot requests. The contract and implementation are a real lifecycle subset; persistent disk identity, clone/resize/relocate, generation fencing and retry equivalence remain unproved.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Preserve partial for matching lifecycle methods only. A method/interface or successful source read is not observed recovery. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Preserve partial for matching lifecycle methods only. A method/interface or successful source read is not observed recovery. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32020,7 +32020,7 @@
           "status": "partial",
           "lev_equivalent": "E2B plan/bind selects a configured template and declared lifetime. This is a real image/template selection subset, not proof of NixOS/Ubuntu/Windows readiness agents, developer tools, immutable fleet catalogue or experimental nested guests.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Partial is scoped to template selection. Preserve all six target guest requirements and their published support labels. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Partial is scoped to template selection. Preserve all six target guest requirements and their published support labels. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32035,7 +32035,7 @@
           "status": "missing",
           "lev_equivalent": "Generic Exec dispatch and cross-surface architecture declarations do not establish persistent browser terminals, collaboration takeover, SSH command parity, desktop clients, guest HTTPS or the browser editor described by these six requirements.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Withdraw the broad partial assertion. The required user journeys have no matched implementation witness in this slice; no universal absence or runtime loss is inferred. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: regressed. Assessment correction only; no runtime loss inferred. Closing source audit 2026-10-16 at Lev54a: Withdraw the broad partial assertion. The required user journeys have no matched implementation witness in this slice; no universal absence or runtime loss is inferred. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32050,7 +32050,7 @@
           "status": "missing",
           "lev_equivalent": "A generic provider dispatch is not a machine repository launcher, forge browser extension, guest inference setup or durable machine-owned agent thread. Exact repository/branch/commit/PR launch and guest agent acceptance remain unproved.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Withdraw partial based solely on agent dispatch. Keep all five requirement references and acceptance criteria; no guest workload was run. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: regressed. Assessment correction only; no runtime loss inferred. Closing source audit 2026-10-16 at Lev54a: Withdraw partial based solely on agent dispatch. Keep all five requirement references and acceptance criteria; no guest workload was run. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32065,7 +32065,7 @@
           "status": "partial",
           "lev_equivalent": "E2B selects unrestricted none or an allowlist and sends the selected network controls. Host guest-to-guest isolation, verified public cache, private repository mirror, inference/secret injection and usage accounting remain unproved.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Keep partial only for matching outbound-network configuration. none means unrestricted, not no network; inject/forced_proxy are declared levels that this adapter does not implement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Keep partial only for matching outbound-network configuration. none means unrestricted, not no network; inject/forced_proxy are declared levels that this adapter does not implement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32082,7 +32082,7 @@
           "status": "not-applicable",
           "lev_equivalent": "Bare-metal NixOS installation and disk formatting belong to an external provider, not a new Lev core engine. The requirements remain retained targets for that provider.",
           "action": "reference",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32096,7 +32096,7 @@
           "status": "not-applicable",
           "lev_equivalent": "The current draft assigns host registration, image staging and gateway credentials to provider infrastructure. No Lev core implementation is proposed.",
           "action": "reference",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32110,7 +32110,7 @@
           "status": "not-applicable",
           "lev_equivalent": "Overalls Nix modules, database/email/TLS and infrastructure migrations are provider-owned requirements. Lev task/run/eval authority remains separate.",
           "action": "reference",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32124,7 +32124,7 @@
           "status": "not-applicable",
           "lev_equivalent": "Authoritative DNS, wildcard ingress and certificates are external provider responsibilities; no replacement Lev DNS engine is proposed.",
           "action": "reference",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: External provider responsibility remains an authored scope decision, not dropped acceptance coverage or an implementation claim. Preserve the original reference action and every requirement. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32138,7 +32138,7 @@
           "status": "partial",
           "lev_equivalent": "E2B implements pause/snapshot and returns snapshot identity; deploy has explicit scoped admission. These are matching operation primitives, not Overalls fleet drain/evacuation, host updates, backup/restore or credential-rotation acceptance.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Partial is limited to actual pause/snapshot operations; backup data, restoration and fleet recovery have not been demonstrated. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: unchanged. Closing source audit 2026-10-16 at Lev54a: Partial is limited to actual pause/snapshot operations; backup data, restoration and fleet recovery have not been demonstrated. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
@@ -32153,7 +32153,7 @@
           "status": "missing",
           "lev_equivalent": "Core/eval persists decisions for Lev subjects, but that is not implementation of the platform release/support-label matrix, public disclosure workflow or branch-specific source admission required here. These three targets remain unassessed.",
           "action": "monitor",
-          "notes": "Closing source audit 2026-10-16 at Lev54a: Withdraw partial derived from generic run/evaluation ownership. Publisher STABLE/PREVIEW/EXPERIMENTAL labels remain source claims, and the trunk MIT notice does not relicense historical Loom. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
+          "notes": "Refresh 2026-10-16: regressed. Assessment correction only; no runtime loss inferred. Closing source audit 2026-10-16 at Lev54a: Withdraw partial derived from generic run/evaluation ownership. Publisher STABLE/PREVIEW/EXPERIMENTAL labels remain source claims, and the trunk MIT notice does not relicense historical Loom. Source only; the complete acceptance criteria remain unassessed. No runtime/provider validation was run by this audit.",
           "absorbed_into": null,
           "tribunal_note": null,
           "evidence_refs": [
