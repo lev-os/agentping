@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-18T15:57:13.932607+00:00",
-  "generator": "tooling/scripts/parity-scorecard.py",
+  "generated_at": "2026-10-29T17:16:01.923000+00:00",
+  "generator": "plugins/workshop/scripts/parity-scorecard.mjs",
   "source_of_truth": ".lev/pm/parity/*.yaml",
   "projection_contract": "docs/specs/spec-parity.md",
   "projection_source": "graph_operations",
@@ -14,24 +14,24 @@
   "graph_operations": {
     "contract_ref": "core/context-graph/src/types.ts#GraphOperation",
     "source": "parity-scorecard",
-    "operation_count": 36553,
+    "operation_count": 36972,
     "by_type": {
-      "upsert_entity": 8459,
-      "add_claim": 19808,
-      "add_link": 8286
+      "upsert_entity": 8550,
+      "add_claim": 20051,
+      "add_link": 8371
     },
     "projection_boundary": "YAML -> GraphOperation[] -> scorecard/dashboard/gen-ui projections"
   },
   "summary": {
-    "parity_files": 173,
-    "total_features": 2029,
+    "parity_files": 179,
+    "total_features": 2052,
     "absorbed": 79,
-    "pending": 1333,
-    "deferred": 40,
+    "pending": 1353,
+    "deferred": 41,
     "rejected": 79,
-    "monitor": 279,
+    "monitor": 281,
     "unclassified": 0,
-    "absorbed_pct": 3.9,
+    "absorbed_pct": 3.8,
     "unclassified_pct": 0.0
   },
   "untriaged_targets": [],
@@ -7143,6 +7143,76 @@
       "deferred": 0,
       "rejected": 0,
       "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "chopin",
+      "label": "Chopin",
+      "category": "collaborative-planning",
+      "priority": "P1",
+      "measured_at": "2026-10-21",
+      "updated_at": "2026-10-21",
+      "owner": null,
+      "path": ".lev/pm/parity/chopin.yaml",
+      "verdict": "extract",
+      "total_features": 3,
+      "classified": 3,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3
+      },
+      "features": [
+        {
+          "id": "revision-bound-authoring",
+          "name": "Reject stale agent document edits",
+          "status": "missing",
+          "lev_equivalent": "apps/multiplayer/packages/protocol/src/tasks.ts",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/chopin/apps/server/src/plan/edit.ts:137-154",
+            "workshop/analysis/chopin/analysis.md"
+          ]
+        },
+        {
+          "id": "attributed-decisions",
+          "name": "Retain human decisions separately from rewritten prose",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer/packages/relay/src/core/decisionAudit.ts",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/chopin/apps/server/src/questions/decision-followup-write.ts:25-158",
+            "workshop/analysis/chopin/analysis.md"
+          ]
+        },
+        {
+          "id": "revision-bound-handoff",
+          "name": "Bind execution to approved document and graph revisions",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer/packages/protocol/src/reviews.ts",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/chopin/apps/server/src/tasks/graphs.ts:321-341",
+            "workshop/analysis/chopin/analysis.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
       "deferred_items": [],
       "rejected_items": []
     },
@@ -20670,6 +20740,258 @@
       "rejected": 0,
       "monitor": 1,
       "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "humanlayer",
+      "label": "HumanLayer",
+      "category": "collaborative-coding-agents",
+      "priority": "P1",
+      "measured_at": "2026-10-23",
+      "updated_at": "2026-10-23",
+      "owner": null,
+      "path": ".lev/pm/parity/humanlayer.yaml",
+      "verdict": "extract",
+      "total_features": 4,
+      "classified": 4,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4
+      },
+      "features": [
+        {
+          "id": "shared-response-composition",
+          "name": "Collaborative response draft with scoped presence",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer room context and protocol",
+          "action": "extract",
+          "notes": "Source-backed opportunity; no product integration or live provider proof. Existing related controls do not establish full parity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/humanlayer/apps/riptide-ui/src/hooks/session-detail/use-response-editor-collaboration.ts:96-200",
+            "workshop/analysis/humanlayer/analysis.md"
+          ]
+        },
+        {
+          "id": "temporary-prompting-grants",
+          "name": "Owner-controlled teammate prompting with expiry",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer owner admission and room membership",
+          "action": "extract",
+          "notes": "Source-backed opportunity; no product integration or live provider proof. Existing related controls do not establish full parity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/humanlayer/apps/riptide-api/src/lib/session-multiplayer-prompting-auth.ts:56-84",
+            "workshop/analysis/humanlayer/analysis.md"
+          ]
+        },
+        {
+          "id": "anchored-artifact-review",
+          "name": "Typed review comments tied to artifact passages",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer/packages/protocol/src/reviews.ts",
+          "action": "extract",
+          "notes": "Source-backed opportunity; no product integration or live provider proof. Existing related controls do not establish full parity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/humanlayer/packages/ui/src/artifact-viewer-v2/toolbar/review-actions.ts:3-43",
+            "workshop/analysis/humanlayer/analysis.md"
+          ]
+        },
+        {
+          "id": "provider-aware-intervention",
+          "name": "Stop and resume while retaining provider identity",
+          "status": "partial",
+          "lev_equivalent": "core/exec and core/substrate",
+          "action": "extract",
+          "notes": "Source-backed opportunity; no product integration or live provider proof. Existing related controls do not establish full parity.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/humanlayer/apps/riptide-daemon/src/agents/claudecode/interrupts.ts:15-113",
+            "workshop/analysis/humanlayer/analysis.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 4,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "infini-ai-lab-hermit",
+      "label": "Hermit (Infini AI Lab)",
+      "category": "agent-harness-optimization",
+      "priority": "P2",
+      "measured_at": "2026-10-27",
+      "updated_at": "2026-10-27",
+      "owner": "Workshop Intake; plugins/sdlc; core/exec; core/eval",
+      "path": ".lev/pm/parity/infini-ai-lab-hermit.yaml",
+      "verdict": "extract",
+      "total_features": 8,
+      "classified": 8,
+      "unclassified": 0,
+      "counts": {
+        "extract": 4,
+        "adopt": 2,
+        "merge": 1,
+        "deferred": 1
+      },
+      "features": [
+        {
+          "id": "adapter-package-contract",
+          "name": "Evolve a package of context, tools, skills and sub-agents with fixed and learnable paths",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory/src/evolution/types.ts; core/exec/src/adapter-plugin.ts",
+          "action": "extract",
+          "notes": "Lev's evolution candidate carries one content string; the execution adapter manifest is provider metadata, not an editable package contract. Copy the allowed-edit and package test pattern first; no shared type change yet.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/adapter/manifest.py:61-101",
+            "workshop/intake/infini-ai-lab-hermit/hermit/spec.py:47-114",
+            "plugins/evolve-memory/src/evolution/types.ts:8-23",
+            "core/exec/src/adapter-plugin.ts:36-57"
+          ]
+        },
+        {
+          "id": "invalid-edit-repair",
+          "name": "Restore forbidden or malformed edits while keeping valid candidate edits",
+          "status": "missing",
+          "lev_equivalent": "No equivalent package repair in the inspected EvolutionEngine",
+          "action": "extract",
+          "notes": "Upstream restores fixed files from template and invalid editable files from parent; Lev gates the candidate as a whole. Test deliberate forbidden edits, format errors and complete parent fallback.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/spec.py:202-245",
+            "workshop/intake/infini-ai-lab-hermit/hermit/trainer/trainer.py:543-577",
+            "plugins/evolve-memory/src/evolution/engine.ts:110-116"
+          ]
+        },
+        {
+          "id": "evolver-lifecycle",
+          "name": "Interchangeable optimizer setup, bootstrap, step and finalize lifecycle",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory/src/evolution/engine.ts",
+          "action": "adopt",
+          "notes": "Wrap one upstream optimizer behind managed execution; do not port its optimizer library or mistake the existing strategy enum for a multi-engine lifecycle.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/evolver/base.py",
+            "workshop/intake/infini-ai-lab-hermit/hermit/algorithms/evolvers/gepa/evolver.py:1-15",
+            "plugins/evolve-memory/src/evolution/engine.ts:72-145"
+          ]
+        },
+        {
+          "id": "structured-learning-material",
+          "name": "Feed task outputs, feedback, traces and usage into the next adapter revision",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory/src/evolution/engine.ts",
+          "action": "extract",
+          "notes": "Lev's inspected reflection uses aggregate scores/errors; its executionLog is a summary sentence. Extract the per-task failure-material pattern, with Lev receipts as provenance and hidden tests excluded.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/trainer/material.py",
+            "workshop/intake/infini-ai-lab-hermit/hermit/trainer/trainer.py:445-461",
+            "plugins/evolve-memory/src/evolution/engine.ts:228-310"
+          ]
+        },
+        {
+          "id": "candidate-checkpoint-resume",
+          "name": "Version complete adapter trees and resume optimizer state",
+          "status": "partial",
+          "lev_equivalent": "EvolutionCandidate parentId and EvolutionResult lineage",
+          "action": "extract",
+          "notes": "Existing lineage fields are not proof of multi-file restart. Spike pins immutable commit plus manifest/file digests and separates card-only revisions from tested bytes.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/tree.py",
+            "workshop/intake/infini-ai-lab-hermit/hermit/trainer/trainer.py:261-308",
+            "plugins/evolve-memory/src/evolution/types.ts:8-23",
+            "plugins/evolve-memory/src/evolution/types.ts:70-85"
+          ]
+        },
+        {
+          "id": "portable-adapter-exports",
+          "name": "Load one adapter as context, native tools, skills and sub-agents across hosts",
+          "status": "partial",
+          "lev_equivalent": "core/exec/src/adapter-plugin.ts; core/exec/src/providers/registry.ts",
+          "action": "adopt",
+          "notes": "Wrap public Session/export behavior first. Test disposable host output and exact config changes; do not replace shared workspace instructions.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/adapter/session.py:145-223",
+            "workshop/intake/infini-ai-lab-hermit/hermit/hosts/codex.py:40-83",
+            "core/exec/src/adapter-plugin.ts:36-57",
+            "core/exec/src/providers/registry.ts:48-98"
+          ]
+        },
+        {
+          "id": "independent-promotion",
+          "name": "Keep structural validity, optimizer selection and Lev acceptance as separate checks",
+          "status": "partial",
+          "lev_equivalent": "core/eval/src/handlers/candidate-fitness.ts; core/eval/src/decide.ts",
+          "action": "merge",
+          "notes": "GEPA has method-specific improvement selection; the trainer has structural admission. Both remain observations for Lev, which judges an immutable candidate against unchanged baseline and hidden tests.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/trainer/trainer.py:543-577",
+            "workshop/intake/infini-ai-lab-hermit/hermit/algorithms/evolvers/gepa/evolver.py:1-15",
+            "workshop/intake/infini-ai-lab-hermit/hermit/evaluate.py:74-96",
+            "core/eval/src/handlers/candidate-fitness.ts:18-34"
+          ]
+        },
+        {
+          "id": "cross-task-memory-evolution",
+          "name": "Maintain world-model and continual-harness memory across tasks",
+          "status": "partial",
+          "lev_equivalent": "plugins/evolve-memory; deferred memory evolution backlog item",
+          "action": "deferred",
+          "notes": "Retain specific prior art; existing memory deferral does not hold package-contract, repair or host-export experiments.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/infini-ai-lab-hermit/hermit/algorithms/templates/mwm/adapter.yaml",
+            "workshop/intake/infini-ai-lab-hermit/hermit/algorithms/evolvers/continual_harness/evolver.py:1-24",
+            ".lev/pm/roadmap/backlog.yaml:1162-1178"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [
+        "workshop/analysis/infini-ai-lab-hermit/analysis.md",
+        "workshop/pocs/infini-ai-lab-hermit/README.md",
+        ".lev/pm/parity/harness2.yaml",
+        ".lev/pm/designs/design-plugins-gepa-optimization-run-v1.yaml"
+      ],
+      "absorbed": 0,
+      "pending": 7,
+      "deferred": 1,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [
+        {
+          "id": "cross-task-memory-evolution",
+          "name": "Maintain world-model and continual-harness memory across tasks",
+          "action": "deferred",
+          "absorbed_into": null,
+          "tribunal_note": null
+        }
+      ],
       "rejected_items": []
     },
     {
@@ -39491,6 +39813,147 @@
       "rejected_items": []
     },
     {
+      "target": "verus-proof-synthesis",
+      "label": "Microsoft Verus Proof Synthesis",
+      "category": "proof-synthesis",
+      "priority": "P1",
+      "measured_at": "2026-10-21",
+      "updated_at": "2026-10-21",
+      "owner": null,
+      "path": ".lev/pm/parity/verus-proof-synthesis.yaml",
+      "verdict": "extract",
+      "total_features": 3,
+      "classified": 3,
+      "unclassified": 0,
+      "counts": {
+        "extract": 3
+      },
+      "features": [
+        {
+          "id": "bounded-proof-repair",
+          "name": "Generate bounded proof candidates using checker diagnostics",
+          "status": "missing",
+          "lev_equivalent": "core/exec worker flows",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus-proof-synthesis/verusage/agents/main_loop.py:135-212",
+            "workshop/analysis/verus-proof-synthesis/analysis.md"
+          ]
+        },
+        {
+          "id": "final-source-preservation",
+          "name": "Independently reject executable and contract changes",
+          "status": "missing",
+          "lev_equivalent": "core/eval evaluator checks",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus-proof-synthesis/verusage/utils.py:351-428",
+            "workshop/analysis/verus-proof-synthesis/analysis.md"
+          ]
+        },
+        {
+          "id": "independent-acceptance",
+          "name": "Separate proof candidate generation from acceptance",
+          "status": "partial",
+          "lev_equivalent": "core/exec and core/eval",
+          "action": "extract",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus-proof-synthesis/autoverus/veval.py:189-197",
+            "workshop/analysis/verus-proof-synthesis/analysis.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "verus",
+      "label": "Verus",
+      "category": "formal-verification",
+      "priority": "P1",
+      "measured_at": "2026-10-21",
+      "updated_at": "2026-10-21",
+      "owner": null,
+      "path": ".lev/pm/parity/verus.yaml",
+      "verdict": "adopt",
+      "total_features": 3,
+      "classified": 3,
+      "unclassified": 0,
+      "counts": {
+        "adopt": 1,
+        "build": 2
+      },
+      "features": [
+        {
+          "id": "rust-checker-evidence",
+          "name": "External checker for Rust specification conformance",
+          "status": "missing",
+          "lev_equivalent": "core/eval evaluator registry and core/exec command runner",
+          "action": "adopt",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus/README.md:5-11",
+            "workshop/analysis/verus/analysis.md"
+          ]
+        },
+        {
+          "id": "trusted-escape-rejection",
+          "name": "Reject unapproved trusted proof escapes",
+          "status": "missing",
+          "lev_equivalent": "core/eval evaluator policy",
+          "action": "build",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus/source/rust_verify/src/config.rs:489-496",
+            "workshop/analysis/verus/analysis.md"
+          ]
+        },
+        {
+          "id": "proof-revision-binding",
+          "name": "Bind checker result to source spec and checker inputs",
+          "status": "partial",
+          "lev_equivalent": "apps/multiplayer/packages/protocol/src/reviews.ts",
+          "action": "build",
+          "notes": "Status describes inspected Lev parity; external behavior is source-backed unless the report names a passing check. Adoption remains conditional on the report validation ladder.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/intake/verus/source/rust_verify/src/config.rs:489-496",
+            "workshop/analysis/verus/analysis.md"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 3,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 0,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
       "target": "whathappened",
       "label": "whathappened",
       "category": "research-context-engineering",
@@ -40366,6 +40829,66 @@
       "lineage": [],
       "absorbed": 0,
       "pending": 2,
+      "deferred": 0,
+      "rejected": 0,
+      "monitor": 2,
+      "deferred_items": [],
+      "rejected_items": []
+    },
+    {
+      "target": "youtube-ix1qqk1ivma",
+      "label": "Fighting Code Slop — Dexter Horthy",
+      "category": "software-delivery-assurance",
+      "priority": "P2",
+      "measured_at": "2026-10-20",
+      "updated_at": "2026-10-20",
+      "owner": null,
+      "path": ".lev/pm/parity/youtube-ix1qqk1ivma.yaml",
+      "verdict": "extract",
+      "total_features": 2,
+      "classified": 2,
+      "unclassified": 0,
+      "counts": {
+        "reference": 2
+      },
+      "features": [
+        {
+          "id": "sequential-maintenance-evaluation",
+          "name": "Evaluate repeated changes while preserving earlier behavior",
+          "status": "partial",
+          "lev_equivalent": "Existing SDLC work/review flow and Eval decisions exercised on a three-change synthetic CSV trajectory; no reusable product evaluation pack promoted",
+          "action": "reference",
+          "notes": "2026-10-20: All three accepted synthetic checkpoints preserve cumulative tests. A dropped-empty-cell control fails Eval. A duplicate-engine control passes behavior tests, fails semantic review, then passes after normal feedback repair. Bounded workload proof only; general maintenance performance remains unverified.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/youtube-ix1qqk1ivma/transcript.txt:215",
+            "plugins/sdlc/flows/sdlc.flow.yaml:102",
+            "core/eval/src/decide.ts:172",
+            "https://arxiv.org/abs/2603.24755v2",
+            "workshop/poc/software-factory-spikes/analysis.md"
+          ]
+        },
+        {
+          "id": "observable-worker-feedback",
+          "name": "Give workers behavior evidence and failed-review feedback",
+          "status": "partial",
+          "lev_equivalent": "Existing SDLC flow returns review results to the worker",
+          "action": "reference",
+          "notes": "Tool access and source declarations are not proof that workers test the correct behavior.",
+          "absorbed_into": null,
+          "tribunal_note": null,
+          "evidence_refs": [
+            "workshop/analysis/youtube-ix1qqk1ivma/transcript.txt:378",
+            "plugins/sdlc/flows/sdlc.flow.yaml:120",
+            "docs/ARCHITECTURE.md:632"
+          ]
+        }
+      ],
+      "metrics": [],
+      "lineage": [],
+      "absorbed": 0,
+      "pending": 0,
       "deferred": 0,
       "rejected": 0,
       "monitor": 2,
